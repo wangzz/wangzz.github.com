@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人日志]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-03-31T19:17:04+08:00</updated>
+  <updated>2014-03-31T20:21:05+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -12,5 +12,14 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[开始写blog啦]]></title>
+    <link href="http://wangzz.github.io/blog/2014/03/31/kai-shi-xie-blogla/"/>
+    <updated>2014-03-31T20:19:44+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/03/31/kai-shi-xie-blogla</id>
+    <content type="html"><![CDATA[<p>这是我的第一篇日志，以后多多关注！</p>
+]]></content>
+  </entry>
   
 </feed>
