@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[王中周的个人日志]]></title>
+  <link href="http://wangzz.github.io/atom.xml" rel="self"/>
+  <link href="http://wangzz.github.io/"/>
+  <updated>2014-03-31T19:17:04+08:00</updated>
+  <id>http://wangzz.github.io/</id>
+  <author>
+    <name><![CDATA[王中周]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+</feed>
