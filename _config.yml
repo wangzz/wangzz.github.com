@@ -2,10 +2,10 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://yoursite.com
-title: My Octopress Blog
+url: http://wangzz.github.io
+title: 王中周的个人日志
 subtitle: A blogging framework for hackers.
-author: Your Name
+author: 王中周
 simple_search: https://www.google.com/search
 description:
 
