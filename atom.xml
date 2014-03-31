@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[王中周的个人日志]]></title>
-  <link href="http://wangzz.github.io/atom.xml" rel="self"/>
-  <link href="http://wangzz.github.io/"/>
-  <updated>2014-03-31T20:50:34+08:00</updated>
-  <id>http://wangzz.github.io/</id>
+  <title><![CDATA[王中周的个人博客]]></title>
+  <link href="http://www.foogry.tk/atom.xml" rel="self"/>
+  <link href="http://www.foogry.tk/"/>
+  <updated>2014-03-31T20:54:11+08:00</updated>
+  <id>http://www.foogry.tk/</id>
   <author>
     <name><![CDATA[王中周]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[开始写blog啦]]></title>
-    <link href="http://wangzz.github.io/blog/2014/03/31/kai-shi-xie-blogla/"/>
+    <link href="http://www.foogry.tk/blog/2014/03/31/kai-shi-xie-blogla/"/>
     <updated>2014-03-31T20:19:44+08:00</updated>
-    <id>http://wangzz.github.io/blog/2014/03/31/kai-shi-xie-blogla</id>
+    <id>http://www.foogry.tk/blog/2014/03/31/kai-shi-xie-blogla</id>
     <content type="html"><![CDATA[<p>这是我的第一篇日志，以后多多关注！</p>
 ]]></content>
   </entry>
