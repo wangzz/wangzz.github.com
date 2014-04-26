@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-26T15:22:20+08:00</updated>
+  <updated>2014-04-26T15:30:05+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -21,9 +21,9 @@
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <ol>
-<li><p>本文旨在搜集github上优秀的开源项目，会持续更新。。。</p></li>
+<li><p>本文旨在搜集github上优秀的开源项目</p></li>
 <li><p>本文搜集的项目都是用于iOS开发</p></li>
-<li><p>本文会持续更新</p></li>
+<li><p>本文会持续更新&hellip;</p></li>
 </ol>
 
 
