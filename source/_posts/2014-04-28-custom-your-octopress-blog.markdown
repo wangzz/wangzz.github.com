@@ -155,14 +155,16 @@ Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
 然后再增加aside，复制以下代码到`source/_includes/asides/category_list.html`（如果没有就新建）中：
 
 
-
+```
 > <section>
 >  <h1>Categories</h1>
 >  <ul id="categories">
 >   {% category_list %}
 >  </ul>
 > </section>
+```
 
+记得把每行最前边的`>`去掉
 
 最后更改_config.yml文件，让侧边栏链接到刚才新增加的`source/_includes/asides/category_list.html`文件：
 
