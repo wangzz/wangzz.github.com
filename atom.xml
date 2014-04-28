@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T16:05:54+08:00</updated>
+  <updated>2014-04-28T16:11:53+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -212,12 +212,12 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'>&lt;section&gt;
 </span><span class='line'> &lt;h1&gt;Categories&lt;/h1&gt;
 </span><span class='line'> &lt;ul id="categories"&gt;
-</span><span class='line'>  <li class='category'><a href='http://wangzz.github.io/blog/categories/octopress/'>Octopress (2)</a></li>
-<li class='category'><a href='http://wangzz.github.io/blog/categories/opensource/'>opensource (1)</a></li>
-
+</span><span class='line'>  { category_list }
 </span><span class='line'> &lt;/ul&gt;
 </span><span class='line'>&lt;/section&gt;</span></code></pre></td></tr></table></div></figure>
 
+
+<p>注意要将<code>{ category_list }</code>中<code>category_list</code>单词的左右两边分别加个<code>%</code></p>
 
 <p>最后更改_config.yml文件，让侧边栏链接到刚才新增加的<code>source/_includes/asides/category_list.html</code>文件：</p>
 
