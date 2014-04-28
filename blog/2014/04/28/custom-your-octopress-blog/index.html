@@ -182,9 +182,10 @@
 
 <p>首先在文章列表中你想展示的缩略部分增加标记：</p>
 
-<p> <code>
- &lt;!-- more --&gt;
-</code></p>
+<p> &#8220;`
+ <!-- more --></p>
+
+<p> &#8220;`</p>
 
 <p>然后自定义<code>_config.yml</code>中的对应设置项：</p>
 
@@ -224,8 +225,9 @@ description: 如何自定义Octopress博客</p>
 
 <p>首先，保存以下内容到<code>plugins/category_list_tag.rb</code>中（如果文件不存在就新创建一个）：</p>
 
-<p> &#8220;`
- module Jekyll
+<p> &#8220;`</p>
+
+<p> module Jekyll
   class CategoryListTag &lt; Liquid::Tag</p>
 
 <pre><code>def render(context)
@@ -252,8 +254,9 @@ end</p>
 
 <p>然后再增加aside，复制以下代码到<code>source/_includes/asides/category_list.html</code>（如果没有就新建）中：</p>
 
-<p> &#8220;`
- <section>
+<p> &#8220;`</p>
+
+<p> <section>
   <h1>Categories</h1>
   <ul id="categories"></p>
 
@@ -269,8 +272,9 @@ end</p>
 
 <p>最后更改_config.yml文件，让侧边栏链接到刚才新增加的<code>source/_includes/asides/category_list.html</code>文件：</p>
 
-<p> &#8220;`
-default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</p>
+<p> &#8220;`</p>
+
+<p>default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</p>
 
 <p> &#8220;`</p>
 
