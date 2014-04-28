@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T16:19:23+08:00</updated>
+  <updated>2014-04-28T17:06:44+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -237,6 +237,7 @@
 <ul>
 <li><p><a href="http://blog.csdn.net/lcliliil/article/details/13727927">SEO统计</a></p></li>
 <li><p><a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">增加category列表</a></p></li>
+<li><p><a href="http://octopress.org/docs/theme/template/">Theming &amp; Customization</a></p></li>
 </ul>
 
 ]]></content>
