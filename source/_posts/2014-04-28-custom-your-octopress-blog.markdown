@@ -186,9 +186,17 @@ default_asides: [asides/recent_posts.html, asides/category_list.html, asides/git
 
 首先编辑文件`/source/_includes/custom/navigation.html`，仿照Blog和Archives的写法增加一行About：
 
-![about]()
+![about](https://github.com/wangzz/wangzz.github.com/blob/master/images/1E66BCE6-EB83-42E8-AA5A-F0E66CD04A65.png?raw=true)
 
+然后使用命令：
 
+```
+rake new_page['about']
+```
+
+创建一个页面，保存路径为`source\about\index.markdown`
+
+编辑index.markdown文件成自己想要的样式，然后重新部署，就能看到导航栏上新增了About项目。
 
 
 
@@ -207,5 +215,5 @@ default_asides: [asides/recent_posts.html, asides/category_list.html, asides/git
 
 * [Theming & Customization](http://octopress.org/docs/theme/template/)
 
-
+* [Add About Page](http://asaf.github.io/blog/2013/07/08/blogging-with-octopress-add-about-page/)
 

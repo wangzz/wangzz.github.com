@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "about"
+title: "关于我"
 date: 2014-04-28 16:53
 comments: true
 sharing: true
@@ -9,4 +9,10 @@ footer: true
 ---
 
 
-hello
+* 职业：iOS开发
+
+* 工作经历：曾就职于高阳科技、北京拉手网，现在高德地图
+
+* 早期在CSND上写博客：[http://blog.csdn.net/wzzvictory](http://blog.csdn.net/wzzvictory)
+
+* 欢迎通过在本站留言或通过[新浪微博](http://weibo.com/foogry)联系我
