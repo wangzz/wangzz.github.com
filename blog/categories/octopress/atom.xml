@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T15:56:09+08:00</updated>
+  <updated>2014-04-28T15:58:02+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -166,6 +166,8 @@ end</p>
 
 <p>然后再增加aside，复制以下代码到<code>source/_includes/asides/category_list.html</code>（如果没有就新建）中：</p>
 
+<p>```</p>
+
 <blockquote><p><section>
  <h1>Categories</h1>
  <ul id="categories">
@@ -173,7 +175,10 @@ end</p>
 <li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
 
  </ul>
-</section></p></blockquote>
+</section>
+```</p></blockquote>
+
+<p>记得把每行最前边的<code>&gt;</code>去掉</p>
 
 <p>最后更改_config.yml文件，让侧边栏链接到刚才新增加的<code>source/_includes/asides/category_list.html</code>文件：</p>
 
@@ -291,7 +296,7 @@ Your identification has been saved in /Users/you/.ssh/id_rsa.</p>
 
 <h1>The key fingerprint is:</h1>
 
-<h1>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x79;&#x6f;&#117;&#x72;&#95;&#x65;&#x6d;&#97;&#105;&#108;&#x40;&#x65;&#120;&#97;&#109;&#112;&#x6c;&#101;&#46;&#99;&#x6f;&#x6d;">&#121;&#x6f;&#117;&#114;&#x5f;&#x65;&#109;&#97;&#x69;&#x6c;&#x40;&#x65;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#x63;&#x6f;&#109;</a></h1>
+<h1>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#x79;&#111;&#117;&#114;&#95;&#x65;&#109;&#x61;&#x69;&#108;&#64;&#101;&#120;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#46;&#x63;&#111;&#109;">&#121;&#x6f;&#117;&#x72;&#95;&#x65;&#x6d;&#x61;&#105;&#108;&#x40;&#x65;&#120;&#x61;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#x6d;</a></h1>
 
 <p>```</p>
 
