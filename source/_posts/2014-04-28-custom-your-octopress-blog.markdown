@@ -158,11 +158,11 @@ Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
 <section>
  <h1>Categories</h1>
  <ul id="categories">
-  {%category_list%}
+  { category_list }
  </ul>
 </section>
 ```
-
+注意要将`{ category_list }`中`category_list`单词的左右两边分别加个`%`
 
 最后更改_config.yml文件，让侧边栏链接到刚才新增加的`source/_includes/asides/category_list.html`文件：
 
