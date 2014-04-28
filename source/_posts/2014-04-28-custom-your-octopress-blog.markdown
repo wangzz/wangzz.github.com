@@ -199,8 +199,12 @@ rake new_page['about']
 编辑index.markdown文件成自己想要的样式，然后重新部署，就能看到导航栏上新增了About项目。
 
 
+* 自定义Footer
+
+界面底部的声明部分同样可以自定义，修改文件：`source/_includes/custom/footer.html`成自己想要的格式即可。
 
 
+* 修改网站主题
 
 
 
