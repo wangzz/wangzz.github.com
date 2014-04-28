@@ -22,6 +22,10 @@ Octopress的仓库目录下有两个branch，`source`和`master`。
 
 2. `master`分支下保存生成的博客内容，该分支在Octopress本地仓库的根目录下一个叫`_deploy`得文件夹中。该文件夹是以下划线开头的，会在执行`git push origin source`命令时被忽略，这也是为什么一个目录中能同时存在两个不同分支的文件夹的原因。
 
+
+<!-- more -->
+
+
 ##二、在本地重建Octopress仓库
 
 需要执行以下命令：
@@ -34,7 +38,6 @@ $ git clone -b source git@github.com:username/username.github.com.git octopress
 别忘了`username`替换成你自己github用户名。
 另外还要注意的是，clone的地址不能是`http`而必须得是`ssh`的。
 
-<!-- more -->
 
 如果执行时提示以下错误：
 

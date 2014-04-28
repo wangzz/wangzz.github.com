@@ -3,7 +3,11 @@ layout: post
 title: "github优秀开源项目大全-iOS"
 date: 2014-04-25 17:45:33 +0800
 comments: true
-categories: 
+categories: opensource
+tags: [octopress, 博客, github, 开源, iOS]
+keywords: octopress, 博客, github, 开源, iOS, ChatSecure-iOS
+description: github优秀开源项目大全-iOS
+ 
 ---
 
 ##前言
@@ -33,7 +37,7 @@ SegmentFault的官方iOS客户端
 
 开源中国社区oschina的官方iPhone客户端，appstore已上线。早期地址在[github](https://github.com/gaosboy/iOSSF)上,后来迁移到OSChina自己的代码托管平台.
 
-
+<!-- more -->
 
 
 #Xcode插件
