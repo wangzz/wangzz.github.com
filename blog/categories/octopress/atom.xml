@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T17:34:19+08:00</updated>
+  <updated>2014-04-28T17:52:00+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -213,6 +213,18 @@ rake new_page['about']
 
 <p>编辑index.markdown文件成自己想要的样式，然后重新部署，就能看到导航栏上新增了About项目。</p>
 
+<ul>
+<li>自定义Footer</li>
+</ul>
+
+
+<p>界面底部的声明部分同样可以自定义，修改文件：<code>source/_includes/custom/footer.html</code>成自己想要的格式即可。</p>
+
+<ul>
+<li>修改网站主题</li>
+</ul>
+
+
 <h2>参考文章</h2>
 
 <ul>
@@ -320,7 +332,7 @@ Your identification has been saved in /Users/you/.ssh/id_rsa.</p>
 
 <h1>The key fingerprint is:</h1>
 
-<h1>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db <a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#x79;&#x6f;&#117;&#114;&#95;&#x65;&#x6d;&#97;&#105;&#108;&#x40;&#x65;&#120;&#x61;&#x6d;&#112;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#121;&#111;&#x75;&#114;&#95;&#x65;&#x6d;&#97;&#x69;&#108;&#x40;&#x65;&#x78;&#x61;&#109;&#112;&#108;&#101;&#46;&#x63;&#x6f;&#109;</a></h1>
+<h1>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#x79;&#111;&#117;&#x72;&#95;&#101;&#109;&#x61;&#x69;&#x6c;&#64;&#101;&#x78;&#x61;&#x6d;&#112;&#108;&#101;&#46;&#x63;&#111;&#x6d;">&#x79;&#x6f;&#117;&#x72;&#x5f;&#101;&#x6d;&#97;&#105;&#108;&#x40;&#101;&#x78;&#x61;&#x6d;&#x70;&#108;&#101;&#x2e;&#99;&#111;&#109;</a></h1>
 
 <p>```</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T17:34:19+08:00</updated>
+  <updated>2014-04-28T17:52:00+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -255,6 +255,18 @@
 <p>创建一个页面，保存路径为<code>source\about\index.markdown</code></p>
 
 <p>编辑index.markdown文件成自己想要的样式，然后重新部署，就能看到导航栏上新增了About项目。</p>
+
+<ul>
+<li>自定义Footer</li>
+</ul>
+
+
+<p>界面底部的声明部分同样可以自定义，修改文件：<code>source/_includes/custom/footer.html</code>成自己想要的格式即可。</p>
+
+<ul>
+<li>修改网站主题</li>
+</ul>
+
 
 <h2>参考文章</h2>
 
