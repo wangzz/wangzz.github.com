@@ -191,6 +191,7 @@ default_asides: [asides/recent_posts.html, asides/category_list.html, asides/git
 
 * [增加category列表](http://codemacro.com/2012/07/18/add-category-list-to-octopress/)
 
+* [Theming & Customization](http://octopress.org/docs/theme/template/)
 
 
 
