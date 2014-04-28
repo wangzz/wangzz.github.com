@@ -278,3 +278,9 @@ Octopress博客中，默认是在当前界面中打开第三方链接，这导�
 * [Add About Page](http://asaf.github.io/blog/2013/07/08/blogging-with-octopress-add-about-page/)
 
 * [新标签页打开第三方链接](http://www.blogjava.net/lishunli/archive/2013/01/20/394478.html)
+
+* [增加新浪微博秀](http://blog.csdn.net/lcliliil/article/details/13725895)
+
+
+
+
