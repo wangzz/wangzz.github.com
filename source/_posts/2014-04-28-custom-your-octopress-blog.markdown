@@ -12,7 +12,7 @@ description: 如何自定义Octopress博客
 ---
 
 
-#SEO
+##SEO
 
 * 增加统计工具
 
@@ -24,6 +24,7 @@ description: 如何自定义Octopress博客
 
 只需到`百度统计`官方网站申请一个账号，将获取的代码添加到`source/_includes/custom/footer.html`中，重新部署即可。
 
+ <!-- more -->
 
 * 搜索优化
 
@@ -76,7 +77,7 @@ Octopress实现该功能的代码在`source/_includes/head.html`文件中：
 
 
 
-#界面相关
+##界面相关
 
 * 博客首页显示文章摘要
 
@@ -84,19 +85,27 @@ Octopress实现该功能的代码在`source/_includes/head.html`文件中：
 
 首先在文章列表中你想展示的缩略部分增加标记：
 
-`<!-- more -->`
+ ```
+ <!-- more -->
+ ```
 
 然后自定义`_config.yml`中的对应设置项：
+
+ ```
+ excerpt_link: "阅读更多 &rarr;" 
  
- `excerpt_link: "阅读更多 &rarr;" `
+ ```
  
 这样就有了我博客中现在的效果：
+![read more](https://github.com/wangzz/wangzz.github.com/blob/master/images/336C83D8-ADEB-49A2-93D6-815A74509434.png?raw=true)
+
+* 
 
 
 
 
+##参考文章
 
+* [http://blog.csdn.net/lcliliil/article/details/13727927](http://blog.csdn.net/lcliliil/article/details/13727927)
 
-
-
-
+* 
