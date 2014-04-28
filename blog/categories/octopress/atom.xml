@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T17:19:20+08:00</updated>
+  <updated>2014-04-28T17:34:19+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -201,7 +201,17 @@ default_asides: [asides/recent_posts.html, asides/category_list.html, asides/git
 
 <p>首先编辑文件<code>/source/_includes/custom/navigation.html</code>，仿照Blog和Archives的写法增加一行About：</p>
 
-<p><img src="" alt="about" /></p>
+<p><img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/1E66BCE6-EB83-42E8-AA5A-F0E66CD04A65.png?raw=true" alt="about" /></p>
+
+<p>然后使用命令：</p>
+
+<p><code>
+rake new_page['about']
+</code></p>
+
+<p>创建一个页面，保存路径为<code>source\about\index.markdown</code></p>
+
+<p>编辑index.markdown文件成自己想要的样式，然后重新部署，就能看到导航栏上新增了About项目。</p>
 
 <h2>参考文章</h2>
 
@@ -209,6 +219,7 @@ default_asides: [asides/recent_posts.html, asides/category_list.html, asides/git
 <li><p><a href="http://blog.csdn.net/lcliliil/article/details/13727927">SEO统计</a></p></li>
 <li><p><a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">增加category列表</a></p></li>
 <li><p><a href="http://octopress.org/docs/theme/template/">Theming &amp; Customization</a></p></li>
+<li><p><a href="http://asaf.github.io/blog/2013/07/08/blogging-with-octopress-add-about-page/">Add About Page</a></p></li>
 </ul>
 
 ]]></content>
@@ -309,7 +320,7 @@ Your identification has been saved in /Users/you/.ssh/id_rsa.</p>
 
 <h1>The key fingerprint is:</h1>
 
-<h1>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#x79;&#111;&#x75;&#x72;&#x5f;&#x65;&#109;&#x61;&#105;&#108;&#64;&#101;&#120;&#97;&#x6d;&#112;&#108;&#101;&#46;&#99;&#x6f;&#x6d;">&#x79;&#x6f;&#117;&#114;&#95;&#101;&#109;&#97;&#x69;&#x6c;&#64;&#101;&#120;&#x61;&#109;&#112;&#108;&#101;&#x2e;&#99;&#x6f;&#x6d;</a></h1>
+<h1>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db <a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#x79;&#x6f;&#117;&#114;&#95;&#x65;&#x6d;&#97;&#105;&#108;&#x40;&#x65;&#120;&#x61;&#x6d;&#112;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#121;&#111;&#x75;&#114;&#95;&#x65;&#x6d;&#97;&#x69;&#108;&#x40;&#x65;&#x78;&#x61;&#109;&#112;&#108;&#101;&#46;&#x63;&#x6f;&#109;</a></h1>
 
 <p>```</p>
 
