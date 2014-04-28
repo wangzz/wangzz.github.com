@@ -177,8 +177,9 @@ Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
 default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
 ```
 
-完成以上步骤后，重新部署就能看到博客的右侧边栏增加了`category`列表：
-![category](https://github.com/wangzz/wangzz.github.com/blob/master/images/ED4CED7F-41A1-4A2C-9681-79D73342B4B0.png?raw=true)
+完成以上步骤后，重新部署就能看到博客的右侧边栏增加了`category`列表了。
+
+
 
 * 自定义侧边栏之增加新浪微博
 
@@ -205,7 +206,7 @@ default_asides: [asides/recent_posts.html, asides/category_list.html, asides/git
 
 最后，和自定义category侧边栏一样，我们需要在`default_asides`中加入`custom/asides/weibo.html`。
 
-重新部署后，微博秀就能正常展示啦。
+重新部署后，微博秀就能正常展示啦！
 
 
 
