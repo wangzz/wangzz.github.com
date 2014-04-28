@@ -355,9 +355,50 @@ $(document).bind('DOMNodeInserted', function(event) {
 <p>界面底部的声明部分同样可以自定义，修改文件：<code>source/_includes/custom/footer.html</code>成自己想要的格式即可。</p>
 
 <ul>
-<li>修改网站主题</li>
+<li>自定义网站主题</li>
 </ul>
 
+
+<p>目前有很多第三方主题，比如：<a href="http://opthemes.com/">http://opthemes.com/</a></p>
+
+<p>该网站搜集了很多漂亮的主题，对应的主题里都有安装方式。</p>
+
+<ul>
+<li>新标签页打开网站中第三方链接</li>
+</ul>
+
+
+<p>Octopress博客中，默认是在当前界面中打开第三方链接，这导致网站浏览者跳到第三方链接后很难回来。</p>
+
+<p>将以下代码加入<code>source/_includes/custom/head.html</code>文件中：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; &lt;script type="text/javascript"&gt;
+</span><span class='line'>&gt; function addBlankTargetForLinks () {
+</span><span class='line'>&gt;   $('a[href^="http"]').each(function(){
+</span><span class='line'>&gt;       $(this).attr('target', '_blank');
+</span><span class='line'>&gt;   });
+</span><span class='line'>&gt; }
+</span><span class='line'>&gt; 
+</span><span class='line'>&gt; $(document).bind('DOMNodeInserted', function(event) {
+</span><span class='line'>&gt;  addBlankTargetForLinks();
+</span><span class='line'>&gt; });
+</span><span class='line'>&gt; &lt;/script&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>记得把左侧的<code>&gt;</code>符号都去掉。</p>
+
+<p>不过本站的链接还是会在当前界面中打开。</p>
 
 <h2>参考文章</h2>
 
@@ -366,6 +407,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 <li><p><a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">增加category列表</a></p></li>
 <li><p><a href="http://octopress.org/docs/theme/template/">Theming &amp; Customization</a></p></li>
 <li><p><a href="http://asaf.github.io/blog/2013/07/08/blogging-with-octopress-add-about-page/">Add About Page</a></p></li>
+<li><p><a href="http://www.blogjava.net/lishunli/archive/2013/01/20/394478.html">新标签页打开第三方链接</a></p></li>
 </ul>
 
 </div>
@@ -446,6 +488,16 @@ $(document).bind('DOMNodeInserted', function(event) {
 <aside class="sidebar">
   
     <section>
+    <h1>新浪微博</h1>
+    <ul id="weibo">
+    <li>
+
+<iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1734555471&verifier=6c6f0bb3&dpc=1"></iframe>
+
+</li>
+    </ul>
+</section>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     

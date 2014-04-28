@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T18:08:49+08:00</updated>
+  <updated>2014-04-28T18:35:31+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -221,9 +221,43 @@ rake new_page['about']
 <p>界面底部的声明部分同样可以自定义，修改文件：<code>source/_includes/custom/footer.html</code>成自己想要的格式即可。</p>
 
 <ul>
-<li>修改网站主题</li>
+<li>自定义网站主题</li>
 </ul>
 
+
+<p>目前有很多第三方主题，比如：<a href="http://opthemes.com/">http://opthemes.com/</a></p>
+
+<p>该网站搜集了很多漂亮的主题，对应的主题里都有安装方式。</p>
+
+<ul>
+<li>新标签页打开网站中第三方链接</li>
+</ul>
+
+
+<p>Octopress博客中，默认是在当前界面中打开第三方链接，这导致网站浏览者跳到第三方链接后很难回来。</p>
+
+<p>将以下代码加入<code>source/_includes/custom/head.html</code>文件中：</p>
+
+<p>```</p>
+
+<blockquote><p><script type="text/javascript">
+function addBlankTargetForLinks () {
+  $(&lsquo;a[href^=&ldquo;http&rdquo;]&rsquo;).each(function(){</p>
+
+<pre><code>  $(this).attr('target', '_blank');
+</code></pre>
+
+<p>  });
+}</p>
+
+<p>$(document).bind(&lsquo;DOMNodeInserted&rsquo;, function(event) {
+ addBlankTargetForLinks();
+});
+</script>
+<code>``
+记得把左侧的</code>>`符号都去掉。</p></blockquote>
+
+<p>不过本站的链接还是会在当前界面中打开。</p>
 
 <h2>参考文章</h2>
 
@@ -232,6 +266,7 @@ rake new_page['about']
 <li><p><a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">增加category列表</a></p></li>
 <li><p><a href="http://octopress.org/docs/theme/template/">Theming &amp; Customization</a></p></li>
 <li><p><a href="http://asaf.github.io/blog/2013/07/08/blogging-with-octopress-add-about-page/">Add About Page</a></p></li>
+<li><p><a href="http://www.blogjava.net/lishunli/archive/2013/01/20/394478.html">新标签页打开第三方链接</a></p></li>
 </ul>
 
 ]]></content>
@@ -332,7 +367,7 @@ Your identification has been saved in /Users/you/.ssh/id_rsa.</p>
 
 <h1>The key fingerprint is:</h1>
 
-<h1>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x79;&#x6f;&#x75;&#x72;&#x5f;&#x65;&#109;&#97;&#105;&#108;&#64;&#101;&#x78;&#x61;&#109;&#112;&#x6c;&#101;&#x2e;&#x63;&#x6f;&#x6d;">&#x79;&#x6f;&#117;&#x72;&#x5f;&#x65;&#x6d;&#97;&#105;&#x6c;&#x40;&#x65;&#120;&#97;&#109;&#x70;&#108;&#101;&#x2e;&#x63;&#x6f;&#109;</a></h1>
+<h1>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#58;&#121;&#111;&#x75;&#x72;&#x5f;&#x65;&#109;&#x61;&#105;&#108;&#64;&#x65;&#120;&#97;&#109;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#111;&#109;">&#x79;&#111;&#x75;&#114;&#95;&#x65;&#x6d;&#97;&#x69;&#x6c;&#64;&#101;&#x78;&#x61;&#109;&#x70;&#x6c;&#101;&#x2e;&#x63;&#x6f;&#x6d;</a></h1>
 
 <p>```</p>
 
