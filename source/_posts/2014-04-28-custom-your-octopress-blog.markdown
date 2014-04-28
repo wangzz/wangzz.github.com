@@ -162,7 +162,9 @@ Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
  </ul>
 </section>
 ```
-注意要将`{ category_list }`中`category_list`单词的左右两边分别加个`%`
+注意要将`{ category_list }`中`category_list`单词的左右两边分别加个`%`,即写成下图所示样式：
+![categorylist_pic](https://github.com/wangzz/wangzz.github.com/blob/master/images/D04878A8-B17E-4B76-A8FD-E4938C293B84.png?raw=true)
+搞那么复杂是markdown排版问题。。。
 
 最后更改_config.yml文件，让侧边栏链接到刚才新增加的`source/_includes/asides/category_list.html`文件：
 
