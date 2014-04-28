@@ -100,7 +100,7 @@ Octopress实现该功能的代码在`source/_includes/head.html`文件中：
 这样就有了我博客中现在的效果：
 ![read more](https://github.com/wangzz/wangzz.github.com/blob/master/images/336C83D8-ADEB-49A2-93D6-815A74509434.png?raw=true)
 
-* 自定义侧边栏
+* 自定义侧边栏之增加category列表
 
 下面以增加侧边栏category列表为例。
 
@@ -179,6 +179,35 @@ default_asides: [asides/recent_posts.html, asides/category_list.html, asides/git
 
 完成以上步骤后，重新部署就能看到博客的右侧边栏增加了`category`列表：
 ![category](https://github.com/wangzz/wangzz.github.com/blob/master/images/ED4CED7F-41A1-4A2C-9681-79D73342B4B0.png?raw=true)
+
+* 自定义侧边栏之增加新浪微博
+
+在博客中增加新浪模块是一个很好的和渎职互动方式，增加方式如下：
+
+首先要从[新浪微博秀](http://app.weibo.com/tool/weiboshow)获取到自定义的微博秀代码，设定好微博秀样式后将代码复制下来。
+
+然后在`source/_includes/custom/asides`目录下新建`weibo.html`文件，按照如下格式编辑该文件：
+
+```
+<section>
+    <h1>新浪微博</h1>
+    <ul id="weibo">
+    <li>
+
+   -- 在此插入获得的微博秀代码 --
+
+      </li>
+    </ul>
+</section>
+```
+
+将刚才赋值下来的自定义微博秀代码粘贴到上述指定位置。
+
+最后，和自定义category侧边栏一样，我们需要在`default_asides`中加入`custom/asides/weibo.html`。
+
+重新部署后，微博秀就能正常展示啦。
+
+
 
 * 自定义Navigation
 
