@@ -197,9 +197,84 @@
 <img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/336C83D8-ADEB-49A2-93D6-815A74509434.png?raw=true" alt="read more" /></p>
 
 <ul>
-<li></li>
+<li>博客侧边栏增加category列表</li>
 </ul>
 
+
+<p>在创建新文章时，我们会填写以下属性：</p>
+
+<p> &#8220;`</p>
+
+<hr />
+
+<p>layout: post
+title: &ldquo;自定义你的Octopress博客&rdquo;
+date: 2014-04-28 11:17:31 +0800
+comments: true
+categories: Octopress
+tags: [octopress, 博客自定义, seo]
+keywords: seo, octopress, analytics, 博客自定义
+description: 如何自定义Octopress博客</p>
+
+<hr />
+
+<p> &#8220;`</p>
+
+<p>其中的<code>categories</code>会为当前文章指定一个分类。我们可能有需要通过分类查找文章的需求，而侧边栏中默认只有最近提交列表。下面就介绍如何在侧边栏中显示文章分类列表。</p>
+
+<p>首先，保存以下内容到<code>plugins/category_list_tag.rb</code>中（如果文件不存在就新创建一个）：</p>
+
+<p> &#8220;`
+ module Jekyll
+  class CategoryListTag &lt; Liquid::Tag</p>
+
+<pre><code>def render(context)
+  html = ""
+  categories = context.registers[:site].categories.keys
+  categories.sort.each do |category|
+    posts_in_category = context.registers[:site].categories[category].size
+    category_dir = context.registers[:site].config['category_dir']
+    category_url = File.join(category_dir, category.gsub(/_|\P{Word}/, '-').gsub(/-{2,}/, '-').downcase)
+    html &lt;&lt; "&lt;li class='category'&gt;&lt;a href='/#{category_url}/'&gt;#{category} (#{posts_in_category})&lt;/a&gt;&lt;/li&gt;\n"
+  end
+  html
+end
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>Liquid::Template.register_tag(&lsquo;category_list&rsquo;, Jekyll::CategoryListTag)</p>
+
+<p> &#8220;`</p>
+
+<p>这个插件会向liquid注册一个名为<code>category_list</code>的tag，该tag就是以li的形式将站点所有的category组织起来。</p>
+
+<p>然后再增加aside，复制以下代码到<code>source/_includes/asides/category_list.html</code>（如果没有就新建）中：</p>
+
+<p> &#8220;`
+ <section>
+  <h1>Categories</h1>
+  <ul id="categories"></p>
+
+<pre><code>&lt;li class='category'&gt;&lt;a href='/blog/categories/octopress/'&gt;Octopress (2)&lt;/a&gt;&lt;/li&gt;
+</code></pre>
+
+<p><li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li></p>
+
+<p>  </ul>
+</section></p>
+
+<p> &#8220;`</p>
+
+<p>最后更改_config.yml文件，让侧边栏链接到刚才新增加的<code>source/_includes/asides/category_list.html</code>文件：</p>
+
+<p> &#8220;`
+default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</p>
+
+<p> &#8220;`</p>
+
+<p>完成以上步骤后，重新部署就能看到博客的右侧边栏增加了<code>category</code>列表：</p>
 
 <h2>参考文章</h2>
 
