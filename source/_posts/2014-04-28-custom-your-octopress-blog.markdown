@@ -85,20 +85,18 @@ Octopress实现该功能的代码在`source/_includes/head.html`文件中：
 
 首先在文章列表中你想展示的缩略部分增加标记：
 
- ```
+```
  <!-- more -->
- 
- ```
+
+```
+
 
 然后自定义`_config.yml`中的对应设置项：
 
+```
+ excerpt_link: "阅读更多 &rarr;"
+```
 
- ```
- excerpt_link: "阅读更多 &rarr;" 
- 
- ```
- 
- 
 这样就有了我博客中现在的效果：
 ![read more](https://github.com/wangzz/wangzz.github.com/blob/master/images/336C83D8-ADEB-49A2-93D6-815A74509434.png?raw=true)
 
@@ -106,9 +104,7 @@ Octopress实现该功能的代码在`source/_includes/head.html`文件中：
 
 在创建新文章时，我们会填写以下属性：
 
-
- ```
- 
+```
 ---
 
 layout: post
@@ -121,18 +117,17 @@ keywords: seo, octopress, analytics, 博客自定义
 description: 如何自定义Octopress博客
 
 ---
+```
 
- ```
- 
- 
+
+
 其中的`categories`会为当前文章指定一个分类。我们可能有需要通过分类查找文章的需求，而侧边栏中默认只有最近提交列表。下面就介绍如何在侧边栏中显示文章分类列表。
 
 
 首先，保存以下内容到`plugins/category_list_tag.rb`中（如果文件不存在就新创建一个）：
 
 
- ```
- 
+```
  module Jekyll
   class CategoryListTag < Liquid::Tag
     def render(context)
@@ -150,9 +145,8 @@ description: 如何自定义Octopress博客
 end
 
 Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
- 
- 
- ```
+
+```
 
 
 这个插件会向liquid注册一个名为`category_list`的tag，该tag就是以li的形式将站点所有的category组织起来。
@@ -160,9 +154,8 @@ Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
 
 然后再增加aside，复制以下代码到`source/_includes/asides/category_list.html`（如果没有就新建）中：
 
- 
- ``` 
- 
+
+```
  <section>
   <h1>Categories</h1>
   <ul id="categories">
@@ -170,21 +163,18 @@ Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
   </ul>
 </section>
 
- 
- ```
+```
 
 最后更改_config.yml文件，让侧边栏链接到刚才新增加的`source/_includes/asides/category_list.html`文件：
 
- 
- ```
- 
+
+```
 default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
 
- 
- ```
+```
 
 完成以上步骤后，重新部署就能看到博客的右侧边栏增加了`category`列表：
-
+![category](https://github.com/wangzz/wangzz.github.com/blob/master/images/ED4CED7F-41A1-4A2C-9681-79D73342B4B0.png?raw=true)
 
 
 
@@ -197,4 +187,4 @@ default_asides: [asides/recent_posts.html, asides/category_list.html, asides/git
 
 * [http://blog.csdn.net/lcliliil/article/details/13727927](http://blog.csdn.net/lcliliil/article/details/13727927)
 
-* 
+*
