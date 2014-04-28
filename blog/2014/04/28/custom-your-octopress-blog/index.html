@@ -182,17 +182,16 @@
 
 <p>首先在文章列表中你想展示的缩略部分增加标记：</p>
 
-<p> &#8220;`
- <!-- more --></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> &lt;!-- more --&gt;
+</span></code></pre></td></tr></table></div></figure>
 
-<p> &#8220;`</p>
 
 <p>然后自定义<code>_config.yml</code>中的对应设置项：</p>
 
-<p> &#8220;`
- excerpt_link: &ldquo;阅读更多 &rarr;&rdquo;</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> excerpt_link: "阅读更多 &rarr;"</span></code></pre></td></tr></table></div></figure>
 
-<p> &#8220;`</p>
 
 <p>这样就有了我博客中现在的效果：
 <img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/336C83D8-ADEB-49A2-93D6-815A74509434.png?raw=true" alt="read more" /></p>
@@ -204,89 +203,112 @@
 
 <p>在创建新文章时，我们会填写以下属性：</p>
 
-<p> &#8220;`</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>---
+</span><span class='line'>
+</span><span class='line'>layout: post
+</span><span class='line'>title: "自定义你的Octopress博客"
+</span><span class='line'>date: 2014-04-28 11:17:31 +0800
+</span><span class='line'>comments: true
+</span><span class='line'>categories: Octopress
+</span><span class='line'>tags: [octopress, 博客自定义, seo]
+</span><span class='line'>keywords: seo, octopress, analytics, 博客自定义
+</span><span class='line'>description: 如何自定义Octopress博客
+</span><span class='line'>
+</span><span class='line'>---</span></code></pre></td></tr></table></div></figure>
 
-<hr />
-
-<p>layout: post
-title: &ldquo;自定义你的Octopress博客&rdquo;
-date: 2014-04-28 11:17:31 +0800
-comments: true
-categories: Octopress
-tags: [octopress, 博客自定义, seo]
-keywords: seo, octopress, analytics, 博客自定义
-description: 如何自定义Octopress博客</p>
-
-<hr />
-
-<p> &#8220;`</p>
 
 <p>其中的<code>categories</code>会为当前文章指定一个分类。我们可能有需要通过分类查找文章的需求，而侧边栏中默认只有最近提交列表。下面就介绍如何在侧边栏中显示文章分类列表。</p>
 
 <p>首先，保存以下内容到<code>plugins/category_list_tag.rb</code>中（如果文件不存在就新创建一个）：</p>
 
-<p> &#8220;`</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> module Jekyll
+</span><span class='line'>  class CategoryListTag &lt; Liquid::Tag
+</span><span class='line'>    def render(context)
+</span><span class='line'>      html = ""
+</span><span class='line'>      categories = context.registers[:site].categories.keys
+</span><span class='line'>      categories.sort.each do |category|
+</span><span class='line'>        posts_in_category = context.registers[:site].categories[category].size
+</span><span class='line'>        category_dir = context.registers[:site].config['category_dir']
+</span><span class='line'>        category_url = File.join(category_dir, category.gsub(/_|\P{Word}/, '-').gsub(/-{2,}/, '-').downcase)
+</span><span class='line'>        html &lt;&lt; "&lt;li class='category'&gt;&lt;a href='/#{category_url}/'&gt;#{category} (#{posts_in_category})&lt;/a&gt;&lt;/li&gt;\n"
+</span><span class='line'>      end
+</span><span class='line'>      html
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
+</span></code></pre></td></tr></table></div></figure>
 
-<p> module Jekyll
-  class CategoryListTag &lt; Liquid::Tag</p>
-
-<pre><code>def render(context)
-  html = ""
-  categories = context.registers[:site].categories.keys
-  categories.sort.each do |category|
-    posts_in_category = context.registers[:site].categories[category].size
-    category_dir = context.registers[:site].config['category_dir']
-    category_url = File.join(category_dir, category.gsub(/_|\P{Word}/, '-').gsub(/-{2,}/, '-').downcase)
-    html &lt;&lt; "&lt;li class='category'&gt;&lt;a href='/#{category_url}/'&gt;#{category} (#{posts_in_category})&lt;/a&gt;&lt;/li&gt;\n"
-  end
-  html
-end
-</code></pre>
-
-<p>  end
-end</p>
-
-<p>Liquid::Template.register_tag(&lsquo;category_list&rsquo;, Jekyll::CategoryListTag)</p>
-
-<p> &#8220;`</p>
 
 <p>这个插件会向liquid注册一个名为<code>category_list</code>的tag，该tag就是以li的形式将站点所有的category组织起来。</p>
 
 <p>然后再增加aside，复制以下代码到<code>source/_includes/asides/category_list.html</code>（如果没有就新建）中：</p>
 
-<p> &#8220;`</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> &lt;section&gt;
+</span><span class='line'>  &lt;h1&gt;Categories&lt;/h1&gt;
+</span><span class='line'>  &lt;ul id="categories"&gt;
+</span><span class='line'>    <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
 
-<p> <section>
-  <h1>Categories</h1>
-  <ul id="categories"></p>
+</span><span class='line'>  &lt;/ul&gt;
+</span><span class='line'>&lt;/section&gt;
+</span></code></pre></td></tr></table></div></figure>
 
-<pre><code>&lt;li class='category'&gt;&lt;a href='/blog/categories/octopress/'&gt;Octopress (2)&lt;/a&gt;&lt;/li&gt;
-</code></pre>
-
-<p><li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li></p>
-
-<p>  </ul>
-</section></p>
-
-<p> &#8220;`</p>
 
 <p>最后更改_config.yml文件，让侧边栏链接到刚才新增加的<code>source/_includes/asides/category_list.html</code>文件：</p>
 
-<p> &#8220;`</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
+</span></code></pre></td></tr></table></div></figure>
 
-<p>default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</p>
 
-<p> &#8220;`</p>
-
-<p>完成以上步骤后，重新部署就能看到博客的右侧边栏增加了<code>category</code>列表：</p>
+<p>完成以上步骤后，重新部署就能看到博客的右侧边栏增加了<code>category</code>列表：
+<img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/ED4CED7F-41A1-4A2C-9681-79D73342B4B0.png?raw=true" alt="category" /></p>
 
 <h2>参考文章</h2>
 
 <ul>
-<li><p><a href="http://blog.csdn.net/lcliliil/article/details/13727927">http://blog.csdn.net/lcliliil/article/details/13727927</a></p></li>
-<li></li>
+<li><a href="http://blog.csdn.net/lcliliil/article/details/13727927">http://blog.csdn.net/lcliliil/article/details/13727927</a></li>
 </ul>
 
+
+<p>*</p>
 </div>
 
 
