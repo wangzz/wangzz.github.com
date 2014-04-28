@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T17:06:44+08:00</updated>
+  <updated>2014-04-28T17:19:20+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -126,9 +126,11 @@
 <img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/336C83D8-ADEB-49A2-93D6-815A74509434.png?raw=true" alt="read more" /></p>
 
 <ul>
-<li>博客侧边栏增加category列表</li>
+<li>自定义侧边栏</li>
 </ul>
 
+
+<p>下面以增加侧边栏category列表为例。</p>
 
 <p>在创建新文章时，我们会填写以下属性：</p>
 
@@ -144,7 +146,9 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>---
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>---
 </span><span class='line'>
 </span><span class='line'>layout: post
 </span><span class='line'>title: "自定义你的Octopress博客"
@@ -225,12 +229,22 @@
 <p>最后更改_config.yml文件，让侧边栏链接到刚才新增加的<code>source/_includes/asides/category_list.html</code>文件：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</span></code></pre></td></tr></table></div></figure>
 
 
 <p>完成以上步骤后，重新部署就能看到博客的右侧边栏增加了<code>category</code>列表：
 <img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/ED4CED7F-41A1-4A2C-9681-79D73342B4B0.png?raw=true" alt="category" /></p>
+
+<ul>
+<li>自定义Navigation</li>
+</ul>
+
+
+<p>默认的导航栏只有Blog、Archives两项，很难满足大家的要求。下面以增加about界面为例说明如何在导航栏上增加内容。</p>
+
+<p>首先编辑文件<code>/source/_includes/custom/navigation.html</code>，仿照Blog和Archives的写法增加一行About：</p>
+
+<p><img src="" alt="about" /></p>
 
 <h2>参考文章</h2>
 

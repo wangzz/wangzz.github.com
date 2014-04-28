@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T17:06:44+08:00</updated>
+  <updated>2014-04-28T17:19:20+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -113,13 +113,17 @@ description: 如何自定义Octopress博客
 <img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/336C83D8-ADEB-49A2-93D6-815A74509434.png?raw=true" alt="read more" /></p>
 
 <ul>
-<li>博客侧边栏增加category列表</li>
+<li>自定义侧边栏</li>
 </ul>
 
 
+<p>下面以增加侧边栏category列表为例。</p>
+
 <p>在创建新文章时，我们会填写以下属性：</p>
 
-<h2>```</h2>
+<p>```</p>
+
+<hr />
 
 <p>layout: post
 title: &ldquo;自定义你的Octopress博客&rdquo;
@@ -181,13 +185,23 @@ end</p>
 
 <p>最后更改_config.yml文件，让侧边栏链接到刚才新增加的<code>source/_includes/asides/category_list.html</code>文件：</p>
 
-<p>```
-default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</p>
-
-<p>```</p>
+<p><code>
+default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
+</code></p>
 
 <p>完成以上步骤后，重新部署就能看到博客的右侧边栏增加了<code>category</code>列表：
 <img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/ED4CED7F-41A1-4A2C-9681-79D73342B4B0.png?raw=true" alt="category" /></p>
+
+<ul>
+<li>自定义Navigation</li>
+</ul>
+
+
+<p>默认的导航栏只有Blog、Archives两项，很难满足大家的要求。下面以增加about界面为例说明如何在导航栏上增加内容。</p>
+
+<p>首先编辑文件<code>/source/_includes/custom/navigation.html</code>，仿照Blog和Archives的写法增加一行About：</p>
+
+<p><img src="" alt="about" /></p>
 
 <h2>参考文章</h2>
 
@@ -295,7 +309,7 @@ Your identification has been saved in /Users/you/.ssh/id_rsa.</p>
 
 <h1>The key fingerprint is:</h1>
 
-<h1>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db <a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#x79;&#x6f;&#x75;&#x72;&#x5f;&#101;&#x6d;&#97;&#105;&#x6c;&#64;&#x65;&#x78;&#97;&#x6d;&#x70;&#108;&#x65;&#x2e;&#x63;&#111;&#109;">&#121;&#111;&#117;&#114;&#95;&#101;&#109;&#97;&#105;&#x6c;&#64;&#x65;&#120;&#x61;&#x6d;&#112;&#x6c;&#101;&#x2e;&#x63;&#x6f;&#109;</a></h1>
+<h1>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#x79;&#111;&#x75;&#x72;&#x5f;&#x65;&#109;&#x61;&#105;&#108;&#64;&#101;&#120;&#97;&#x6d;&#112;&#108;&#101;&#46;&#99;&#x6f;&#x6d;">&#x79;&#x6f;&#117;&#114;&#95;&#101;&#109;&#97;&#x69;&#x6c;&#64;&#101;&#120;&#x61;&#109;&#112;&#108;&#101;&#x2e;&#99;&#x6f;&#x6d;</a></h1>
 
 <p>```</p>
 
