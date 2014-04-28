@@ -87,14 +87,17 @@ Octopress实现该功能的代码在`source/_includes/head.html`文件中：
 
  ```
  <!-- more -->
+ 
  ```
 
 然后自定义`_config.yml`中的对应设置项：
+
 
  ```
  excerpt_link: "阅读更多 &rarr;" 
  
  ```
+ 
  
 这样就有了我博客中现在的效果：
 ![read more](https://github.com/wangzz/wangzz.github.com/blob/master/images/336C83D8-ADEB-49A2-93D6-815A74509434.png?raw=true)
@@ -102,6 +105,7 @@ Octopress实现该功能的代码在`source/_includes/head.html`文件中：
 * 博客侧边栏增加category列表
 
 在创建新文章时，我们会填写以下属性：
+
 
  ```
  
@@ -120,6 +124,7 @@ description: 如何自定义Octopress博客
 
  ```
  
+ 
 其中的`categories`会为当前文章指定一个分类。我们可能有需要通过分类查找文章的需求，而侧边栏中默认只有最近提交列表。下面就介绍如何在侧边栏中显示文章分类列表。
 
 
@@ -127,6 +132,7 @@ description: 如何自定义Octopress博客
 
 
  ```
+ 
  module Jekyll
   class CategoryListTag < Liquid::Tag
     def render(context)
@@ -145,7 +151,9 @@ end
 
 Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
  
+ 
  ```
+
 
 这个插件会向liquid注册一个名为`category_list`的tag，该tag就是以li的形式将站点所有的category组织起来。
 
@@ -154,12 +162,14 @@ Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
 
  
  ``` 
+ 
  <section>
   <h1>Categories</h1>
   <ul id="categories">
     {% category_list %}
   </ul>
 </section>
+
  
  ```
 
@@ -167,7 +177,9 @@ Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
 
  
  ```
+ 
 default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
+
  
  ```
 
