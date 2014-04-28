@@ -89,7 +89,7 @@
   </header>
 
 
-<div class="entry-content"><h1>SEO</h1>
+<div class="entry-content"><h2>SEO</h2>
 
 <ul>
 <li>增加统计工具</li>
@@ -103,6 +103,8 @@
 <p>集成百度统计方式非常简单：</p>
 
 <p>只需到<code>百度统计</code>官方网站申请一个账号，将获取的代码添加到<code>source/_includes/custom/footer.html</code>中，重新部署即可。</p>
+
+<p> <!-- more --></p>
 
 <ul>
 <li>搜索优化</li>
@@ -169,7 +171,7 @@
 
 <p>此外，还可以在<code>_config.yml</code>里添加默认的<code>description</code>和<code>keywords</code>，不过我没试过。</p>
 
-<h1>界面相关</h1>
+<h2>界面相关</h2>
 
 <ul>
 <li>博客首页显示文章摘要</li>
@@ -180,13 +182,32 @@
 
 <p>首先在文章列表中你想展示的缩略部分增加标记：</p>
 
-<p><code>&lt;!-- more --&gt;</code></p>
+<p> <code>
+ &lt;!-- more --&gt;
+</code></p>
 
 <p>然后自定义<code>_config.yml</code>中的对应设置项：</p>
 
-<p> <code>excerpt_link: "阅读更多 &amp;rarr;"</code></p>
+<p> &#8220;`
+ excerpt_link: &ldquo;阅读更多 &rarr;&rdquo;</p>
 
-<p>这样就有了我博客中现在的效果：</p>
+<p> &#8220;`</p>
+
+<p>这样就有了我博客中现在的效果：
+<img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/336C83D8-ADEB-49A2-93D6-815A74509434.png?raw=true" alt="read more" /></p>
+
+<ul>
+<li></li>
+</ul>
+
+
+<h2>参考文章</h2>
+
+<ul>
+<li><p><a href="http://blog.csdn.net/lcliliil/article/details/13727927">http://blog.csdn.net/lcliliil/article/details/13727927</a></p></li>
+<li></li>
+</ul>
+
 </div>
 
 

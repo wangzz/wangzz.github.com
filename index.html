@@ -92,7 +92,7 @@
   </header>
 
 
-  <div class="entry-content"><h1>SEO</h1>
+  <div class="entry-content"><h2>SEO</h2>
 
 <ul>
 <li>增加统计工具</li>
@@ -107,91 +107,12 @@
 
 <p>只需到<code>百度统计</code>官方网站申请一个账号，将获取的代码添加到<code>source/_includes/custom/footer.html</code>中，重新部署即可。</p>
 
-<ul>
-<li>搜索优化</li>
-</ul>
-
-
-<p>为了让自己搭建的博客更容易被搜索引擎搜到，最好将网站地址提交给各大搜索引擎，下面有两个连接搜集了各个搜索引擎的网站提交入口：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>http://urlc.cn/tool/addurl.html
-</span><span class='line'>http://tool.lusongsong.com/addurl.html</span></code></pre></td></tr></table></div></figure>
-
-
-<p>我试了下，添加到<code>google</code>以后，搜索关键字的时候自己的博客确实排名靠前了。</p>
-
-<p>光是将网址添加到搜索引擎还不够，你必须得为你的文章添加关键字，才能更好地被引擎搜到，在创建一篇新文章的时候，生成的makedown文件包含以下内容，以本文举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>---
-</span><span class='line'>
-</span><span class='line'>layout: post
-</span><span class='line'>title: "自定义你的Octopress博客"
-</span><span class='line'>date: 2014-04-28 11:17:31 +0800
-</span><span class='line'>comments: true
-</span><span class='line'>categories: Octopress
-</span><span class='line'>
-</span><span class='line'>---</span></code></pre></td></tr></table></div></figure>
-
-
-<p>实际上我们还可以为其添加以下几项，以本文举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>tags: [octopress, 博客自定义, seo]
-</span><span class='line'>keywords: seo, octopress, analytics, 博客自定义
-</span><span class='line'>description: 如何自定义Octopress博客</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样更利于搜索引擎抓取到我们的博客。</p>
-
-<p>事实上，如果我们不做上述设置，Octopress会默认将文章的前150个字作为文章的关键字，供搜索引擎抓取，但那并不一定准确。</p>
-
-<p>Octopress实现该功能的代码在<code>source/_includes/head.html</code>文件中：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>  &lt;meta name="description" content="如何自定义Octopress博客"&gt;
-</span><span class='line'>&lt;meta name="keywords" content="seo, octopress, analytics, 博客自定义"&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>此外，还可以在<code>_config.yml</code>里添加默认的<code>description</code>和<code>keywords</code>，不过我没试过。</p>
-
-<h1>界面相关</h1>
-
-<ul>
-<li>博客首页显示文章摘要</li>
-</ul>
-
-
-<p>默认情况下，博客首页文章列表中都会全部展示，要想让文章在首页中只显示一部分配置也非常简单：</p>
-
-<p>首先在文章列表中你想展示的缩略部分增加标记：</p>
-
-<p><code>&lt;!-- more --&gt;</code></p>
-
-<p>然后自定义<code>_config.yml</code>中的对应设置项：</p>
-
-<p> <code>excerpt_link: "阅读更多 &amp;rarr;"</code></p>
-
-<p>这样就有了我博客中现在的效果：</p>
-</div>
+<p> </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/28/custom-your-octopress-blog/">阅读更多 &rarr;</a>
+    </footer>
   
 
 
