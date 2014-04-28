@@ -18,7 +18,7 @@ description: 如何自定义Octopress博客
 
 博客搭建好了以后，大家一定很想知道每天都有多少的访问量。现在有很多工具都可以帮助我们做这件事，比如`Google Analytics`、`百度统计`、`CNZZ` 等。
 
-其中`Google Analytics`是Octopress自带的统计工具，使用方式也非常简单，只需要到`Google Analytics`申请一个`app id`，填写到`_config.yml`文件中的`google_analytics_tracking_id`后面即可。但`Google Analytics`存在翻墙的麻烦，而且`百度统计`功能也挺齐全，完全能满足我的需求，就选在了`百度统计`。
+其中`Google Analytics`是Octopress自带的统计工具，使用方式也非常简单，只需要到`Google Analytics`申请一个`app id`，填写到`_config.yml`文件中的`google_analytics_tracking_id`后面即可。但`Google Analytics`存在翻墙的麻烦，而且`百度统计`功能也挺齐全，完全能满足我的需求，就选择了`百度统计`。
 
 集成百度统计方式非常简单：
 
