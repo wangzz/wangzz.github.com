@@ -204,9 +204,35 @@ rake new_page['about']
 界面底部的声明部分同样可以自定义，修改文件：`source/_includes/custom/footer.html`成自己想要的格式即可。
 
 
-* 修改网站主题
+* 自定义网站主题
+
+目前有很多第三方主题，比如：[http://opthemes.com/](http://opthemes.com/)
+
+该网站搜集了很多漂亮的主题，对应的主题里都有安装方式。
 
 
+* 新标签页打开网站中第三方链接
+
+Octopress博客中，默认是在当前界面中打开第三方链接，这导致网站浏览者跳到第三方链接后很难回来。
+
+将以下代码加入`source/_includes/custom/head.html`文件中：
+
+```
+> <script type="text/javascript">
+> function addBlankTargetForLinks () {
+>   $('a[href^="http"]').each(function(){
+>       $(this).attr('target', '_blank');
+>   });
+> }
+> 
+> $(document).bind('DOMNodeInserted', function(event) {
+>  addBlankTargetForLinks();
+> });
+> </script>
+```
+记得把左侧的`>`符号都去掉。
+
+不过本站的链接还是会在当前界面中打开。
 
 
 
@@ -221,3 +247,4 @@ rake new_page['about']
 
 * [Add About Page](http://asaf.github.io/blog/2013/07/08/blogging-with-octopress-add-about-page/)
 
+* [新标签页打开第三方链接](http://www.blogjava.net/lishunli/archive/2013/01/20/394478.html)
