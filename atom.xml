@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T10:38:49+08:00</updated>
+  <updated>2014-04-28T11:04:02+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -135,8 +135,12 @@
 
 
 <p>别忘了<code>username</code>替换成你自己github用户名。
-另外还要注意的是，clone的地址不能是<code>http</code>而必须得是<code>ssh</code>的。
-如果执行时提示以下错误：</p>
+另外还要注意的是，clone的地址不能是<code>http</code>而必须得是<code>ssh</code>的。</p>
+
+<!-- more -->
+
+
+<p>如果执行时提示以下错误：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>

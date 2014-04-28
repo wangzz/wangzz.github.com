@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Octopress | 王中周的个人博客]]></title>
+  <link href="http://wangzz.github.io/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://wangzz.github.io/"/>
+  <updated>2014-04-28T11:04:02+08:00</updated>
+  <id>http://wangzz.github.io/</id>
+  <author>
+    <name><![CDATA[王中周]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[让你的Octopress博客在多台Mac上同时使用]]></title>
+    <link href="http://wangzz.github.io/blog/2014/04/02/ru-he-pei-zhi-rang-ni-de-octopressbo-ke-zai-duo-tai-macshang-tong-shi-shi-yong/"/>
+    <updated>2014-04-02T14:28:35+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/04/02/ru-he-pei-zhi-rang-ni-de-octopressbo-ke-zai-duo-tai-macshang-tong-shi-shi-yong</id>
+    <content type="html"><![CDATA[<p>前阵子在公司电脑上配置好了Octopress博客，但是想在家里的Mac上使用，开始以为简单的将仓库clone就可以了，不幸的是我想的太简单。后来在网上看到了前面列出的第一篇文章，终于解决问题。</p>
+
+<h2>一、Octopress目录结构</h2>
+
+<p>Octopress的仓库目录下有两个branch，<code>source</code>和<code>master</code>。</p>
+
+<ol>
+<li><p><code>source</code>分支下保存Octopress的源代码，我们需要用他们生成博客，该分支保存在Octopress本地仓库的根目录下；</p></li>
+<li><p><code>master</code>分支下保存生成的博客内容，该分支在Octopress本地仓库的根目录下一个叫<code>_deploy</code>得文件夹中。该文件夹是以下划线开头的，会在执行<code>git push origin source</code>命令时被忽略，这也是为什么一个目录中能同时存在两个不同分支的文件夹的原因。</p></li>
+</ol>
+
+
+<h2>二、在本地重建Octopress仓库</h2>
+
+<p>需要执行以下命令：</p>
+
+<ol>
+<li>clone <code>source</code>分支</li>
+</ol>
+
+
+<p><code>
+$ git clone -b source git@github.com:username/username.github.com.git octopress
+</code>
+别忘了<code>username</code>替换成你自己github用户名。
+另外还要注意的是，clone的地址不能是<code>http</code>而必须得是<code>ssh</code>的。</p>
+
+<!-- more -->
+
+
+<p>如果执行时提示以下错误：</p>
+
+<p>```
+Cloning into &lsquo;octopress&rsquo;&hellip;
+The authenticity of host &lsquo;github.com (192.30.252.131)&rsquo; can&rsquo;t be established.
+RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added &lsquo;github.com,192.30.252.131&rsquo; (RSA) to the list of known hosts.
+Permission denied (publickey).
+fatal: Could not read from remote repository.</p>
+
+<p>Please make sure you have the correct access rights
+and the repository exists.</p>
+
+<p>```</p>
+
+<p>说明你的电脑不被github信任，需要在你电脑上创建<code>ssh key</code>并添加到github中。</p>
+
+<p>这是你需要执行2；
+如果没出现上述错误，直接执行3。</p>
+
+<p>2.创建并添加ssh key</p>
+
+<p>2.1 创建ssh key</p>
+
+<p>2.1.1 生成key</p>
+
+<p>执行命令：</p>
+
+<p><code>
+$ ssh-keygen -t rsa -C "your_email@example.com"
+</code></p>
+
+<p>会提示：</p>
+
+<p><code>
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/you/.ssh/id_rsa): [Press enter]
+</code></p>
+
+<p>这时候按回车键(Enter)继续：</p>
+
+<p>```
+Enter passphrase (empty for no passphrase): [Type a passphrase]</p>
+
+<h1>Enter same passphrase again: [Type passphrase again]</h1>
+
+<p>```</p>
+
+<p>会要求你输入一个密码，4位以上，要记住，后面有用。</p>
+
+<p>接下来会提示：</p>
+
+<p>```
+Your identification has been saved in /Users/you/.ssh/id_rsa.</p>
+
+<h1>Your public key has been saved in /Users/you/.ssh/id_rsa.pub.</h1>
+
+<h1>The key fingerprint is:</h1>
+
+<h1>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x79;&#111;&#117;&#114;&#x5f;&#101;&#109;&#x61;&#105;&#108;&#x40;&#x65;&#x78;&#x61;&#x6d;&#x70;&#x6c;&#101;&#x2e;&#x63;&#x6f;&#x6d;">&#121;&#x6f;&#x75;&#x72;&#95;&#x65;&#109;&#x61;&#x69;&#x6c;&#x40;&#x65;&#x78;&#x61;&#x6d;&#x70;&#108;&#x65;&#x2e;&#x63;&#111;&#x6d;</a></h1>
+
+<p>```</p>
+
+<p>到这里就说明key已经创建成功了。</p>
+
+<p>2.1.2 把生成的key添加到<code>ssh-agent</code>中
+最后需要执行以下命令：</p>
+
+<p><code>
+$ ssh-add ~/.ssh/id_rsa
+</code></p>
+
+<p>2.2 把生成的key添加到github</p>
+
+<p>2.2.1 copy key内容</p>
+
+<p>先执行下面的命令：</p>
+
+<p><code>
+pbcopy &lt; ~/.ssh/id_rsa.pub
+</code>
+该命令将key中的内容copy到粘贴板中，以便后面使用。当然你也可以用自己的方式copy。</p>
+
+<p>2.2.2 找到添加key的地方</p>
+
+<p>先点击<a href="https://github.com/settings">Account Settings</a>：</p>
+
+<p><img src="https://github-images.s3.amazonaws.com/help/settings/userbar-account-settings.png" alt="账户设置" /></p>
+
+<p>进入设置界面后，点击界面左侧的<a href="https://github.com/settings/ssh">SSH KEYS</a>:</p>
+
+<p><img src="https://github-images.s3.amazonaws.com/help/settings/settings-sidebar-ssh-keys.png" alt="ssh keys" /></p>
+
+<p>点击<code>Add SSH key</code>按钮：</p>
+
+<p><img src="https://github-images.s3.amazonaws.com/help/settings/ssh-add-ssh-key.png" alt="add ssh key" /></p>
+
+<p>点击<code>Add key</code>按钮：</p>
+
+<p><img src="https://github-images.s3.amazonaws.com/help/settings/ssh-add-key.png" alt="add key" /></p>
+
+<p>在输入框内粘贴刚才copy的key，点击确定即可。</p>
+
+<p>2.3 验证key可用性</p>
+
+<p>通过ssh github验证key是否可用：</p>
+
+<p><code>
+$ ssh -T git@github.com
+</code></p>
+
+<p>命令执行后会输出：</p>
+
+<p><code>
+The authenticity of host 'github.com (207.97.227.239)' can't be established.
+RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
+Are you sure you want to continue connecting (yes/no)?
+</code></p>
+
+<p>输入<code>yes</code>如果打印以下内容，就说明OK了：</p>
+
+<p><code>
+Hi username! You've successfully authenticated, but GitHub does not
+</code></p>
+
+<p> 3.clone master分支</p>
+
+<p>下面需要将master分支clone到<code>_deploy</code>目录：</p>
+
+<p><code>
+$ cd octopress
+$ git clone git@github.com:username/username.github.com.git _deploy
+</code></p>
+
+<p> 4.配置环境</p>
+
+<p>执行以下命令配置环境：</p>
+
+<p><code>
+$ gem install bundler
+$ rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
+$ bundle install
+$ rake setup_github_pages
+</code></p>
+
+<p>执行最后一条命令时需要你输入github中博客仓库地址：</p>
+
+<p><code>
+Enter the read/write url for your repository
+(For example, 'git@github.com:your_username/your_username.github.com)
+</code>
+到此所有的工作都完成了，你就可以享受在两台电脑上使用Octopress了！</p>
+
+<h2>三、Tips</h2>
+
+<ol>
+<li>及时提交本地修改</li>
+</ol>
+
+
+<p>在每处配置了Octopress的地方，做了任何修改都要提交，否则另一个地方做了修改，本地更新的时候肯定会冲突。</p>
+
+<p>每次在本地做完修改以后，都要及时提交，分别执行以下命令：</p>
+
+<p><code>
+$ rake generate
+$ rake deploy             # update the remote master branch
+</code></p>
+
+<p>第一条命令会使用本地的修改生成最新的blog网站，并且生成的blog会存放到<code>Octopress</code>根目录下的<code>public/</code>目录下；</p>
+
+<p>第二条命令主要做了两件事：</p>
+
+<p>*用<code>generate</code>命令生成在<code>public/</code>目录下的内容覆盖<code>_deploy/</code>目录下内容；</p>
+
+<p>*将<code>_deploy/</code>目录下的修改<code>add</code> 、 <code>commit</code>到git，并<code>push</code>到git的<code>master</code>分支。</p>
+
+<p>别以为这就结束了，你还得把source分支中做的修改提交的git仓库中，执行以下命令：</p>
+
+<p><code>
+$ git add .
+$ git commit -am "Some comment here."
+$ git push origin source  # update the remote source branch
+</code>
+执行完这两步后，稍过一会就能看到自己blog中的更新啦！</p>
+
+<p> 2.修改前先更新到最新版本</p>
+
+<p>为了以防万一，在本地做任何修改前都要先做更新，可以执行以下命令分别更新<code>source</code>和<code>master</code>分支：</p>
+
+<p><code>
+$ cd octopress
+$ git pull origin source  # update the local source branch
+$ cd ./_deploy
+$ git pull origin master  # update the local master branch
+</code></p>
+
+<h2>四、参考文档</h2>
+
+<p>本文参考了以下两篇文章：</p>
+
+<ol>
+<li><p><a href="http://blog.zerosharp.com/clone-your-octopress-to-blog-from-two-places/"><strong>Clone Your Octopress to Blog From Two Places</strong></a></p></li>
+<li><p><a href="https://help.github.com/articles/generating-ssh-keys"><strong>Generating SSH Keys</strong></a></p></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>
