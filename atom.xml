@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T16:15:20+08:00</updated>
+  <updated>2014-04-28T16:19:23+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -218,8 +218,9 @@
 
 
 <p>注意要将<code>{ category_list }</code>中<code>category_list</code>单词的左右两边分别加个<code>%</code>,即写成下图所示样式：
-<img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/D04878A8-B17E-4B76-A8FD-E4938C293B84.png?raw=true" alt="categorylist_pic" />
-搞那么复杂是markdown排版问题。。。</p>
+<img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/D04878A8-B17E-4B76-A8FD-E4938C293B84.png?raw=true" alt="categorylist_pic" /></p>
+
+<p>搞那么复杂是markdown排版问题。。。</p>
 
 <p>最后更改_config.yml文件，让侧边栏链接到刚才新增加的<code>source/_includes/asides/category_list.html</code>文件：</p>
 
@@ -234,11 +235,10 @@
 <h2>参考文章</h2>
 
 <ul>
-<li><a href="http://blog.csdn.net/lcliliil/article/details/13727927">http://blog.csdn.net/lcliliil/article/details/13727927</a></li>
+<li><p><a href="http://blog.csdn.net/lcliliil/article/details/13727927">SEO统计</a></p></li>
+<li><p><a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">增加category列表</a></p></li>
 </ul>
 
-
-<p>*</p>
 ]]></content>
   </entry>
   
