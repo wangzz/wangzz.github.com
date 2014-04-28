@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Opensource | 王中周的个人博客]]></title>
+  <link href="http://wangzz.github.io/blog/categories/opensource/atom.xml" rel="self"/>
+  <link href="http://wangzz.github.io/"/>
+  <updated>2014-04-28T11:11:35+08:00</updated>
+  <id>http://wangzz.github.io/</id>
+  <author>
+    <name><![CDATA[王中周]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[github优秀开源项目大全-iOS]]></title>
+    <link href="http://wangzz.github.io/blog/2014/04/25/githubyou-xiu-xiang-mu-ios/"/>
+    <updated>2014-04-25T17:45:33+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/04/25/githubyou-xiu-xiang-mu-ios</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<ol>
+<li><p>本文旨在搜集github上优秀的开源项目</p></li>
+<li><p>本文搜集的项目都是用于iOS开发</p></li>
+<li><p>本文会持续更新&hellip;</p></li>
+</ol>
+
+
+<h2>完整客户端</h2>
+
+<ul>
+<li><a href="https://github.com/dennisreimann/">ioctocat</a></li>
+</ul>
+
+
+<p>github的iOS客户端，目前开源代码是V1版本，V2版本在appstore上可以下载</p>
+
+<ul>
+<li><a href="https://github.com/chrisballinger/ChatSecure-iOS">ChatSecure-iOS</a></li>
+</ul>
+
+
+<p>使用XMPP协议的IM开源软件，很强大，在appstore上可以下载</p>
+
+<ul>
+<li><a href="https://github.com/gaosboy/iOSSF">SegmentFault</a></li>
+</ul>
+
+
+<p>SegmentFault的官方iOS客户端</p>
+
+<ul>
+<li><a href="http://git.oschina.net/oschina/iphone-app">OSChina-iOS</a></li>
+</ul>
+
+
+<p>开源中国社区oschina的官方iPhone客户端，appstore已上线。早期地址在<a href="https://github.com/gaosboy/iOSSF">github</a>上,后来迁移到OSChina自己的代码托管平台.</p>
+
+<!-- more -->
+
+
+<h1>Xcode插件</h1>
+
+<ul>
+<li><a href="https://github.com/kattrali/cocoapods-xcode-plugin">cocoapods-xcode-plugin</a></li>
+</ul>
+
+
+<p>用于在Xcode中管理CocoaPods依赖库
+<img src="https://raw.githubusercontent.com/kattrali/cocoapods-xcode-plugin/master/menu.png" alt="cocoapods-xcode-plugin" /></p>
+
+<ul>
+<li><a href="https://github.com/qfish/XAlign">XAlign</a></li>
+</ul>
+
+
+<p>方便实现代码对其功能，使代码风格统一
+<img src="https://camo.githubusercontent.com/7973c0e352b1f91e3efe5b3550cff5df97f4589a/687474703a2f2f7166692e73682f58416c69676e2f696d616765732f657175616c2e676966" alt="XAlign" /></p>
+
+<h1>工具</h1>
+
+<ul>
+<li><a href="https://github.com/johnno1962/Xtrace">Xtrace</a></li>
+</ul>
+
+
+<p>能详细打印出一个某个方法被调用的堆栈，方便调试时定位问题
+<img src="https://camo.githubusercontent.com/c5b766f2e9646f5b909ac4e8d63cca6d4f2ff7fd/687474703a2f2f696e6a656374696f6e666f7278636f64652e6a6f686e686f6c6473776f7274682e636f6d2f787472616365632e706e673f666c7573683d32" alt="Xtrace" /></p>
+
+<ul>
+<li><a href="https://github.com/realmacsoftware/RMConnecter">RMConnecter</a></li>
+</ul>
+
+
+<p>在上传AppStore时需要填写app的描述信息，此软件能很方便的填写这些信息。
+<img src="https://github.com/realmacsoftware/RMConnecter/blob/master/Assets/screenshots.png?raw=true" alt="RMConnecter" /></p>
+
+<h1>自定义view</h1>
+
+<ul>
+<li><a href="https://github.com/yishuiliunian/DZTableView">DZTableView</a></li>
+</ul>
+
+
+<p>仿照UITableView机制自己实现的一个自定义tableview，带有详细的说明文档</p>
+]]></content>
+  </entry>
+  
+</feed>

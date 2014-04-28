@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T11:04:02+08:00</updated>
+  <updated>2014-04-28T11:11:35+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -56,6 +56,9 @@
 
 
 <p>开源中国社区oschina的官方iPhone客户端，appstore已上线。早期地址在<a href="https://github.com/gaosboy/iOSSF">github</a>上,后来迁移到OSChina自己的代码托管平台.</p>
+
+<!-- more -->
+
 
 <h1>Xcode插件</h1>
 
@@ -121,6 +124,9 @@
 </ol>
 
 
+<!-- more -->
+
+
 <h2>二、在本地重建Octopress仓库</h2>
 
 <p>需要执行以下命令：</p>
@@ -136,9 +142,6 @@
 
 <p>别忘了<code>username</code>替换成你自己github用户名。
 另外还要注意的是，clone的地址不能是<code>http</code>而必须得是<code>ssh</code>的。</p>
-
-<!-- more -->
-
 
 <p>如果执行时提示以下错误：</p>
 
