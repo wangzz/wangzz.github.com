@@ -274,23 +274,14 @@
 
 <p>然后再增加aside，复制以下代码到<code>source/_includes/asides/category_list.html</code>（如果没有就新建）中：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; &lt;section&gt;
-</span><span class='line'>&gt;  &lt;h1&gt;Categories&lt;/h1&gt;
-</span><span class='line'>&gt;  &lt;ul id="categories"&gt;
-</span><span class='line'>&gt;   <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
-<li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
+<p><section>
+ <h1>Categories</h1>
+ <ul id="categories">
+  <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li></p>
 
-</span><span class='line'>&gt;  &lt;/ul&gt;
-</span><span class='line'>&gt; &lt;/section&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>记得把每行最前边的<code>&gt;</code>去掉</p>
+<p> </ul>
+</section></p>
 
 <p>最后更改_config.yml文件，让侧边栏链接到刚才新增加的<code>source/_includes/asides/category_list.html</code>文件：</p>
 
