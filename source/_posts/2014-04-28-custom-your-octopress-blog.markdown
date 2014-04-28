@@ -100,11 +100,14 @@ Octopress实现该功能的代码在`source/_includes/head.html`文件中：
 这样就有了我博客中现在的效果：
 ![read more](https://github.com/wangzz/wangzz.github.com/blob/master/images/336C83D8-ADEB-49A2-93D6-815A74509434.png?raw=true)
 
-* 博客侧边栏增加category列表
+* 自定义侧边栏
+
+下面以增加侧边栏category列表为例。
 
 在创建新文章时，我们会填写以下属性：
 
 ```
+
 ---
 
 layout: post
@@ -172,11 +175,22 @@ Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)
 
 ```
 default_asides: [asides/recent_posts.html, asides/category_list.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
-
 ```
 
 完成以上步骤后，重新部署就能看到博客的右侧边栏增加了`category`列表：
 ![category](https://github.com/wangzz/wangzz.github.com/blob/master/images/ED4CED7F-41A1-4A2C-9681-79D73342B4B0.png?raw=true)
+
+* 自定义Navigation
+
+默认的导航栏只有Blog、Archives两项，很难满足大家的要求。下面以增加about界面为例说明如何在导航栏上增加内容。
+
+首先编辑文件`/source/_includes/custom/navigation.html`，仿照Blog和Archives的写法增加一行About：
+
+![about]()
+
+
+
+
 
 
 
