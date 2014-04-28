@@ -1,9 +1,13 @@
 ---
+
 layout: post
 title: "让你的Octopress博客在多台Mac上同时使用"
 date: 2014-04-02 14:28:35 +0800
 comments: true
-categories:
+categories: Octopress
+tags: [octopress, 博客]
+keywords: octopress, 博客 ,octopress多电脑使用 ,Mac
+description: 让你的Octopress博客在多台Mac上同时使用
  
 ---
 
@@ -29,6 +33,9 @@ $ git clone -b source git@github.com:username/username.github.com.git octopress
 ```
 别忘了`username`替换成你自己github用户名。
 另外还要注意的是，clone的地址不能是`http`而必须得是`ssh`的。
+
+<!-- more -->
+
 如果执行时提示以下错误：
 
 ```
