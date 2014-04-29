@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-28T18:53:49+08:00</updated>
+  <updated>2014-04-29T17:05:12+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -391,6 +391,9 @@
 
 <p>使用XMPP协议的IM开源软件，很强大，在appstore上可以下载</p>
 
+<!-- more -->
+
+
 <ul>
 <li><a href="https://github.com/gaosboy/iOSSF">SegmentFault</a></li>
 </ul>
@@ -405,8 +408,27 @@
 
 <p>开源中国社区oschina的官方iPhone客户端，appstore已上线。早期地址在<a href="https://github.com/gaosboy/iOSSF">github</a>上,后来迁移到OSChina自己的代码托管平台.</p>
 
-<!-- more -->
+<ul>
+<li><a href="https://github.com/fggeraissate/FFCalendar">FFCalendar</a></li>
+</ul>
 
+
+<p>实现了日历的基本功能，目前只支持iPad版本
+<img src="https://raw.githubusercontent.com/fggeraissate/FFCalendar/master/FFCalendar/FFCalendars/Util/Images/YearlyCalendar.png" alt="FFCalendar" /></p>
+
+<ul>
+<li><a href="https://github.com/WhiteHouse/wh-app-ios">wh-app-ios</a></li>
+</ul>
+
+
+<p>美国白宫（WhiteHouse）的官方app，听起来很高大上哈</p>
+
+<ul>
+<li><a href="https://github.com/ruby-china/ruby-china-for-ios">ruby-china-for-ios</a></li>
+</ul>
+
+
+<p>Ruby China的官方app</p>
 
 <h1>Xcode插件</h1>
 
@@ -444,6 +466,30 @@
 <p>在上传AppStore时需要填写app的描述信息，此软件能很方便的填写这些信息。
 <img src="https://github.com/realmacsoftware/RMConnecter/blob/master/Assets/screenshots.png?raw=true" alt="RMConnecter" /></p>
 
+<ul>
+<li><a href="https://github.com/facebook/xctool">xctool</a></li>
+</ul>
+
+
+<p>facebook出的自动编译工具，不像xcodebuild，它能够整洁的打印出日志</p>
+
+<p><img src="https://camo.githubusercontent.com/f4c5388651b83663ff811969c0e2099073c25484/68747470733a2f2f66706f747465725f7075626c69632e73332e616d617a6f6e6177732e636f6d2f7863746f6f6c2d7569636174616c6f672e676966" alt="xctool" /></p>
+
+<ul>
+<li><a href="https://github.com/facebook/pop">pop</a></li>
+</ul>
+
+
+<p>facebook那神奇的动画引擎，你懂得。。。
+<img src="https://github.com/facebook/pop/blob/master/Images/pop.gif?raw=true" alt="pop" /></p>
+
+<ul>
+<li><a href="https://github.com/facebook/KVOController">KVOController</a></li>
+</ul>
+
+
+<p>facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时也是线程安全的。</p>
+
 <h1>自定义view</h1>
 
 <ul>
@@ -452,6 +498,23 @@
 
 
 <p>仿照UITableView机制自己实现的一个自定义tableview，带有详细的说明文档</p>
+
+<ul>
+<li><a href="https://github.com/andreamazz/AMWaveTransition">AMWaveTransition</a></li>
+</ul>
+
+
+<p>很炫的带有表格的视图控制器切换效果，点击每个栏目会有限带有波浪效果的信息展示，类似于Facebook Paper</p>
+
+<p><img src="https://raw.githubusercontent.com/andreamazz/AMWaveTransition/master/screenshot.gif" alt="AMWaveTransition" /></p>
+
+<ul>
+<li><a href="https://github.com/facebook/Shimmer">Shimmer</a></li>
+</ul>
+
+
+<p>又是facebook出的，可以让view展示波光粼粼的效果
+<img src="https://github.com/facebook/Shimmer/blob/master/shimmer.gif?raw=true" alt="Shimmer" /></p>
 ]]></content>
   </entry>
   
