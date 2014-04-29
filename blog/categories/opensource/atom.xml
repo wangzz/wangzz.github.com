@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Opensource | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-04-29T17:05:12+08:00</updated>
+  <updated>2014-04-29T17:07:38+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -132,8 +132,9 @@
 </ul>
 
 
-<p>facebook那神奇的动画引擎，你懂得。。。
-<img src="https://github.com/facebook/pop/blob/master/Images/pop.gif?raw=true" alt="pop" /></p>
+<p>facebook那神奇的动画引擎，你懂得。。。</p>
+
+<p><img src="https://github.com/facebook/pop/blob/master/Images/pop.gif?raw=true" alt="pop" /></p>
 
 <ul>
 <li><a href="https://github.com/facebook/KVOController">KVOController</a></li>
@@ -165,8 +166,9 @@
 </ul>
 
 
-<p>又是facebook出的，可以让view展示波光粼粼的效果
-<img src="https://github.com/facebook/Shimmer/blob/master/shimmer.gif?raw=true" alt="Shimmer" /></p>
+<p>又是facebook出的，可以让view展示波光粼粼的效果</p>
+
+<p><img src="https://github.com/facebook/Shimmer/blob/master/shimmer.gif?raw=true" alt="Shimmer" /></p>
 ]]></content>
   </entry>
   
