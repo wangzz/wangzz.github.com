@@ -29,6 +29,10 @@ github的iOS客户端，目前开源代码是V1版本，V2版本在appstore上�
 
 使用XMPP协议的IM开源软件，很强大，在appstore上可以下载
 
+
+<!-- more -->
+
+
  * [SegmentFault](https://github.com/gaosboy/iOSSF)
 
 SegmentFault的官方iOS客户端
@@ -37,7 +41,19 @@ SegmentFault的官方iOS客户端
 
 开源中国社区oschina的官方iPhone客户端，appstore已上线。早期地址在[github](https://github.com/gaosboy/iOSSF)上,后来迁移到OSChina自己的代码托管平台.
 
-<!-- more -->
+
+* [FFCalendar](https://github.com/fggeraissate/FFCalendar)
+
+实现了日历的基本功能，目前只支持iPad版本
+![FFCalendar](https://raw.githubusercontent.com/fggeraissate/FFCalendar/master/FFCalendar/FFCalendars/Util/Images/YearlyCalendar.png)
+
+* [wh-app-ios](https://github.com/WhiteHouse/wh-app-ios)
+
+美国白宫（WhiteHouse）的官方app，听起来很高大上哈
+
+* [ruby-china-for-ios](https://github.com/ruby-china/ruby-china-for-ios)
+
+Ruby China的官方app
 
 
 #Xcode插件
@@ -64,6 +80,21 @@ SegmentFault的官方iOS客户端
 在上传AppStore时需要填写app的描述信息，此软件能很方便的填写这些信息。
 ![RMConnecter](https://github.com/realmacsoftware/RMConnecter/blob/master/Assets/screenshots.png?raw=true)
 
+* [xctool](https://github.com/facebook/xctool)
+
+facebook出的自动编译工具，不像xcodebuild，它能够整洁的打印出日志
+
+![xctool](https://camo.githubusercontent.com/f4c5388651b83663ff811969c0e2099073c25484/68747470733a2f2f66706f747465725f7075626c69632e73332e616d617a6f6e6177732e636f6d2f7863746f6f6c2d7569636174616c6f672e676966)
+
+* [pop](https://github.com/facebook/pop)
+
+facebook那神奇的动画引擎，你懂得。。。
+![pop](https://github.com/facebook/pop/blob/master/Images/pop.gif?raw=true)
+
+* [KVOController](https://github.com/facebook/KVOController)
+
+facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时也是线程安全的。
+
 
 
 #自定义view
@@ -73,8 +104,16 @@ SegmentFault的官方iOS客户端
 仿照UITableView机制自己实现的一个自定义tableview，带有详细的说明文档
 
 
+* [AMWaveTransition](https://github.com/andreamazz/AMWaveTransition)
+
+很炫的带有表格的视图控制器切换效果，点击每个栏目会有限带有波浪效果的信息展示，类似于Facebook Paper
+
+![AMWaveTransition](https://raw.githubusercontent.com/andreamazz/AMWaveTransition/master/screenshot.gif)
 
 
+* [Shimmer](https://github.com/facebook/Shimmer)
 
+又是facebook出的，可以让view展示波光粼粼的效果
+![Shimmer](https://github.com/facebook/Shimmer/blob/master/shimmer.gif?raw=true)
 
 
