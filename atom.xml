@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-05T11:52:01+08:00</updated>
+  <updated>2014-05-05T12:09:06+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -508,6 +508,13 @@
 
 
 <p>通过method swizzling技术，能够在一个类的现有方法执行之前或之后附加一个代码片段（以block方式），能极大的方便我们调试。</p>
+
+<ul>
+<li><a href="https://github.com/PSPDFKit/PSPDFKit-Demo">PSPDFKit</a></li>
+</ul>
+
+
+<p>十分强大的PDF开发框架，有异步加载、预览、编辑、加标注等很多功能</p>
 
 <h2>自定义view</h2>
 
