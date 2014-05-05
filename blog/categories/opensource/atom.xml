@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Opensource | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-05T12:09:06+08:00</updated>
+  <updated>2014-05-05T17:45:53+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -167,6 +167,13 @@
 
 
 <p>十分强大的PDF开发框架，有异步加载、预览、编辑、加标注等很多功能</p>
+
+<ul>
+<li><a href="https://github.com/xhacker/TEAChart">TEAChart</a></li>
+</ul>
+
+
+<p>使用简单，功能强大的图标工具</p>
 
 <h2>自定义view</h2>
 
