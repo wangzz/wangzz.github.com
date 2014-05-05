@@ -116,7 +116,9 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 十分强大的PDF开发框架，有异步加载、预览、编辑、加标注等很多功能
 
 
+* [TEAChart](https://github.com/xhacker/TEAChart)
 
+使用简单，功能强大的图标工具
 
 ##自定义view
 
