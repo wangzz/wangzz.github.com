@@ -120,6 +120,10 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 
 使用简单，功能强大的图标工具
 
+![TEAChart](https://github.com/wangzz/wangzz.github.com/blob/master/images/TEAChart-screen-short.gif?raw=true)
+
+
+
 ##自定义view
 
  * [DZTableView](https://github.com/yishuiliunian/DZTableView)
