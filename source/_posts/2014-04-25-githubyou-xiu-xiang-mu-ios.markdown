@@ -118,7 +118,7 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 
 * [TEAChart](https://github.com/xhacker/TEAChart)
 
-使用简单，功能强大的图标工具
+使用简单，功能强大的图表工具
 
 ![TEAChart](https://github.com/wangzz/wangzz.github.com/blob/master/images/TEAChart-screen-short.gif?raw=true)
 
