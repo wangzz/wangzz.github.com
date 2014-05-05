@@ -58,6 +58,7 @@ Ruby China的官方app
 * [cheddar-ios](https://github.com/nothingmagical/cheddar-ios)
 
 一款不错的日程管理软件，Appstore上能下载
+
 ![cheddar-ios](https://github.com/wangzz/wangzz.github.com/blob/master/images/cheddar-ios-screen-short.jpeg?raw=true)
 
 
