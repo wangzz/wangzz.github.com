@@ -55,8 +55,11 @@ SegmentFault的官方iOS客户端
 
 Ruby China的官方app
 
+* [cheddar-ios](https://github.com/nothingmagical/cheddar-ios)
 
-#Xcode插件
+一款不错的日程管理软件，Appstore上能下载
+
+##Xcode插件
 
  * [cocoapods-xcode-plugin](https://github.com/kattrali/cocoapods-xcode-plugin)
 
@@ -68,7 +71,7 @@ Ruby China的官方app
 方便实现代码对其功能，使代码风格统一
 ![XAlign](https://camo.githubusercontent.com/7973c0e352b1f91e3efe5b3550cff5df97f4589a/687474703a2f2f7166692e73682f58416c69676e2f696d616765732f657175616c2e676966)
 
-#工具
+##工具
 
  * [Xtrace](https://github.com/johnno1962/Xtrace)
 
@@ -86,6 +89,10 @@ facebook出的自动编译工具，不像xcodebuild，它能够整洁的打印�
 
 ![xctool](https://camo.githubusercontent.com/f4c5388651b83663ff811969c0e2099073c25484/68747470733a2f2f66706f747465725f7075626c69632e73332e616d617a6f6e6177732e636f6d2f7863746f6f6c2d7569636174616c6f672e676966)
 
+
+
+##开发框架
+
 * [pop](https://github.com/facebook/pop)
 
 facebook那神奇的动画引擎，你懂得。。。
@@ -96,9 +103,14 @@ facebook那神奇的动画引擎，你懂得。。。
 
 facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时也是线程安全的。
 
+* [Aspects](https://github.com/steipete/Aspects)
+
+通过method swizzling技术，能够在一个类的现有方法执行之前或之后附加一个代码片段（以block方式），能极大的方便我们调试。
 
 
-#自定义view
+
+
+##自定义view
 
  * [DZTableView](https://github.com/yishuiliunian/DZTableView)
 
@@ -117,5 +129,11 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 又是facebook出的，可以让view展示波光粼粼的效果
 
 ![Shimmer](https://github.com/facebook/Shimmer/blob/master/shimmer.gif?raw=true)
+
+* [PSTCollectionView](https://github.com/steipete/PSTCollectionView)
+
+仿照系统的UICollectionView的API实现的collection view，支持ARC和iOS4.3+系统，可用于替代只能从iOS6开始支持的UICollectionView
+
+
 
 
