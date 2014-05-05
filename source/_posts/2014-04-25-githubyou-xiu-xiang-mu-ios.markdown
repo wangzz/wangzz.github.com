@@ -111,6 +111,10 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 
 通过method swizzling技术，能够在一个类的现有方法执行之前或之后附加一个代码片段（以block方式），能极大的方便我们调试。
 
+* [PSPDFKit](https://github.com/PSPDFKit/PSPDFKit-Demo)
+
+十分强大的PDF开发框架，有异步加载、预览、编辑、加标注等很多功能
+
 
 
 
