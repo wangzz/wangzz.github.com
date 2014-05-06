@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-05T17:53:20+08:00</updated>
+  <updated>2014-05-06T18:26:27+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -438,6 +438,13 @@
 <p>一款不错的日程管理软件，Appstore上能下载</p>
 
 <p><img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/cheddar-ios-screen-short.jpeg?raw=true" alt="cheddar-ios" /></p>
+
+<ul>
+<li><a href="https://github.com/jimpick/twitterfon">twitterfon</a></li>
+</ul>
+
+
+<p>第三方twitter客户端，不过作者上传后至今5年了都没更新过。。。</p>
 
 <h2>Xcode插件</h2>
 
