@@ -68,6 +68,45 @@ Ruby China的官方app
 第三方twitter客户端，不过作者上传后至今5年了都没更新过。。。
 
 
+* [viewfinder](https://github.com/viewfinderco/viewfinder)
+
+移动支付公司Square在其工程博客上宣布，基于Apache 2.0许可协议，开源了于去年12月初收购的照片管理和共享应用Viewfinder，包括Viewfinder服务器、Android和iOS应用在内的25万行代码已托管到GitHub上。
+对此，Square工程师Peter Mattis在[工程博客](http://corner.squareup.com/2014/05/open-sourcing-viewfinder.html)上表示，Square之所以考虑到将Viewfinder的完整代码公之于众，是希望能够与人方便，让开发者在应用开发过程中可以加以利用或作为参考。尽管Square团队并没有为Viewfinder提供技术支持，也没有进行Bug修复，但此举还是赢得了满堂喝彩一致点赞。
+
+Viewfinder包含了许多非常有趣的代码，对于开发者来说，绝对是大大的Surprise，主要如下：
+
+	. Viewfinder服务器提供了一个拥有各种Amazon DynamoDB索引选项的结构化数据库架构。
+	. 服务器还提供了数据库和协议层版本控制支持。
+	. 在本地元数据存储方面，Viewfinder客户端使用LevelDB，相比CoreData，更易于使用，也相当便捷。
+	. 内置可直接运行于移动设备上的全文本搜索引擎，支持联系人和图片搜索。
+	. 使用GYP生成Xcode项目文件和Android构建文件。
+	. 支持C++模板元编程，可使用C++11可变参数模板根据C++方法自动计算Java方法签名。
+
+该段介绍出自[这里](http://www.pcbeta.com/viewnews-63336-1.html)。
+
+viewfinder使用GYP生成Xcode的工程文件，生成方式如下：
+
+首先要安装GYP，执行以下步骤：
+
+```
+$ svn checkout http://gyp.googlecode.com/svn/trunk/ gyp-read-only 
+$ cd gyp-read-only 
+$ ./setup.py build 
+$ sudo ./setup.py install 
+
+```
+	
+安装成功以后，再进入到clone下来的viewfineder源码目录，执行：
+
+```
+$ cd viewfinder/clients/ios
+$ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
+
+```
+
+这样就能成功生成Xcode工程文件了，然后需要通过`ViewfinderGyp.xcodeproj`文件打开工程。
+
+
 
 ##Xcode插件
 
@@ -154,6 +193,9 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 
 仿照系统的UICollectionView的API实现的collection view，支持ARC和iOS4.3+系统，可用于替代只能从iOS6开始支持的UICollectionView
 
+* [JDStatusBarNotification](https://github.com/jaydee3/JDStatusBarNotification)
+
+各种形式在状态栏展示信息，包括提示、进度等，展示格式和动画方式也有好几种。下图只是以静态方式展示其效果，更多详情请点击链接查看。
 
 
 

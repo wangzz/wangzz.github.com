@@ -13,9 +13,17 @@ footer: true
 
 * 工作经历：曾就职于高阳科技、北京拉手网，现在高德地图
 
-* 早期在CSND上写博客：[http://blog.csdn.net/wzzvictory](http://blog.csdn.net/wzzvictory)
+* 联系我：
 
-* 欢迎在本站留言或通过[新浪微博](http://weibo.com/foogry)联系我
+	1. 在本站留言
+	
+	2. 关注我的[新浪微博](http://weibo.com/foogry)
+	
+	3. gmail邮箱：<fooogry@gmail.com>
+	
+
+
+* 早期在CSND上写博客：[http://blog.csdn.net/wzzvictory](http://blog.csdn.net/wzzvictory)
 
 * 项目经验：
 
