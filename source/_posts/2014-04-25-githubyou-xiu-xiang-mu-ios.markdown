@@ -104,7 +104,7 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 
 ```
 
-这样就能成功生成Xcode工程文件了，然后需要通过`ViewfinderGyp.xcodeproj`文件打开工程。
+这样就能成功生成Xcode工程文件了，不过需要通过`ViewfinderGyp.xcodeproj`文件打开工程。
 
 
 
@@ -196,6 +196,8 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 * [JDStatusBarNotification](https://github.com/jaydee3/JDStatusBarNotification)
 
 各种形式在状态栏展示信息，包括提示、进度等，展示格式和动画方式也有好几种。下图只是以静态方式展示其效果，更多详情请点击链接查看。
+
+![JDStatusBarNotification](https://github.com/wangzz/wangzz.github.com/blob/master/images/article1/styles.png?raw=true)
 
 
 
