@@ -1,14 +1,12 @@
-
 ---
-
 layout: post
-title: "自定义你的Octopress博客fff"
-date: 2014-04-28 11:17:31 +0800
+title: "github优秀开源项目大全-iOSddd"
+date: 2014-04-25 17:45:33 +0800
 comments: true
-categories: Octopress
-tags: [octopress, 博客自定义, seo]
-keywords: seo, octopress, analytics, 博客自定义
-description: 如何自定义Octopress博客
+categories: opensource
+tags: [octopress, 博客, github, 开源, iOS]
+keywords: octopress, 博客, github, 开源, iOS, ChatSecure-iOS
+description: github优秀开源项目大全-iOS
  
 ---
 
