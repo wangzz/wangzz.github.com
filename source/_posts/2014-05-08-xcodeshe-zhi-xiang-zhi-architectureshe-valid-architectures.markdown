@@ -1,4 +1,14 @@
+---
+layout: post
+title: "Xcode设置项之Architectures和Valid Architectures"
+date: 2014-05-08 16:52:21 +0800
+comments: true
+categories: Xcode设置
+tags: [Xcode, Xcode设置, Architectures, Valid Architectures, iOS]
+keywords: Xcode, Xcode设置, Architectures, Valid Architectures, iOS
+description: Xcode设置项之Architectures和Valid Architectures
 
+---
 
 ##iPhone指令集
 
@@ -14,6 +24,8 @@ ARMv6  = iPhone, iPhone 3G, iPod 1G/2G
 ##设置你想支持的指令集
 
 Xcode中关于生成二进制包指令集相关的设置项有以下三个：
+
+<!-- more -->
 
 ####Architectures
 
