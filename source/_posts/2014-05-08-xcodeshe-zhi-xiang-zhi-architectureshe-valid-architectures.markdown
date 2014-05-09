@@ -4,9 +4,9 @@ title: "Xcode设置项之Architectures和Valid Architectures"
 date: 2014-05-9 17:45:33 +0800
 comments: true
 categories: XcodeSettings
-tags: [octopress, 博客, github, 开源, iOS]
-keywords: octopress, 博客, github, 开源, iOS, ChatSecure-iOS
-description: github优秀开源项目大全-iOS
+tags: [Architectures, Valid Architectures, Xcode设置]
+keywords: Architectures, Valid Architectures, Xcode设置
+description: Xcode设置项之Architectures和Valid Architectures
  
 ---
 
@@ -72,11 +72,11 @@ Boolean value. Specifies whether the product includes only object code for the n
 
 * 指令集都是可以向下兼容的
 
-	比如，你的设备是armv7s指令集，那么它也可以兼容运行比armv7s版本低的指令集：armv7、armv6
+比如，你的设备是armv7s指令集，那么它也可以兼容运行比armv7s版本低的指令集：armv7、armv6
 
 * xcode对armv6指令集的支持
 
-	Xcode4.5起不再支持armv6，Xcode4.5的release notes中明确指出：
+Xcode4.5起不再支持armv6，Xcode4.5的release notes中明确指出：
 
 ```
 Changes
@@ -96,6 +96,7 @@ The minimum deployment target is iOS 4.3. 12282166
 根据向下兼容原则，armv7指令集的应用是可以正常在支持armv7s/arm64指令集的机器上运行的。
 
 不过对于armv7s/arm64指令集设备来说，使用运行armv7应用是会有一定的性能损失，不过这种损失有多大缺乏权威统计数据，个人认为是不会影响用户体验的。
+
 
 
 
