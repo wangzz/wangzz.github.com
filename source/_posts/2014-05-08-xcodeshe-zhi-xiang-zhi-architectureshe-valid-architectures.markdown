@@ -1,13 +1,14 @@
 
 ---
+
 layout: post
-title: "Xcode设置项之Architectures和ValidArchitectures"
-date: 2014-05-08 16:52:21 +0800
+title: "自定义你的Octopress博客fff"
+date: 2014-04-28 11:17:31 +0800
 comments: true
-categories: XcodeSettings
-tags: [Xcode, Xcode设置, Architectures, ValidArchitectures, iOS]
-keywords: Xcode, Xcode设置, Architectures, ValidArchitectures
-description: Xcode设置项之Architectures和ValidArchitectures
+categories: Octopress
+tags: [octopress, 博客自定义, seo]
+keywords: seo, octopress, analytics, 博客自定义
+description: 如何自定义Octopress博客
  
 ---
 
