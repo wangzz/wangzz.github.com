@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-09T19:28:26+08:00</updated>
+  <updated>2014-05-09T19:30:13+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -57,7 +57,7 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'>Space-separated list of identifiers. Specifies the architectures for which the binary may be built. During the build, this list is intersected with the value of ARCHS build setting; the resulting list specifies the architectures the binary can run on. If the resulting architecture list is empty, the target generates no binary.</span></code></pre></td></tr></table></div></figure>
 
 
-<p>该编译项指定可能支持的指令集，<strong><strong>该列表和Architectures列表的交集，将是Xcode最终生成二进制包所支持的指令集</strong></strong>。</p>
+<p>该编译项指定可能支持的指令集，<strong>该列表和Architectures列表的交集，将是Xcode最终生成二进制包所支持的指令集</strong>。</p>
 
 <p>比如，你的<code>Valid Architectures</code>设置的支持arm指令集版本有：<code>armv7/armv7s/arm64</code>，对应的<code>Architectures</code>设置的支持arm指令集版本有：<code>armv7s</code>，这时Xcode只会生成一个<code>armv7s</code>指令集的二进制包。</p>
 
@@ -73,7 +73,7 @@
 
 <p>当该选项设置成YES时，你连上一个<code>armv7</code>指令集的设备，就算你的<code>Valid Architectures</code>和<code>Architectures</code>都设置成<code>armv7/armv7s/arm64</code>，还是依然只会生成一个<code>armv7</code>指令集的二进制包。</p>
 
-<p>当然该选项起作用的前提是<strong><strong>你的Xcode必须成功连接了调试设备</strong></strong>。如果你没有任何活跃设备，即Xcode没有成功连接调试设备，就算该设置项设置成YES依然还会编译<code>Valid Architectures</code>和<code>Architectures</code>指定的二进制包。</p>
+<p>当然该选项起作用的前提是<strong>你的Xcode必须成功连接了调试设备</strong>。如果你没有任何活跃设备，即Xcode没有成功连接调试设备，就算该设置项设置成YES依然还会编译<code>Valid Architectures</code>和<code>Architectures</code>指定的二进制包。</p>
 
 <p>通常情况下，该编译选项在Debug模式都设成YES，Release模式都设成NO。</p>
 
