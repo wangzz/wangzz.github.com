@@ -200,4 +200,9 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 ![JDStatusBarNotification](https://github.com/wangzz/wangzz.github.com/blob/master/images/article1/styles.png?raw=true)
 
 
+* [SphereView](https://github.com/heroims/SphereView)
+
+一个球形3D标签，能够放大、缩小、拖动、点击、自动旋转。效果挺玄的，就是感觉有点卡，还有一定的优化空间。下图截了一个静态图片:
+
+![SphereView](https://github.com/wangzz/wangzz.github.com/blob/master/images/article1/SphereView.png?raw=true)
 
