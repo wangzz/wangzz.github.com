@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-09T19:25:10+08:00</updated>
+  <updated>2014-05-09T19:28:26+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -80,14 +80,18 @@
 <h2>说明</h2>
 
 <ul>
-<li><p>指令集都是可以向下兼容的</p>
-
-<p>  比如，你的设备是armv7s指令集，那么它也可以兼容运行比armv7s版本低的指令集：armv7、armv6</p></li>
-<li><p>xcode对armv6指令集的支持</p>
-
-<p>  Xcode4.5起不再支持armv6，Xcode4.5的release notes中明确指出：</p></li>
+<li>指令集都是可以向下兼容的</li>
 </ul>
 
+
+<p>比如，你的设备是armv7s指令集，那么它也可以兼容运行比armv7s版本低的指令集：armv7、armv6</p>
+
+<ul>
+<li>xcode对armv6指令集的支持</li>
+</ul>
+
+
+<p>Xcode4.5起不再支持armv6，Xcode4.5的release notes中明确指出：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
