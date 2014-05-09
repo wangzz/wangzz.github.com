@@ -4,7 +4,7 @@ title: "Xcode设置项之Architectures和Valid Architectures"
 date: 2014-05-08 16:52:21 +0800
 comments: true
 categories: Xcode设置
-tags: [Xcode, Xcode设置, Architectures, Valid Architectures, iOS]
+tags: [Xcode, Xcode设置, Architectures, iOS]
 keywords: Xcode, Xcode设置, Architectures, Valid Architectures, iOS
 
 ---
