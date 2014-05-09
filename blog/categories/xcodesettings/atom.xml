@@ -4,7 +4,7 @@
   <title><![CDATA[Category: XcodeSettings | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/xcodesettings/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-09T19:24:04+08:00</updated>
+  <updated>2014-05-09T19:25:10+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[github优秀开源项目大全-iOSddd]]></title>
-    <link href="http://wangzz.github.io/blog/2014/04/25/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/"/>
-    <updated>2014-04-25T17:45:33+08:00</updated>
-    <id>http://wangzz.github.io/blog/2014/04/25/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures</id>
+    <title type="html"><![CDATA[Xcode设置项之Architectures和Valid Architectures]]></title>
+    <link href="http://wangzz.github.io/blog/2014/05/09/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/"/>
+    <updated>2014-05-09T17:45:33+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/05/09/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures</id>
     <content type="html"><![CDATA[<h2>iPhone指令集</h2>
 
 <p>本文所讲的内容都是围绕iPhone的指令集(想了解ARM指令集的同学请点击<a href="http://en.wikipedia.org/wiki/ARM_architecture">这里</a>)，现在先说说不同型号的iPhone都使用的是什么指令集：</p>
