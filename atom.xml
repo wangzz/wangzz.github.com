@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-09T19:16:50+08:00</updated>
+  <updated>2014-05-09T19:18:28+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -21,12 +21,12 @@
     <content type="html"><![CDATA[<hr />
 
 <p>layout: post
-title: &ldquo;Xcode设置项之Architectures和Valid Architectures&rdquo;
+title: &ldquo;Xcode设置项之Architectures和ValidArchitectures&rdquo;
 date: 2014-05-08 16:52:21 +0800
 comments: true
 categories: opensource
 tags: [Xcode, Xcode设置, Architectures, Valid Architectures, iOS]
-keywords: Xcode, Xcode设置, Architectures, Valid Architectures, iOS
+keywords: Xcode, Xcode设置, Architectures, Valid Architectures
 description: Xcode设置项之Architectures和Valid Architectures</p>
 
 <hr />
