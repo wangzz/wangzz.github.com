@@ -3,7 +3,7 @@ layout: post
 title: "github优秀开源项目大全-iOSddd"
 date: 2014-04-25 17:45:33 +0800
 comments: true
-categories: opensource
+categories: Xcode设置
 tags: [octopress, 博客, github, 开源, iOS]
 keywords: octopress, 博客, github, 开源, iOS, ChatSecure-iOS
 description: github优秀开源项目大全-iOS
