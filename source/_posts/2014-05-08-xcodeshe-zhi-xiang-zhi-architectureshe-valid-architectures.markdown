@@ -1,12 +1,12 @@
 
 ---
 layout: post
-title: "Xcode设置项之Architectures和Valid Architectures"
+title: "Xcode设置项之Architectures和ValidArchitectures"
 date: 2014-05-08 16:52:21 +0800
 comments: true
 categories: opensource
 tags: [Xcode, Xcode设置, Architectures, Valid Architectures, iOS]
-keywords: Xcode, Xcode设置, Architectures, Valid Architectures, iOS
+keywords: Xcode, Xcode设置, Architectures, Valid Architectures
 description: Xcode设置项之Architectures和Valid Architectures
  
 ---
