@@ -19,7 +19,6 @@ ARMv8/ARM64 = iPhone 5s, iPad Air, Retina iPad Mini
 ARMv7s = iPhone 5, iPhone 5c, iPad 4
 ARMv7  = iPhone 3GS, iPhone 4, iPhone 4S, iPod 3G/4G/5G, iPad, iPad 2, iPad 3, iPad Mini  
 ARMv6  = iPhone, iPhone 3G, iPod 1G/2G
-
 ```
 
 ##设置你想支持的指令集
