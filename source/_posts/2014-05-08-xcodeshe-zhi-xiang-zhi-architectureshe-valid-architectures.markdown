@@ -6,7 +6,6 @@ comments: true
 categories: Xcode设置
 tags: [Xcode, Xcode设置, Architectures, Valid Architectures, iOS]
 keywords: Xcode, Xcode设置, Architectures, Valid Architectures, iOS
-description: Xcode设置项之Architectures和Valid Architectures
 
 ---
 
