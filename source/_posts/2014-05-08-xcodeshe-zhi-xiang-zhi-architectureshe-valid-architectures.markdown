@@ -47,7 +47,7 @@ Space-separated list of identifiers. Specifies the architectures (ABIs, processo
 Space-separated list of identifiers. Specifies the architectures for which the binary may be built. During the build, this list is intersected with the value of ARCHS build setting; the resulting list specifies the architectures the binary can run on. If the resulting architecture list is empty, the target generates no binary.
 ```
 
-该编译项指定可能支持的指令集，****该列表和Architectures列表的交集，将是Xcode最终生成二进制包所支持的指令集****。
+该编译项指定可能支持的指令集，**该列表和Architectures列表的交集，将是Xcode最终生成二进制包所支持的指令集**。
 
 比如，你的`Valid Architectures`设置的支持arm指令集版本有：`armv7/armv7s/arm64`，对应的`Architectures`设置的支持arm指令集版本有：`armv7s`，这时Xcode只会生成一个`armv7s`指令集的二进制包。
 
@@ -63,7 +63,7 @@ Boolean value. Specifies whether the product includes only object code for the n
 
 当该选项设置成YES时，你连上一个`armv7`指令集的设备，就算你的`Valid Architectures`和`Architectures`都设置成`armv7/armv7s/arm64`，还是依然只会生成一个`armv7`指令集的二进制包。
 
-当然该选项起作用的前提是****你的Xcode必须成功连接了调试设备****。如果你没有任何活跃设备，即Xcode没有成功连接调试设备，就算该设置项设置成YES依然还会编译`Valid Architectures`和`Architectures`指定的二进制包。
+当然该选项起作用的前提是**你的Xcode必须成功连接了调试设备**。如果你没有任何活跃设备，即Xcode没有成功连接调试设备，就算该设置项设置成YES依然还会编译`Valid Architectures`和`Architectures`指定的二进制包。
 
 通常情况下，该编译选项在Debug模式都设成YES，Release模式都设成NO。
 
