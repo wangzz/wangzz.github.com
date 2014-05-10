@@ -126,6 +126,16 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 一个辅助代码编辑插件。支持高亮选中、批量选中方法和方法名、根据选中的方法批量生成方法声明、高亮正则搜索等功能。
 
 
+* [Injection for Xcode](https://github.com/johnno1962/injectionforxcode)
+
+一个神奇的Xcode 插件，能让应用在运行的时候做出的小的改变立马体现效果，而不需要重新编译。。。
+
+* [Alcatraz](https://github.com/supermarin/Alcatraz)
+
+以图形化界面管理Xcode插件的插件。
+
+<img src="/images/article1/plugin_alcatraz" width="560" height="650">
+
 
 ##工具
 
