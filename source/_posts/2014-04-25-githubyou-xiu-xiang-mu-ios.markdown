@@ -112,14 +112,14 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 
 用于在Xcode中管理CocoaPods依赖库
 
-<p><img src="/images/article1/cocoapods_menu.png" width="360" height="190"></p>
+<p><img src="/images/article1/plugin_cocoapods_menu.png" width="560" height="390"></p>
 
 
  * [XAlign](https://github.com/qfish/XAlign)
 
 方便实现代码对其功能，使代码风格统一
 
-<img src="/images/article1/xcode_plugin_align.png" width="360" height="260">
+<img src="/images/article1/plugin_align.gif" width="560" height="460">
 
 * [XcodeBoost](https://github.com/fortinmike/XcodeBoost)
 
@@ -133,20 +133,19 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 
 能详细打印出一个某个方法被调用的堆栈，方便调试时定位问题
 
-<img src="/images/article1/tool_xtrace.png" width="360" height="260">
+<img src="/images/article1/tool_xtrace.png" width="560" height="460">
 
  * [RMConnecter](https://github.com/realmacsoftware/RMConnecter)
 
 在上传AppStore时需要填写app的描述信息，此软件能很方便的填写这些信息。
 
-<img src="/images/article1/tool_rnconnecter.png" width="380" height="320">
+<img src="/images/article1/tool_rnconnecter.png" width="580" height="500">
 
 * [xctool](https://github.com/facebook/xctool)
 
 facebook出的自动编译工具，不像xcodebuild，它能够整洁的打印出日志
 
-![xctool](https://camo.githubusercontent.com/f4c5388651b83663ff811969c0e2099073c25484/68747470733a2f2f66706f747465725f7075626c69632e73332e616d617a6f6e6177732e636f6d2f7863746f6f6c2d7569636174616c6f672e676966)
-
+<img src="/images/article1/tool_xctool.gif" width="584" height="414">
 
 
 ##开发框架
