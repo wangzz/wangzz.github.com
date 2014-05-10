@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T17:52:05+08:00</updated>
+  <updated>2014-05-10T17:59:08+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -691,7 +691,7 @@
 </ul>
 
 
-<p>快速查找工程中的文件、代码等资源</p>
+<p>快速查找工程中的文件、代码等资源，和Xcode5自带的<code>Open Quickly</code>功能相似。</p>
 
 <p><img src="http://wangzz.github.io/images/article1/plugin_codepilot.png" width="516" height="540"></p>
 
