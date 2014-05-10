@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Opensource | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T15:17:16+08:00</updated>
+  <updated>2014-05-10T15:28:26+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -168,6 +168,22 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 
 
 <p>一个辅助代码编辑插件。支持高亮选中、批量选中方法和方法名、根据选中的方法批量生成方法声明、高亮正则搜索等功能。</p>
+
+<ul>
+<li><a href="https://github.com/johnno1962/injectionforxcode">Injection for Xcode</a></li>
+</ul>
+
+
+<p>一个神奇的Xcode 插件，能让应用在运行的时候做出的小的改变立马体现效果，而不需要重新编译。。。</p>
+
+<ul>
+<li><a href="https://github.com/supermarin/Alcatraz">Alcatraz</a></li>
+</ul>
+
+
+<p>以图形化界面管理Xcode插件的插件。</p>
+
+<p><img src="http://wangzz.github.io/images/article1/plugin_alcatraz" width="560" height="650"></p>
 
 <h2>工具</h2>
 
