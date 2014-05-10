@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T15:08:53+08:00</updated>
+  <updated>2014-05-10T15:17:16+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -616,7 +616,7 @@
 
 <p>用于在Xcode中管理CocoaPods依赖库</p>
 
-<p><img src="http://wangzz.github.io/images/article1/cocoapods_menu.png" width="360" height="190"></p>
+<p><img src="http://wangzz.github.io/images/article1/plugin_cocoapods_menu.png" width="560" height="390"></p>
 
 
 <ul>
@@ -626,7 +626,7 @@
 
 <p>方便实现代码对其功能，使代码风格统一</p>
 
-<p><img src="http://wangzz.github.io/images/article1/xcode_plugin_align.png" width="360" height="260"></p>
+<p><img src="http://wangzz.github.io/images/article1/plugin_align.gif" width="560" height="460"></p>
 
 <ul>
 <li><a href="https://github.com/fortinmike/XcodeBoost">XcodeBoost</a></li>
@@ -644,7 +644,7 @@
 
 <p>能详细打印出一个某个方法被调用的堆栈，方便调试时定位问题</p>
 
-<p><img src="http://wangzz.github.io/images/article1/tool_xtrace.png" width="360" height="260"></p>
+<p><img src="http://wangzz.github.io/images/article1/tool_xtrace.png" width="560" height="460"></p>
 
 <ul>
 <li><a href="https://github.com/realmacsoftware/RMConnecter">RMConnecter</a></li>
@@ -653,7 +653,7 @@
 
 <p>在上传AppStore时需要填写app的描述信息，此软件能很方便的填写这些信息。</p>
 
-<p><img src="http://wangzz.github.io/images/article1/tool_rnconnecter.png" width="380" height="320"></p>
+<p><img src="http://wangzz.github.io/images/article1/tool_rnconnecter.png" width="580" height="500"></p>
 
 <ul>
 <li><a href="https://github.com/facebook/xctool">xctool</a></li>
@@ -662,7 +662,7 @@
 
 <p>facebook出的自动编译工具，不像xcodebuild，它能够整洁的打印出日志</p>
 
-<p><img src="https://camo.githubusercontent.com/f4c5388651b83663ff811969c0e2099073c25484/68747470733a2f2f66706f747465725f7075626c69632e73332e616d617a6f6e6177732e636f6d2f7863746f6f6c2d7569636174616c6f672e676966" alt="xctool" /></p>
+<p><img src="http://wangzz.github.io/images/article1/tool_xctool.gif" width="584" height="414"></p>
 
 <h2>开发框架</h2>
 
