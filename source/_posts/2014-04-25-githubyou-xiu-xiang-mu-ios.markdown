@@ -268,3 +268,11 @@ iOS7风格的侧滑菜单，支持左右双向侧滑：
 
 <img src="/images/article1/view_remenu.gif" width="320" height="480">
 
+
+* [SWParallaxScrollView](https://github.com/5sw/SWParallaxScrollView)
+
+能够实现在多个图层上以不同速度滑动的自定义ScrollView，可用于做软件启动时的help界面：
+
+<img src="/images/article1/view_parallax_scrollview.gif" width="480" height="320">
+
+
