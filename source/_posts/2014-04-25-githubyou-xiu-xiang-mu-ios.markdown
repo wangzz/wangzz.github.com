@@ -167,6 +167,9 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 
 ![TEAChart](https://github.com/wangzz/wangzz.github.com/blob/master/images/TEAChart-screen-short.gif?raw=true)
 
+* [SearchCoreTest](https://github.com/kewenya/SearchCoreTest)
+
+一个联系人搜索库，支持的搜索方式包括：用户名汉字、拼音及模糊搜索，号码搜索，最重要的是支持T9搜索，做过通讯录类应用的同学都懂的。我在项目里用过，很赞。
 
 
 ##自定义view
