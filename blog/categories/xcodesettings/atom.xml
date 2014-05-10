@@ -4,7 +4,7 @@
   <title><![CDATA[Category: XcodeSettings | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/xcodesettings/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T14:35:08+08:00</updated>
+  <updated>2014-05-10T14:41:48+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -20,7 +20,7 @@
     <id>http://wangzz.github.io/blog/2014/05/09/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures</id>
     <content type="html"><![CDATA[<h2>iPhone指令集</h2>
 
-<p>本文所讲的内容都是围绕iPhone的指令集(想了解ARM指令集的同学请点击<a href="http://en.wikipedia.org/wiki/ARM_architecture">这里</a>)，现在先说说不同型号的iPhone都使用的是什么指令集：</p>
+<p>本文所讲的内容都是围绕iPhone的CPU指令集(想了解ARM指令集的同学请点击<a href="http://en.wikipedia.org/wiki/ARM_architecture">这里</a>)，现在先说说不同型号的iPhone都使用的是什么指令集：</p>
 
 <p><code>
 ARMv8/ARM64 = iPhone 5s, iPad Air, Retina iPad Mini
@@ -44,7 +44,7 @@ ARMv6  = iPhone, iPhone 3G, iPod 1G/2G
 Space-separated list of identifiers. Specifies the architectures (ABIs, processor models) to which the binary is targeted. When this build setting specifies more than one architecture, the generated binary may contain object code for each of the specified architectures.
 </code></p>
 
-<p>改变以选项指定了工程将被编译成支持哪些指令集，支持指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，造成最终编译的包很大。</p>
+<p>该编译选项指定了工程将被编译成支持哪些指令集，支持指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，造成最终编译的包很大。</p>
 
 <h4>Valid Architectures</h4>
 

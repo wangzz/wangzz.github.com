@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Opensource | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T14:35:08+08:00</updated>
+  <updated>2014-05-10T14:41:48+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -299,7 +299,7 @@ $ gyp &mdash;depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp</p>
 
 <p>iOS7风格的侧滑菜单，支持左右双向侧滑：</p>
 
-<p><img src="images/article1/RESideMenu.gif" alt="RESideMenu" /></p>
+<p><img src="/images/article1/RESideMenu.gif" alt="RESideMenu" /></p>
 ]]></content>
   </entry>
   
