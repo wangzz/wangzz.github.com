@@ -157,6 +157,12 @@ facebook出的自动编译工具，不像xcodebuild，它能够整洁的打印�
 
 <img src="/images/article1/tool_xctool.gif" width="584" height="414">
 
+* [iOS-Universal-Framework](https://github.com/kstenerud/iOS-Universal-Framework)
+
+用于生成兼容armv6/armv7/i386 `framework`的Xcode工程模版，不过目前还存在不少问题：
+
+<img src="/images/article1/tool_framework.png" width="584" height="414">
+
 
 ##开发框架
 
