@@ -13,7 +13,7 @@ description: Xcode设置项之Architectures和Valid Architectures
 
 ##iPhone指令集
 
-本文所讲的内容都是围绕iPhone的指令集(想了解ARM指令集的同学请点击[这里](http://en.wikipedia.org/wiki/ARM_architecture))，现在先说说不同型号的iPhone都使用的是什么指令集：
+本文所讲的内容都是围绕iPhone的CPU指令集(想了解ARM指令集的同学请点击[这里](http://en.wikipedia.org/wiki/ARM_architecture))，现在先说说不同型号的iPhone都使用的是什么指令集：
 
 ```
 ARMv8/ARM64 = iPhone 5s, iPad Air, Retina iPad Mini
@@ -36,7 +36,7 @@ Xcode中关于生成二进制包指令集相关的设置项有以下三个：
 Space-separated list of identifiers. Specifies the architectures (ABIs, processor models) to which the binary is targeted. When this build setting specifies more than one architecture, the generated binary may contain object code for each of the specified architectures.
 ```
 
-改变以选项指定了工程将被编译成支持哪些指令集，支持指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，造成最终编译的包很大。
+该编译选项指定了工程将被编译成支持哪些指令集，支持指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，造成最终编译的包很大。
 
 
 ####Valid Architectures

@@ -220,4 +220,4 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 
 iOS7风格的侧滑菜单，支持左右双向侧滑：
 
-![RESideMenu](images/article1/RESideMenu.gif)
+![RESideMenu](/images/article1/RESideMenu.gif)
