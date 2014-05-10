@@ -160,6 +160,13 @@ iOS资深开发者[罗朝辉](http://blog.csdn.net/kesalin)做的一款应用，
 
 <img src="/images/article1/plugin_xtodo.png" width="516" height="320">
 
+* [CodePilot](https://github.com/macoscope/CodePilot)
+
+快速查找工程中的文件、代码等资源
+
+<img src="/images/article1/plugin_codepilot.png" width="516" height="540">
+
+
 
 ##工具
 
