@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T15:51:18+08:00</updated>
+  <updated>2014-05-10T15:58:52+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -679,6 +679,15 @@
 <p>facebook出的自动编译工具，不像xcodebuild，它能够整洁的打印出日志</p>
 
 <p><img src="http://wangzz.github.io/images/article1/tool_xctool.gif" width="584" height="414"></p>
+
+<ul>
+<li><a href="https://github.com/kstenerud/iOS-Universal-Framework">iOS-Universal-Framework</a></li>
+</ul>
+
+
+<p>用于生成兼容armv6/armv7/i386 <code>framework</code>的Xcode工程模版，不过目前还存在不少问题：</p>
+
+<p><img src="http://wangzz.github.io/images/article1/tool_framework.png" width="584" height="414"></p>
 
 <h2>开发框架</h2>
 
