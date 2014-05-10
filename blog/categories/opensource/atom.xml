@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Opensource | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T16:04:39+08:00</updated>
+  <updated>2014-05-10T16:23:32+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -372,6 +372,15 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 <p>自定义的下拉菜单</p>
 
 <p><img src="http://wangzz.github.io/images/article1/view_remenu.gif" width="320" height="480"></p>
+
+<ul>
+<li><a href="https://github.com/5sw/SWParallaxScrollView">SWParallaxScrollView</a></li>
+</ul>
+
+
+<p>能够实现在多个图层上以不同速度滑动的自定义ScrollView，可用于做软件启动时的help界面：</p>
+
+<p><img src="http://wangzz.github.io/images/article1/view_parallax_scrollview.gif" width="480" height="320"></p>
 ]]></content>
   </entry>
   
