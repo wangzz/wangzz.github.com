@@ -136,6 +136,13 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 
 <img src="/images/article1/plugin_alcatraz.png" width="560" height="650">
 
+* [KSImageNamed-Xcode](https://github.com/ksuther/KSImageNamed-Xcode)
+
+当输入`[NSImage imageNamed:` 或者`[UIImage imageNamed:`时，会自动补全工程中可用的图片名称，同时能提供选中图片的预览。
+
+<img src="/images/article1/plugin_image_named.gif" width="516" height="220">
+
+
 
 ##工具
 
@@ -159,7 +166,7 @@ facebook出的自动编译工具，不像xcodebuild，它能够整洁的打印�
 
 * [iOS-Universal-Framework](https://github.com/kstenerud/iOS-Universal-Framework)
 
-用于生成兼容armv6/armv7/i386 `framework`的Xcode工程模版，不过目前还存在不少问题：
+用于生成兼容armv6/armv7/i386 `framework`的Xcode工程模版：
 
 <img src="/images/article1/tool_framework.png" width="584" height="414">
 
