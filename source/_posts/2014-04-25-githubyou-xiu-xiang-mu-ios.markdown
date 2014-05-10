@@ -112,8 +112,9 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 
 * [AmericanEnglish](https://github.com/kesalin/AmericanEnglish)
 
-iOS资深开发者`罗朝辉`做的一款应用，《美式英语》的iPhone版本
+iOS资深开发者[罗朝辉](http://blog.csdn.net/kesalin)做的一款应用，《美式英语》的iPhone版本
 
+<img src="/images/article1/app_american_english.png" width="320" height="480">
 
 
 
@@ -153,6 +154,11 @@ iOS资深开发者`罗朝辉`做的一款应用，《美式英语》的iPhone版
 
 <img src="/images/article1/plugin_image_named.gif" width="516" height="220">
 
+* [XToDo](https://github.com/trawor/XToDo)
+
+能以图形界面列表的形式列出代码中添加了`TODO`,`FIXME`,`???`,`!!!!`标识的项目，方便解决软件中备注的未解决问题。另外，能查找的还不只上述四种标识，用户可以自己添加想支持的标识。
+
+<img src="/images/article1/plugin_xtodo.png" width="516" height="320">
 
 
 ##工具
