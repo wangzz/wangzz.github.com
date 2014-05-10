@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Opensource | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T14:41:48+08:00</updated>
+  <updated>2014-05-10T15:08:53+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -65,8 +65,10 @@
 </ul>
 
 
-<p>实现了日历的基本功能，目前只支持iPad版本
-<img src="https://raw.githubusercontent.com/fggeraissate/FFCalendar/master/FFCalendar/FFCalendars/Util/Images/YearlyCalendar.png" alt="FFCalendar" /></p>
+<p>实现了日历的基本功能，目前只支持iPad版本</p>
+
+<p><img src="https://raw.githubusercontent.com/fggeraissate/FFCalendar/master/FFCalendar/FFCalendars/Util/Images/YearlyCalendar.png" width="320" height="480"></p>
+
 
 <ul>
 <li><a href="https://github.com/WhiteHouse/wh-app-ios">wh-app-ios</a></li>
@@ -89,7 +91,8 @@
 
 <p>一款不错的日程管理软件，Appstore上能下载</p>
 
-<p><img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/cheddar-ios-screen-short.jpeg?raw=true" alt="cheddar-ios" /></p>
+<p><img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/cheddar-ios-screen-short.jpeg?raw=true" width="320" height="480"></p>
+
 
 <ul>
 <li><a href="https://github.com/jimpick/twitterfon">twitterfon</a></li>
@@ -122,21 +125,19 @@
 
 <p>首先要安装GYP，执行以下步骤：</p>
 
-<p>```
-$ svn checkout <a href="http://gyp.googlecode.com/svn/trunk/">http://gyp.googlecode.com/svn/trunk/</a> gyp-read-only
+<p><code>
+$ svn checkout http://gyp.googlecode.com/svn/trunk/ gyp-read-only
 $ cd gyp-read-only
 $ ./setup.py build
-$ sudo ./setup.py install</p>
-
-<p>```</p>
+$ sudo ./setup.py install
+</code></p>
 
 <p>安装成功以后，再进入到clone下来的viewfineder源码目录，执行：</p>
 
-<p>```
+<p><code>
 $ cd viewfinder/clients/ios
-$ gyp &mdash;depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp</p>
-
-<p>```</p>
+$ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
+</code></p>
 
 <p>这样就能成功生成Xcode工程文件了，不过需要通过<code>ViewfinderGyp.xcodeproj</code>文件打开工程。</p>
 
@@ -147,16 +148,19 @@ $ gyp &mdash;depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp</p>
 </ul>
 
 
-<p>用于在Xcode中管理CocoaPods依赖库
-<img src="https://raw.githubusercontent.com/kattrali/cocoapods-xcode-plugin/master/menu.png" alt="cocoapods-xcode-plugin" /></p>
+<p>用于在Xcode中管理CocoaPods依赖库</p>
+
+<p><img src="http://wangzz.github.io/images/article1/cocoapods_menu.png" width="360" height="190"></p>
+
 
 <ul>
 <li><a href="https://github.com/qfish/XAlign">XAlign</a></li>
 </ul>
 
 
-<p>方便实现代码对其功能，使代码风格统一
-<img src="https://camo.githubusercontent.com/7973c0e352b1f91e3efe5b3550cff5df97f4589a/687474703a2f2f7166692e73682f58416c69676e2f696d616765732f657175616c2e676966" alt="XAlign" /></p>
+<p>方便实现代码对其功能，使代码风格统一</p>
+
+<p><img src="http://wangzz.github.io/images/article1/xcode_plugin_align.png" width="360" height="260"></p>
 
 <ul>
 <li><a href="https://github.com/fortinmike/XcodeBoost">XcodeBoost</a></li>
@@ -172,16 +176,18 @@ $ gyp &mdash;depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp</p>
 </ul>
 
 
-<p>能详细打印出一个某个方法被调用的堆栈，方便调试时定位问题
-<img src="https://camo.githubusercontent.com/c5b766f2e9646f5b909ac4e8d63cca6d4f2ff7fd/687474703a2f2f696e6a656374696f6e666f7278636f64652e6a6f686e686f6c6473776f7274682e636f6d2f787472616365632e706e673f666c7573683d32" alt="Xtrace" /></p>
+<p>能详细打印出一个某个方法被调用的堆栈，方便调试时定位问题</p>
+
+<p><img src="http://wangzz.github.io/images/article1/tool_xtrace.png" width="360" height="260"></p>
 
 <ul>
 <li><a href="https://github.com/realmacsoftware/RMConnecter">RMConnecter</a></li>
 </ul>
 
 
-<p>在上传AppStore时需要填写app的描述信息，此软件能很方便的填写这些信息。
-<img src="https://github.com/realmacsoftware/RMConnecter/blob/master/Assets/screenshots.png?raw=true" alt="RMConnecter" /></p>
+<p>在上传AppStore时需要填写app的描述信息，此软件能很方便的填写这些信息。</p>
+
+<p><img src="http://wangzz.github.io/images/article1/tool_rnconnecter.png" width="380" height="320"></p>
 
 <ul>
 <li><a href="https://github.com/facebook/xctool">xctool</a></li>
@@ -239,6 +245,13 @@ $ gyp &mdash;depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp</p>
 
 
 <p>一个联系人搜索库，支持的搜索方式包括：用户名汉字、拼音及模糊搜索，号码搜索，最重要的是支持T9搜索，做过通讯录类应用的同学都懂的。我在项目里用过，很赞。</p>
+
+<ul>
+<li><a href="https://github.com/robbiehanson/XMPPFramework">XMPPFramework</a></li>
+</ul>
+
+
+<p>应该是XMPP协议Objective-C实现的最好版本，小型开发者想做IM应用的好选择，使用起来也很方便。</p>
 
 <h2>自定义view</h2>
 
@@ -300,6 +313,13 @@ $ gyp &mdash;depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp</p>
 <p>iOS7风格的侧滑菜单，支持左右双向侧滑：</p>
 
 <p><img src="/images/article1/RESideMenu.gif" alt="RESideMenu" /></p>
+
+<ul>
+<li><a href="https://github.com/gcamp/GCDiscreetNotificationView">GCDiscreetNotificationView</a></li>
+</ul>
+
+
+<p>一种在view的顶部弹出并会自动消失的通知类view，是toast的一种变形。目前<a href="http://git.oschina.net/oschina/iphone-app">开源中国</a>的项目正在用该view。</p>
 ]]></content>
   </entry>
   
