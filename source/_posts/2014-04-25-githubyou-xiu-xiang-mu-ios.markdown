@@ -166,6 +166,11 @@ iOS资深开发者[罗朝辉](http://blog.csdn.net/kesalin)做的一款应用，
 
 <img src="/images/article1/plugin_codepilot.png" width="516" height="540">
 
+* [VVDocumenter-Xcode](https://github.com/onevcat/VVDocumenter-Xcode)
+
+提供了为代码增加注视的最快捷方式，是我使用频率最高的插件，[猫神](http://onevcat.com/)出品。
+
+<img src="/images/article1/plugin_vvdocumenter.gif" width="516" height="300">
 
 
 ##工具
