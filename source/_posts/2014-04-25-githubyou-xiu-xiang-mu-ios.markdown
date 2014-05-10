@@ -134,7 +134,7 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 
 以图形化界面管理Xcode插件的插件。
 
-<img src="/images/article1/plugin_alcatraz" width="560" height="650">
+<img src="/images/article1/plugin_alcatraz.png" width="560" height="650">
 
 
 ##工具
