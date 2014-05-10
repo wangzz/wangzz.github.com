@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Opensource | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T17:46:31+08:00</updated>
+  <updated>2014-05-10T17:52:05+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -228,6 +228,15 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 <p>快速查找工程中的文件、代码等资源</p>
 
 <p><img src="http://wangzz.github.io/images/article1/plugin_codepilot.png" width="516" height="540"></p>
+
+<ul>
+<li><a href="https://github.com/onevcat/VVDocumenter-Xcode">VVDocumenter-Xcode</a></li>
+</ul>
+
+
+<p>提供了为代码增加注视的最快捷方式，是我使用频率最高的插件，<a href="http://onevcat.com/">猫神</a>出品。</p>
+
+<p><img src="http://wangzz.github.io/images/article1/plugin_vvdocumenter.gif" width="516" height="300"></p>
 
 <h2>工具</h2>
 
