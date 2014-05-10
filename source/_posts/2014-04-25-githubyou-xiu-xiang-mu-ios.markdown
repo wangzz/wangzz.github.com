@@ -243,5 +243,15 @@ iOS7风格的侧滑菜单，支持左右双向侧滑：
 一种在view的顶部弹出并会自动消失的通知类view，是toast的一种变形。目前[开源中国](http://git.oschina.net/oschina/iphone-app)的项目正在用该view。
 
 
+* [CLProgressHUD](https://github.com/cleexiang/CLProgressHUD)
 
+大麦网iOS客户端工程师开源的一个HUD view，
+
+<img src="/images/article1/view_clprogresshud.gif" width="320" height="480">
+
+* [REMenu](https://github.com/romaonthego/REMenu)
+
+自定义的下拉菜单
+
+<img src="/images/article1/view_remenu.gif" width="320" height="480">
 
