@@ -162,7 +162,7 @@ iOS资深开发者[罗朝辉](http://blog.csdn.net/kesalin)做的一款应用，
 
 * [CodePilot](https://github.com/macoscope/CodePilot)
 
-快速查找工程中的文件、代码等资源
+快速查找工程中的文件、代码等资源，和Xcode5自带的`Open Quickly`功能相似。
 
 <img src="/images/article1/plugin_codepilot.png" width="516" height="540">
 
