@@ -120,6 +120,12 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 方便实现代码对其功能，使代码风格统一
 ![XAlign](https://camo.githubusercontent.com/7973c0e352b1f91e3efe5b3550cff5df97f4589a/687474703a2f2f7166692e73682f58416c69676e2f696d616765732f657175616c2e676966)
 
+* [XcodeBoost](https://github.com/fortinmike/XcodeBoost)
+
+一个辅助代码编辑插件。支持高亮选中、批量选中方法和方法名、根据选中的方法批量生成方法声明、高亮正则搜索等功能。
+
+
+
 ##工具
 
  * [Xtrace](https://github.com/johnno1962/Xtrace)
@@ -209,3 +215,9 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 
 ![SphereView](https://github.com/wangzz/wangzz.github.com/blob/master/images/article1/SphereView.png?raw=true)
 
+
+* [RESideMenu](https://github.com/romaonthego/RESideMenu)
+
+iOS7风格的侧滑菜单，支持左右双向侧滑：
+
+![RESideMenu](images/article1/RESideMenu.gif)
