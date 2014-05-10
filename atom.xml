@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T16:54:16+08:00</updated>
+  <updated>2014-05-10T17:02:59+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -615,6 +615,13 @@
 <p><code>Hacker News</code>的iPhone客户端</p>
 
 <p><img src="http://wangzz.github.io/images/article1/app_hack_news.png" width="320" height="480"></p>
+
+<ul>
+<li><a href="https://github.com/kesalin/AmericanEnglish">AmericanEnglish</a></li>
+</ul>
+
+
+<p>iOS资深开发者<code>罗朝辉</code>做的一款应用，《美式英语》的iPhone版本</p>
 
 <h2>Xcode插件</h2>
 
