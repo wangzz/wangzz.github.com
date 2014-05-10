@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-09T19:38:01+08:00</updated>
+  <updated>2014-05-10T11:01:09+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -691,6 +691,13 @@
 <p>使用简单，功能强大的图表工具</p>
 
 <p><img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/TEAChart-screen-short.gif?raw=true" alt="TEAChart" /></p>
+
+<ul>
+<li><a href="https://github.com/kewenya/SearchCoreTest">SearchCoreTest</a></li>
+</ul>
+
+
+<p>一个联系人搜索库，支持的搜索方式包括：用户名汉字、拼音及模糊搜索，号码搜索，最重要的是支持T9搜索，做过通讯录类应用的同学都懂的。我在项目里用过，很赞。</p>
 
 <h2>自定义view</h2>
 
