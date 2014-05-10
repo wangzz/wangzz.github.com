@@ -104,6 +104,17 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 
 这样就能成功生成Xcode工程文件了，不过需要通过`ViewfinderGyp.xcodeproj`文件打开工程。
 
+* [HackerNews](https://github.com/Xuzz/newsyc)
+
+`Hacker News`的iPhone客户端
+
+<img src="/images/article1/app_hack_news.png" width="320" height="480">
+
+* [AmericanEnglish](https://github.com/kesalin/AmericanEnglish)
+
+iOS资深开发者`罗朝辉`做的一款应用，《美式英语》的iPhone版本
+
+
 
 
 ##Xcode插件
@@ -112,7 +123,7 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 
 用于在Xcode中管理CocoaPods依赖库
 
-<p><img src="/images/article1/plugin_cocoapods_menu.png" width="560" height="390"></p>
+<img src="/images/article1/plugin_cocoapods_menu.png" width="560" height="390">
 
 
  * [XAlign](https://github.com/qfish/XAlign)
