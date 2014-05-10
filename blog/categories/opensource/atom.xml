@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Opensource | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T17:02:59+08:00</updated>
+  <updated>2014-05-10T17:34:48+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -155,7 +155,9 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 </ul>
 
 
-<p>iOS资深开发者<code>罗朝辉</code>做的一款应用，《美式英语》的iPhone版本</p>
+<p>iOS资深开发者<a href="http://blog.csdn.net/kesalin">罗朝辉</a>做的一款应用，《美式英语》的iPhone版本</p>
+
+<p><img src="http://wangzz.github.io/images/article1/app_american_english.png" width="320" height="480"></p>
 
 <h2>Xcode插件</h2>
 
@@ -208,6 +210,15 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 <p>当输入<code>[NSImage imageNamed:</code> 或者<code>[UIImage imageNamed:</code>时，会自动补全工程中可用的图片名称，同时能提供选中图片的预览。</p>
 
 <p><img src="http://wangzz.github.io/images/article1/plugin_image_named.gif" width="516" height="220"></p>
+
+<ul>
+<li><a href="https://github.com/trawor/XToDo">XToDo</a></li>
+</ul>
+
+
+<p>能以图形界面列表的形式列出代码中添加了<code>TODO</code>,<code>FIXME</code>,<code>???</code>,<code>!!!!</code>标识的项目，方便解决软件中备注的未解决问题。另外，能查找的还不只上述四种标识，用户可以自己添加想支持的标识。</p>
+
+<p><img src="http://wangzz.github.io/images/article1/plugin_xtodo.png" width="516" height="320"></p>
 
 <h2>工具</h2>
 
