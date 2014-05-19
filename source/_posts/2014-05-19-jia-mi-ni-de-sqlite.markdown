@@ -39,7 +39,7 @@ SQLite是一个`轻量的`、`跨平台的`、`开源的`数据库引擎，它�
 
 目前网上查询到iOS平台可用的SQLite加密工具有以下几种：
 
-1. [SQLite Encryption Extension (SEE)](http://www.sqlite.org/index.html)
+* [SQLite Encryption Extension (SEE)](http://www.sqlite.org/index.html)
 	
 	事实上SQLite有加解密接口，只是免费版本没有实现而已。而`SQLite Encryption Extension (SEE)`是SQLite的加密版本，提供以下加密方式：
 	
@@ -52,23 +52,23 @@ AES-256 in OFB mode
 
 SQLite Encryption Extension (SEE)版本是收费的，本文发布时其售价高达2000美刀！
 	
-2. [SQLiteEncrypt](http://www.sqlite-encrypt.com/index.htm)
+* [SQLiteEncrypt](http://www.sqlite-encrypt.com/index.htm)
 
 	使用AES加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。
 	
 	`SQLiteEncrypt`是收费的，本文发布时售价89.95美刀。
 
-3. [SQLiteCrypt](http://sqlite-crypt.com/index.htm)
+* [SQLiteCrypt](http://sqlite-crypt.com/index.htm)
 
 	使用256-bit AES加密，其原理和[SQLiteEncrypt](http://www.sqlite-encrypt.com/index.htm)一样，都是实现了SQLite的加密相关接口。
 	
 	`SQLiteCrypt`也是收费的，本文发布时售价128美刀。
 	
-4. [SQLCipher](http://sqlcipher.net/)
+* [SQLCipher](http://sqlcipher.net/)
 	
 	首先需要说明的是，`SQLCipher`是完全开源的，代码托管在[github](https://github.com/sqlcipher/sqlcipher)上。
 	
-	`SQLCipher`使用256-bit AES加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见[这里](http://sqlcipher.net/sqlcipher-api/)
+	`SQLCipher`使用256-bit AES加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见[这里](http://sqlcipher.net/sqlcipher-api/)。
 	
 	`SQLCipher`分为收费版本和免费版本，本文发布时收费版本iOS平台每个开发者售价499美刀。照官网的说法，收费版本和免费版本的区别：
 	
