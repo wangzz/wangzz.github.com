@@ -50,7 +50,7 @@ AES-128 in CCM mode
 AES-256 in OFB mode
 ```
 
-	SQLite Encryption Extension (SEE)版本是收费的，本文发布时其售价高达2000美刀！
+SQLite Encryption Extension (SEE)版本是收费的，本文发布时其售价高达2000美刀！
 	
 2. [SQLiteEncrypt](http://www.sqlite-encrypt.com/index.htm)
 
@@ -73,11 +73,11 @@ AES-256 in OFB mode
 	`SQLCipher`分为收费版本和免费版本，本文发布时收费版本iOS平台每个开发者售价499美刀。照官网的说法，收费版本和免费版本的区别：
 	
 ```
-1.easier to setup, saving many steps in project configuration
-2.pre-built with a modern version of OpenSSL, avoiding another external dependency
-3.much faster for each build cycle because the library doesn't need to be built from scratch on each compile (build time can be up to 95% faster with the static libraries)
+easier to setup, saving many steps in project configuration
+pre-built with a modern version of OpenSSL, avoiding another external dependency
+much faster for each build cycle because the library doesn't need to be built from scratch on each compile (build time can be up to 95% faster with the static libraries)
 ```
-	只是集成起来更简单，不用再添加`OpenSSL`依赖库，而且编译速度更快，从功能上来说没有任何区别。仅仅为了上述一点便利去花费499美刀，对于我等苦逼RD来说太不值了，还好有一个免费版本。
+只是集成起来更简单，不用再添加`OpenSSL`依赖库，而且编译速度更快，从功能上来说没有任何区别。仅仅为了上述一点便利去花费499美刀，对于我等苦逼RD来说太不值了，还好有一个免费版本。
 
 鉴于上述SQLite加密工具中，只有`SQLCiper`有免费版本，下面将将着重介绍下`SQLCiper`。
 	
