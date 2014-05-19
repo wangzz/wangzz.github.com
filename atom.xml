@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-10T17:59:08+08:00</updated>
+  <updated>2014-05-19T22:30:54+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -12,6 +12,110 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[加密你的SQLite]]></title>
+    <link href="http://wangzz.github.io/blog/2014/05/19/jia-mi-ni-de-sqlite/"/>
+    <updated>2014-05-19T10:19:42+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/05/19/jia-mi-ni-de-sqlite</id>
+    <content type="html"><![CDATA[<h2>关于SQLite</h2>
+
+<p>SQLite是一个<code>轻量的</code>、<code>跨平台的</code>、<code>开源的</code>数据库引擎，它的在<code>读写效率</code>、<code>消耗总量</code>、<code>延迟时间</code>和<code>整体简单性上</code>具有的优越性，使其成为移动平台数据库的最佳解决方案（如iOS、Android）。</p>
+
+<p>然而<code>免费版</code>的SQLite有一个致命缺点：不支持加密。这就导致存储在SQLite中的数据可以被任何人用任何文本编辑器查看到。比如国内某团购iOS客户端的DB缓存数据就一览无余：</p>
+
+<p><img src="http://wangzz.github.io/images/article2/meituan_db_info.png" width="550" height="250"></p>
+
+<!-- more -->
+
+
+<h2>SQLite加密方式</h2>
+
+<p>对数据库加密的思路有两种：</p>
+
+<ul>
+<li>将内容加密后再写入数据库</li>
+</ul>
+
+
+<p>这种方式使用简单，在入库/出库只需要将字段做对应的加解密操作即可，一定程度上解决了将数据赤裸裸暴露的问题。</p>
+
+<p>不过这种方式并不是彻底的加密，因为数据库的表结构等信息还是能被查看到。另外写入数据库的内容加密后，搜索也是个问题。</p>
+
+<ul>
+<li>对数据库文件加密</li>
+</ul>
+
+
+<p>将整个数据库整个文件加密，这种方式基本上能解决数据库的信息安全问题。目前已有的SQLite加密基本都是通过这种方式实现的。</p>
+
+<h2>SQLite加密工具</h2>
+
+<p>目前网上查询到iOS平台可用的SQLite加密工具有以下几种：</p>
+
+<ol>
+<li><p><a href="http://www.sqlite.org/index.html">SQLite Encryption Extension (SEE)</a></p>
+
+<p> 事实上SQLite有加解密接口，只是免费版本没有实现而已。而<code>SQLite Encryption Extension (SEE)</code>是SQLite的加密版本，提供以下加密方式：</p>
+
+<p> <code>
+ RC4
+ AES-128 in OFB mode
+ AES-128 in CCM mode
+ AES-256 in OFB mode
+</code>
+ <code>SQLite Encryption Extension (SEE)</code>版本是收费的，本文发布时其售价高达2000美刀！</p></li>
+<li><p><a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a></p>
+
+<p> 使用<code>AES</code>方式加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。</p>
+
+<p> <code>SQLiteEncrypt</code>是收费的，本文发布时售价89.95美刀。</p></li>
+<li><p><a href="http://sqlite-crypt.com/index.htm">SQLiteCrypt</a></p>
+
+<p> 使用<code>256-bit AES</code>方式加密，其原理和<a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a>一样，都是实现了SQLite的加密相关接口。</p>
+
+<p> <code>SQLiteCrypt</code>也是收费的，本文发布时售价128美刀。</p></li>
+<li><p><a href="http://sqlcipher.net/">SQLCipher</a></p>
+
+<p> 首先需要说明的是，<code>SQLCipher</code>是完全开源的，代码托管在<a href="https://github.com/sqlcipher/sqlcipher">github</a>上。</p>
+
+<p> <code>SQLCipher</code>使用<code>256-bit AES</code>方式加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见<a href="http://sqlcipher.net/sqlcipher-api/">这里</a></p>
+
+<p> <code>SQLCipher</code>分为收费版本和免费版本，本文发布时收费版本iOS平台每个开发者售价499美刀。照官网的说法，收费版本和免费版本的区别：</p>
+
+<p> &#8220;`</p>
+
+<ol>
+<li>easier to setup, saving many steps in project configuration</li>
+<li>pre-built with a modern version of OpenSSL, avoiding another external    dependency</li>
+<li>much faster for each build cycle because the library doesn&rsquo;t need to be  built from scratch on each compile (build time can be up to 95% faster  with the static libraries)
+<code>``
+只是集成起来更简单，不用再添加</code>OpenSSL`依赖库，而且编译速度更快，从功能上来说没有任何区别。仅仅为了上述一点便利去花费499美刀，对于我等苦逼RD来说太不值了，还好有一个免费版本。</li>
+</ol>
+</li>
+</ol>
+
+
+<p>鉴于上述SQLite加密工具中，只有<code>SQLCiper</code>有免费版本，下面将将着重介绍下<code>SQLCiper</code>。</p>
+
+<h2>SQLCipher</h2>
+
+<p>本节主要介绍如何在项目中集成<code>SQLCipher</code>。</p>
+
+<p>未完待续&hellip;</p>
+
+<h2>参考文档</h2>
+
+<ul>
+<li><p><a href="http://www.hwaci.com/sw/sqlite/see.html">The SQLite Encryption Extension (SEE)</a></p></li>
+<li><p><a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a></p></li>
+<li><p><a href="http://sqlite-crypt.com/index.htm">SQLiteCrypt</a></p></li>
+<li><p><a href="http://stackoverflow.com/questions/5669905/sqlite-with-encryption-password-protection">SQLite with encryption/password protection</a></p></li>
+<li><p><a href="http://sqlcipher.net/documentation/">SQLCipher</a></p></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Xcode设置项之Architectures和Valid Architectures]]></title>
