@@ -113,9 +113,9 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>SQLite是一个<code>轻量的</code>、<code>跨平台的</code>、<code>开源的</code>数据库引擎，它的在<code>读写效率</code>、<code>消耗总量</code>、<code>延迟时间</code>和<code>整体简单性上</code>具有的优越性，使其成为移动平台数据库的最佳解决方案（如iOS、Android）。</p>
 
-<p>然而<code>免费版</code>的SQLite有一个致命缺点：不支持加密。这就导致存储在SQLite中的数据可以被任何人用任何文本编辑器查看到。比如国内某团购iOS客户端的DB缓存数据就一览无余：</p>
+<p>然而免费版的SQLite有一个致命缺点：不支持加密。这就导致存储在SQLite中的数据可以被任何人用任何文本编辑器查看到。比如国内某团购iOS客户端的DB缓存数据就一览无余：</p>
 
-<p><img src="/images/article2/meituan_db_info.png" width="550" height="250"></p>
+<p><img src="/images/article2/meituan_db_info.png" width="700" height="300"></p>
 
 <!-- more -->
 
@@ -147,45 +147,54 @@ $(document).bind('DOMNodeInserted', function(event) {
 <ol>
 <li><p><a href="http://www.sqlite.org/index.html">SQLite Encryption Extension (SEE)</a></p>
 
-<p> 事实上SQLite有加解密接口，只是免费版本没有实现而已。而<code>SQLite Encryption Extension (SEE)</code>是SQLite的加密版本，提供以下加密方式：</p>
+<p> 事实上SQLite有加解密接口，只是免费版本没有实现而已。而<code>SQLite Encryption Extension (SEE)</code>是SQLite的加密版本，提供以下加密方式：</p></li>
+</ol>
 
-<p> <code>
- RC4
- AES-128 in OFB mode
- AES-128 in CCM mode
- AES-256 in OFB mode
-</code>
- <code>SQLite Encryption Extension (SEE)</code>版本是收费的，本文发布时其售价高达2000美刀！</p></li>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>RC4
+</span><span class='line'>AES-128 in OFB mode
+</span><span class='line'>AES-128 in CCM mode
+</span><span class='line'>AES-256 in OFB mode</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>SQLite Encryption Extension (SEE)版本是收费的，本文发布时其售价高达2000美刀！
+</code></pre>
+
+<ol>
 <li><p><a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a></p>
 
-<p> 使用<code>AES</code>方式加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。</p>
+<p> 使用AES加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。</p>
 
 <p> <code>SQLiteEncrypt</code>是收费的，本文发布时售价89.95美刀。</p></li>
 <li><p><a href="http://sqlite-crypt.com/index.htm">SQLiteCrypt</a></p>
 
-<p> 使用<code>256-bit AES</code>方式加密，其原理和<a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a>一样，都是实现了SQLite的加密相关接口。</p>
+<p> 使用256-bit AES加密，其原理和<a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a>一样，都是实现了SQLite的加密相关接口。</p>
 
 <p> <code>SQLiteCrypt</code>也是收费的，本文发布时售价128美刀。</p></li>
 <li><p><a href="http://sqlcipher.net/">SQLCipher</a></p>
 
 <p> 首先需要说明的是，<code>SQLCipher</code>是完全开源的，代码托管在<a href="https://github.com/sqlcipher/sqlcipher">github</a>上。</p>
 
-<p> <code>SQLCipher</code>使用<code>256-bit AES</code>方式加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见<a href="http://sqlcipher.net/sqlcipher-api/">这里</a></p>
+<p> <code>SQLCipher</code>使用256-bit AES加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见<a href="http://sqlcipher.net/sqlcipher-api/">这里</a></p>
 
-<p> <code>SQLCipher</code>分为收费版本和免费版本，本文发布时收费版本iOS平台每个开发者售价499美刀。照官网的说法，收费版本和免费版本的区别：</p>
-
-<p> &#8220;`</p>
-
-<ol>
-<li>easier to setup, saving many steps in project configuration</li>
-<li>pre-built with a modern version of OpenSSL, avoiding another external    dependency</li>
-<li>much faster for each build cycle because the library doesn&rsquo;t need to be  built from scratch on each compile (build time can be up to 95% faster  with the static libraries)
-<code>``
-只是集成起来更简单，不用再添加</code>OpenSSL`依赖库，而且编译速度更快，从功能上来说没有任何区别。仅仅为了上述一点便利去花费499美刀，对于我等苦逼RD来说太不值了，还好有一个免费版本。</li>
-</ol>
-</li>
+<p> <code>SQLCipher</code>分为收费版本和免费版本，本文发布时收费版本iOS平台每个开发者售价499美刀。照官网的说法，收费版本和免费版本的区别：</p></li>
 </ol>
 
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>1.easier to setup, saving many steps in project configuration
+</span><span class='line'>2.pre-built with a modern version of OpenSSL, avoiding another external dependency
+</span><span class='line'>3.much faster for each build cycle because the library doesn't need to be built from scratch on each compile (build time can be up to 95% faster with the static libraries)</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>只是集成起来更简单，不用再添加`OpenSSL`依赖库，而且编译速度更快，从功能上来说没有任何区别。仅仅为了上述一点便利去花费499美刀，对于我等苦逼RD来说太不值了，还好有一个免费版本。
+</code></pre>
 
 <p>鉴于上述SQLite加密工具中，只有<code>SQLCiper</code>有免费版本，下面将将着重介绍下<code>SQLCiper</code>。</p>
 
