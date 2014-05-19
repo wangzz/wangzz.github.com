@@ -144,11 +144,11 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>目前网上查询到iOS平台可用的SQLite加密工具有以下几种：</p>
 
-<ol>
+<ul>
 <li><p><a href="http://www.sqlite.org/index.html">SQLite Encryption Extension (SEE)</a></p>
 
-<p> 事实上SQLite有加解密接口，只是免费版本没有实现而已。而<code>SQLite Encryption Extension (SEE)</code>是SQLite的加密版本，提供以下加密方式：</p></li>
-</ol>
+<p>  事实上SQLite有加解密接口，只是免费版本没有实现而已。而<code>SQLite Encryption Extension (SEE)</code>是SQLite的加密版本，提供以下加密方式：</p></li>
+</ul>
 
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -163,25 +163,25 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>SQLite Encryption Extension (SEE)版本是收费的，本文发布时其售价高达2000美刀！</p>
 
-<ol>
+<ul>
 <li><p><a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a></p>
 
-<p> 使用AES加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。</p>
+<p>  使用AES加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。</p>
 
-<p> <code>SQLiteEncrypt</code>是收费的，本文发布时售价89.95美刀。</p></li>
+<p>  <code>SQLiteEncrypt</code>是收费的，本文发布时售价89.95美刀。</p></li>
 <li><p><a href="http://sqlite-crypt.com/index.htm">SQLiteCrypt</a></p>
 
-<p> 使用256-bit AES加密，其原理和<a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a>一样，都是实现了SQLite的加密相关接口。</p>
+<p>  使用256-bit AES加密，其原理和<a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a>一样，都是实现了SQLite的加密相关接口。</p>
 
-<p> <code>SQLiteCrypt</code>也是收费的，本文发布时售价128美刀。</p></li>
+<p>  <code>SQLiteCrypt</code>也是收费的，本文发布时售价128美刀。</p></li>
 <li><p><a href="http://sqlcipher.net/">SQLCipher</a></p>
 
-<p> 首先需要说明的是，<code>SQLCipher</code>是完全开源的，代码托管在<a href="https://github.com/sqlcipher/sqlcipher">github</a>上。</p>
+<p>  首先需要说明的是，<code>SQLCipher</code>是完全开源的，代码托管在<a href="https://github.com/sqlcipher/sqlcipher">github</a>上。</p>
 
-<p> <code>SQLCipher</code>使用256-bit AES加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见<a href="http://sqlcipher.net/sqlcipher-api/">这里</a></p>
+<p>  <code>SQLCipher</code>使用256-bit AES加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见<a href="http://sqlcipher.net/sqlcipher-api/">这里</a>。</p>
 
-<p> <code>SQLCipher</code>分为收费版本和免费版本，本文发布时收费版本iOS平台每个开发者售价499美刀。照官网的说法，收费版本和免费版本的区别：</p></li>
-</ol>
+<p>  <code>SQLCipher</code>分为收费版本和免费版本，本文发布时收费版本iOS平台每个开发者售价499美刀。照官网的说法，收费版本和免费版本的区别：</p></li>
+</ul>
 
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
