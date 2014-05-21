@@ -41,7 +41,7 @@ SQLite是一个`轻量的`、`跨平台的`、`开源的`数据库引擎，它�
 
 * [SQLite Encryption Extension (SEE)](http://www.sqlite.org/index.html)
 	
-	事实上SQLite有加解密接口，只是免费版本没有实现而已。而`SQLite Encryption Extension (SEE)`是SQLite的加密版本，提供以下加密方式：
+事实上SQLite有加解密接口，只是免费版本没有实现而已。而`SQLite Encryption Extension (SEE)`是SQLite的加密版本，提供以下加密方式：
 	
 ```
 RC4
@@ -50,33 +50,36 @@ AES-128 in CCM mode
 AES-256 in OFB mode
 ```
 
-SQLite Encryption Extension (SEE)版本是收费的。	
+SQLite Encryption Extension (SEE)版本是收费的。
+
+	
 * [SQLiteEncrypt](http://www.sqlite-encrypt.com/index.htm)
 
-	使用AES加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。
+使用AES加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。
 	
-	`SQLiteEncrypt`是收费的。
+`SQLiteEncrypt`是收费的。
 
 * [SQLiteCrypt](http://sqlite-crypt.com/index.htm)
 
-	使用256-bit AES加密，其原理和[SQLiteEncrypt](http://www.sqlite-encrypt.com/index.htm)一样，都是实现了SQLite的加密相关接口。
+使用256-bit AES加密，其原理和[SQLiteEncrypt](http://www.sqlite-encrypt.com/index.htm)一样，都是实现了SQLite的加密相关接口。
 	
-	`SQLiteCrypt`也是收费的。
+`SQLiteCrypt`也是收费的。
 	
 * [SQLCipher](http://sqlcipher.net/)
 	
-	首先需要说明的是，`SQLCipher`是完全开源的，代码托管在[github](https://github.com/sqlcipher/sqlcipher)上。
+首先需要说明的是，`SQLCipher`是完全开源的，代码托管在[github](https://github.com/sqlcipher/sqlcipher)上。
 	
-	`SQLCipher`使用256-bit AES加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见[这里](http://sqlcipher.net/sqlcipher-api/)。
+`SQLCipher`使用256-bit AES加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见[这里](http://sqlcipher.net/sqlcipher-api/)。
 	
-	`SQLCipher`分为收费版本和免费版本，本文发布时收费版本iOS平台每个开发者售价499美刀。照官网的说法，收费版本和免费版本的区别：
+`SQLCipher`分为收费版本和免费版本，官网介绍的区别为：
 	
 ```
 easier to setup, saving many steps in project configuration
 pre-built with a modern version of OpenSSL, avoiding another external dependency
 much faster for each build cycle because the library doesn't need to be built from scratch on each compile (build time can be up to 95% faster with the static libraries)
 ```
-只是集成起来更简单，不用再添加`OpenSSL`依赖库，而且编译速度更快，从功能上来说没有任何区别。仅仅为了上述一点便利去花费499美刀，对于我等苦逼RD来说太不值了，还好有一个免费版本。
+
+只是集成起来更简单，不用再添加`OpenSSL`依赖库，而且编译速度更快，从功能上来说没有任何区别。仅仅为了上述一点便利去花费几百美刀，对于我等苦逼RD来说太不值了，还好有一个免费版本。
 
 鉴于上述SQLite加密工具中，只有`SQLCiper`有免费版本，下面将将着重介绍下`SQLCiper`。
 	
@@ -139,6 +142,7 @@ sqlite> DETACH DATABASE plaintext;
 
 总体来说，SQLCipher是一个使用方便，灵活性高的数据库加密工具。
 
+另外，我写了个[SQLCipherDemo](http://download.csdn.net/detail/wzzvictory_tjsd/7379055)工程放到了[CSDN](http://download.csdn.net/detail/wzzvictory_tjsd/7379055)上，有需要的同学请自行下载。
 
 
 ##参考文档
