@@ -50,19 +50,18 @@ AES-128 in CCM mode
 AES-256 in OFB mode
 ```
 
-SQLite Encryption Extension (SEE)版本是收费的，本文发布时其售价高达2000美刀！
-	
+SQLite Encryption Extension (SEE)版本是收费的。	
 * [SQLiteEncrypt](http://www.sqlite-encrypt.com/index.htm)
 
 	使用AES加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。
 	
-	`SQLiteEncrypt`是收费的，本文发布时售价89.95美刀。
+	`SQLiteEncrypt`是收费的。
 
 * [SQLiteCrypt](http://sqlite-crypt.com/index.htm)
 
 	使用256-bit AES加密，其原理和[SQLiteEncrypt](http://www.sqlite-encrypt.com/index.htm)一样，都是实现了SQLite的加密相关接口。
 	
-	`SQLiteCrypt`也是收费的，本文发布时售价128美刀。
+	`SQLiteCrypt`也是收费的。
 	
 * [SQLCipher](http://sqlcipher.net/)
 	
@@ -81,12 +80,64 @@ much faster for each build cycle because the library doesn't need to be built fr
 
 鉴于上述SQLite加密工具中，只有`SQLCiper`有免费版本，下面将将着重介绍下`SQLCiper`。
 	
-##SQLCipher
+##在项目中使用SQLCipher
 
-本节主要介绍如何在项目中集成`SQLCipher`。
+在项目中集成免费版的`SQLCipher`略显复杂，还好官网以图文的方式介绍的非常详细，集成过程请参考[官网教程](http://sqlcipher.net/ios-tutorial)。
+
+* 使用SQLCipher初始化数据库
+
+下面这段代码来自官网，其作用是使用SQLCipher创建一个新的加密数据库，或者打开一个使用SQLCipher创建的数据库。
+
+```
+NSString *databasePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
+                              stringByAppendingPathComponent: @"cipher.db"];
+    sqlite3 *db;
+    if (sqlite3_open([databasePath UTF8String], &db) == SQLITE_OK) {
+        const char* key = [@"BIGSecret" UTF8String];
+        sqlite3_key(db, key, strlen(key));
+        int result = sqlite3_exec(db, (const char*) "SELECT count(*) FROM sqlite_master;", NULL, NULL, NULL);
+        if (result == SQLITE_OK) {
+            NSLog(@"password is correct, or, database has been initialized");
+        } else {
+            NSLog(@"incorrect password! errCode:%d",result);
+        }
+        
+        sqlite3_close(db);
+    }
+    
+```
+
+需要注意的是，在使用`sqlite3_open`打开或创建一个数据库，在对数据库做任何其它操作之前，都必须先使用`sqlite3_key`输入密码，否则会导致数据库操作失败，报出sqlite错误码`SQLITE_NOTADB`。
+
+在`sqlite3_open`打开数据库成功，而且用`sqlite3_key`输入密码以后，就可以正常的对数据库进行增、删、改、查等操作了。
 
 
-未完待续...
+* 使用SQLCipher加密已存在的数据库
+
+SQLCipher提供了`sqlcipher_export()`函数，该函数可以方便的对一个普通数据库导入到SQLCipher加密加密的数据库中，操作方式如下：
+
+```
+$ ./sqlcipher plaintext.db 
+sqlite> ATTACH DATABASE 'encrypted.db' AS encrypted KEY 'testkey'; 
+sqlite> SELECT sqlcipher_export('encrypted'); 
+sqlite> DETACH DATABASE encrypted; 
+```
+
+
+* 解除使用SQLCipher加密的数据库密码
+
+`sqlcipher_export()`函数同样可以将SQLCipher加密后的数据库内容导入到未加密的数据库中，从而实现解密，操作方式如下：
+
+```
+$ ./sqlcipher encrypted.db 
+sqlite> PRAGMA key = 'testkey'; 
+sqlite> ATTACH DATABASE 'plaintext.db' AS plaintext KEY '';  -- empty key will disable encryption
+sqlite> SELECT sqlcipher_export('plaintext'); 
+sqlite> DETACH DATABASE plaintext; 
+```
+
+
+总体来说，SQLCipher是一个使用方便，灵活性高的数据库加密工具。
 
 
 
