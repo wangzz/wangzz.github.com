@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Database | 王中周的个人博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/database/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-21T11:42:49+08:00</updated>
+  <updated>2014-05-21T13:07:51+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -54,11 +54,11 @@
 <p>目前网上查询到iOS平台可用的SQLite加密工具有以下几种：</p>
 
 <ul>
-<li><p><a href="http://www.sqlite.org/index.html">SQLite Encryption Extension (SEE)</a></p>
-
-<p>  事实上SQLite有加解密接口，只是免费版本没有实现而已。而<code>SQLite Encryption Extension (SEE)</code>是SQLite的加密版本，提供以下加密方式：</p></li>
+<li><a href="http://www.sqlite.org/index.html">SQLite Encryption Extension (SEE)</a></li>
 </ul>
 
+
+<p>事实上SQLite有加解密接口，只是免费版本没有实现而已。而<code>SQLite Encryption Extension (SEE)</code>是SQLite的加密版本，提供以下加密方式：</p>
 
 <p><code>
 RC4
@@ -67,36 +67,44 @@ AES-128 in CCM mode
 AES-256 in OFB mode
 </code></p>
 
-<p>SQLite Encryption Extension (SEE)版本是收费的。<br/>
-* <a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a></p>
-
-<pre><code>使用AES加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。
-
-`SQLiteEncrypt`是收费的。
-</code></pre>
+<p>SQLite Encryption Extension (SEE)版本是收费的。</p>
 
 <ul>
-<li><p><a href="http://sqlite-crypt.com/index.htm">SQLiteCrypt</a></p>
-
-<p>  使用256-bit AES加密，其原理和<a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a>一样，都是实现了SQLite的加密相关接口。</p>
-
-<p>  <code>SQLiteCrypt</code>也是收费的。</p></li>
-<li><p><a href="http://sqlcipher.net/">SQLCipher</a></p>
-
-<p>  首先需要说明的是，<code>SQLCipher</code>是完全开源的，代码托管在<a href="https://github.com/sqlcipher/sqlcipher">github</a>上。</p>
-
-<p>  <code>SQLCipher</code>使用256-bit AES加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见<a href="http://sqlcipher.net/sqlcipher-api/">这里</a>。</p>
-
-<p>  <code>SQLCipher</code>分为收费版本和免费版本，本文发布时收费版本iOS平台每个开发者售价499美刀。照官网的说法，收费版本和免费版本的区别：</p></li>
+<li><a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a></li>
 </ul>
 
+
+<p>使用AES加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。</p>
+
+<p><code>SQLiteEncrypt</code>是收费的。</p>
+
+<ul>
+<li><a href="http://sqlite-crypt.com/index.htm">SQLiteCrypt</a></li>
+</ul>
+
+
+<p>使用256-bit AES加密，其原理和<a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a>一样，都是实现了SQLite的加密相关接口。</p>
+
+<p><code>SQLiteCrypt</code>也是收费的。</p>
+
+<ul>
+<li><a href="http://sqlcipher.net/">SQLCipher</a></li>
+</ul>
+
+
+<p>首先需要说明的是，<code>SQLCipher</code>是完全开源的，代码托管在<a href="https://github.com/sqlcipher/sqlcipher">github</a>上。</p>
+
+<p><code>SQLCipher</code>使用256-bit AES加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见<a href="http://sqlcipher.net/sqlcipher-api/">这里</a>。</p>
+
+<p><code>SQLCipher</code>分为收费版本和免费版本，官网介绍的区别为：</p>
 
 <p><code>
 easier to setup, saving many steps in project configuration
 pre-built with a modern version of OpenSSL, avoiding another external dependency
 much faster for each build cycle because the library doesn't need to be built from scratch on each compile (build time can be up to 95% faster with the static libraries)
-</code>
-只是集成起来更简单，不用再添加<code>OpenSSL</code>依赖库，而且编译速度更快，从功能上来说没有任何区别。仅仅为了上述一点便利去花费499美刀，对于我等苦逼RD来说太不值了，还好有一个免费版本。</p>
+</code></p>
+
+<p>只是集成起来更简单，不用再添加<code>OpenSSL</code>依赖库，而且编译速度更快，从功能上来说没有任何区别。仅仅为了上述一点便利去花费几百美刀，对于我等苦逼RD来说太不值了，还好有一个免费版本。</p>
 
 <p>鉴于上述SQLite加密工具中，只有<code>SQLCiper</code>有免费版本，下面将将着重介绍下<code>SQLCiper</code>。</p>
 
@@ -166,6 +174,8 @@ sqlite&gt; DETACH DATABASE plaintext;
 </code></p>
 
 <p>总体来说，SQLCipher是一个使用方便，灵活性高的数据库加密工具。</p>
+
+<p>另外，我写了个<a href="http://download.csdn.net/detail/wzzvictory_tjsd/7379055">SQLCipherDemo</a>工程放到了<a href="http://download.csdn.net/detail/wzzvictory_tjsd/7379055">CSDN</a>上，有需要的同学请自行下载。</p>
 
 <h2>参考文档</h2>
 
