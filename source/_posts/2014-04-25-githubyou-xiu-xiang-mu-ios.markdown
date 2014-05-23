@@ -117,6 +117,16 @@ iOS资深开发者[罗朝辉](http://blog.csdn.net/kesalin)做的一款应用，
 <img src="/images/article1/app_american_english.png" width="320" height="480">
 
 
+* [FormosaWeibo](https://github.com/xincode9/FormosaWeibo)
+
+使用新浪微博开放平台做的微博客户端，做工略显粗糙，作者也有几个月没更新了。
+
+* [RSSRead](https://github.com/ming1016/RSSRead)
+
+AppStore[上线产品](https://itunes.apple.com/cn/app/yi-yue-rss-li-xian-xin-wen-yue-du/id850246364?mt=8)，中文名称`已阅`。一个iOS设备上的RSS/Atom阅读器，刚成立的项目，还有很多有待完善的地方。
+
+<img src="/images/article1/app_rssread.jpeg" width="320" height="480">
+
 
 ##Xcode插件
 
@@ -200,6 +210,23 @@ facebook出的自动编译工具，不像xcodebuild，它能够整洁的打印�
 <img src="/images/article1/tool_framework.png" width="584" height="414">
 
 
+* [UYLPasswordManager](https://github.com/kharrison/UYLPasswordManager)
+
+对访问iOS Keychain的封装库。
+
+* [sqlcipher](https://github.com/sqlcipher/sqlcipher)
+
+这是目前我已知的唯一一个支持对SQLite加密的免费开源库，对应的有收费版本。本开源库实现了对SQLite开源免费版本中未实现的加密接口，同时做了一定的扩展。使用的是256位AES加密方式。
+
+强烈推荐！
+
+
+* [Xcode-Snippets](https://github.com/mattt/Xcode-Snippets)
+
+`AFNetworking`作者、mattt大神开源的常用Xcode代码片段。
+
+
+
 ##开发框架
 
 * [pop](https://github.com/facebook/pop)
@@ -234,6 +261,35 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 * [XMPPFramework](https://github.com/robbiehanson/XMPPFramework)
 
 应该是XMPP协议Objective-C实现的最好版本，小型开发者想做IM应用的好选择，使用起来也很方便。
+
+* [JSQMessagesViewController](https://github.com/jessesquires/JSQMessagesViewController)
+
+一个通用聊天界面框架，效果不错，感谢作者的开源。这个框架后来被国内某无耻程序员修改成[MessageDisplayKit](https://github.com/xhzengAIB/MessageDisplayKit)，大有据为己有之式，违背了开源精神。
+
+<img src="/images/article1/framework_JSQMessagesViewController.png" width="320" height="480">
+
+* [vTeam](https://github.com/hailongz/vTeam)
+
+一个开发者积累多年的开发框架，值得看看。
+
+
+* [AGGeometryKit](https://github.com/hfossli/AGGeometryKit)
+
+几何图形框架，把AGGeometryKit和POP结合起来使用，可实现非常棒的动态和动画。
+
+
+* [IMQuickSearch](https://github.com/Intermark/IMQuickSearch)
+
+IMQuickSearch是一个快速搜索工具，可以过滤包含多种自定义NSObject类的NSArray。
+
+<img src="/images/article1/framework_IMQuickSearch.gif" width="320" height="480">
+
+
+* [iOSPlot](https://github.com/honcheng/iOSPlot)
+
+新加坡开发`honcheng`实现的图标制作框架，支持折线图、饼状图等。
+
+<img src="/images/article1/framework_iOSPlot.png" width="480" height="320">
 
 
 ##自定义view
@@ -303,5 +359,59 @@ iOS7风格的侧滑菜单，支持左右双向侧滑：
 能够实现在多个图层上以不同速度滑动的自定义ScrollView，可用于做软件启动时的help界面：
 
 <img src="/images/article1/view_parallax_scrollview.gif" width="480" height="320">
+
+* [Vurig-Calendar](https://github.com/tjeerdintveen/Vurig-Calendar)
+
+自定义的日历，界面很简洁，月份切换时动画效果也不错。
+
+<img src="/images/article1/framework_Vurig-Calendar.png" width="320" height="480">
+
+
+* [M80AttributedLabel](https://github.com/xiangwangfeng/M80AttributedLabel)
+
+功能较齐全的attributed lable，支持attributed string和图片、链接、控件的混排。
+
+* [BCMeshTransformView](https://github.com/Ciechan/BCMeshTransformView)
+
+实现了相当炫的拉幕式的界面切换效果，其灵感来自CALayer的私有属性`meshTransform`以及和其对应的`CAMeshTransform`。
+
+<img src="/images/article1/view_BCMeshTransformView.jpg" width="320" height="480">
+
+
+* [TwitterCover](https://github.com/cyndibaby905/TwitterCover)
+
+新浪微博开发者仿照Twitter的iOS客户端中的效果实现的向下拉动滚动视图，视图顶端的图片会随着下拉而变大，并且带有模糊的效果。
+
+<img src="/images/article1/view_TwitterCover.gif" width="320" height="480">
+
+
+* [THContactPicker](https://github.com/tristanhimmelman/THContactPicker)
+
+模仿系统邮件应用实现的联系人选择界面。
+
+<img src="/images/article1/view_THContactPicker.gif" width="320" height="480">
+
+
+* [DKCircleButton](https://github.com/kronik/DKCircleButton)
+
+一个扁平化的，能带声波效果的按钮。
+
+<img src="/images/article1/view_DKCircleButton.gif" width="320" height="480">
+
+* [PaperFold-for-iOS](https://github.com/honcheng/PaperFold-for-iOS)
+
+新加坡开发`honcheng`实现的折纸效果的界面切换，适合做电子书阅读类应用。
+
+<img src="/images/article1/view_PaperFold-for-iOS.png" width="320" height="480">
+
+* [RTLabel](https://github.com/honcheng/RTLabel)
+
+新加坡开发`honcheng`多媒体显示view，支持html语法，应用非常广泛。
+
+<img src="/images/article1/view_RTLabel.png" width="320" height="480">
+
+
+
+
 
 
