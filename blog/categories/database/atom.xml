@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Database | 王中周的个人博客]]></title>
+  <title><![CDATA[Category: Database | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/database/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-23T20:54:26+08:00</updated>
+  <updated>2014-05-23T21:06:25+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>

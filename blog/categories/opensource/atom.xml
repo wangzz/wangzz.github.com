@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Opensource | 王中周的个人博客]]></title>
+  <title><![CDATA[Category: Opensource | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-23T20:54:26+08:00</updated>
+  <updated>2014-05-23T21:06:25+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -375,7 +375,7 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 </ul>
 
 
-<p>一个通用聊天界面框架，效果不错，感谢作者的开源。这个框架后来被国内某无耻程序员修改成<a href="https://github.com/xhzengAIB/MessageDisplayKit">MessageDisplayKit</a>，大有据为己有之式，违背了开源精神。</p>
+<p>一个通用聊天界面框架，效果不错，感谢作者的开源。这个框架后来被国内某无耻程序员修改成<a href="https://github.com/xhzengAIB/MessageDisplayKit">MessageDisplayKit</a>，大有据为己有之势。</p>
 
 <p><img src="http://wangzz.github.io/images/article1/framework_JSQMessagesViewController.png" width="320" height="480"></p>
 
@@ -407,7 +407,7 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 </ul>
 
 
-<p>新加坡开发<code>honcheng</code>实现的图标制作框架，支持折线图、饼状图等。</p>
+<p>新加坡开发者<code>honcheng</code>实现的图标制作框架，支持折线图、饼状图等。</p>
 
 <p><img src="http://wangzz.github.io/images/article1/framework_iOSPlot.png" width="480" height="320"></p>
 
@@ -563,7 +563,7 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 </ul>
 
 
-<p>新加坡开发<code>honcheng</code>实现的折纸效果的界面切换，适合做电子书阅读类应用。</p>
+<p>新加坡开发者<code>honcheng</code>实现的折纸效果的界面切换，适合做电子书阅读类应用。</p>
 
 <p><img src="http://wangzz.github.io/images/article1/view_PaperFold-for-iOS.png" width="320" height="480"></p>
 
@@ -572,7 +572,7 @@ $ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp
 </ul>
 
 
-<p>新加坡开发<code>honcheng</code>多媒体显示view，支持html语法，应用非常广泛。</p>
+<p>新加坡开发者<code>honcheng</code>多媒体显示view，支持html语法，应用非常广泛。</p>
 
 <p><img src="http://wangzz.github.io/images/article1/view_RTLabel.png" width="320" height="480"></p>
 ]]></content>
