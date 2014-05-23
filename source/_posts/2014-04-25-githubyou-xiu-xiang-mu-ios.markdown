@@ -264,7 +264,7 @@ facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时�
 
 * [JSQMessagesViewController](https://github.com/jessesquires/JSQMessagesViewController)
 
-一个通用聊天界面框架，效果不错，感谢作者的开源。这个框架后来被国内某无耻程序员修改成[MessageDisplayKit](https://github.com/xhzengAIB/MessageDisplayKit)，大有据为己有之式，违背了开源精神。
+一个通用聊天界面框架，效果不错，感谢作者的开源。这个框架后来被国内某无耻程序员修改成[MessageDisplayKit](https://github.com/xhzengAIB/MessageDisplayKit)，大有据为己有之势。
 
 <img src="/images/article1/framework_JSQMessagesViewController.png" width="320" height="480">
 
@@ -287,7 +287,7 @@ IMQuickSearch是一个快速搜索工具，可以过滤包含多种自定义NSOb
 
 * [iOSPlot](https://github.com/honcheng/iOSPlot)
 
-新加坡开发`honcheng`实现的图标制作框架，支持折线图、饼状图等。
+新加坡开发者`honcheng`实现的图标制作框架，支持折线图、饼状图等。
 
 <img src="/images/article1/framework_iOSPlot.png" width="480" height="320">
 
@@ -400,13 +400,13 @@ iOS7风格的侧滑菜单，支持左右双向侧滑：
 
 * [PaperFold-for-iOS](https://github.com/honcheng/PaperFold-for-iOS)
 
-新加坡开发`honcheng`实现的折纸效果的界面切换，适合做电子书阅读类应用。
+新加坡开发者`honcheng`实现的折纸效果的界面切换，适合做电子书阅读类应用。
 
 <img src="/images/article1/view_PaperFold-for-iOS.png" width="320" height="480">
 
 * [RTLabel](https://github.com/honcheng/RTLabel)
 
-新加坡开发`honcheng`多媒体显示view，支持html语法，应用非常广泛。
+新加坡开发者`honcheng`多媒体显示view，支持html语法，应用非常广泛。
 
 <img src="/images/article1/view_RTLabel.png" width="320" height="480">
 
