@@ -4,7 +4,7 @@
   <title><![CDATA[Category: XcodeSettings | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/xcodesettings/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-25T17:37:24+08:00</updated>
+  <updated>2014-05-25T17:43:50+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -20,7 +20,7 @@
     <id>http://wangzz.github.io/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an</id>
     <content type="html"><![CDATA[<h2>问题说明</h2>
 
-<p>在做地图类应用时，经常需要用到位置模拟功能。iOS模拟器提供了该功能，我们可以写入指定的经纬度，选中模拟器后，按照以下菜单层次进入即可设置：</p>
+<p>在做地图类应用时，经常需要用到位置模拟功能。iOS模拟器提供了该功能，我们可以设置指定的经纬度，选中模拟器后，按照以下菜单层次进入即可设置：</p>
 
 <p><code>
 Debug --&gt; Location --&gt; Custom Location
@@ -52,6 +52,12 @@ Debug --&gt; Location --&gt; Custom Location
 <p>然后将界面拉到底部，填写GPX文件名称，选择操作系统型号；</p>
 
 <p>点击<code>Create</code>按钮即可生成一个XML格式的GPX文件，再点击<code>Download</code>按钮即可将文件下载到本地。</p>
+
+<p>生成的GPX文件大概是这样：</p>
+
+<p><code>
+&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;&lt;gpxxmlns="http://www.topografix.com/GPX/1/1"xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"version="1.1" creator="gpx-poi.com"&gt;   &lt;wpt lat=“41.988810" lon="116.474828"&gt;      &lt;time&gt;2014-05-25T07:27:53Z&lt;/time&gt;      &lt;name&gt;A&lt;/name&gt;   &lt;/wpt&gt;&lt;/gpx&gt;
+</code></p>
 
 <ul>
 <li>导入GPX文件</li>
