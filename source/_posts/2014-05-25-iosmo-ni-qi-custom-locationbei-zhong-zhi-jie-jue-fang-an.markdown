@@ -31,7 +31,7 @@ Debug --> Location --> Custom Location
 
 GPX（GPS eXchange Format, GPS交换格式)是一个XML格式,为应用软件设计的通用GPS数据格式。它可以用来描述路点、轨迹、路程。（来自[维基百科](http://zh.wikipedia.org/wiki/GPX)）
 
-我们可以通过第三方网站：[gpx-poi.com/](http://gpx-poi.com/)来生成一个GPX文件，生成过程也很方便：
+我们可以通过第三方网站：[gpx-poi.com](http://gpx-poi.com/)来生成一个GPX文件，生成过程也很方便：
 
 在网站左上角拖动地图到指定位置，鼠标单击后会出现一个红色标注，同时地图下方会显示出标注的经纬度数据；
 
