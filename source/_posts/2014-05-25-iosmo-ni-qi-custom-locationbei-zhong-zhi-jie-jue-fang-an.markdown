@@ -44,7 +44,10 @@ GPX（GPS eXchange Format, GPS交换格式)是一个XML格式,为应用软件设
 生成的GPX文件大概是这样：
 
 ```
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><gpxxmlns="http://www.topografix.com/GPX/1/1"xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"version="1.1" creator="gpx-poi.com">   <wpt lat=“41.988810" lon="116.474828">      <time>2014-05-25T07:27:53Z</time>      <name>A</name>   </wpt></gpx>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<gpxxmlns="http://www.topografix.com/GPX/1/1"xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"version="1.1" creator="gpx-poi.com">
+   <wpt lat=“41.988810" lon="116.474828">      <time>2014-05-25T07:27:53Z</time>      <name>A</name>   </wpt>
+   </gpx>
 ```
 
 * 导入GPX文件
