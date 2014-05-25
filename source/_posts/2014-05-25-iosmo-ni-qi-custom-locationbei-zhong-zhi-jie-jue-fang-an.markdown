@@ -25,6 +25,8 @@ Debug --> Location --> Custom Location
 
 好在Xcode的target设置项中提供了设置位置信息的方法，允许我们使用GPX文件来设置自定义位置信息，步骤如下：
 
+<!-- more -->
+
 * 获取GPX文件
 
 GPX（GPS eXchange Format, GPS交换格式)是一个XML格式,为应用软件设计的通用GPS数据格式。它可以用来描述路点、轨迹、路程。（来自[维基百科](http://zh.wikipedia.org/wiki/GPX)）
