@@ -4,7 +4,7 @@
   <title><![CDATA[Category: XcodeSettings | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/xcodesettings/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-25T17:32:14+08:00</updated>
+  <updated>2014-05-25T17:34:07+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -32,6 +32,9 @@ Debug --&gt; Location --&gt; Custom Location
 <h2>解决方案</h2>
 
 <p>好在Xcode的target设置项中提供了设置位置信息的方法，允许我们使用GPX文件来设置自定义位置信息，步骤如下：</p>
+
+<!-- more -->
+
 
 <ul>
 <li>获取GPX文件</li>
