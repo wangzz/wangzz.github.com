@@ -12,7 +12,7 @@ description: iOS模拟器Custom Location被重置解决方案
 
 ##问题说明
 
-在做地图类应用时，经常需要用到位置模拟功能。iOS模拟器提供了该功能，我们可以写入指定的经纬度，选中模拟器后，按照以下菜单层次进入即可设置：
+在做地图类应用时，经常需要用到位置模拟功能。iOS模拟器提供了该功能，我们可以设置指定的经纬度，选中模拟器后，按照以下菜单层次进入即可设置：
 
 ```
 Debug --> Location --> Custom Location
@@ -40,6 +40,12 @@ GPX（GPS eXchange Format, GPS交换格式)是一个XML格式,为应用软件设
 然后将界面拉到底部，填写GPX文件名称，选择操作系统型号；
 
 点击`Create`按钮即可生成一个XML格式的GPX文件，再点击`Download`按钮即可将文件下载到本地。
+
+生成的GPX文件大概是这样：
+
+```
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><gpxxmlns="http://www.topografix.com/GPX/1/1"xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"version="1.1" creator="gpx-poi.com">   <wpt lat=“41.988810" lon="116.474828">      <time>2014-05-25T07:27:53Z</time>      <name>A</name>   </wpt></gpx>
+```
 
 * 导入GPX文件
 
