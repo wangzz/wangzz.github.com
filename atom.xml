@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-25T17:48:54+08:00</updated>
+  <updated>2014-05-25T17:50:07+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -63,14 +63,12 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-<span class='line-number'>8</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
 </span><span class='line'>&lt;gpxxmlns="http://www.topografix.com/GPX/1/1"xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"version="1.1" creator="gpx-poi.com"&gt;
-</span><span class='line'>   &lt;wpt lat=“41.988810" lon="116.474828"&gt;
-</span><span class='line'>    &lt;time&gt;2014-05-25T07:27:53Z&lt;/time&gt;
+</span><span class='line'>  &lt;wpt lat=“41.988810" lon="116.474828"&gt;
+</span><span class='line'>      &lt;time&gt;2014-05-25T07:27:53Z&lt;/time&gt;
 </span><span class='line'>      &lt;name&gt;A&lt;/name&gt;
 </span><span class='line'>      &lt;/wpt&gt;
-</span><span class='line'>
 </span><span class='line'>&lt;/gpx&gt;</span></code></pre></td></tr></table></div></figure>
 
 
