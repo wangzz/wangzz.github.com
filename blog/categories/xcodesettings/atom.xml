@@ -4,7 +4,7 @@
   <title><![CDATA[Category: XcodeSettings | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/xcodesettings/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-25T17:46:50+08:00</updated>
+  <updated>2014-05-25T17:48:54+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -55,12 +55,18 @@ Debug --&gt; Location --&gt; Custom Location
 
 <p>生成的GPX文件大概是这样：</p>
 
-<p><code>
-&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-&lt;gpxxmlns="http://www.topografix.com/GPX/1/1"xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"version="1.1" creator="gpx-poi.com"&gt;
-   &lt;wpt lat=“41.988810" lon="116.474828"&gt;      &lt;time&gt;2014-05-25T07:27:53Z&lt;/time&gt;      &lt;name&gt;A&lt;/name&gt;   &lt;/wpt&gt;
-   &lt;/gpx&gt;
-</code></p>
+<p>```
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;UTF-8&rdquo; standalone=&ldquo;no&rdquo;?>
+&lt;gpxxmlns=&ldquo;<a href="http://www.topografix.com/GPX/1/1">http://www.topografix.com/GPX/1/1</a>"xmlns:xsi="<a href="http://www.w3.org/2001/XMLSchema-instance">http://www.w3.org/2001/XMLSchema-instance</a>&rdquo; xsi:schemaLocation=&ldquo;<a href="http://www.topografix.com/GPX/1/1">http://www.topografix.com/GPX/1/1</a> <a href="http://www.topografix.com/GPX/1/1/gpx.xsd">http://www.topografix.com/GPX/1/1/gpx.xsd</a>"version="1.1&rdquo; creator=&ldquo;gpx-poi.com&rdquo;>
+   <wpt lat=“41.988810" lon="116.474828"></p>
+
+<pre><code>&lt;time&gt;2014-05-25T07:27:53Z&lt;/time&gt;
+  &lt;name&gt;A&lt;/name&gt;
+  &lt;/wpt&gt;
+</code></pre>
+
+<p></gpx>
+```</p>
 
 <ul>
 <li>导入GPX文件</li>
