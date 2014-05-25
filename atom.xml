@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-23T21:06:25+08:00</updated>
+  <updated>2014-05-25T17:32:14+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -12,6 +12,74 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS模拟器Custom Location被重置解决方案]]></title>
+    <link href="http://wangzz.github.io/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an/"/>
+    <updated>2014-05-25T17:29:18+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an</id>
+    <content type="html"><![CDATA[<h2>问题说明</h2>
+
+<p>在做地图类应用时，经常需要用到位置模拟功能。iOS模拟器提供了该功能，我们可以写入指定的经纬度，选中模拟器后，按照以下菜单层次进入即可设置：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Debug --&gt; Location --&gt; Custom Location</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是该功能存在的问题是设置完经纬度每次重新run程序，或者重启模拟器的时候都有可能使之前设置的Location状态从<code>Custom Location</code>变成<code>None</code>，导致设置的经纬度信息无效。</p>
+
+<p>因此经常需要重新选择<code>Custom Location</code>，对于每天需要run程序n次的我们来说苦不堪言&hellip;</p>
+
+<h2>解决方案</h2>
+
+<p>好在Xcode的target设置项中提供了设置位置信息的方法，允许我们使用GPX文件来设置自定义位置信息，步骤如下：</p>
+
+<ul>
+<li>获取GPX文件</li>
+</ul>
+
+
+<p>GPX（GPS eXchange Format, GPS交换格式)是一个XML格式,为应用软件设计的通用GPS数据格式。它可以用来描述路点、轨迹、路程。（来自<a href="http://zh.wikipedia.org/wiki/GPX">维基百科</a>）</p>
+
+<p>我们可以通过第三方网站：<a href="http://gpx-poi.com/">gpx-poi.com/</a>来生成一个GPX文件，生成过程也很方便：</p>
+
+<p>在网站左上角拖动地图到指定位置，鼠标单击后会出现一个红色标注，同时地图下方会显示出标注的经纬度数据；</p>
+
+<p>点击地图下方的<code>Update</code>按钮就能将经纬度信息更新到界面右侧的位置信息描述表格中；</p>
+
+<p>然后将界面拉到底部，填写GPX文件名称，选择操作系统型号；</p>
+
+<p>点击<code>Create</code>按钮即可生成一个XML格式的GPX文件，再点击<code>Download</code>按钮即可将文件下载到本地。</p>
+
+<ul>
+<li>导入GPX文件</li>
+</ul>
+
+
+<p>在Xcode中选中指定target，按以下菜单层次进入：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Edite Scheme --&gt;  Options --&gt;  Default Location --&gt;  Add GPX File to Project</span></code></pre></td></tr></table></div></figure>
+
+
+<p>（此时必须保证<code>Allow Location Simulation</code>选项是选中的，该设置项默认选中。）</p>
+
+<p>如图所示：</p>
+
+<p><img src="http://wangzz.github.io/images/article3/default_location.png" width="703" height="475"></p>
+
+<p>即可将刚才生成并下载到本地的GPX文件添加到工程里。从此以后不管是重新run程序还是重启模拟器都可以在程序启动的时候定到位。</p>
+
+<p>不过这种做法有个缺点，我在实际使用的时候发现设置完<code>Default Location</code>以后，真机的位置信息也会被更改成设置的位置！！！还请记得在软件发布时删除该设置项。</p>
+
+<h2>参考文档</h2>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/19719276/ios-simulator-reverts-location-setting">iOS Simulator Reverts Location Setting</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[加密你的SQLite]]></title>
