@@ -21,23 +21,29 @@ iOS系统是出了名的封闭，每个应用的活动范围被严格地限制�
 ##使用方式
 
 
-####消息接收者
+####1、消息接收者
 
 CFMessagePort端口消息的接收者需要实现以下两个功能：
 
-###### 注册监听
+######1.1 注册监听
 
 消息接收者需要通过以下方式注册消息监听：
 
 ```
-if (0 != mMsgPortListenner && CFMessagePortIsValid(mMsgPortListenner))
+-(void)startListenning
+{
+	if (0 != mMsgPortListenner && CFMessagePortIsValid(mMsgPortListenner))
 	{
 		CFMessagePortInvalidate(mMsgPortListenner);
 	}
     mMsgPortListenner = CFMessagePortCreateLocal(kCFAllocatorDefault,CFSTR(LOCAL_MACH_PORT_NAME),onRecvMessageCallBack, NULL, NULL);
     CFRunLoopSourceRef source = CFMessagePortCreateRunLoopSource(kCFAllocatorDefault, mMsgPortListenner, 0);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopCommonModes);
+    NSLog(@"start listenning");
+}
 ```
+
+ <!-- more -->
 
 其中`LOCAL_MACH_PORT_NAME`的定义为：
 
@@ -45,11 +51,11 @@ if (0 != mMsgPortListenner && CFMessagePortIsValid(mMsgPortListenner))
 #define LOCAL_MACH_PORT_NAME    "com.wangzz.demo"
 ```
 
-通过的源码可以看出，CFMessagePort实际上是通过Mach port实现的。Mach port是iOS系统提供的基于端口的输入源，可用于线程或进程间通讯。而Runloop支持的输入源类型中就包括基于端口的输入源，因此可以使用Runloop做为CFMessagePort端口源事件的监听者。
+经过查看源码发现，CFMessagePort实际上是通过mach port实现的。Mach port是iOS系统提供的基于端口的输入源，可用于线程或进程间通讯。而Runloop支持的输入源类型中就包括基于端口的输入源，因此可以使用Runloop做为CFMessagePort端口源事件的监听者。
 
 上述代码有几点需要说明：
 
-* 通过CFMessagePortCreateLocal创建一个本地CFMessagePortRef对象
+* 通过CFMessagePortCreateLocal可以创建一个本地CFMessagePortRef对象
 
 * CFMessagePort对象是靠一个字符串来唯一标识的，这一点非常重要，在这里字符串是由宏`LOCAL_MACH_PORT_NAME`定义的；
 
@@ -58,7 +64,7 @@ if (0 != mMsgPortListenner && CFMessagePortIsValid(mMsgPortListenner))
 * 将创建的对象作为输入源添加到Runloop中，从而实现对端口源事件的监听，当Runloop收到对应的端口源事件时，会调用上一步中指定的回调芳芳；
 
 
-###### 实现回调方法
+######1.2 实现回调方法
 
 
 回调函数为CFMessagePortCallBack类型，其定义部分为：
@@ -123,7 +129,7 @@ CFDataRef onRecvMessageCallBack(CFMessagePortRef local,SInt32 msgid,CFDataRef cf
 该方法实现的较为简单，解析约定的数据（测试代码中约定传送的是string）,为了测试，同时生成一个CFDataRef数据返回给port消息的发送者。
 
 
-###### 取消端口监听
+######1.3 取消端口监听
 
 可以通过如下方式取消对port端口的监听：
 
@@ -136,7 +142,7 @@ CFDataRef onRecvMessageCallBack(CFMessagePortRef local,SInt32 msgid,CFDataRef cf
 ```
 CFMessagePortInvalidate会停止port消息的发送和接收操作，而只有调用了CFRelease，CFMessagePortRef对象才真正的被释放掉。
 
-####消息发送者
+####2、消息发送者
 
 发送部分代码如下：
 
