@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-06-04T18:42:00+08:00</updated>
+  <updated>2014-06-04T18:44:19+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -18,9 +18,7 @@
     <link href="http://wangzz.github.io/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/"/>
     <updated>2014-06-04T18:31:51+08:00</updated>
     <id>http://wangzz.github.io/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
-
-<p>iOS系统是出了名的封闭，每个应用的活动范围被严格地限制在各自的沙盒中。尽管如此，iOS还是提供了若干进程间通信机制，CFMessagePort就是其中之一。</p>
+    <content type="html"><![CDATA[<p>iOS系统是出了名的封闭，每个应用的活动范围被严格地限制在各自的沙盒中。尽管如此，iOS还是提供了若干进程间通信机制，CFMessagePort就是其中之一。</p>
 
 <p>从类名可以看出，CFMessagePort属于<code>Core Foundation</code>层的东西，其实现部分是开源的，代码在可以在苹果的<a href="http://opensource.apple.com/source/CF/CF-855.14/CFMessagePort.c">开源代码库</a>中找到。</p>
 
