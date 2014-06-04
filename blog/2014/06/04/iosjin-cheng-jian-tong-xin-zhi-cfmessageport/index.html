@@ -117,11 +117,11 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <h2>使用方式</h2>
 
-<h4>消息接收者</h4>
+<h4>1、消息接收者</h4>
 
 <p>CFMessagePort端口消息的接收者需要实现以下两个功能：</p>
 
-<h6>注册监听</h6>
+<h6>1.1 注册监听</h6>
 
 <p>消息接收者需要通过以下方式注册消息监听：</p>
 
@@ -132,14 +132,24 @@ $(document).bind('DOMNodeInserted', function(event) {
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (0 != mMsgPortListenner && CFMessagePortIsValid(mMsgPortListenner))
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-(void)startListenning
+</span><span class='line'>{
+</span><span class='line'>  if (0 != mMsgPortListenner && CFMessagePortIsValid(mMsgPortListenner))
 </span><span class='line'>  {
 </span><span class='line'>      CFMessagePortInvalidate(mMsgPortListenner);
 </span><span class='line'>  }
 </span><span class='line'>    mMsgPortListenner = CFMessagePortCreateLocal(kCFAllocatorDefault,CFSTR(LOCAL_MACH_PORT_NAME),onRecvMessageCallBack, NULL, NULL);
 </span><span class='line'>    CFRunLoopSourceRef source = CFMessagePortCreateRunLoopSource(kCFAllocatorDefault, mMsgPortListenner, 0);
-</span><span class='line'>    CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopCommonModes);</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>    CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopCommonModes);
+</span><span class='line'>    NSLog(@"start listenning");
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
+
+<p> <!-- more --></p>
 
 <p>其中<code>LOCAL_MACH_PORT_NAME</code>的定义为：</p>
 
@@ -147,19 +157,19 @@ $(document).bind('DOMNodeInserted', function(event) {
 </pre></td><td class='code'><pre><code class=''><span class='line'>#define LOCAL_MACH_PORT_NAME    "com.wangzz.demo"</span></code></pre></td></tr></table></div></figure>
 
 
-<p>通过的源码可以看出，CFMessagePort实际上是通过Mach port实现的。Mach port是iOS系统提供的基于端口的输入源，可用于线程或进程间通讯。而Runloop支持的输入源类型中就包括基于端口的输入源，因此可以使用Runloop做为CFMessagePort端口源事件的监听者。</p>
+<p>经过查看源码发现，CFMessagePort实际上是通过mach port实现的。Mach port是iOS系统提供的基于端口的输入源，可用于线程或进程间通讯。而Runloop支持的输入源类型中就包括基于端口的输入源，因此可以使用Runloop做为CFMessagePort端口源事件的监听者。</p>
 
 <p>上述代码有几点需要说明：</p>
 
 <ul>
-<li><p>通过CFMessagePortCreateLocal创建一个本地CFMessagePortRef对象</p></li>
+<li><p>通过CFMessagePortCreateLocal可以创建一个本地CFMessagePortRef对象</p></li>
 <li><p>CFMessagePort对象是靠一个字符串来唯一标识的，这一点非常重要，在这里字符串是由宏<code>LOCAL_MACH_PORT_NAME</code>定义的；</p></li>
 <li><p>创建CFMessagePort对象的同时设置了端口源事件的回调函数onRecvMessageCallBack，用于处理端口源事件；</p></li>
 <li><p>将创建的对象作为输入源添加到Runloop中，从而实现对端口源事件的监听，当Runloop收到对应的端口源事件时，会调用上一步中指定的回调芳芳；</p></li>
 </ul>
 
 
-<h6>实现回调方法</h6>
+<h6>1.2 实现回调方法</h6>
 
 <p>回调函数为CFMessagePortCallBack类型，其定义部分为：</p>
 
@@ -253,7 +263,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>该方法实现的较为简单，解析约定的数据（测试代码中约定传送的是string）,为了测试，同时生成一个CFDataRef数据返回给port消息的发送者。</p>
 
-<h6>取消端口监听</h6>
+<h6>1.3 取消端口监听</h6>
 
 <p>可以通过如下方式取消对port端口的监听：</p>
 
@@ -271,7 +281,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>CFMessagePortInvalidate会停止port消息的发送和接收操作，而只有调用了CFRelease，CFMessagePortRef对象才真正的被释放掉。</p>
 
-<h4>消息发送者</h4>
+<h4>2、消息发送者</h4>
 
 <p>发送部分代码如下：</p>
 
