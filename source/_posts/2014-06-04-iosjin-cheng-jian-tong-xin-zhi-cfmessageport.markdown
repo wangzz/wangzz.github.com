@@ -11,7 +11,6 @@ description: iOS进程间通信之CFMessagePort
 ---
 
 
-##前言
 
 iOS系统是出了名的封闭，每个应用的活动范围被严格地限制在各自的沙盒中。尽管如此，iOS还是提供了若干进程间通信机制，CFMessagePort就是其中之一。
 
@@ -43,7 +42,10 @@ CFMessagePort端口消息的接收者需要实现以下两个功能：
 }
 ```
 
+
  <!-- more -->
+ 
+ 
 
 其中`LOCAL_MACH_PORT_NAME`的定义为：
 
