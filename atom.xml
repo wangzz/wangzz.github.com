@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-27T14:48:57+08:00</updated>
+  <updated>2014-06-04T18:34:35+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -12,6 +12,332 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS进程间通信之CFMessagePort]]></title>
+    <link href="http://wangzz.github.io/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/"/>
+    <updated>2014-06-04T18:31:51+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>iOS系统是出了名的封闭，每个应用的活动范围被严格地限制在各自的沙盒中。尽管如此，iOS还是提供了若干进程间通信机制，CFMessagePort就是其中之一。</p>
+
+<p>从类名可以看出，CFMessagePort属于<code>Core Foundation</code>层的东西，其实现部分是开源的，代码在可以在苹果的<a href="http://opensource.apple.com/source/CF/CF-855.14/CFMessagePort.c">开源代码库</a>中找到。</p>
+
+<h2>使用方式</h2>
+
+<h4>消息接收者</h4>
+
+<p>CFMessagePort端口消息的接收者需要实现以下两个功能：</p>
+
+<h6>注册监听</h6>
+
+<p>消息接收者需要通过以下方式注册消息监听：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (0 != mMsgPortListenner && CFMessagePortIsValid(mMsgPortListenner))
+</span><span class='line'>  {
+</span><span class='line'>      CFMessagePortInvalidate(mMsgPortListenner);
+</span><span class='line'>  }
+</span><span class='line'>    mMsgPortListenner = CFMessagePortCreateLocal(kCFAllocatorDefault,CFSTR(LOCAL_MACH_PORT_NAME),onRecvMessageCallBack, NULL, NULL);
+</span><span class='line'>    CFRunLoopSourceRef source = CFMessagePortCreateRunLoopSource(kCFAllocatorDefault, mMsgPortListenner, 0);
+</span><span class='line'>    CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopCommonModes);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中<code>LOCAL_MACH_PORT_NAME</code>的定义为：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#define LOCAL_MACH_PORT_NAME    "com.wangzz.demo"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过的源码可以看出，CFMessagePort实际上是通过Mach port实现的。Mach port是iOS系统提供的基于端口的输入源，可用于线程或进程间通讯。而Runloop支持的输入源类型中就包括基于端口的输入源，因此可以使用Runloop做为CFMessagePort端口源事件的监听者。</p>
+
+<p>上述代码有几点需要说明：</p>
+
+<ul>
+<li><p>通过CFMessagePortCreateLocal创建一个本地CFMessagePortRef对象</p></li>
+<li><p>CFMessagePort对象是靠一个字符串来唯一标识的，这一点非常重要，在这里字符串是由宏<code>LOCAL_MACH_PORT_NAME</code>定义的；</p></li>
+<li><p>创建CFMessagePort对象的同时设置了端口源事件的回调函数onRecvMessageCallBack，用于处理端口源事件；</p></li>
+<li><p>将创建的对象作为输入源添加到Runloop中，从而实现对端口源事件的监听，当Runloop收到对应的端口源事件时，会调用上一步中指定的回调芳芳；</p></li>
+</ul>
+
+
+<h6>实现回调方法</h6>
+
+<p>回调函数为CFMessagePortCallBack类型，其定义部分为：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>typedef CFDataRef (*CFMessagePortCallBack) (
+</span><span class='line'>   CFMessagePortRef local,
+</span><span class='line'>   SInt32 msgid,
+</span><span class='line'>   CFDataRef data,
+</span><span class='line'>   void *info
+</span><span class='line'>);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>各个参数的含义为：</p>
+
+<ul>
+<li><p>CFMessagePortRef local</p>
+
+<p>  当前接收消息的CFMessagePortRef对象。</p></li>
+<li><p>SInt32 msgid</p>
+
+<p>  这个字段非常有用，用于标识消息。如果通信双方进程约定号每个msgid对应的数据结构，即可实现较为复杂的通信。</p></li>
+<li><p>CFDataRef data</p>
+
+<p>  通信的真正数据部分。</p></li>
+<li><p>void *info</p>
+
+<p>  为使用CFMessagePortCreateLocal方法创建port端口时指定的CFMessagePortContext对象的info字段，通常为空。</p></li>
+</ul>
+
+
+<p>该回调方法可以返回一个CFDataRef类型的数据给port消息的发送者，以实现有效的双方通信，这一点也非常重要。</p>
+
+<p>我的回调函数onRecvMessageCallBack的实现：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CFDataRef onRecvMessageCallBack(CFMessagePortRef local,SInt32 msgid,CFDataRef cfData, void*info)
+</span><span class='line'>{
+</span><span class='line'>    NSLog(@"onRecvMessageCallBack is called");
+</span><span class='line'>    NSString *strData = nil;
+</span><span class='line'>    if (cfData)
+</span><span class='line'>    {
+</span><span class='line'>          const UInt8  * recvedMsg = CFDataGetBytePtr(cfData);
+</span><span class='line'>      strData = [NSString stringWithCString:(char *)recvedMsg encoding:NSUTF8StringEncoding];
+</span><span class='line'>        /**
+</span><span class='line'>         
+</span><span class='line'>         实现数据解析操作
+</span><span class='line'>         
+</span><span class='line'>         **/
+</span><span class='line'>        
+</span><span class='line'>        NSLog(@"receive message:%@",strData);
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    //为了测试，生成返回数据
+</span><span class='line'>    NSString *returnString = [NSString stringWithFormat:@"i have receive:%@",strData];
+</span><span class='line'>    const char* cStr = [returnString UTF8String];
+</span><span class='line'>  NSUInteger ulen = [returnString lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+</span><span class='line'>    CFDataRef sgReturn = CFDataCreate(NULL, (UInt8 *)cStr, ulen);
+</span><span class='line'>    
+</span><span class='line'>    return sgReturn;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该方法实现的较为简单，解析约定的数据（测试代码中约定传送的是string）,为了测试，同时生成一个CFDataRef数据返回给port消息的发送者。</p>
+
+<h6>取消端口监听</h6>
+
+<p>可以通过如下方式取消对port端口的监听：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)endLisenning
+</span><span class='line'>{
+</span><span class='line'>    CFMessagePortInvalidate(mMsgPortListenner);
+</span><span class='line'>    CFRelease(mMsgPortListenner);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>CFMessagePortInvalidate会停止port消息的发送和接收操作，而只有调用了CFRelease，CFMessagePortRef对象才真正的被释放掉。</p>
+
+<h4>消息发送者</h4>
+
+<p>发送部分代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-(NSString *)sendMessageToDameonWith:(id)msgInfo msgID:(NSInteger)msgid
+</span><span class='line'>{
+</span><span class='line'>    // 生成Remote port
+</span><span class='line'>    CFMessagePortRef bRemote = CFMessagePortCreateRemote(kCFAllocatorDefault, CFSTR(MACH_PORT_REMOTE));
+</span><span class='line'>    if (nil == bRemote) {
+</span><span class='line'>        NSLog(@"bRemote create failed");
+</span><span class='line'>        return nil;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    // 构建发送数据（string）
+</span><span class='line'>    NSString    *msg = [NSString stringWithFormat:@"%@",msgInfo];
+</span><span class='line'>    NSLog(@"send msg is :%@",msg);
+</span><span class='line'>    const char *message = [msg UTF8String];
+</span><span class='line'>    CFDataRef data,recvData = nil;
+</span><span class='line'>    data = CFDataCreate(NULL, (UInt8 *)message, strlen(message));
+</span><span class='line'>    
+</span><span class='line'>    // 执行发送操作
+</span><span class='line'>    CFMessagePortSendRequest(bRemote, msgid, data, 0, 100 , kCFRunLoopDefaultMode, &recvData);
+</span><span class='line'>    if (nil == recvData) {
+</span><span class='line'>        NSLog(@"recvData date is nil.");
+</span><span class='line'>        CFRelease(data);
+</span><span class='line'>        CFMessagePortInvalidate(bRemote);
+</span><span class='line'>        CFRelease(bRemote);
+</span><span class='line'>        return nil;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    // 解析返回数据
+</span><span class='line'>    const UInt8  * recvedMsg = CFDataGetBytePtr(recvData);
+</span><span class='line'>    if (nil == recvedMsg) {
+</span><span class='line'>        NSLog(@"receive date err.");
+</span><span class='line'>        CFRelease(data);
+</span><span class='line'>        CFMessagePortInvalidate(bRemote);
+</span><span class='line'>        CFRelease(bRemote);
+</span><span class='line'>        return nil;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    NSString    *strMsg = [NSString stringWithCString:(char *)recvedMsg encoding:NSUTF8StringEncoding];
+</span><span class='line'>    NSLog(@"%@",strMsg);
+</span><span class='line'>    
+</span><span class='line'>    CFRelease(data);
+</span><span class='line'>    CFMessagePortInvalidate(bRemote);
+</span><span class='line'>    CFRelease(bRemote);
+</span><span class='line'>    CFRelease(recvData);
+</span><span class='line'>    
+</span><span class='line'>    return strMsg;
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中<code>MACH_PORT_REMOTE</code>的定义为：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#define MACH_PORT_REMOTE    "com.wangzz.demo"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>发送消息时要相对简单，首先通过CFMessagePortCreateRemote生成一个Remote的CFMessagePortRef，这里需要注意的是CFMessagePortCreateRemote时传入的字符串唯一标识<code>MACH_PORT_REMOTE</code>必须和消息接收者创建local的CFMessagePortRef时使用的字符串唯一标识是同一个！</p>
+
+<p>通过查看源码发现，CFMessagePortCreateRemote会根据<code>MACH_PORT_REMOTE</code>定义的字符串为唯一标识获取消息接收者通过CFMessagePortCreateLocal使用相同字符串创建的底层mach port端口，从而实现向消息接收者发送信息。</p>
+
+<p>如果消息接收者还没有创建或者通过CFMessagePortCreateLocal创建local端口失败时，想要通过CFMessagePortCreateRemote去创建remote端口肯定是失败的。</p>
+
+<h2>说明</h2>
+
+<ul>
+<li>很遗憾的是，在iOS7及以后系统中，CFMessagePort的通信机制不再可用。</li>
+</ul>
+
+
+<p>在使用CFMessagePortCreateLocal/CFMessagePortCreateRemote创建CFMessagePortRef对象时会失败，官方文档中是这么说的：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>This method is not available on iOS 7 and later—it will return NULL and log a sandbox violation in syslog. See Concurrency Programming Guide for possible replacement technologies.</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><p>CFMessagePort只能用于本地进程通信。</p></li>
+<li><p>CFMessagePort是基于mach port端口的通信方式，不但可以用于进程通信，也可以用于线程间通信，只是线程间通信有了GCD和Cocoa提供的原生方法，已经能很方便的实现了，没必要再使用CFMessagePort。</p></li>
+<li><p>进程通信使用场景</p></li>
+</ul>
+
+
+<p>iOS系统多任务机制，使得进程间通信基本都只能用于越狱开发。常用的场景是前端有一个UI程序用于界面展示，后端有一个daemo精灵程序用于任务处理。</p>
+
+<ul>
+<li>demo工程</li>
+</ul>
+
+
+<p>实现了一个demo工程，示例CFMessagePort的使用，可以到<a href="http://download.csdn.net/detail/wzzvictory_tjsd/7446745">CSDN下载</a>。</p>
+
+<p>为了模拟进程间通信场景，我将消息接收进程CFMessagePortReceive做成了能够后台播放音乐的程序，以便其切到后台后能继续存活。</p>
+
+<p>demo使用方式：</p>
+
+<pre><code>1、CFMessagePortReceive启动后，点击Start Listenning创建CFMessagePort接口并开始监听port消息，然后将CFMessagePortReceive切到后台；
+2、启动CFMessagePortSend程序，在输入框中写入内容，点击发送按钮即可和CFMessagePortReceive通信。
+</code></pre>
+
+<h2>参考文档</h2>
+
+<ul>
+<li><p><a href="http://opensource.apple.com/source/CF/CF-855.14/">CF-855.14</a></p></li>
+<li><p><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW1">Threading Programming Guide</a></p></li>
+<li><p><a href="https://developer.apple.com/library/mac/documentation/corefoundation/Reference/CFMessagePortRef/Reference/reference.html#//apple_ref/doc/uid/20001437-CH203-DontLinkElementID_8">CFMessagePort Reference</a></p></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS模拟器Custom Location被重置解决方案]]></title>
