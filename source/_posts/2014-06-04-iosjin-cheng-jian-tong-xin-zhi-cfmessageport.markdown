@@ -22,13 +22,13 @@ iOS系统是出了名的封闭，每个应用的活动范围被严格地限制�
 
 ####1、消息接收者
 
-CFMessagePort端口消息的接收者需要实现以下两个功能：
+CFMessagePort端口消息的接收者需要实现以下功能：
 
 ######1.1 注册监听
 
 消息接收者需要通过以下方式注册消息监听：
 
-```
+```objective-c
 -(void)startListenning
 {
 	if (0 != mMsgPortListenner && CFMessagePortIsValid(mMsgPortListenner))
