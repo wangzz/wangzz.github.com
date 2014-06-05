@@ -49,7 +49,7 @@ CFMessagePort端口消息的接收者需要实现以下功能：
 
 其中`LOCAL_MACH_PORT_NAME`的定义为：
 
-```
+```objective-c
 #define LOCAL_MACH_PORT_NAME    "com.wangzz.demo"
 ```
 
@@ -70,7 +70,7 @@ CFMessagePort端口消息的接收者需要实现以下功能：
 
 
 回调函数为CFMessagePortCallBack类型，其定义部分为：
-```
+```objective-c
 typedef CFDataRef (*CFMessagePortCallBack) (
    CFMessagePortRef local,
    SInt32 msgid,
@@ -100,7 +100,7 @@ typedef CFDataRef (*CFMessagePortCallBack) (
 
 我的回调函数onRecvMessageCallBack的实现：
 
-```
+```objective-c
 CFDataRef onRecvMessageCallBack(CFMessagePortRef local,SInt32 msgid,CFDataRef cfData, void*info)
 {
     NSLog(@"onRecvMessageCallBack is called");
@@ -135,7 +135,7 @@ CFDataRef onRecvMessageCallBack(CFMessagePortRef local,SInt32 msgid,CFDataRef cf
 
 可以通过如下方式取消对port端口的监听：
 
-```
+```objective-c
 - (void)endLisenning
 {
     CFMessagePortInvalidate(mMsgPortListenner);
@@ -148,7 +148,7 @@ CFMessagePortInvalidate会停止port消息的发送和接收操作，而只有�
 
 发送部分代码如下：
 
-```
+```objective-c
 -(NSString *)sendMessageToDameonWith:(id)msgInfo msgID:(NSInteger)msgid
 {
     // 生成Remote port
@@ -199,7 +199,8 @@ CFMessagePortInvalidate会停止port消息的发送和接收操作，而只有�
 ```
 
 其中`MACH_PORT_REMOTE`的定义为：
-```
+
+```objective-c
 #define MACH_PORT_REMOTE    "com.wangzz.demo"
 ```
 
@@ -227,17 +228,25 @@ This method is not available on iOS 7 and later—it will return NULL and log a 
 
 iOS系统多任务机制，使得进程间通信基本都只能用于越狱开发。常用的场景是前端有一个UI程序用于界面展示，后端有一个daemo精灵程序用于任务处理。
 
-* demo工程
+##demo工程
 
-实现了一个demo工程，示例CFMessagePort的使用，可以到[CSDN下载](http://download.csdn.net/detail/wzzvictory_tjsd/7446745)。
+特地做了了个demo工程，以便更好地演示CFMessagePort的使用，可以到[CSDN下载](http://download.csdn.net/detail/wzzvictory_tjsd/7446745)。
 
 为了模拟进程间通信场景，我将消息接收进程CFMessagePortReceive做成了能够后台播放音乐的程序，以便其切到后台后能继续存活。
 
 demo使用方式：
 
-	1、CFMessagePortReceive启动后，点击Start Listenning创建CFMessagePort接口并开始监听port消息，然后将CFMessagePortReceive切到后台；
-	2、启动CFMessagePortSend程序，在输入框中写入内容，点击发送按钮即可和CFMessagePortReceive通信。
+* CFMessagePortReceive启动后，点击Start Listenning创建CFMessagePort接口并开始监听port消息，然后将CFMessagePortReceive切到后台；
 
+* 启动CFMessagePortSend程序，在输入框中写入内容，点击发送按钮即可和CFMessagePortReceive通信。
+
+* MessagePort通信过程中会有日志输出，可以使用以下方式查看日志：
+
+	1.真机
+	选择：Xcode->Window->Organizer->Devices，然后选中窗口左侧当前设备的Console窗口查看。
+	
+	2.模拟器
+	选择：模拟器->调试->打开系统日志，或者直接使用快捷键`⌘/`直接打开系统控制台查看日志。
 
 
 ##参考文档
