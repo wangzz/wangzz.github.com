@@ -120,13 +120,13 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <h4>1、消息接收者</h4>
 
-<p>CFMessagePort端口消息的接收者需要实现以下两个功能：</p>
+<p>CFMessagePort端口消息的接收者需要实现以下功能：</p>
 
 <h6>1.1 注册监听</h6>
 
 <p>消息接收者需要通过以下方式注册消息监听：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -137,17 +137,18 @@ $(document).bind('DOMNodeInserted', function(event) {
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-(void)startListenning
-</span><span class='line'>{
-</span><span class='line'>  if (0 != mMsgPortListenner && CFMessagePortIsValid(mMsgPortListenner))
-</span><span class='line'>  {
-</span><span class='line'>      CFMessagePortInvalidate(mMsgPortListenner);
-</span><span class='line'>  }
-</span><span class='line'>    mMsgPortListenner = CFMessagePortCreateLocal(kCFAllocatorDefault,CFSTR(LOCAL_MACH_PORT_NAME),onRecvMessageCallBack, NULL, NULL);
-</span><span class='line'>    CFRunLoopSourceRef source = CFMessagePortCreateRunLoopSource(kCFAllocatorDefault, mMsgPortListenner, 0);
-</span><span class='line'>    CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopCommonModes);
-</span><span class='line'>    NSLog(@"start listenning");
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">startListenning</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">!=</span> <span class="n">mMsgPortListenner</span> <span class="o">&amp;&amp;</span> <span class="n">CFMessagePortIsValid</span><span class="p">(</span><span class="n">mMsgPortListenner</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">CFMessagePortInvalidate</span><span class="p">(</span><span class="n">mMsgPortListenner</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>    <span class="n">mMsgPortListenner</span> <span class="o">=</span> <span class="n">CFMessagePortCreateLocal</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span><span class="n">CFSTR</span><span class="p">(</span><span class="n">LOCAL_MACH_PORT_NAME</span><span class="p">),</span><span class="n">onRecvMessageCallBack</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRunLoopSourceRef</span> <span class="n">source</span> <span class="o">=</span> <span class="n">CFMessagePortCreateRunLoopSource</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">mMsgPortListenner</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRunLoopAddSource</span><span class="p">(</span><span class="n">CFRunLoopGetCurrent</span><span class="p">(),</span> <span class="n">source</span><span class="p">,</span> <span class="n">kCFRunLoopCommonModes</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;start listenning&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p> </div>

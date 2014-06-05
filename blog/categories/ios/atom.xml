@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-06-04T18:44:19+08:00</updated>
+  <updated>2014-06-05T17:46:22+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -26,13 +26,13 @@
 
 <h4>1、消息接收者</h4>
 
-<p>CFMessagePort端口消息的接收者需要实现以下两个功能：</p>
+<p>CFMessagePort端口消息的接收者需要实现以下功能：</p>
 
 <h6>1.1 注册监听</h6>
 
 <p>消息接收者需要通过以下方式注册消息监听：</p>
 
-<p>```
+<p>```objective-c
 &ndash;(void)startListenning
 {</p>
 
