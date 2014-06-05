@@ -234,6 +234,8 @@ iOS系统多任务机制，使得进程间通信基本都只能用于越狱开�
 
 为了模拟进程间通信场景，我将消息接收进程CFMessagePortReceive做成了能够后台播放音乐的程序，以便其切到后台后能继续存活。
 
+由于CFMessagePort不再支持iOS7及以后系统，本demo实在iOS6系统上测试的。
+
 demo使用方式：
 
 * CFMessagePortReceive启动后，点击Start Listenning创建CFMessagePort接口并开始监听port消息，然后将CFMessagePortReceive切到后台；
@@ -243,9 +245,11 @@ demo使用方式：
 * MessagePort通信过程中会有日志输出，可以使用以下方式查看日志：
 
 	1.真机
+	
 	选择：Xcode->Window->Organizer->Devices，然后选中窗口左侧当前设备的Console窗口查看。
 	
 	2.模拟器
+	
 	选择：模拟器->调试->打开系统日志，或者直接使用快捷键`⌘/`直接打开系统控制台查看日志。
 
 
