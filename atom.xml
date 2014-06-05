@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-06-05T17:46:22+08:00</updated>
+  <updated>2014-06-05T18:03:15+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -328,20 +328,26 @@
 
 <p>iOS系统多任务机制，使得进程间通信基本都只能用于越狱开发。常用的场景是前端有一个UI程序用于界面展示，后端有一个daemo精灵程序用于任务处理。</p>
 
-<ul>
-<li>demo工程</li>
-</ul>
+<h2>demo工程</h2>
 
-
-<p>实现了一个demo工程，示例CFMessagePort的使用，可以到<a href="http://download.csdn.net/detail/wzzvictory_tjsd/7446745">CSDN下载</a>。</p>
+<p>特地做了了个demo工程，以便更好地演示CFMessagePort的使用，可以到<a href="http://download.csdn.net/detail/wzzvictory_tjsd/7446745">CSDN下载</a>。</p>
 
 <p>为了模拟进程间通信场景，我将消息接收进程CFMessagePortReceive做成了能够后台播放音乐的程序，以便其切到后台后能继续存活。</p>
 
 <p>demo使用方式：</p>
 
-<pre><code>1、CFMessagePortReceive启动后，点击Start Listenning创建CFMessagePort接口并开始监听port消息，然后将CFMessagePortReceive切到后台；
-2、启动CFMessagePortSend程序，在输入框中写入内容，点击发送按钮即可和CFMessagePortReceive通信。
-</code></pre>
+<ul>
+<li><p>CFMessagePortReceive启动后，点击Start Listenning创建CFMessagePort接口并开始监听port消息，然后将CFMessagePortReceive切到后台；</p></li>
+<li><p>启动CFMessagePortSend程序，在输入框中写入内容，点击发送按钮即可和CFMessagePortReceive通信。</p></li>
+<li><p>MessagePort通信过程中会有日志输出，可以使用以下方式查看日志：</p>
+
+<p>  1.真机
+  选择：Xcode->Window->Organizer->Devices，然后选中窗口左侧当前设备的Console窗口查看。</p>
+
+<p>  2.模拟器
+  选择：模拟器->调试->打开系统日志，或者直接使用快捷键<code>⌘/</code>直接打开系统控制台查看日志。</p></li>
+</ul>
+
 
 <h2>参考文档</h2>
 
