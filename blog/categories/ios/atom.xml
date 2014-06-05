@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-06-05T18:03:15+08:00</updated>
+  <updated>2014-06-05T18:08:19+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -252,6 +252,8 @@ This method is not available on iOS 7 and later—it will return NULL and log a 
 
 <p>为了模拟进程间通信场景，我将消息接收进程CFMessagePortReceive做成了能够后台播放音乐的程序，以便其切到后台后能继续存活。</p>
 
+<p>由于CFMessagePort不再支持iOS7及以后系统，本demo实在iOS6系统上测试的。</p>
+
 <p>demo使用方式：</p>
 
 <ul>
@@ -259,11 +261,13 @@ This method is not available on iOS 7 and later—it will return NULL and log a 
 <li><p>启动CFMessagePortSend程序，在输入框中写入内容，点击发送按钮即可和CFMessagePortReceive通信。</p></li>
 <li><p>MessagePort通信过程中会有日志输出，可以使用以下方式查看日志：</p>
 
-<p>  1.真机
-  选择：Xcode->Window->Organizer->Devices，然后选中窗口左侧当前设备的Console窗口查看。</p>
+<p>  1.真机</p>
 
-<p>  2.模拟器
-  选择：模拟器->调试->打开系统日志，或者直接使用快捷键<code>⌘/</code>直接打开系统控制台查看日志。</p></li>
+<p>  选择：Xcode->Window->Organizer->Devices，然后选中窗口左侧当前设备的Console窗口查看。</p>
+
+<p>  2.模拟器</p>
+
+<p>  选择：模拟器->调试->打开系统日志，或者直接使用快捷键<code>⌘/</code>直接打开系统控制台查看日志。</p></li>
 </ul>
 
 
