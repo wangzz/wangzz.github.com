@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-05-23T21:06:25+08:00</updated>
+  <updated>2014-06-05T18:08:19+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -12,6 +12,446 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS进程间通信之CFMessagePort]]></title>
+    <link href="http://wangzz.github.io/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/"/>
+    <updated>2014-06-04T18:31:51+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport</id>
+    <content type="html"><![CDATA[<p>iOS系统是出了名的封闭，每个应用的活动范围被严格地限制在各自的沙盒中。尽管如此，iOS还是提供了若干进程间通信机制，CFMessagePort就是其中之一。</p>
+
+<p>从类名可以看出，CFMessagePort属于<code>Core Foundation</code>层的东西，其实现部分是开源的，代码在可以在苹果的<a href="http://opensource.apple.com/source/CF/CF-855.14/CFMessagePort.c">开源代码库</a>中找到。</p>
+
+<h2>使用方式</h2>
+
+<h4>1、消息接收者</h4>
+
+<p>CFMessagePort端口消息的接收者需要实现以下功能：</p>
+
+<h6>1.1 注册监听</h6>
+
+<p>消息接收者需要通过以下方式注册消息监听：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">startListenning</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">!=</span> <span class="n">mMsgPortListenner</span> <span class="o">&amp;&amp;</span> <span class="n">CFMessagePortIsValid</span><span class="p">(</span><span class="n">mMsgPortListenner</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">CFMessagePortInvalidate</span><span class="p">(</span><span class="n">mMsgPortListenner</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>    <span class="n">mMsgPortListenner</span> <span class="o">=</span> <span class="n">CFMessagePortCreateLocal</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span><span class="n">CFSTR</span><span class="p">(</span><span class="n">LOCAL_MACH_PORT_NAME</span><span class="p">),</span><span class="n">onRecvMessageCallBack</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRunLoopSourceRef</span> <span class="n">source</span> <span class="o">=</span> <span class="n">CFMessagePortCreateRunLoopSource</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">mMsgPortListenner</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRunLoopAddSource</span><span class="p">(</span><span class="n">CFRunLoopGetCurrent</span><span class="p">(),</span> <span class="n">source</span><span class="p">,</span> <span class="n">kCFRunLoopCommonModes</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;start listenning&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> <!-- more --></p>
+
+<p>其中<code>LOCAL_MACH_PORT_NAME</code>的定义为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="cp">#define LOCAL_MACH_PORT_NAME    &quot;com.wangzz.demo&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>经过查看源码发现，CFMessagePort实际上是通过mach port实现的。Mach port是iOS系统提供的基于端口的输入源，可用于线程或进程间通讯。而Runloop支持的输入源类型中就包括基于端口的输入源，因此可以使用Runloop做为CFMessagePort端口源事件的监听者。</p>
+
+<p>上述代码有几点需要说明：</p>
+
+<ul>
+<li><p>通过CFMessagePortCreateLocal可以创建一个本地CFMessagePortRef对象</p></li>
+<li><p>CFMessagePort对象是靠一个字符串来唯一标识的，这一点非常重要，在这里字符串是由宏<code>LOCAL_MACH_PORT_NAME</code>定义的；</p></li>
+<li><p>创建CFMessagePort对象的同时设置了端口源事件的回调函数onRecvMessageCallBack，用于处理端口源事件；</p></li>
+<li><p>将创建的对象作为输入源添加到Runloop中，从而实现对端口源事件的监听，当Runloop收到对应的端口源事件时，会调用上一步中指定的回调芳芳；</p></li>
+</ul>
+
+
+<h6>1.2 实现回调方法</h6>
+
+<p>回调函数为CFMessagePortCallBack类型，其定义部分为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">typedef</span> <span class="nf">CFDataRef</span> <span class="p">(</span><span class="o">*</span><span class="n">CFMessagePortCallBack</span><span class="p">)</span> <span class="p">(</span>
+</span><span class='line'>   <span class="n">CFMessagePortRef</span> <span class="n">local</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">SInt32</span> <span class="n">msgid</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">CFDataRef</span> <span class="n">data</span><span class="p">,</span>
+</span><span class='line'>   <span class="kt">void</span> <span class="o">*</span><span class="n">info</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>各个参数的含义为：</p>
+
+<ul>
+<li><p>CFMessagePortRef local</p>
+
+<p>  当前接收消息的CFMessagePortRef对象。</p></li>
+<li><p>SInt32 msgid</p>
+
+<p>  这个字段非常有用，用于标识消息。如果通信双方进程约定号每个msgid对应的数据结构，即可实现较为复杂的通信。</p></li>
+<li><p>CFDataRef data</p>
+
+<p>  通信的真正数据部分。</p></li>
+<li><p>void *info</p>
+
+<p>  为使用CFMessagePortCreateLocal方法创建port端口时指定的CFMessagePortContext对象的info字段，通常为空。</p></li>
+</ul>
+
+
+<p>该回调方法可以返回一个CFDataRef类型的数据给port消息的发送者，以实现有效的双方通信，这一点也非常重要。</p>
+
+<p>我的回调函数onRecvMessageCallBack的实现：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CFDataRef</span> <span class="nf">onRecvMessageCallBack</span><span class="p">(</span><span class="n">CFMessagePortRef</span> <span class="n">local</span><span class="p">,</span><span class="n">SInt32</span> <span class="n">msgid</span><span class="p">,</span><span class="n">CFDataRef</span> <span class="n">cfData</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span><span class="n">info</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;onRecvMessageCallBack is called&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span><span class="n">strData</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">cfData</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>          <span class="k">const</span> <span class="n">UInt8</span>  <span class="o">*</span> <span class="n">recvedMsg</span> <span class="o">=</span> <span class="n">CFDataGetBytePtr</span><span class="p">(</span><span class="n">cfData</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">strData</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithCString:</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">recvedMsg</span> <span class="nl">encoding:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
+</span><span class='line'>        <span class="cm">/**</span>
+</span><span class='line'><span class="cm">         </span>
+</span><span class='line'><span class="cm">         实现数据解析操作</span>
+</span><span class='line'><span class="cm">         </span>
+</span><span class='line'><span class="cm">         **/</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;receive message:%@&quot;</span><span class="p">,</span><span class="n">strData</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//为了测试，生成返回数据</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span><span class="n">returnString</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;i have receive:%@&quot;</span><span class="p">,</span><span class="n">strData</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">cStr</span> <span class="o">=</span> <span class="p">[</span><span class="n">returnString</span> <span class="n">UTF8String</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">NSUInteger</span> <span class="n">ulen</span> <span class="o">=</span> <span class="p">[</span><span class="n">returnString</span> <span class="nl">lengthOfBytesUsingEncoding:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CFDataRef</span> <span class="n">sgReturn</span> <span class="o">=</span> <span class="n">CFDataCreate</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="p">(</span><span class="n">UInt8</span> <span class="o">*</span><span class="p">)</span><span class="n">cStr</span><span class="p">,</span> <span class="n">ulen</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">sgReturn</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该方法实现的较为简单，解析约定的数据（测试代码中约定传送的是string）,为了测试，同时生成一个CFDataRef数据返回给port消息的发送者。</p>
+
+<h6>1.3 取消端口监听</h6>
+
+<p>可以通过如下方式取消对port端口的监听：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">endLisenning</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">CFMessagePortInvalidate</span><span class="p">(</span><span class="n">mMsgPortListenner</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRelease</span><span class="p">(</span><span class="n">mMsgPortListenner</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>CFMessagePortInvalidate会停止port消息的发送和接收操作，而只有调用了CFRelease，CFMessagePortRef对象才真正的被释放掉。</p>
+
+<h4>2、消息发送者</h4>
+
+<p>发送部分代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">sendMessageToDameonWith:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">msgInfo</span> <span class="nf">msgID:</span><span class="p">(</span><span class="n">NSInteger</span><span class="p">)</span><span class="nv">msgid</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// 生成Remote port</span>
+</span><span class='line'>    <span class="n">CFMessagePortRef</span> <span class="n">bRemote</span> <span class="o">=</span> <span class="n">CFMessagePortCreateRemote</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">CFSTR</span><span class="p">(</span><span class="n">MACH_PORT_REMOTE</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">nil</span> <span class="o">==</span> <span class="n">bRemote</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;bRemote create failed&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 构建发送数据（string）</span>
+</span><span class='line'>    <span class="n">NSString</span>    <span class="o">*</span><span class="n">msg</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span><span class="n">msgInfo</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;send msg is :%@&quot;</span><span class="p">,</span><span class="n">msg</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">message</span> <span class="o">=</span> <span class="p">[</span><span class="n">msg</span> <span class="n">UTF8String</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CFDataRef</span> <span class="n">data</span><span class="p">,</span><span class="n">recvData</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="n">CFDataCreate</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="p">(</span><span class="n">UInt8</span> <span class="o">*</span><span class="p">)</span><span class="n">message</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="n">message</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 执行发送操作</span>
+</span><span class='line'>    <span class="n">CFMessagePortSendRequest</span><span class="p">(</span><span class="n">bRemote</span><span class="p">,</span> <span class="n">msgid</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span> <span class="p">,</span> <span class="n">kCFRunLoopDefaultMode</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">recvData</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">nil</span> <span class="o">==</span> <span class="n">recvData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;recvData date is nil.&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">CFRelease</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">CFMessagePortInvalidate</span><span class="p">(</span><span class="n">bRemote</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">CFRelease</span><span class="p">(</span><span class="n">bRemote</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 解析返回数据</span>
+</span><span class='line'>    <span class="k">const</span> <span class="n">UInt8</span>  <span class="o">*</span> <span class="n">recvedMsg</span> <span class="o">=</span> <span class="n">CFDataGetBytePtr</span><span class="p">(</span><span class="n">recvData</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">nil</span> <span class="o">==</span> <span class="n">recvedMsg</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;receive date err.&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">CFRelease</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">CFMessagePortInvalidate</span><span class="p">(</span><span class="n">bRemote</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">CFRelease</span><span class="p">(</span><span class="n">bRemote</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSString</span>    <span class="o">*</span><span class="n">strMsg</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithCString:</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">recvedMsg</span> <span class="nl">encoding:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span><span class="n">strMsg</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CFRelease</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFMessagePortInvalidate</span><span class="p">(</span><span class="n">bRemote</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRelease</span><span class="p">(</span><span class="n">bRemote</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRelease</span><span class="p">(</span><span class="n">recvData</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">strMsg</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中<code>MACH_PORT_REMOTE</code>的定义为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="cp">#define MACH_PORT_REMOTE    &quot;com.wangzz.demo&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>发送消息时要相对简单，首先通过CFMessagePortCreateRemote生成一个Remote的CFMessagePortRef，这里需要注意的是CFMessagePortCreateRemote时传入的字符串唯一标识<code>MACH_PORT_REMOTE</code>必须和消息接收者创建local的CFMessagePortRef时使用的字符串唯一标识是同一个！</p>
+
+<p>通过查看源码发现，CFMessagePortCreateRemote会根据<code>MACH_PORT_REMOTE</code>定义的字符串为唯一标识获取消息接收者通过CFMessagePortCreateLocal使用相同字符串创建的底层mach port端口，从而实现向消息接收者发送信息。</p>
+
+<p>如果消息接收者还没有创建或者通过CFMessagePortCreateLocal创建local端口失败时，想要通过CFMessagePortCreateRemote去创建remote端口肯定是失败的。</p>
+
+<h2>说明</h2>
+
+<ul>
+<li>很遗憾的是，在iOS7及以后系统中，CFMessagePort的通信机制不再可用。</li>
+</ul>
+
+
+<p>在使用CFMessagePortCreateLocal/CFMessagePortCreateRemote创建CFMessagePortRef对象时会失败，官方文档中是这么说的：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">This</span> <span class="n">method</span> <span class="n">is</span> <span class="n">not</span> <span class="n">available</span> <span class="n">on</span> <span class="n">iOS</span> <span class="mi">7</span> <span class="n">and</span> <span class="n">later</span><span class="err">—</span><span class="n">it</span> <span class="n">will</span> <span class="k">return</span> <span class="nb">NULL</span> <span class="n">and</span> <span class="n">log</span> <span class="n">a</span> <span class="n">sandbox</span> <span class="n">violation</span> <span class="k">in</span> <span class="n">syslog</span><span class="p">.</span> <span class="n">See</span> <span class="n">Concurrency</span> <span class="n">Programming</span> <span class="n">Guide</span> <span class="k">for</span> <span class="n">possible</span> <span class="n">replacement</span> <span class="n">technologies</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><p>CFMessagePort只能用于本地进程通信。</p></li>
+<li><p>CFMessagePort是基于mach port端口的通信方式，不但可以用于进程通信，也可以用于线程间通信，只是线程间通信有了GCD和Cocoa提供的原生方法，已经能很方便的实现了，没必要再使用CFMessagePort。</p></li>
+<li><p>进程通信使用场景</p></li>
+</ul>
+
+
+<p>iOS系统多任务机制，使得进程间通信基本都只能用于越狱开发。常用的场景是前端有一个UI程序用于界面展示，后端有一个daemo精灵程序用于任务处理。</p>
+
+<h2>demo工程</h2>
+
+<p>特地做了了个demo工程，以便更好地演示CFMessagePort的使用，可以到<a href="http://download.csdn.net/detail/wzzvictory_tjsd/7446745">CSDN下载</a>。</p>
+
+<p>为了模拟进程间通信场景，我将消息接收进程CFMessagePortReceive做成了能够后台播放音乐的程序，以便其切到后台后能继续存活。</p>
+
+<p>由于CFMessagePort不再支持iOS7及以后系统，本demo实在iOS6系统上测试的。</p>
+
+<p>demo使用方式：</p>
+
+<ul>
+<li><p>CFMessagePortReceive启动后，点击Start Listenning创建CFMessagePort接口并开始监听port消息，然后将CFMessagePortReceive切到后台；</p></li>
+<li><p>启动CFMessagePortSend程序，在输入框中写入内容，点击发送按钮即可和CFMessagePortReceive通信。</p></li>
+<li><p>MessagePort通信过程中会有日志输出，可以使用以下方式查看日志：</p>
+
+<p>  1.真机</p>
+
+<p>  选择：Xcode->Window->Organizer->Devices，然后选中窗口左侧当前设备的Console窗口查看。</p>
+
+<p>  2.模拟器</p>
+
+<p>  选择：模拟器->调试->打开系统日志，或者直接使用快捷键<code>⌘/</code>直接打开系统控制台查看日志。</p></li>
+</ul>
+
+
+<h2>参考文档</h2>
+
+<ul>
+<li><p><a href="http://opensource.apple.com/source/CF/CF-855.14/">CF-855.14</a></p></li>
+<li><p><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW1">Threading Programming Guide</a></p></li>
+<li><p><a href="https://developer.apple.com/library/mac/documentation/corefoundation/Reference/CFMessagePortRef/Reference/reference.html#//apple_ref/doc/uid/20001437-CH203-DontLinkElementID_8">CFMessagePort Reference</a></p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS模拟器Custom Location被重置解决方案]]></title>
+    <link href="http://wangzz.github.io/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an/"/>
+    <updated>2014-05-25T17:29:18+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an</id>
+    <content type="html"><![CDATA[<h2>问题说明</h2>
+
+<p>在做地图类应用时，经常需要用到位置模拟功能。iOS模拟器提供了该功能，我们可以设置指定的经纬度，选中模拟器后，按照以下菜单层次进入即可设置：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Debug --&gt; Location --&gt; Custom Location</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是该功能存在的问题是设置完经纬度每次重新run程序，或者重启模拟器的时候都有可能使之前设置的Location状态从<code>Custom Location</code>变成<code>None</code>，导致设置的经纬度信息无效。</p>
+
+<p>因此经常需要重新选择<code>Custom Location</code>，对于每天需要run程序n次的我们来说苦不堪言&hellip;</p>
+
+<h2>解决方案</h2>
+
+<p>好在Xcode的target设置项中提供了设置位置信息的方法，允许我们使用GPX文件来设置自定义位置信息，步骤如下：</p>
+
+<!-- more -->
+
+
+<ul>
+<li>获取GPX文件</li>
+</ul>
+
+
+<p>GPX（GPS eXchange Format, GPS交换格式)是一个XML格式,为应用软件设计的通用GPS数据格式。它可以用来描述路点、轨迹、路程。（来自<a href="http://zh.wikipedia.org/wiki/GPX">维基百科</a>）</p>
+
+<p>我们可以通过第三方网站：<a href="http://gpx-poi.com/">gpx-poi.com</a>来生成一个GPX文件，生成过程也很方便：</p>
+
+<p>在网站左上角拖动地图到指定位置，鼠标单击后会出现一个红色标注，同时地图下方会显示出标注的经纬度数据；</p>
+
+<p>点击地图下方的<code>Update</code>按钮就能将经纬度信息更新到界面右侧的位置信息描述表格中；</p>
+
+<p>然后将界面拉到底部，填写GPX文件名称，选择操作系统型号；</p>
+
+<p>点击<code>Create</code>按钮即可生成一个XML格式的GPX文件，再点击<code>Download</code>按钮即可将文件下载到本地。</p>
+
+<p>生成的GPX文件大概是这样：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
+</span><span class='line'>&lt;gpxxmlns="http://www.topografix.com/GPX/1/1"xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"version="1.1" creator="gpx-poi.com"&gt;
+</span><span class='line'>  &lt;wpt lat=“41.988810" lon="116.474828"&gt;
+</span><span class='line'>      &lt;time&gt;2014-05-25T07:27:53Z&lt;/time&gt;
+</span><span class='line'>      &lt;name&gt;A&lt;/name&gt;
+</span><span class='line'>      &lt;/wpt&gt;
+</span><span class='line'>&lt;/gpx&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>导入GPX文件</li>
+</ul>
+
+
+<p>在Xcode中选中指定target，按以下菜单层次进入：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Edite Scheme --&gt;  Options --&gt;  Default Location --&gt;  Add GPX File to Project</span></code></pre></td></tr></table></div></figure>
+
+
+<p>（此时必须保证<code>Allow Location Simulation</code>选项是选中的，该设置项默认选中。）</p>
+
+<p>如图所示：</p>
+
+<p><img src="http://wangzz.github.io/images/article3/default_location.png" width="703" height="475"></p>
+
+<p>即可将刚才生成并下载到本地的GPX文件添加到工程里。从此以后不管是重新run程序还是重启模拟器都可以在程序启动的时候定到位。</p>
+
+<p>不过这种做法有个缺点，我在实际使用的时候发现设置完<code>Default Location</code>以后，真机的位置信息也会被更改成设置的位置！！！还请记得在软件发布时删除该设置项。</p>
+
+<h2>参考文档</h2>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/19719276/ios-simulator-reverts-location-setting">iOS Simulator Reverts Location Setting</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[加密你的SQLite]]></title>
