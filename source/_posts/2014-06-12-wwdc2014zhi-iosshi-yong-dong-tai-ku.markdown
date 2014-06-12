@@ -12,7 +12,7 @@ description: WWDC2014之iOS使用动态库
 
 ## 苹果的开放态度
 
-WWDC2014上发布的Xcode6 beta版有了不少更新，其中令人激动的是在iOS上开放了动态库，在Xcode6 Beta版的更新文档中是这样描述的：
+WWDC2014上发布的`Xcode6 beta`版有了不少更新，其中令我惊讶的一个是苹果在iOS上开放了动态库，在`Xcode6 Beta`版的更新文档中是这样描述的：
 
 >
 Frameworks for iOS. iOS developers can now create dynamic frameworks. Frameworks are a collection of code and resources to encapsulate functionality that is valuable across multiple projects. Frameworks work perfectly with extensions, sharing logic that can be used by both the main application, and the bundled extensions.
