@@ -4,7 +4,7 @@
   <title><![CDATA[Category: WWDC2014 | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/wwdc2014/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-06-12T19:50:16+08:00</updated>
+  <updated>2014-06-12T20:00:21+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -20,7 +20,7 @@
     <id>http://wangzz.github.io/blog/2014/06/12/wwdc2014zhi-iosshi-yong-dong-tai-ku</id>
     <content type="html"><![CDATA[<h2>苹果的开放态度</h2>
 
-<p>WWDC2014上发布的Xcode6 beta版有了不少更新，其中令人激动的是在iOS上开放了动态库，在Xcode6 Beta版的更新文档中是这样描述的：</p>
+<p>WWDC2014上发布的<code>Xcode6 beta</code>版有了不少更新，其中令我惊讶的一个是苹果在iOS上开放了动态库，在<code>Xcode6 Beta</code>版的更新文档中是这样描述的：</p>
 
 <blockquote><p>Frameworks for iOS. iOS developers can now create dynamic frameworks. Frameworks are a collection of code and resources to encapsulate functionality that is valuable across multiple projects. Frameworks work perfectly with extensions, sharing logic that can be used by both the main application, and the bundled extensions.</p></blockquote>
 
