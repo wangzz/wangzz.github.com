@@ -22,9 +22,11 @@ Frameworks for iOS. iOS developers can now create dynamic frameworks. Frameworks
 
 framework是Cocoa/Cocoa Touch程序中使用的一种资源打包方式，可以将将代码文件、头文件、资源文件、说明文档等集中在一起，方便开发者使用，作为一名Cocoa/Cocoa Touch程序员每天都要跟各种各样的Framework打交道。Cocoa/Cocoa Touch开发框架本身提供了大量的Framework，比如Foundation.framework/UIKit.framework/AppKit.framework等。需要注意的是，这些framework无一例外都是动态库。
 
+<!-- more -->
+
 但残忍的是，Cocoa Touch上并不允许我们使用自己创建的framework。不过由于framework是一种优秀的资源打包方式，拥有无穷智慧的程序员们便想出了以framework的形式打包静态库的招数，因此我们平时看到的第三方发布的framework无一例外都是静态库，真正的动态库是上不了AppStore的。
 
-WWDC2014给我的一个很大感触是苹果对iOS的开放态度：允许使用动态库、允许第三方键盘、App Extension等等，这些在之前是想都不敢想的事。
+WWDC2014给我的一个很大感触是苹果对iOS的开放态度：允许使用动态库、允许第三方键盘、`App Extension`等等，这些在之前是想都不敢想的事。
 
 
 
@@ -53,7 +55,7 @@ WWDC2014给我的一个很大感触是苹果对iOS的开放态度：允许使用
 
 在其它大部分平台上，动态库都可以用于不同应用间共享，这就大大节省了内存。从目前来看，iOS仍然不允许进程间共享动态库，即iOS上的动态库只能是私有的，因为我们仍然不能将动态库文件放置在除了自身沙盒以外的其它任何地方。
 
-不过iOS8上开放了App Extension功能，可以为一个应用创建插件，这样主app和插件之间共享动态库还是可行的。
+不过iOS8上开放了`App Extension`功能，可以为一个应用创建插件，这样主app和插件之间共享动态库还是可行的。
 
  
 PS：
@@ -110,7 +112,7 @@ PS：
 
 ![header](/images/article4/header.png)
 
-我们只需将希望开放的头文件放到Public列表中即可，比如我开放了Dylib.h和Person.h两个头文件，在生成的framework的Header目录下就可以看到这两个头文件，如下图所示：
+我们只需将希望开放的头文件放到Public列表中即可，比如我开放了`Dylib.h`和`Person.h`两个头文件，在生成的framework的Header目录下就可以看到这两个头文件，如下图所示：
 
 ![public_header](/images/article4/public_header.png)
 
@@ -127,11 +129,11 @@ PS：
 
 ![aggregate](/images/article4/aggregate.png)
 
-按提示一步步操作即可，我给Aggregate的target的命名是CommonDylib。
+按提示一步步操作即可，我给`Aggregate`的Target的命名是`CommonDylib`。
 
 * 设置Target Dependencies
 
-按以下路径设置CommonDylib对应的Target Dependencies:
+按以下路径设置`CommonDylib`对应的`Target Dependencies`:
 
 ```
 TARGETS-->CommonDylib-->Build Phases-->Target Dependencies
@@ -140,7 +142,7 @@ TARGETS-->CommonDylib-->Build Phases-->Target Dependencies
 
 * 添加Run Script
 
-按以下路径为CommonDylib添加Run Script:
+按以下路径为`CommonDylib`添加`Run Script`:
 
 ```
 TARGETS-->CommonDylib-->Build Phases-->Run Script
@@ -192,11 +194,11 @@ rm -r "${WRK_DIR}"
 
 脚本的主要功能是：
 
-	1.分别编译生成真机和模拟器使用的framework；
-	2.使用lipo命令将其合并成一个通用framework；
-	3.最后将生成的通用framework放置在工程根目录下新建的Products目录下。
+1.分别编译生成真机和模拟器使用的framework；
+2.使用lipo命令将其合并成一个通用framework；
+3.最后将生成的通用framework放置在工程根目录下新建的Products目录下。
 
-如果一切顺利，对CommonDylib target执行run操作以后就能生成一个如图所示的通用framework文件了：
+如果一切顺利，对`CommonDylib` target执行run操作以后就能生成一个如图所示的通用framework文件了：
 
 ![products](/images/article4/products.png)
 
@@ -205,7 +207,7 @@ rm -r "${WRK_DIR}"
 
 ####添加动态库到工程文件
 
-经过以上步骤的努力，生成了最终需要的framework文件，为了演示动态库的使用，新建了一个名为FrameworkDemo的工程。通过以下方式将刚生成的framework添加到工程中：
+经过以上步骤的努力，生成了最终需要的framework文件，为了演示动态库的使用，新建了一个名为`FrameworkDemo`的工程。通过以下方式将刚生成的framework添加到工程中：
 
 ```
 Targets-->Build Phases-->Link Binary With Libraries
@@ -365,6 +367,12 @@ github上有一个完整的[示例代码](https://github.com/ddeville/ImageLogge
 
 从这里看出，原来就算空白工程软件启动的时候也会加载多达一百二十多个动态库，如果这些都是静态库，那该有多可怕！！
 
+
+## Demo
+
+本文使用的例子已经上传到[github](https://github.com/wangzz/Demo/tree/master/FrameworkDemo)上，需要的朋友请自取。
+
+另外，本文对某些东西可能有理解错误的地方，还请指出。
 
 ##参考文档：
 
