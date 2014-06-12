@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: WWDC2014 | 王中周的技术博客]]></title>
+  <link href="http://wangzz.github.io/blog/categories/wwdc2014/atom.xml" rel="self"/>
+  <link href="http://wangzz.github.io/"/>
+  <updated>2014-06-12T19:31:26+08:00</updated>
+  <id>http://wangzz.github.io/</id>
+  <author>
+    <name><![CDATA[王中周]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[WWDC2014之iOS使用动态库]]></title>
+    <link href="http://wangzz.github.io/blog/2014/06/12/wwdc2014zhi-iosshi-yong-dong-tai-ku/"/>
+    <updated>2014-06-12T19:27:57+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/06/12/wwdc2014zhi-iosshi-yong-dong-tai-ku</id>
+    <content type="html"><![CDATA[<h2>苹果的开放态度</h2>
+
+<p>WWDC2014上发布的Xcode6 beta版有了不少更新，其中令人激动的是在iOS上开放了动态库，在Xcode6 Beta版的更新文档中是这样描述的：</p>
+
+<blockquote><p>Frameworks for iOS. iOS developers can now create dynamic frameworks. Frameworks are a collection of code and resources to encapsulate functionality that is valuable across multiple projects. Frameworks work perfectly with extensions, sharing logic that can be used by both the main application, and the bundled extensions.</p></blockquote>
+
+<p>详情见官方文档<a href="https://developer.apple.com/library/prerelease/ios/documentation/DeveloperTools/Conceptual/WhatsNewXcode/Articles/xcode_6_0.html">New Features in Xcode 6 Beta</a>。</p>
+
+<p>framework是Cocoa/Cocoa Touch程序中使用的一种资源打包方式，可以将将代码文件、头文件、资源文件、说明文档等集中在一起，方便开发者使用，作为一名Cocoa/Cocoa Touch程序员每天都要跟各种各样的Framework打交道。Cocoa/Cocoa Touch开发框架本身提供了大量的Framework，比如Foundation.framework/UIKit.framework/AppKit.framework等。需要注意的是，这些framework无一例外都是动态库。</p>
+
+<p>但残忍的是，Cocoa Touch上并不允许我们使用自己创建的framework。不过由于framework是一种优秀的资源打包方式，拥有无穷智慧的程序员们便想出了以framework的形式打包静态库的招数，因此我们平时看到的第三方发布的framework无一例外都是静态库，真正的动态库是上不了AppStore的。</p>
+
+<p>WWDC2014给我的一个很大感触是苹果对iOS的开放态度：允许使用动态库、允许第三方键盘、App Extension等等，这些在之前是想都不敢想的事。</p>
+
+<h2>iOS上动态库可以做什么</h2>
+
+<p>和静态库在编译时和app代码链接并打进同一个二进制包中不同，动态库可以在运行时手动加载，这样就可以做很多事情，比如：</p>
+
+<ul>
+<li>应用插件化</li>
+</ul>
+
+
+<p>目前很多应用功能越做越多，软件显得越来越臃肿。因此插件化就成了很多软件发展的必经之路，比如支付宝这种平台级别的软件：</p>
+
+<p><img src="http://wangzz.github.io/images/article4/AliPay.png" width="320" height="480"></p>
+
+<p>首页上密密麻麻的功能，而且还在增多，照这个趋势发展下去，软件包的大小将会不可想象。目前常用的解决方案是使用web页面，但用户体验和Native界面是没法比的。</p>
+
+<p>设想，如果每一个功能点都是一个动态库，在用户想使用某个功能的时候让其从网络下载，然后手动加载动态库，实现功能的的插件化，就再也不用担心功能点的无限增多了，这该是件多么美好的事！</p>
+
+<ul>
+<li>软件版本实时模块升级</li>
+</ul>
+
+
+<p>还在忍受苹果动辄一周，甚至更长的审核周期吗？有了动态库妈妈就再也不用担心你的软件升级了！</p>
+
+<p>如果软件中的某个功能点出现了严重的bug，或者想在其中新增功能，你的这个功能点又是通过动态库实现的，这时候你只需要在适当的时候从服务器上将新版本的动态库文件下载到本地，然后在用户重启应用的时候即可实现新功能的展现。</p>
+
+<ul>
+<li>共享可执行文件</li>
+</ul>
+
+
+<p>在其它大部分平台上，动态库都可以用于不同应用间共享，这就大大节省了内存。从目前来看，iOS仍然不允许进程间共享动态库，即iOS上的动态库只能是私有的，因为我们仍然不能将动态库文件放置在除了自身沙盒以外的其它任何地方。</p>
+
+<p>不过iOS8上开放了App Extension功能，可以为一个应用创建插件，这样主app和插件之间共享动态库还是可行的。</p>
+
+<p>PS：
+上述关于动态库在iOS平台的使用，在技术上都是可行的，但本人并没有真正尝试过做出一个上线AppStore的应用，因此并不保证按照上述方式使用动态库一定能通过苹果审核！</p>
+
+<h2>创建动态库</h2>
+
+<h4>1、创建动态库</h4>
+
+<ul>
+<li>创建工程文件</li>
+</ul>
+
+
+<p>在下图所示界面能够找到Cocoa Touch动态库的创建入口：</p>
+
+<p><img src="/images/article4/cocoa_touch_framework.png" alt="framework" /></p>
+
+<p>跟随指引一步步操作即可创建一个新的动态库工程，我的工程名字叫Dylib，Xcode会同时创建一个和工程target同名的.h文件，比如我的就是Dylib.h。</p>
+
+<ul>
+<li>向工程中添加文件</li>
+</ul>
+
+
+<p>接下来就可以在工程中随意添加文件了。我在其中新建了一个名为Person的测试类，提供的接口如下：</p>
+
+<p>```objective-c</p>
+
+<p>@interface Person : NSObject</p>
+
+<ul>
+<li>(void)run;</li>
+</ul>
+
+
+<p>@end</p>
+
+<p>```</p>
+
+<p>对应的实现部分：</p>
+
+<p>```objective-c</p>
+
+<p>@implementation Person</p>
+
+<ul>
+<li><p>(void)run
+{
+  NSLog(@&ldquo;let&rsquo;s run.&rdquo;);</p>
+
+<p>  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&ldquo;The Second Alert&rdquo; message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@&ldquo;done&rdquo;, nil];
+  [alert show];
+}</p></li>
+</ul>
+
+
+<p>@end</p>
+
+<p>```</p>
+
+<ul>
+<li>设置开放的头文件</li>
+</ul>
+
+
+<p>一个库里面可以后很多的代码，但是我们需要设置能够提供给外界使用的接口，可以通过Target&mdash;>Build Phases&mdash;>Headers来设置，如下图所示：</p>
+
+<p><img src="/images/article4/header.png" alt="header" /></p>
+
+<p>我们只需将希望开放的头文件放到Public列表中即可，比如我开放了Dylib.h和Person.h两个头文件，在生成的framework的Header目录下就可以看到这两个头文件，如下图所示：</p>
+
+<p><img src="/images/article4/public_header.png" alt="public_header" /></p>
+
+<p>一切完成，Run以后就能成功生成framework文件了。</p>
+
+<h4>2、通用动态库</h4>
+
+<p>经过第一步我们只是创建了一个动态库文件，但是和静态库类似，该动态库并同时不支持真机和模拟器，可以通过以下步骤创建通用动态库：</p>
+
+<ul>
+<li>创建Aggregate Target</li>
+</ul>
+
+
+<p>按下图所示，在动态库工程中添加一个类型为Aggregate的target:</p>
+
+<p><img src="/images/article4/aggregate.png" alt="aggregate" /></p>
+
+<p>按提示一步步操作即可，我给Aggregate的target的命名是CommonDylib。</p>
+
+<ul>
+<li>设置Target Dependencies</li>
+</ul>
+
+
+<p>按以下路径设置CommonDylib对应的Target Dependencies:</p>
+
+<p><code>
+TARGETS--&gt;CommonDylib--&gt;Build Phases--&gt;Target Dependencies
+</code>
+将真正的动态库Dylib Target添加到其中。</p>
+
+<ul>
+<li>添加Run Script</li>
+</ul>
+
+
+<p>按以下路径为CommonDylib添加Run Script:</p>
+
+<p><code>
+TARGETS--&gt;CommonDylib--&gt;Build Phases--&gt;Run Script
+</code></p>
+
+<p>添加的脚本为：</p>
+
+<p>```</p>
+
+<h1>Sets the target folders and the final framework product.</h1>
+
+<p>FMK_NAME=${PROJECT_NAME}</p>
+
+<h1>Install dir will be the final output to the framework.</h1>
+
+<h1>The following line create it in the root folder of the current project.</h1>
+
+<p>INSTALL_DIR=${SRCROOT}/Products/${FMK_NAME}.framework</p>
+
+<h1>Working dir will be deleted after the framework creation.</h1>
+
+<p>WRK_DIR=build
+DEVICE_DIR=${WRK_DIR}/Release-iphoneos/${FMK_NAME}.framework
+SIMULATOR_DIR=${WRK_DIR}/Release-iphonesimulator/${FMK_NAME}.framework</p>
+
+<h1>-configuration ${CONFIGURATION}</h1>
+
+<h1>Clean and Building both architectures.</h1>
+
+<p>xcodebuild -configuration &ldquo;Release&rdquo; -target &ldquo;${FMK_NAME}&rdquo; -sdk iphoneos clean build
+xcodebuild -configuration &ldquo;Release&rdquo; -target &ldquo;${FMK_NAME}&rdquo; -sdk iphonesimulator clean build</p>
+
+<h1>Cleaning the oldest.</h1>
+
+<p>if [ -d &ldquo;${INSTALL_DIR}&rdquo; ]
+then
+rm -rf &ldquo;${INSTALL_DIR}&rdquo;
+fi</p>
+
+<p>mkdir -p &ldquo;${INSTALL_DIR}&rdquo;</p>
+
+<p>cp -R &ldquo;${DEVICE_DIR}/&rdquo; &ldquo;${INSTALL_DIR}/&rdquo;</p>
+
+<h1>Uses the Lipo Tool to merge both binary files (i386 + armv6/armv7) into one Universal final product.</h1>
+
+<p>lipo -create &ldquo;${DEVICE_DIR}/${FMK_NAME}&rdquo; &ldquo;${SIMULATOR_DIR}/${FMK_NAME}&rdquo; -output &ldquo;${INSTALL_DIR}/${FMK_NAME}&rdquo;</p>
+
+<p>rm -r &ldquo;${WRK_DIR}&rdquo;</p>
+
+<p>```</p>
+
+<p>添加以后的效果如图所示：</p>
+
+<p><img src="/images/article4/commonlib_setting.png" alt="commonlib_setting" /></p>
+
+<p>该脚本是我根据一篇文章中介绍的脚本改写的，感谢<a href="http://blog.sina.com.cn/s/blog_407fb5bc01013v6s.html">原文作者</a>。</p>
+
+<p>脚本的主要功能是：</p>
+
+<pre><code>1.分别编译生成真机和模拟器使用的framework；
+2.使用lipo命令将其合并成一个通用framework；
+3.最后将生成的通用framework放置在工程根目录下新建的Products目录下。
+</code></pre>
+
+<p>如果一切顺利，对CommonDylib target执行run操作以后就能生成一个如图所示的通用framework文件了：</p>
+
+<p><img src="/images/article4/products.png" alt="products" /></p>
+
+<h2>使用动态库</h2>
+
+<h4>添加动态库到工程文件</h4>
+
+<p>经过以上步骤的努力，生成了最终需要的framework文件，为了演示动态库的使用，新建了一个名为FrameworkDemo的工程。通过以下方式将刚生成的framework添加到工程中：</p>
+
+<p><code>
+Targets--&gt;Build Phases--&gt;Link Binary With Libraries
+</code></p>
+
+<p>同时设置将framework作为资源文件拷贝到Bundle中：</p>
+
+<p><code>
+Targets--&gt;Build Phases--&gt;Copy Bundle Resources
+</code></p>
+
+<p>如图所示：</p>
+
+<p><img src="/images/article4/framework_demo_setting.png" alt="framework_demo_setting" /></p>
+
+<p>仅仅这样做是不够的，还需要为动态库添加链接依赖。</p>
+
+<h4>自动链接动态库</h4>
+
+<p>添加完动态库后，如果希望动态库在软件启动时自动链接，可以通过以下方式设置动态库依赖路径：</p>
+
+<p><code>
+Targets--&gt;Build Setting--&gt;Linking--&gt;Runpath Search Paths
+</code></p>
+
+<p>由于向工程中添加动态库时，将动态库设置了Copy Bundle Resources，因此就可以将<code>Runpath Search Paths</code>路径依赖设置为main bundle，即沙盒中的FrameworkDemo.app目录，向<code>Runpath Search Paths</code>中添加下述内容：</p>
+
+<p><code>
+@executable_path/
+</code></p>
+
+<p>如图所示：</p>
+
+<p><img src="/images/article4/run_search_path.png" alt="run_search_path" /></p>
+
+<p>其中的<code>@executable_path/</code>表示可执行文件所在路径，即沙盒中的.app目录，注意不要漏掉最后的<code>/</code>。</p>
+
+<p>如果你将动态库放到了沙盒中的其他目录，只需要添加对应路径的依赖就可以了。</p>
+
+<h4>需要的时候链接动态库</h4>
+
+<p>动态库的另一个重要特性就是<code>即插即用</code>性，我们可以选择在需要的时候再加载动态库。</p>
+
+<ul>
+<li>更改设置</li>
+</ul>
+
+
+<p>如果不希望在软件一启动就加载动态库，需要将</p>
+
+<p><code>
+Targets--&gt;Build Phases--&gt;Link Binary With Libraries
+</code></p>
+
+<p>中<code>Dylib.framework</code>对应的Status由默认的<code>Required</code>改成<code>Optional</code>；或者更干脆的，将<code>Dylib.framework</code>从<code>Link Binary With Libraries</code>列表中删除即可。</p>
+
+<ul>
+<li>使用dlopen加载动态库</li>
+</ul>
+
+
+<p>以<code>Dylib.framework</code>为例，动态库中真正的可执行代码为<code>Dylib.framework/Dylib</code>文件，因此使用dlopen时如果仅仅指定加载动态库的路径为<code>Dylib.framework</code>是没法成功加载的。</p>
+
+<p>示例代码如下：</p>
+
+<p>```objective-c</p>
+
+<ul>
+<li><p>(IBAction)onDlopenLoadAtPathAction1:(id)sender
+{
+  NSString *documentsPath = [NSString stringWithFormat:@&ldquo;%@/Documents/Dylib.framework/Dylib&rdquo;,NSHomeDirectory()];
+  [self dlopenLoadDylibWithPath:documentsPath];
+}</p></li>
+<li><p>(void)dlopenLoadDylibWithPath:(NSString <em>)path
+{
+  libHandle = NULL;
+  libHandle = dlopen([path cStringUsingEncoding:NSUTF8StringEncoding], RTLD_NOW);
+  if (libHandle == NULL) {
+      char </em>error = dlerror();
+      NSLog(@&ldquo;dlopen error: %s&rdquo;, error);
+  } else {
+      NSLog(@&ldquo;dlopen load framework success.&rdquo;);
+  }
+}
+```</p></li>
+</ul>
+
+
+<p>以dlopen方式使用动态库不知道是否能通过苹果审核。</p>
+
+<ul>
+<li>使用NSBundle加载动态库</li>
+</ul>
+
+
+<p>也可以使用NSBundle来加载动态库，实现代码如下：</p>
+
+<p>```objective-c</p>
+
+<ul>
+<li><p>(IBAction)onBundleLoadAtPathAction1:(id)sender
+{
+  NSString *documentsPath = [NSString stringWithFormat:@&ldquo;%@/Documents/Dylib.framework&rdquo;,NSHomeDirectory()];
+  [self bundleLoadDylibWithPath:documentsPath];
+}</p></li>
+<li><p>(void)bundleLoadDylibWithPath:(NSString <em>)path
+{
+  _libPath = path;
+  NSError </em>err = nil;
+  NSBundle *bundle = [NSBundle bundleWithPath:path];
+  if ([bundle loadAndReturnError:&amp;err]) {
+      NSLog(@&ldquo;bundle load framework success.&rdquo;);
+  } else {
+      NSLog(@&ldquo;bundle load framework err:%@&rdquo;,err);
+  }
+}</p></li>
+</ul>
+
+
+<p>```</p>
+
+<h4>使用动态库中代码</h4>
+
+<p>通过上述任一一种方式加载的动态库后，就可以使用动态库中的代码文件了，以<code>Dylib.framework</code>中的<code>Person</code>类的使用为例：</p>
+
+<p>```objective-c
+&ndash; (IBAction)onTriggerButtonAction:(id)sender
+{</p>
+
+<pre><code>Class rootClass = NSClassFromString(@"Person");
+if (rootClass) {
+    id object = [[rootClass alloc] init];
+    [(Person *)object run];
+}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>注意，如果直接通过下属方式初始化<code>Person</code>类是不成功的：</p>
+
+<p>```objective-c
+&ndash; (IBAction)onTriggerButtonAction:(id)sender
+{</p>
+
+<pre><code>Person *object = [[Person alloc] init];
+if (object) {
+   [object run];
+}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<h2>监测动态库的加载和移除</h2>
+
+<p>我们可以通过下述方式，为动态库的加载和移除添加监听回调：</p>
+
+<p>```objective-c</p>
+
+<ul>
+<li>(void)load
+{
+  <em>dyld_register_func_for_add_image(&amp;image_added);
+  </em>dyld_register_func_for_remove_image(&amp;image_removed);
+}</li>
+</ul>
+
+
+<p>```</p>
+
+<p>github上有一个完整的<a href="https://github.com/ddeville/ImageLogger">示例代码</a>，</p>
+
+<p>从这里看出，原来就算空白工程软件启动的时候也会加载多达一百二十多个动态库，如果这些都是静态库，那该有多可怕！！</p>
+
+<h2>参考文档：</h2>
+
+<ul>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/documentation/MacOSX/Conceptual/BPFrameworks/Frameworks.html#//apple_ref/doc/uid/10000183-SW1">Framework Programming Guide</a></p></li>
+<li><p><a href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/dyld.1.html">OS X Man Pages</a></p></li>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/documentation/DeveloperTools/Conceptual/WhatsNewXcode/Articles/xcode_6_0.html">New Features in Xcode 6 Beta</a></p></li>
+<li><p><a href="https://github.com/ddeville/ImageLogger">ImageLogger</a></p></li>
+<li><p><a href="http://realmacsoftware.com/blog/dynamic-linking?utm_campaign=iOS_Dev_Weekly_Issue_140&amp;utm_medium=email&amp;utm_source=iOS%2BDev%2BWeekly">Dynamic Linking</a></p></li>
+<li><p><a href="http://en.wikipedia.org/wiki/Dynamic_loading#Mac_OS_X">Dynamic loading</a></p></li>
+<li><p><a href="http://support.revealapp.com/kb/getting-started/integrating-reveal-with-your-ios-app#dynamic-library-integration">Integrating Reveal with your iOS app</a></p></li>
+<li><p><a href="http://blog.sina.com.cn/s/blog_407fb5bc01013v6s.html">IOS Framework制作全攻略</a></p></li>
+<li><p><a href="http://www.tanhao.me/pieces/1361.html">Build Settings中的变量@rpath,@loader_path,@executable_path</a></p></li>
+<li><p><a href="http://www.cocoachina.com/newbie/basic/2012/0516/4255.html">深入浅出Cocoa之Framework</a></p></li>
+<li><p><a href="http://blog.sina.com.cn/s/blog_a843a8850101rv9k.html">linux中静态库和动态库的区别和汇总</a></p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
