@@ -15,25 +15,21 @@ description: WWDC2014之App Extensions学习笔记
 
 ##一、关于App Extensions
 
-extension是iOS8对用户新开放的一种对几种固定系统区域的扩展机制，它的出现一定程度上是为了弥补iOS的沙盒机制对应用间通信的限制。
+`extension`是iOS8新开放的一种对几个固定系统区域的扩展机制，它可以在一定程度上弥补iOS的沙盒机制对应用间通信的限制。
 
-它的出现，一方面为用户提供了在某些系统应用中使用我们应用提供的服务的便捷方式，比如用户可以在`今天`中的widgets查看应用展示的简略信息，而不用再进到我们的应用中，这将是一种全新的用户体验；但是另一方面，extension的出现可能会减少用户启动应用的次数，同时还会增大开发者的工作量。
+`extension`的出现，为用户提供了在其它应用中使用我们应用提供的服务的便捷方式，比如用户可以在`Today`的`widgets`中查看应用展示的简略信息，而不用再进到我们的应用中，这将是一种全新的用户体验；但是，extension的出现可能会减少用户启动应用的次数，同时还会增大开发者的工作量。
 
 
 <!-- more -->
 
-为了演示，新建了个名为AppExtensionDemo的demo工程。
-
 ####几个关键词
 
 * extension point
-
 系统中支持`extension`的区域，`extension`的类别也是据此区分的，iOS上共有`Today`、`Share`、`Action`、`Photo Editing`、`Storage Provider`、`Custom keyboard`几种，其中`Today`中的`extension`又被称为`widget`。
 
 每种`extension point`的使用方式和适合干的活都不一样，因此不存在通用的`extension`。
 
 * app extension
-
 即为本文所说的`extension`。`extension`并不是一个独立的app，它有一个包含在app bundle中的独立bundle，`extension`的bundle后缀名是`.appex`。其生命周期也和普通app不同，这些后文将会详述。
 
 `extension`不能单独存在，必须有一个包含它的`containing app`。
@@ -42,13 +38,11 @@ extension是iOS8对用户新开放的一种对几种固定系统区域的扩展�
 比如Today中的widget需要在Today中激活和关闭；`Custom keyboard`需要在设置中进行相关设置；`Photo Editing`需要在使用照片时在照片管理器中激活或关闭；`Storage Provider`可以在选择文件时出现；`Share`和`Action`可以在任何应用里被激活，但前提是开发者需要设置`Activation Rules`，以确定`extension`需要在合适出现。
 
 * containing app
-
 尽管苹果开放了extension，但是在iOS中extension并不能单独存在，要想提交到AppStore，必须将extension包含在一个app中提交，并且app的实现部分不能为空,这个包含extension的app就叫`containing app`。
 
 extension会随着`containing app`的安装而安装，同时随着`containing app`的卸载而卸载。
 
 * host app
-
 能够调起`extension`的app被称为`host app`，比如`widget`的`host app`就是`Today`。
 
 ##二、extension和containing app、host app
