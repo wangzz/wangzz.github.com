@@ -94,7 +94,7 @@ extension中是无法直接使用openURL的。
 
 * 可以共享`Shared resources`
 
-extension和containing app可以共同读写一个被称为`Shared resources`的存储区域，这是通过`App Groups`实现的，后文将会详述。
+extension和containing app可以共同读写一个被称为`Shared resources`的存储区域，这是通过App Groups实现的，后文将会详述。
 
 
 三者间的关系可以通过官网给的两张图片形象地说明：
@@ -125,7 +125,7 @@ extension和containing app可以共同读写一个被称为`Shared resources`的
 
 这是iOS8新开放的功能，在OS X上早就可用了。它主要用于同一group下的app共享同一份读写空间，以实现数据共享。
 
-extension和containing app共同读写一份数据是很合理的需求，比如系统的股市应用，widget和app中都需要展示几个公司的股票数据，这就可以通过`App Groups`实现。
+extension和containing app共同读写一份数据是很合理的需求，比如系统的股市应用，widget和app中都需要展示几个公司的股票数据，这就可以通过App Groups实现。
 
 ####3.1 功能开启
 
@@ -133,13 +133,13 @@ extension和containing app共同读写一份数据是很合理的需求，比如
 
 * 在app中开启
 
-`App Groups`位于：
+App Groups位于：
 
 ```
 TARGETS-->AppExtensionDemo-->Capabilities-->App Groups
 ```
 
-找到以后，将`App Groups`右上角的开关打开，然后选择添加groups，比如我的是group.wangzz，当然这是为了测试随便起得名字，正规点得命名规则应该是：group.com.company.app。
+找到以后，将App Groups右上角的开关打开，然后选择添加groups，比如我的是group.wangzz，当然这是为了测试随便起得名字，正规点得命名规则应该是：group.com.company.app。
 
 添加成功以后如下图所示：
 
@@ -147,16 +147,16 @@ TARGETS-->AppExtensionDemo-->Capabilities-->App Groups
 
 * 在extension中开启
 
-我创建的是widget，target名称为TodayExtension，对应的`App Groups`位于：
+我创建的是widget，target名称为TodayExtension，对应的App Groups位于：
 
 ```
 TARGETS-->TodayExtension-->Capabilities-->App Groups
 ```
-开启方式和app中一样，需要注意的是必须保证这里地`App Groups`名称和app中的相同，即为group.wangzz。
+开启方式和app中一样，需要注意的是必须保证这里地App Groups名称和app中的相同，即为group.wangzz。
 
 ##四、extension和containing app数据共享
 
-`app group`给我们提供了同一group内app可以共同读写的区域，可以通过以下方式实现数据共享：
+App Groups给我们提供了同一group内app可以共同读写的区域，可以通过以下方式实现数据共享：
 
 ####4.1 通过NSUserDefaults共享数据
 
@@ -246,7 +246,7 @@ NSFileManager在iOS7提供了containerURLForSecurityApplicationGroupIdentifier�
 
 ##五、extension和containing app代码共享
 
-和数据共享类似，extension和containing app很自然地会有一些业务逻辑上可以共用的代码，这时可以通过iOS8中刚开放使用的framework实现。苹果在[App Extension Programming Guide](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW1)中 `Sharing Code with Your Containing App`是这样描述的：
+和数据共享类似，extension和containing app很自然地会有一些业务逻辑上可以共用的代码，这时可以通过iOS8中刚开放使用的framework实现。苹果在[App Extension Programming Guide](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW1)中是这样描述的：
 
 >
 In iOS 8.0 and later, you can use an embedded framework to share code between your extension and its containing app. For example, if you develop image-processing code that you want both your Photo Editing extension and its containing app to share, you can put the code into a framework and embed it in both targets.
@@ -254,11 +254,11 @@ In iOS 8.0 and later, you can use an embedded framework to share code between yo
 
 即将framework分别嵌入到extension和containing app的target中实现代码共享。但这样岂不是需要分别要将framework分别copy到extension和containing app的main bundle中？
 
-参考extension和containing app数据共享，我试想能不能将framework只保存一份放在`app group`区域？
+参考extension和containing app数据共享，我试想能不能将framework只保存一份放在App Groups区域？
 
-####5.1 copy framework到`app group`
+####5.1 copy framework到App Groups
 
-在app首次启动的时候将framework放到`app group`区域：
+在app首次启动的时候将framework放到App Groups区域：
 
 ```objective-c
 
@@ -361,7 +361,7 @@ extension和普通app的调试方式差不多，开始调试前先选中extensio
 
 * 测试代码
 
-下述代码用于打印`app group`路径、应用的可执行文件路径、对应的Documents路径：
+下述代码用于打印App Groups路径、应用的可执行文件路径、对应的Documents路径：
 
 ```objective-c
 
