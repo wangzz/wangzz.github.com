@@ -164,6 +164,10 @@ $(document).bind('DOMNodeInserted', function(event) {
 <p>PS：
 上述关于动态库在iOS平台的使用，在技术上都是可行的，但本人并没有真正尝试过做出一个上线AppStore的应用，因此并不保证按照上述方式使用动态库一定能通过苹果审核！</p>
 
+<p>2014-6-23修正：</p>
+
+<p>经<a href="http://weibo.com/tangqiaoboy?topnav=1&amp;wvr=5&amp;topsug=1">@唐巧_boy</a>提醒，sandbox会验证动态库的签名，所以如果是动态从服务器更新的动态库，应该是签名不了的，因此应用插件化、软件版本实时模块升级估计很难实现，一切都只能等到iOS8正式版发布以后再验证了。感谢<a href="http://weibo.com/tangqiaoboy?topnav=1&amp;wvr=5&amp;topsug=1">@唐巧_boy</a>！</p>
+
 <h2>创建动态库</h2>
 
 <h4>1、创建动态库</h4>

@@ -223,7 +223,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </ul>
 
 
-<p>extension和containing app可以共同读写一个被称为<code>Shared resources</code>的存储区域，这是通过<code>App Groups</code>实现的，后文将会详述。</p>
+<p>extension和containing app可以共同读写一个被称为<code>Shared resources</code>的存储区域，这是通过App Groups实现的，后文将会详述。</p>
 
 <p>三者间的关系可以通过官网给的两张图片形象地说明：</p>
 
@@ -267,7 +267,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>这是iOS8新开放的功能，在OS X上早就可用了。它主要用于同一group下的app共享同一份读写空间，以实现数据共享。</p>
 
-<p>extension和containing app共同读写一份数据是很合理的需求，比如系统的股市应用，widget和app中都需要展示几个公司的股票数据，这就可以通过<code>App Groups</code>实现。</p>
+<p>extension和containing app共同读写一份数据是很合理的需求，比如系统的股市应用，widget和app中都需要展示几个公司的股票数据，这就可以通过App Groups实现。</p>
 
 <h4>3.1 功能开启</h4>
 
@@ -278,14 +278,14 @@ $(document).bind('DOMNodeInserted', function(event) {
 </ul>
 
 
-<p><code>App Groups</code>位于：</p>
+<p>App Groups位于：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">TARGETS</span><span class="o">--&gt;</span><span class="n">AppExtensionDemo</span><span class="o">--&gt;</span><span class="n">Capabilities</span><span class="o">--&gt;</span><span class="n">App</span> <span class="n">Groups</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>找到以后，将<code>App Groups</code>右上角的开关打开，然后选择添加groups，比如我的是group.wangzz，当然这是为了测试随便起得名字，正规点得命名规则应该是：group.com.company.app。</p>
+<p>找到以后，将App Groups右上角的开关打开，然后选择添加groups，比如我的是group.wangzz，当然这是为了测试随便起得名字，正规点得命名规则应该是：group.com.company.app。</p>
 
 <p>添加成功以后如下图所示：</p>
 
@@ -296,18 +296,18 @@ $(document).bind('DOMNodeInserted', function(event) {
 </ul>
 
 
-<p>我创建的是widget，target名称为TodayExtension，对应的<code>App Groups</code>位于：</p>
+<p>我创建的是widget，target名称为TodayExtension，对应的App Groups位于：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">TARGETS</span><span class="o">--&gt;</span><span class="n">TodayExtension</span><span class="o">--&gt;</span><span class="n">Capabilities</span><span class="o">--&gt;</span><span class="n">App</span> <span class="n">Groups</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>开启方式和app中一样，需要注意的是必须保证这里地<code>App Groups</code>名称和app中的相同，即为group.wangzz。</p>
+<p>开启方式和app中一样，需要注意的是必须保证这里地App Groups名称和app中的相同，即为group.wangzz。</p>
 
 <h2>四、extension和containing app数据共享</h2>
 
-<p><code>app group</code>给我们提供了同一group内app可以共同读写的区域，可以通过以下方式实现数据共享：</p>
+<p>App Groups给我们提供了同一group内app可以共同读写的区域，可以通过以下方式实现数据共享：</p>
 
 <h4>4.1 通过NSUserDefaults共享数据</h4>
 
@@ -448,17 +448,17 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <h2>五、extension和containing app代码共享</h2>
 
-<p>和数据共享类似，extension和containing app很自然地会有一些业务逻辑上可以共用的代码，这时可以通过iOS8中刚开放使用的framework实现。苹果在<a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW1">App Extension Programming Guide</a>中 <code>Sharing Code with Your Containing App</code>是这样描述的：</p>
+<p>和数据共享类似，extension和containing app很自然地会有一些业务逻辑上可以共用的代码，这时可以通过iOS8中刚开放使用的framework实现。苹果在<a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW1">App Extension Programming Guide</a>中是这样描述的：</p>
 
 <blockquote><p>In iOS 8.0 and later, you can use an embedded framework to share code between your extension and its containing app. For example, if you develop image-processing code that you want both your Photo Editing extension and its containing app to share, you can put the code into a framework and embed it in both targets.</p></blockquote>
 
 <p>即将framework分别嵌入到extension和containing app的target中实现代码共享。但这样岂不是需要分别要将framework分别copy到extension和containing app的main bundle中？</p>
 
-<p>参考extension和containing app数据共享，我试想能不能将framework只保存一份放在<code>app group</code>区域？</p>
+<p>参考extension和containing app数据共享，我试想能不能将framework只保存一份放在App Groups区域？</p>
 
-<h4>5.1 copy framework到<code>app group</code></h4>
+<h4>5.1 copy framework到App Groups</h4>
 
-<p>在app首次启动的时候将framework放到<code>app group</code>区域：</p>
+<p>在app首次启动的时候将framework放到App Groups区域：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -616,7 +616,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </ul>
 
 
-<p>下述代码用于打印<code>app group</code>路径、应用的可执行文件路径、对应的Documents路径：</p>
+<p>下述代码用于打印App Groups路径、应用的可执行文件路径、对应的Documents路径：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
