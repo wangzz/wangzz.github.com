@@ -4,7 +4,7 @@
   <title><![CDATA[Category: WWDC2014 | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/wwdc2014/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-06-23T20:17:11+08:00</updated>
+  <updated>2014-06-23T20:29:35+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -506,8 +506,8 @@ Jun 23 19:37:49 autonavis-iPad com.foogry.AppExtensionDemo.TodayExtension[7638] 
 <h2>说明</h2>
 
 <ul>
-<li><p>本文用到的demo已经上传到github上。</p></li>
-<li><p>文中可能有理解有误的地方，欢迎指出。</p></li>
+<li><p>本文用到的demo已经上传到<a href="https://github.com/wangzz/Demo/tree/master/AppExtensionsDemo">github</a>上。</p></li>
+<li><p>文中可能有理解有误的地方，还请指出。</p></li>
 </ul>
 
 
