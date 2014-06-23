@@ -4,7 +4,7 @@
   <title><![CDATA[Category: WWDC2014 | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/wwdc2014/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-06-23T19:59:34+08:00</updated>
+  <updated>2014-06-23T20:07:13+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -22,32 +22,28 @@
 
 <h2>一、关于App Extensions</h2>
 
-<p>extension是iOS8对用户新开放的一种对几种固定系统区域的扩展机制，它的出现一定程度上是为了弥补iOS的沙盒机制对应用间通信的限制。</p>
+<p><code>extension</code>是iOS8新开放的一种对几个固定系统区域的扩展机制，它可以在一定程度上弥补iOS的沙盒机制对应用间通信的限制。</p>
 
-<p>它的出现，一方面为用户提供了在某些系统应用中使用我们应用提供的服务的便捷方式，比如用户可以在<code>今天</code>中的widgets查看应用展示的简略信息，而不用再进到我们的应用中，这将是一种全新的用户体验；但是另一方面，extension的出现可能会减少用户启动应用的次数，同时还会增大开发者的工作量。</p>
+<p><code>extension</code>的出现，为用户提供了在其它应用中使用我们应用提供的服务的便捷方式，比如用户可以在<code>Today</code>的<code>widgets</code>中查看应用展示的简略信息，而不用再进到我们的应用中，这将是一种全新的用户体验；但是，extension的出现可能会减少用户启动应用的次数，同时还会增大开发者的工作量。</p>
 
 <!-- more -->
 
 
-<p>为了演示，新建了个名为AppExtensionDemo的demo工程。</p>
-
 <h4>几个关键词</h4>
 
 <ul>
-<li>extension point</li>
+<li>extension point
+系统中支持<code>extension</code>的区域，<code>extension</code>的类别也是据此区分的，iOS上共有<code>Today</code>、<code>Share</code>、<code>Action</code>、<code>Photo Editing</code>、<code>Storage Provider</code>、<code>Custom keyboard</code>几种，其中<code>Today</code>中的<code>extension</code>又被称为<code>widget</code>。</li>
 </ul>
 
-
-<p>系统中支持<code>extension</code>的区域，<code>extension</code>的类别也是据此区分的，iOS上共有<code>Today</code>、<code>Share</code>、<code>Action</code>、<code>Photo Editing</code>、<code>Storage Provider</code>、<code>Custom keyboard</code>几种，其中<code>Today</code>中的<code>extension</code>又被称为<code>widget</code>。</p>
 
 <p>每种<code>extension point</code>的使用方式和适合干的活都不一样，因此不存在通用的<code>extension</code>。</p>
 
 <ul>
-<li>app extension</li>
+<li>app extension
+即为本文所说的<code>extension</code>。<code>extension</code>并不是一个独立的app，它有一个包含在app bundle中的独立bundle，<code>extension</code>的bundle后缀名是<code>.appex</code>。其生命周期也和普通app不同，这些后文将会详述。</li>
 </ul>
 
-
-<p>即为本文所说的<code>extension</code>。<code>extension</code>并不是一个独立的app，它有一个包含在app bundle中的独立bundle，<code>extension</code>的bundle后缀名是<code>.appex</code>。其生命周期也和普通app不同，这些后文将会详述。</p>
 
 <p><code>extension</code>不能单独存在，必须有一个包含它的<code>containing app</code>。</p>
 
@@ -55,20 +51,18 @@
 比如Today中的widget需要在Today中激活和关闭；<code>Custom keyboard</code>需要在设置中进行相关设置；<code>Photo Editing</code>需要在使用照片时在照片管理器中激活或关闭；<code>Storage Provider</code>可以在选择文件时出现；<code>Share</code>和<code>Action</code>可以在任何应用里被激活，但前提是开发者需要设置<code>Activation Rules</code>，以确定<code>extension</code>需要在合适出现。</p>
 
 <ul>
-<li>containing app</li>
+<li>containing app
+尽管苹果开放了extension，但是在iOS中extension并不能单独存在，要想提交到AppStore，必须将extension包含在一个app中提交，并且app的实现部分不能为空,这个包含extension的app就叫<code>containing app</code>。</li>
 </ul>
 
-
-<p>尽管苹果开放了extension，但是在iOS中extension并不能单独存在，要想提交到AppStore，必须将extension包含在一个app中提交，并且app的实现部分不能为空,这个包含extension的app就叫<code>containing app</code>。</p>
 
 <p>extension会随着<code>containing app</code>的安装而安装，同时随着<code>containing app</code>的卸载而卸载。</p>
 
 <ul>
-<li>host app</li>
+<li>host app
+能够调起<code>extension</code>的app被称为<code>host app</code>，比如<code>widget</code>的<code>host app</code>就是<code>Today</code>。</li>
 </ul>
 
-
-<p>能够调起<code>extension</code>的app被称为<code>host app</code>，比如<code>widget</code>的<code>host app</code>就是<code>Today</code>。</p>
 
 <h2>二、extension和containing app、host app</h2>
 
