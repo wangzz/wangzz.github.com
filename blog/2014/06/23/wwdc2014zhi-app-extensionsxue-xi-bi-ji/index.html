@@ -113,9 +113,9 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <h2>一、关于App Extensions</h2>
 
-<p><code>extension</code>是iOS8新开放的一种对几个固定系统区域的扩展机制，它可以在一定程度上弥补iOS的沙盒机制对应用间通信的限制。</p>
+<p>extension是iOS8新开放的一种对几个固定系统区域的扩展机制，它可以在一定程度上弥补iOS的沙盒机制对应用间通信的限制。</p>
 
-<p><code>extension</code>的出现，为用户提供了在其它应用中使用我们应用提供的服务的便捷方式，比如用户可以在<code>Today</code>的<code>widgets</code>中查看应用展示的简略信息，而不用再进到我们的应用中，这将是一种全新的用户体验；但是，extension的出现可能会减少用户启动应用的次数，同时还会增大开发者的工作量。</p>
+<p>extension的出现，为用户提供了在其它应用中使用我们应用提供的服务的便捷方式，比如用户可以在<code>Today</code>的<code>widgets</code>中查看应用展示的简略信息，而不用再进到我们的应用中，这将是一种全新的用户体验；但是，extension的出现可能会减少用户启动应用的次数，同时还会增大开发者的工作量。</p>
 
 <!-- more -->
 
@@ -127,43 +127,43 @@ $(document).bind('DOMNodeInserted', function(event) {
 </ul>
 
 
-<p>系统中支持<code>extension</code>的区域，<code>extension</code>的类别也是据此区分的，iOS上共有<code>Today</code>、<code>Share</code>、<code>Action</code>、<code>Photo Editing</code>、<code>Storage Provider</code>、<code>Custom keyboard</code>几种，其中<code>Today</code>中的<code>extension</code>又被称为<code>widget</code>。</p>
+<p>系统中支持extension的区域，extension的类别也是据此区分的，iOS上共有<code>Today</code>、<code>Share</code>、<code>Action</code>、<code>Photo Editing</code>、<code>Storage Provider</code>、<code>Custom keyboard</code>几种，其中<code>Today</code>中的extension又被称为<code>widget</code>。</p>
 
-<p>每种<code>extension point</code>的使用方式和适合干的活都不一样，因此不存在通用的<code>extension</code>。</p>
+<p>每种extension point的使用方式和适合干的活都不一样，因此不存在通用的extension。</p>
 
 <ul>
 <li>app extension</li>
 </ul>
 
 
-<p>即为本文所说的<code>extension</code>。<code>extension</code>并不是一个独立的app，它有一个包含在app bundle中的独立bundle，<code>extension</code>的bundle后缀名是<code>.appex</code>。其生命周期也和普通app不同，这些后文将会详述。</p>
+<p>即为本文所说的extension。extension并不是一个独立的app，它有一个包含在app bundle中的独立bundle，extension的bundle后缀名是<code>.appex</code>。其生命周期也和普通app不同，这些后文将会详述。</p>
 
-<p><code>extension</code>不能单独存在，必须有一个包含它的<code>containing app</code>。</p>
+<p>extension不能单独存在，必须有一个包含它的containing app。</p>
 
-<p>另外，<code>extension</code>需要用户手动激活，不同的<code>extension</code>激活方式也不同，比如：
-比如Today中的widget需要在Today中激活和关闭；<code>Custom keyboard</code>需要在设置中进行相关设置；<code>Photo Editing</code>需要在使用照片时在照片管理器中激活或关闭；<code>Storage Provider</code>可以在选择文件时出现；<code>Share</code>和<code>Action</code>可以在任何应用里被激活，但前提是开发者需要设置<code>Activation Rules</code>，以确定<code>extension</code>需要在合适出现。</p>
+<p>另外，extension需要用户手动激活，不同的extension激活方式也不同，比如：
+比如Today中的widget需要在Today中激活和关闭；<code>Custom keyboard</code>需要在设置中进行相关设置；<code>Photo Editing</code>需要在使用照片时在照片管理器中激活或关闭；<code>Storage Provider</code>可以在选择文件时出现；<code>Share</code>和<code>Action</code>可以在任何应用里被激活，但前提是开发者需要设置<code>Activation Rules</code>，以确定extension需要在合适出现。</p>
 
 <ul>
 <li>containing app</li>
 </ul>
 
 
-<p>尽管苹果开放了extension，但是在iOS中extension并不能单独存在，要想提交到AppStore，必须将extension包含在一个app中提交，并且app的实现部分不能为空,这个包含extension的app就叫<code>containing app</code>。</p>
+<p>尽管苹果开放了extension，但是在iOS中extension并不能单独存在，要想提交到AppStore，必须将extension包含在一个app中提交，并且app的实现部分不能为空,这个包含extension的app就叫containing app。</p>
 
-<p>extension会随着<code>containing app</code>的安装而安装，同时随着<code>containing app</code>的卸载而卸载。</p>
+<p>extension会随着containing app的安装而安装，同时随着containing app的卸载而卸载。</p>
 
 <ul>
 <li>host app</li>
 </ul>
 
 
-<p>能够调起<code>extension</code>的app被称为<code>host app</code>，比如<code>widget</code>的<code>host app</code>就是<code>Today</code>。</p>
+<p>能够调起extension的app被称为host app，比如<code>widget</code>的host app就是<code>Today</code>。</p>
 
 <h2>二、extension和containing app、host app</h2>
 
 <h4>2.1 extension和host app</h4>
 
-<p><code>extension</code>和<code>host app</code>之间可以通过extensionContext属性直接通信，该属性是新增加的UIViewController类别：</p>
+<p>extension和host app之间可以通过extensionContext属性直接通信，该属性是新增加的UIViewController类别：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -180,7 +180,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>实际上<code>extension</code>和<code>host app</code>之间是通过IPC（interprocess communication）实现的，只是苹果把调用接口高度抽象了，我们并不需要关注那么底层的东西。</p>
+<p>实际上extension和host app之间是通过IPC（interprocess communication）实现的，只是苹果把调用接口高度抽象了，我们并不需要关注那么底层的东西。</p>
 
 <h4>2.2 containing app和host app</h4>
 
@@ -195,7 +195,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </ul>
 
 
-<p>首先，尽管<code>extension</code>的bundle是放在<code>containing app</code>的bundle中，但是他们是两个完全独立的进程，之间不能直接通信。不过<code>extension</code>可以通过openURL的方式启动<code>containing app</code>（当然也能启动其它app），不过必须通过extensionContext借助<code>host app</code>来实现：</p>
+<p>首先，尽管extension的bundle是放在containing app的bundle中，但是他们是两个完全独立的进程，之间不能直接通信。不过extension可以通过openURL的方式启动containing app（当然也能启动其它app），不过必须通过extensionContext借助host app来实现：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -216,14 +216,14 @@ $(document).bind('DOMNodeInserted', function(event) {
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><code>extension</code>中是无法直接使用openURL的。</p>
+<p>extension中是无法直接使用openURL的。</p>
 
 <ul>
 <li>可以共享<code>Shared resources</code></li>
 </ul>
 
 
-<p><code>extension</code>和<code>containing app</code>可以共同读写一个被称为<code>Shared resources</code>的存储区域，这是通过<code>App Groups</code>实现的，后文将会详述。</p>
+<p>extension和containing app可以共同读写一个被称为<code>Shared resources</code>的存储区域，这是通过<code>App Groups</code>实现的，后文将会详述。</p>
 
 <p>三者间的关系可以通过官网给的两张图片形象地说明：</p>
 
@@ -232,11 +232,11 @@ $(document).bind('DOMNodeInserted', function(event) {
 <p><img src="/images/article5/app_extensions_container_restrictions.png" alt="app_extensions_container_restrictions" /></p>
 
 <ul>
-<li><code>containing app</code>能够控制<code>extension</code>的出现和隐藏</li>
+<li>containing app能够控制extension的出现和隐藏</li>
 </ul>
 
 
-<p>通过以下代码，<code>containing app</code>可以让<code>extension</code>出现或隐藏（当然<code>extension</code>也可以让自己隐藏）：</p>
+<p>通过以下代码，containing app可以让extension出现或隐藏（当然extension也可以让自己隐藏）：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -267,7 +267,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>这是iOS8新开放的功能，在OS X上早就可用了。它主要用于同一group下的app共享同一份读写空间，以实现数据共享。</p>
 
-<p><code>extension</code>和<code>containing app</code>共同读写一份数据是很合理的需求，比如系统的股市应用，widget和app中都需要展示几个公司的股票数据，这就可以通过<code>App Groups</code>实现。</p>
+<p>extension和containing app共同读写一份数据是很合理的需求，比如系统的股市应用，widget和app中都需要展示几个公司的股票数据，这就可以通过<code>App Groups</code>实现。</p>
 
 <h4>3.1 功能开启</h4>
 
@@ -292,7 +292,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 <p><img src="/images/article5/app_group.png" alt="app_group" /></p>
 
 <ul>
-<li>在<code>extension</code>中开启</li>
+<li>在extension中开启</li>
 </ul>
 
 
@@ -305,7 +305,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>开启方式和app中一样，需要注意的是必须保证这里地<code>App Groups</code>名称和app中的相同，即为group.wangzz。</p>
 
-<h2>四、<code>extension</code>和<code>containing app</code>数据共享</h2>
+<h2>四、extension和containing app数据共享</h2>
 
 <p><code>app group</code>给我们提供了同一group内app可以共同读写的区域，可以通过以下方式实现数据共享：</p>
 
@@ -446,15 +446,15 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>两个应用共同读取同一份数据，就会引发数据同步问题。WWDC2014的视频中建议使用NSFileCoordination实现普通文件的读写同步，而数据库可以使用CoreData,Sqlite也支持同步。</p>
 
-<h2>五、<code>extension</code>和<code>containing app</code>代码共享</h2>
+<h2>五、extension和containing app代码共享</h2>
 
-<p>和数据共享类似，<code>extension</code>和<code>containing app</code>很自然地会有一些业务逻辑上可以共用的代码，这时可以通过iOS8中刚开放使用的framework实现。苹果在<a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW1">App Extension Programming Guide</a>中 <code>Sharing Code with Your Containing App</code>是这样描述的：</p>
+<p>和数据共享类似，extension和containing app很自然地会有一些业务逻辑上可以共用的代码，这时可以通过iOS8中刚开放使用的framework实现。苹果在<a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW1">App Extension Programming Guide</a>中 <code>Sharing Code with Your Containing App</code>是这样描述的：</p>
 
 <blockquote><p>In iOS 8.0 and later, you can use an embedded framework to share code between your extension and its containing app. For example, if you develop image-processing code that you want both your Photo Editing extension and its containing app to share, you can put the code into a framework and embed it in both targets.</p></blockquote>
 
-<p>即将framework分别嵌入到<code>extension</code>和<code>containing app</code>的target中实现代码共享。但这样岂不是需要分别要将framework分别copy到<code>extension</code>和<code>containing app</code>的main bundle中？</p>
+<p>即将framework分别嵌入到extension和containing app的target中实现代码共享。但这样岂不是需要分别要将framework分别copy到extension和containing app的main bundle中？</p>
 
-<p>参考<code>extension</code>和<code>containing app</code>数据共享，我试想能不能将framework只保存一份放在<code>app group</code>区域？</p>
+<p>参考extension和containing app数据共享，我试想能不能将framework只保存一份放在<code>app group</code>区域？</p>
 
 <h4>5.1 copy framework到<code>app group</code></h4>
 
@@ -560,27 +560,27 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>经过测试，竟然能够加载成功。</p>
 
-<p>需要说明的是，这里只是说那么用是可以成功加载framework，但还面临不少问题，比如如果用户在启动app之前去使用<code>extension</code>，这时framework还没有copy过去，怎么处理；另外iOS的机制或者苹果的审核是否允许这样使用等。</p>
+<p>需要说明的是，这里只是说那么用是可以成功加载framework，但还面临不少问题，比如如果用户在启动app之前去使用extension，这时framework还没有copy过去，怎么处理；另外iOS的机制或者苹果的审核是否允许这样使用等。</p>
 
 <p>在一切确定下来之前还是乖乖按文档中的方式使用吧。</p>
 
 <h2>六、生命周期</h2>
 
-<p><code>extension</code>和普通app的最大区别之一是生命周期。</p>
+<p>extension和普通app的最大区别之一是生命周期。</p>
 
 <ul>
 <li>开始</li>
 </ul>
 
 
-<p>在用户通过<code>host app</code>点击<code>extension</code>时，系统就会实例化<code>extension</code>应用，这是生命周期的开始。</p>
+<p>在用户通过host app点击extension时，系统就会实例化extension应用，这是生命周期的开始。</p>
 
 <ul>
 <li>执行任务</li>
 </ul>
 
 
-<p>在<code>extension</code>启动以后，开始执行它的使命。</p>
+<p>在extension启动以后，开始执行它的使命。</p>
 
 <ul>
 <li>终止</li>
@@ -589,7 +589,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>在用户取消任务，或者任务执行结束，或者开启了一个长时后台任务时，系统会将其杀掉。</p>
 
-<p>由此可见，<code>extension</code>就是为了任务而生！</p>
+<p>由此可见，extension就是为了任务而生！</p>
 
 <p>下图来自官方文档，它将生命周期划分的更详细：</p>
 
@@ -599,11 +599,11 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <h2>七、 调试</h2>
 
-<p><code>extension</code>和普通app的调试方式差不多，开始调试前先选中<code>extension</code>对应的target，点击run，就会弹出下图所示选择框：</p>
+<p>extension和普通app的调试方式差不多，开始调试前先选中extension对应的target，点击run，就会弹出下图所示选择框：</p>
 
 <p><img src="/images/article5/extension_debug.png" alt="extension_debug" /></p>
 
-<p>需要选择一个<code>host app</code>，这里选择<code>Today</code>。</p>
+<p>需要选择一个host app，这里选择<code>Today</code>。</p>
 
 <p>然后即可和普通app一样调试了，不过我在实际使用过程中，发现有各种奇怪的事情，比如NSLog无法在控制台输出，应该是bug吧。</p>
 
@@ -650,7 +650,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 
 <ul>
-<li><code>containing app</code>执行结果</li>
+<li>containing app执行结果</li>
 </ul>
 
 
@@ -670,7 +670,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 
 <ul>
-<li><code>extension</code>执行结果</li>
+<li>extension执行结果</li>
 </ul>
 
 
@@ -689,7 +689,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>由此可见，不管是<code>extension</code>还是<code>containing app</code>，他们的可执行文件和保存数据的目录都是分开存放的，即所有app的可执行文件都放在一个大目录下，保存数据的目录保存在另一个大目录下，同样，AppGroup放在另一个大目录下。</p>
+<p>由此可见，不管是extension还是containing app，他们的可执行文件和保存数据的目录都是分开存放的，即所有app的可执行文件都放在一个大目录下，保存数据的目录保存在另一个大目录下，同样，AppGroup放在另一个大目录下。</p>
 
 <h2>说明</h2>
 
