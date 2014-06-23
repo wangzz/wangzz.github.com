@@ -4,7 +4,7 @@
   <title><![CDATA[Category: WWDC2014 | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/wwdc2014/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-06-20T10:17:06+08:00</updated>
+  <updated>2014-06-23T19:59:34+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -12,6 +12,522 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[WWDC2014之App Extensions学习笔记]]></title>
+    <link href="http://wangzz.github.io/blog/2014/06/23/wwdc2014zhi-app-extensionsxue-xi-bi-ji/"/>
+    <updated>2014-06-23T19:55:29+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/06/23/wwdc2014zhi-app-extensionsxue-xi-bi-ji</id>
+    <content type="html"><![CDATA[<p><img src="/images/article5/wwdc_banner_promo.jpg" alt="wwdc_banner_promo" /></p>
+
+<h2>一、关于App Extensions</h2>
+
+<p>extension是iOS8对用户新开放的一种对几种固定系统区域的扩展机制，它的出现一定程度上是为了弥补iOS的沙盒机制对应用间通信的限制。</p>
+
+<p>它的出现，一方面为用户提供了在某些系统应用中使用我们应用提供的服务的便捷方式，比如用户可以在<code>今天</code>中的widgets查看应用展示的简略信息，而不用再进到我们的应用中，这将是一种全新的用户体验；但是另一方面，extension的出现可能会减少用户启动应用的次数，同时还会增大开发者的工作量。</p>
+
+<!-- more -->
+
+
+<p>为了演示，新建了个名为AppExtensionDemo的demo工程。</p>
+
+<h4>几个关键词</h4>
+
+<ul>
+<li>extension point</li>
+</ul>
+
+
+<p>系统中支持<code>extension</code>的区域，<code>extension</code>的类别也是据此区分的，iOS上共有<code>Today</code>、<code>Share</code>、<code>Action</code>、<code>Photo Editing</code>、<code>Storage Provider</code>、<code>Custom keyboard</code>几种，其中<code>Today</code>中的<code>extension</code>又被称为<code>widget</code>。</p>
+
+<p>每种<code>extension point</code>的使用方式和适合干的活都不一样，因此不存在通用的<code>extension</code>。</p>
+
+<ul>
+<li>app extension</li>
+</ul>
+
+
+<p>即为本文所说的<code>extension</code>。<code>extension</code>并不是一个独立的app，它有一个包含在app bundle中的独立bundle，<code>extension</code>的bundle后缀名是<code>.appex</code>。其生命周期也和普通app不同，这些后文将会详述。</p>
+
+<p><code>extension</code>不能单独存在，必须有一个包含它的<code>containing app</code>。</p>
+
+<p>另外，<code>extension</code>需要用户手动激活，不同的<code>extension</code>激活方式也不同，比如：
+比如Today中的widget需要在Today中激活和关闭；<code>Custom keyboard</code>需要在设置中进行相关设置；<code>Photo Editing</code>需要在使用照片时在照片管理器中激活或关闭；<code>Storage Provider</code>可以在选择文件时出现；<code>Share</code>和<code>Action</code>可以在任何应用里被激活，但前提是开发者需要设置<code>Activation Rules</code>，以确定<code>extension</code>需要在合适出现。</p>
+
+<ul>
+<li>containing app</li>
+</ul>
+
+
+<p>尽管苹果开放了extension，但是在iOS中extension并不能单独存在，要想提交到AppStore，必须将extension包含在一个app中提交，并且app的实现部分不能为空,这个包含extension的app就叫<code>containing app</code>。</p>
+
+<p>extension会随着<code>containing app</code>的安装而安装，同时随着<code>containing app</code>的卸载而卸载。</p>
+
+<ul>
+<li>host app</li>
+</ul>
+
+
+<p>能够调起<code>extension</code>的app被称为<code>host app</code>，比如<code>widget</code>的<code>host app</code>就是<code>Today</code>。</p>
+
+<h2>二、extension和containing app、host app</h2>
+
+<h4>2.1 extension和host app</h4>
+
+<p><code>extension</code>和<code>host app</code>之间可以通过extensionContext属性直接通信，该属性是新增加的UIViewController类别：</p>
+
+<p>```objective-c
+@interface UIViewController(NSExtensionAdditions) <NSExtensionRequestHandling></p>
+
+<p>// Returns the extension context. Also acts as a convenience method for a view controller to check if it participating in an extension request.
+@property (nonatomic,readonly,retain) NSExtensionContext *extensionContext NS_AVAILABLE_IOS(8_0);</p>
+
+<p>@end
+```</p>
+
+<p>实际上<code>extension</code>和<code>host app</code>之间是通过IPC（interprocess communication）实现的，只是苹果把调用接口高度抽象了，我们并不需要关注那么底层的东西。</p>
+
+<h4>2.2 containing app和host app</h4>
+
+<p>他们之间没有任何直接关系，也从来不需要通信。</p>
+
+<h4>2.3 extension和containing app</h4>
+
+<p>这二者之间的关系最复杂，纠纠缠缠扯不清关系。</p>
+
+<ul>
+<li>不能直接通信</li>
+</ul>
+
+
+<p>首先，尽管<code>extension</code>的bundle是放在<code>containing app</code>的bundle中，但是他们是两个完全独立的进程，之间不能直接通信。不过<code>extension</code>可以通过openURL的方式启动<code>containing app</code>（当然也能启动其它app），不过必须通过extensionContext借助<code>host app</code>来实现：</p>
+
+<p>```objective-c
+//通过openURL的方式启动Containing APP
+&ndash; (void)openURLContainingAPP
+{</p>
+
+<pre><code>[self.extensionContext openURL:[NSURL URLWithString:@"appextension://123"]
+             completionHandler:^(BOOL success) {
+                 NSLog(@"open url result:%d",success);
+             }];
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p><code>extension</code>中是无法直接使用openURL的。</p>
+
+<ul>
+<li>可以共享<code>Shared resources</code></li>
+</ul>
+
+
+<p><code>extension</code>和<code>containing app</code>可以共同读写一个被称为<code>Shared resources</code>的存储区域，这是通过<code>App Groups</code>实现的，后文将会详述。</p>
+
+<p>三者间的关系可以通过官网给的两张图片形象地说明：</p>
+
+<p><img src="/images/article5/detailed_communication.png" alt="detailed_communication" /></p>
+
+<p><img src="/images/article5/app_extensions_container_restrictions.png" alt="app_extensions_container_restrictions" /></p>
+
+<ul>
+<li><code>containing app</code>能够控制<code>extension</code>的出现和隐藏</li>
+</ul>
+
+
+<p>通过以下代码，<code>containing app</code>可以让<code>extension</code>出现或隐藏（当然<code>extension</code>也可以让自己隐藏）：</p>
+
+<p>```objective-c
+//让隐藏的插件重新显示
+&ndash; (void)showTodayExtension
+{</p>
+
+<pre><code>[[NCWidgetController widgetController] setHasContent:YES forWidgetWithBundleIdentifier:@"com.wangzz.app.extension"];
+</code></pre>
+
+<p>}</p>
+
+<p>//隐藏插件
+&ndash; (void)hiddeTodayExtension
+{</p>
+
+<pre><code>[[NCWidgetController widgetController] setHasContent:NO forWidgetWithBundleIdentifier:@"com.wangzz.app.extension"];
+</code></pre>
+
+<p>}
+```</p>
+
+<h2>三、App Groups</h2>
+
+<p>这是iOS8新开放的功能，在OS X上早就可用了。它主要用于同一group下的app共享同一份读写空间，以实现数据共享。</p>
+
+<p><code>extension</code>和<code>containing app</code>共同读写一份数据是很合理的需求，比如系统的股市应用，widget和app中都需要展示几个公司的股票数据，这就可以通过<code>App Groups</code>实现。</p>
+
+<h4>3.1 功能开启</h4>
+
+<p>为了便于后续操作，请先确保你的开发者账号在Xcode上处于登录状态。</p>
+
+<ul>
+<li>在app中开启</li>
+</ul>
+
+
+<p><code>App Groups</code>位于：</p>
+
+<p><code>
+TARGETS--&gt;AppExtensionDemo--&gt;Capabilities--&gt;App Groups
+</code></p>
+
+<p>找到以后，将<code>App Groups</code>右上角的开关打开，然后选择添加groups，比如我的是group.wangzz，当然这是为了测试随便起得名字，正规点得命名规则应该是：group.com.company.app。</p>
+
+<p>添加成功以后如下图所示：</p>
+
+<p><img src="/images/article5/app_group.png" alt="app_group" /></p>
+
+<ul>
+<li>在<code>extension</code>中开启</li>
+</ul>
+
+
+<p>我创建的是widget，target名称为TodayExtension，对应的<code>App Groups</code>位于：</p>
+
+<p><code>
+TARGETS--&gt;TodayExtension--&gt;Capabilities--&gt;App Groups
+</code>
+开启方式和app中一样，需要注意的是必须保证这里地<code>App Groups</code>名称和app中的相同，即为group.wangzz。</p>
+
+<h2>四、<code>extension</code>和<code>containing app</code>数据共享</h2>
+
+<p><code>app group</code>给我们提供了同一group内app可以共同读写的区域，可以通过以下方式实现数据共享：</p>
+
+<h4>4.1 通过NSUserDefaults共享数据</h4>
+
+<ul>
+<li>存数据</li>
+</ul>
+
+
+<p>通过以下方式向NSUserDefaults中保存数据：</p>
+
+<p>```objective-c
+&ndash; (void)saveTextByNSUserDefaults
+{</p>
+
+<pre><code>NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.wangzz"];
+[shared setObject:_textField.text forKey:@"wangzz"];
+[shared synchronize];
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>需要注意的是：</p>
+
+<p>1.保存数据的时候必须指明group id；</p>
+
+<p>2.而且要注意NSUserDefaults能够处理的数据只能是可plist化的对象，详情见<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/PropertyLists/AboutPropertyLists/AboutPropertyLists.html">Property List Programming Guide</a>。</p>
+
+<p>3.为了防止出现数据同步问题，不要忘记调用<code>[shared synchronize];</code></p>
+
+<ul>
+<li>读数据</li>
+</ul>
+
+
+<p>对应的读取数据方式：</p>
+
+<p>```objective-c
+&ndash; (NSString *)readDataFromNSUserDefaults
+{</p>
+
+<pre><code>NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.wangzz"];
+NSString *value = [shared valueForKey:@"wangzz"];
+
+return value;
+</code></pre>
+
+<p>}
+```</p>
+
+<h4>4.2 通过NSFileManager共享数据</h4>
+
+<p>NSFileManager在iOS7提供了containerURLForSecurityApplicationGroupIdentifier方法，可以用来实现app group共享数据。</p>
+
+<ul>
+<li>保存数据</li>
+</ul>
+
+
+<p>```objective-c
+&ndash; (BOOL)saveTextByNSFileManager
+{</p>
+
+<pre><code>NSError *err = nil;
+NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@"group.wangzz"];
+containerURL = [containerURL URLByAppendingPathComponent:@"Library/Caches/good"];
+
+NSString *value = _textField.text;
+BOOL result = [value writeToURL:containerURL atomically:YES encoding:NSUTF8StringEncoding error:&amp;err];
+if (!result) {
+    NSLog(@"%@",err);
+} else {
+    NSLog(@"save value:%@ success.",value);
+}
+
+return result;
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<ul>
+<li>读数据</li>
+</ul>
+
+
+<p>```objective-c</p>
+
+<ul>
+<li><p>(NSString <em>)readTextByNSFileManager
+{
+  NSError </em>err = nil;
+  NSURL <em>containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@&ldquo;group.wangzz&rdquo;];
+  containerURL = [containerURL URLByAppendingPathComponent:@&ldquo;Library/Caches/good&rdquo;];
+  NSString </em>value = [NSString stringWithContentsOfURL:containerURL encoding:NSUTF8StringEncoding error:&amp;err];</p>
+
+<p>  return value;
+}
+```</p></li>
+</ul>
+
+
+<p>在这里我试着保存和读取的是字符串数据，但读写SQlite我相信也是没问题的。</p>
+
+<ul>
+<li>数据同步</li>
+</ul>
+
+
+<p>两个应用共同读取同一份数据，就会引发数据同步问题。WWDC2014的视频中建议使用NSFileCoordination实现普通文件的读写同步，而数据库可以使用CoreData,Sqlite也支持同步。</p>
+
+<h2>五、<code>extension</code>和<code>containing app</code>代码共享</h2>
+
+<p>和数据共享类似，<code>extension</code>和<code>containing app</code>很自然地会有一些业务逻辑上可以共用的代码，这时可以通过iOS8中刚开放使用的framework实现。苹果在<a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW1">App Extension Programming Guide</a>中 <code>Sharing Code with Your Containing App</code>是这样描述的：</p>
+
+<blockquote><p>In iOS 8.0 and later, you can use an embedded framework to share code between your extension and its containing app. For example, if you develop image-processing code that you want both your Photo Editing extension and its containing app to share, you can put the code into a framework and embed it in both targets.</p></blockquote>
+
+<p>即将framework分别嵌入到<code>extension</code>和<code>containing app</code>的target中实现代码共享。但这样岂不是需要分别要将framework分别copy到<code>extension</code>和<code>containing app</code>的main bundle中？</p>
+
+<p>参考<code>extension</code>和<code>containing app</code>数据共享，我试想能不能将framework只保存一份放在<code>app group</code>区域？</p>
+
+<h4>5.1 copy framework到<code>app group</code></h4>
+
+<p>在app首次启动的时候将framework放到<code>app group</code>区域：</p>
+
+<p>```objective-c</p>
+
+<ul>
+<li><p>(BOOL)copyFrameworkFromMainBundleToAppGroup
+{
+  NSFileManager <em>manager = [NSFileManager defaultManager];
+  NSError </em>err = nil;
+  NSURL <em>containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@&ldquo;group.wangzz&rdquo;];
+  NSString </em>sorPath = [NSString stringWithFormat:@&ldquo;%@/Dylib.framework&rdquo;,[[NSBundle mainBundle] bundlePath]];
+  NSString *desPath = [NSString stringWithFormat:@&ldquo;%@/Library/Caches/Dylib.framework&rdquo;,containerURL.path];</p>
+
+<p>  BOOL removeResult = [manager removeItemAtPath:desPath error:&amp;err];
+  if (!removeResult) {
+      NSLog(@&ldquo;%@&rdquo;,err);
+  } else {
+      NSLog(@&ldquo;remove success.&rdquo;);
+  }</p>
+
+<p>  BOOL copyResult = [[NSFileManager defaultManager] copyItemAtPath:sorPath toPath:desPath error:&amp;err];
+  if (!copyResult) {
+      NSLog(@&ldquo;%@&rdquo;,err);
+  } else {
+      NSLog(@&ldquo;copy success.&rdquo;);
+  }</p>
+
+<p>  return copyResult;
+}
+```</p></li>
+</ul>
+
+
+<h4>5.2 使用framework：</h4>
+
+<p>```objective-c
+&ndash; (BOOL)loadFrameworkInAppGroup
+{</p>
+
+<pre><code>NSError *err = nil;
+NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@"group.wangzz"];
+NSString *desPath = [NSString stringWithFormat:@"%@/Library/Caches/Dylib.framework",containerURL.path];
+NSBundle *bundle = [NSBundle bundleWithPath:desPath];
+BOOL result = [bundle loadAndReturnError:&amp;err];
+if (result) {
+    Class root = NSClassFromString(@"Person");
+    if (root) {
+        Person *person = [[root alloc] init];
+        if (person) {
+            [person run];
+        }
+    }
+} else {
+    NSLog(@"%@",err);
+}
+
+return result;
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>经过测试，竟然能够加载成功。</p>
+
+<p>需要说明的是，这里只是说那么用是可以成功加载framework，但还面临不少问题，比如如果用户在启动app之前去使用<code>extension</code>，这时framework还没有copy过去，怎么处理；另外iOS的机制或者苹果的审核是否允许这样使用等。</p>
+
+<p>在一切确定下来之前还是乖乖按文档中的方式使用吧。</p>
+
+<h2>六、生命周期</h2>
+
+<p><code>extension</code>和普通app的最大区别之一是生命周期。</p>
+
+<ul>
+<li>开始</li>
+</ul>
+
+
+<p>在用户通过<code>host app</code>点击<code>extension</code>时，系统就会实例化<code>extension</code>应用，这是生命周期的开始。</p>
+
+<ul>
+<li>执行任务</li>
+</ul>
+
+
+<p>在<code>extension</code>启动以后，开始执行它的使命。</p>
+
+<ul>
+<li>终止</li>
+</ul>
+
+
+<p>在用户取消任务，或者任务执行结束，或者开启了一个长时后台任务时，系统会将其杀掉。</p>
+
+<p>由此可见，<code>extension</code>就是为了任务而生！</p>
+
+<p>下图来自官方文档，它将生命周期划分的更详细：</p>
+
+<p><img src="/images/article5/app_extensions_lifecycle.png" alt="app_extensions_lifecycle" /></p>
+
+<p>通过打印日志发现，<code>Today</code>中的<code>widget</code>在将<code>Today</code>切换到<code>全部</code>或者<code>未读通知时</code>都会被杀掉。</p>
+
+<h2>七、 调试</h2>
+
+<p><code>extension</code>和普通app的调试方式差不多，开始调试前先选中<code>extension</code>对应的target，点击run，就会弹出下图所示选择框：</p>
+
+<p><img src="/images/article5/extension_debug.png" alt="extension_debug" /></p>
+
+<p>需要选择一个<code>host app</code>，这里选择<code>Today</code>。</p>
+
+<p>然后即可和普通app一样调试了，不过我在实际使用过程中，发现有各种奇怪的事情，比如NSLog无法在控制台输出，应该是bug吧。</p>
+
+<h2>八、 iOS8应用文件系统</h2>
+
+<p>发现iOS8的文件系统发生了变化，新的文件系统将可执行文件（即原来的.app文件）从沙盒中移到了另外一个地方，这样感觉更合理。</p>
+
+<ul>
+<li>测试代码</li>
+</ul>
+
+
+<p>下述代码用于打印<code>app group</code>路径、应用的可执行文件路径、对应的Documents路径：</p>
+
+<p>```objective-c</p>
+
+<ul>
+<li><p>(void)logAppPath
+{
+  //app group路径
+  NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@&ldquo;group.wangzz&rdquo;];
+  NSLog(@&ldquo;app group:\n%@&rdquo;,containerURL.path);</p>
+
+<p>  //打印可执行文件路径
+  NSLog(@&ldquo;bundle:\n%@&rdquo;,[[NSBundle mainBundle] bundlePath]);</p>
+
+<p>  //打印documents
+  NSArray <em>paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+  NSString </em>path = [paths objectAtIndex:0];
+  NSLog(@&ldquo;documents:\n%@&rdquo;,path);
+}
+```</p></li>
+<li><p><code>containing app</code>执行结果</p></li>
+</ul>
+
+
+<p><code>
+2014-06-23 19:35:03.944 AppExtensionDemo[7471:365131] app group:
+/private/var/mobile/Containers/Shared/AppGroup/89CCBFB1-CA5E-4C7F-80CB-A3EB9E841816
+2014-06-23 19:35:03.946 AppExtensionDemo[7471:365131] bundle:
+/private/var/mobile/Containers/Bundle/Application/1AC73797-A3BB-4BDE-A647-3D083DA6871A/AppExtensionDemo.app
+2014-06-23 19:35:03.948 AppExtensionDemo[7471:365131] documents:
+/var/mobile/Containers/Data/Application/E5E6E516-0163-4754-9D10-A5F6C33A6261/Documents
+</code></p>
+
+<ul>
+<li><code>extension</code>执行结果</li>
+</ul>
+
+
+<p>```
+Jun 23 19:37:49 autonavis-iPad com.foogry.AppExtensionDemo.TodayExtension[7638] <Warning>: app group:</p>
+
+<pre><code>/private/var/mobile/Containers/Shared/AppGroup/89CCBFB1-CA5E-4C7F-80CB-A3EB9E841816
+</code></pre>
+
+<p>Jun 23 19:37:49 autonavis-iPad com.foogry.AppExtensionDemo.TodayExtension[7638] <Warning>: bundle:</p>
+
+<pre><code>/private/var/mobile/Containers/Bundle/Application/596717B7-7CB8-4F53-BCD4-380F34ABD30F/AppExtensionDemo.app/PlugIns/com.foogry.AppExtensionDemo.TodayExtension.appex
+</code></pre>
+
+<p>Jun 23 19:37:49 autonavis-iPad com.foogry.AppExtensionDemo.TodayExtension[7638] <Warning>: documents:</p>
+
+<pre><code>/var/mobile/Containers/Data/PluginKitPlugin/57581433-3DBD-4930-971F-78D30C150E8A/Documents
+</code></pre>
+
+<p>```</p>
+
+<p>由此可见，不管是<code>extension</code>还是<code>containing app</code>，他们的可执行文件和保存数据的目录都是分开存放的，即所有app的可执行文件都放在一个大目录下，保存数据的目录保存在另一个大目录下，同样，AppGroup放在另一个大目录下。</p>
+
+<h2>说明</h2>
+
+<ul>
+<li><p>本文用到的demo已经上传到github上。</p></li>
+<li><p>文中可能有理解有误的地方，欢迎指出。</p></li>
+</ul>
+
+
+<h2>参考文档</h2>
+
+<ul>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/index.html#//apple_ref/doc/uid/TP40014214-CH20-SW1">App Extension Programming Guide</a></p></li>
+<li><p><a href="http://blog.waynehartman.com/">Crash Course In iOS 8 Widgets</a></p></li>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/documentation/NotificationCenter/Reference/NotificationCenter_Framework/index.html#//apple_ref/doc/uid/TP40014443">Notification Center Framework Reference</a></p></li>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/releasenotes/General/RN-iOSSDK-8.0/">iOS 8 Release Notes</a></p></li>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/documentation/Miscellaneous/Reference/EntitlementKeyReference/Chapters/EnablingAppSandbox.html#//apple_ref/doc/uid/TP40011195-CH4-SW19">Entitlement Key Reference</a></p></li>
+<li><p><a href="http://www.pingwest.com/apples-new-extension-eco-system/">苹果的插件生态系统，开发者的新世界</a></p></li>
+<li><p><a href="http://www.macstories.net/stories/ios-8-extensions-apples-plan-for-a-powerful-app-ecosystem/">iOS 8 Extensions: Apple’s Plan for a Powerful App Ecosystem</a></p></li>
+<li><p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/PropertyLists/AboutPropertyLists/AboutPropertyLists.html">Property List Programming Guide</a></p></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[WWDC2014之iOS使用动态库]]></title>
