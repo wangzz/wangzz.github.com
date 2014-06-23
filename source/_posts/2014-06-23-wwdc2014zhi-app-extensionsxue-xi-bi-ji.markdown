@@ -407,9 +407,9 @@ Jun 23 19:37:49 autonavis-iPad com.foogry.AppExtensionDemo.TodayExtension[7638] 
 
 ##说明
 
-* 本文用到的demo已经上传到github上。
+* 本文用到的demo已经上传到[github](https://github.com/wangzz/Demo/tree/master/AppExtensionsDemo)上。
 
-* 文中可能有理解有误的地方，欢迎指出。
+* 文中可能有理解有误的地方，还请指出。
 
 ##参考文档
 
