@@ -1,0 +1,496 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>屏幕旋转学习笔记 - 王中周的技术博客</title>
+  <meta name="author" content="王中周">
+
+  
+  <meta name="description" content="屏幕旋转学习笔记">
+  <meta name="keywords" content="device orientation, iOS, interface orientation, 屏幕旋转">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wangzz.github.io/blog/2014/08/08/ping-mu-xuan-zhuan-xue-xi-bi-ji">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="王中周的技术博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+<script type="text/javascript">
+
+function addBlankTargetForLinks () {
+
+  $('a[href^="http"]').each(function(){
+
+      $(this).attr('target', '_blank');
+
+  });
+
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+
+  addBlankTargetForLinks();
+
+});
+
+</script>
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">王中周的技术博客</a></h1>
+  
+    <h2>Stay hungry,stay foolish.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:wangzz.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">屏幕旋转学习笔记</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-08T09:39:04+08:00" pubdate data-updated="true">Aug 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>一、两种orientation</h2>
+
+<p>首先需要区分两种orientation</p>
+
+<h4>1、device orientation</h4>
+
+<p>设备的物理方向</p>
+
+<h4>2、interface orientation</h4>
+
+<p>界面显示的方向</p>
+
+<p>这两种orientation并不一定保持一致，比如app只支持竖屏，无论手机怎么旋转（即无论device orientation取什么值），对应的app仍然只有一个竖屏的值（即interface orientation只有一个竖屏的值）。</p>
+
+<p>我们面临的屏幕旋转问题其实就是device orientation改变的时候如何处理对应的interface orientation。</p>
+
+<!-- more -->
+
+
+<h2>二、相关枚举定义</h2>
+
+<h4>1、iOS5和之前版本（后文均简称iOS5）：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>typedef NS_ENUM(NSInteger, UIInterfaceOrientation) {
+</span><span class='line'>    UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
+</span><span class='line'>    UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
+</span><span class='line'>    UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
+</span><span class='line'>    UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2、iOS6和之后版本（后文均简称iOS6）又新增了：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>typedef NS_OPTIONS(NSUInteger, UIInterfaceOrientationMask) {
+</span><span class='line'>    UIInterfaceOrientationMaskPortrait = (1 &lt;&lt; UIInterfaceOrientationPortrait),
+</span><span class='line'>    UIInterfaceOrientationMaskLandscapeLeft = (1 &lt;&lt; UIInterfaceOrientationLandscapeLeft),
+</span><span class='line'>    UIInterfaceOrientationMaskLandscapeRight = (1 &lt;&lt; UIInterfaceOrientationLandscapeRight),
+</span><span class='line'>    UIInterfaceOrientationMaskPortraitUpsideDown = (1 &lt;&lt; UIInterfaceOrientationPortraitUpsideDown),
+</span><span class='line'>    UIInterfaceOrientationMaskLandscape = (UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight),
+</span><span class='line'>    UIInterfaceOrientationMaskAll = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskPortraitUpsideDown),
+</span><span class='line'>    UIInterfaceOrientationMaskAllButUpsideDown = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight),
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>iOS6使用<code>NS_OPTIONS</code>的方式重新定义了UIInterfaceOrientationMaskPortrait、UIInterfaceOrientationMaskLandscapeLeft、UIInterfaceOrientationMaskLandscapeRight、UIInterfaceOrientationMaskPortraitUpsideDown几种基础枚举，这就意味着能以组合的方式更加方便的使用这些枚举值。</p>
+
+<h2>三、相关方法</h2>
+
+<h4>1、iOS5中控制屏幕旋转的方法：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// Applications should use supportedInterfaceOrientations and/or shouldAutorotate..
+</span><span class='line'>- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation NS_DEPRECATED_IOS(2_0, 6_0);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果打算支持toInterfaceOrientation对应的方向就返回YES，否则返回NO。</p>
+
+<h4>2、iOS6中控制屏幕旋转相关方法：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// New Autorotation support.
+</span><span class='line'>- (BOOL)shouldAutorotate NS_AVAILABLE_IOS(6_0);
+</span><span class='line'>- (NSUInteger)supportedInterfaceOrientations NS_AVAILABLE_IOS(6_0);
+</span><span class='line'>// Returns interface orientation masks.
+</span><span class='line'>- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation NS_AVAILABLE_IOS(6_0);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>第一个方法决定是否支持多方向旋转屏，如果返回NO则后面的两个方法都不会再被调用，而且只会支持默认的UIInterfaceOrientationMaskPortrait方向；</p>
+
+<p>第二个方法直接返回支持的旋转方向；</p>
+
+<p>第三个方法返回最优先显示的屏幕方向，比如同时支持Portrait和Landscape方向，但想优先显示Landscape方向，那软件启动的时候就会先显示Landscape，在手机切换旋转方向的时候仍然可以在Portrait和Landscape之间切换；</p>
+
+<h4>3、attemptRotationToDeviceOrientation方法</h4>
+
+<p>从iOS5开始有了这个新方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// call this method when your return value from shouldAutorotateToInterfaceOrientation: changes
+</span><span class='line'>// if the current interface orientation does not match the current device orientation, a rotation may occur provided all relevant view controllers now return YES from shouldAutorotateToInterfaceOrientation:
+</span><span class='line'>+ (void)attemptRotationToDeviceOrientation NS_AVAILABLE_IOS(5_0);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该方法的使用场景是interface orientation和device orientation不一致，但希望通过重新指定interface orientation的值，立即实现二者一致；如果这时只是更改了支持的interface orientation的值，没有调用attemptRotationToDeviceOrientation，那么下次device orientation变化的时候才会实现二者一致，关键点在于能不能立即实现。</p>
+
+<p>举个例子：</p>
+
+<p>假设当前的interface orientation只支持Portrait，如果device orientation变成Landscape，那么interface orientation仍然显示Portrait；</p>
+
+<p>如果这时我们希望interface orientation也变成和device orientation一致的Landscape，以iOS6为例，需要先将supportedInterfaceOrientations的返回值改成Landscape，然后调用attemptRotationToDeviceOrientation方法，系统会重新询问支持的interface orientation，已达到立即更改当前interface orientation的目的。</p>
+
+<h2>四、如何决定interface orientation</h2>
+
+<h4>1、全局控制</h4>
+
+<p>Info.plist文件中，有一个<code>Supported interface orientations</code>，可以配置整个应用的屏幕方向，此处为全局控制。</p>
+
+<h4>2、UIWindow</h4>
+
+<p>iOS6的UIApplicationDelegate提供了下述方法，能够指定 UIWindow 中的界面的屏幕方向：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window  NS_AVAILABLE_IOS(6_0);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该方法默认值为Info.plist中配置的<code>Supported interface orientations</code>项的值。</p>
+
+<p>iOS中通常只有一个window，所以此处的控制也可以视为全局控制。</p>
+
+<h4>3、controller</h4>
+
+<p>只有以下两种情况：</p>
+
+<ul>
+<li>当前controller是window的rootViewController</li>
+<li>当前controller是modal模式的</li>
+</ul>
+
+
+<p>时，orientations相关方法才会起作用（才会被调用），当前controller及其所有的childViewController都在此作用范围内。</p>
+
+<h4>4、最终支持的屏幕方向</h4>
+
+<p>前面所述的3种控制规则的交集就是一个controller的最终支持的方向；</p>
+
+<p>如果最终的交集为空，在iOS6以后会抛出<code>UIApplicationInvalidInterfaceOrientationException</code>崩溃异常。</p>
+
+<h2>四、强制屏幕旋转</h2>
+
+<p>如果interface和device方向不一样，想强制将interface旋转成device的方向，可以通过attemptRotationToDeviceOrientation实现，但是如果想将interface强制旋转成任一指定方向，该方式就无能为力了。</p>
+
+<p>不过聪明的开发者们总能想到解决方式：</p>
+
+<h4>1、私有方法</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是现在苹果已经将该方法私有化了，越狱开发的同学可以试试。</p>
+
+<h4>2、旋转view的transform</h4>
+
+<p>也可以通过旋转view的transform属性达到强制旋转屏幕方向的目的，但个人感觉这不是靠谱的思路，可能会带来某些诡异的问题。</p>
+
+<h4>3、主动触发orientation机制</h4>
+
+<p>要是能主动触发系统的orientation机制，调用orientation相关方法，使新设置的orientation值起作用就好了。这样只要提前设置好想要支持的orientation，然后主动触发orientation机制，便能实现将interface orientation旋转至任意方向的目的。</p>
+
+<p>万能的<a href="http://stackoverflow.com/a/14445888/2293677">stackoverflow</a>上提供了一种主动触发的方式：</p>
+
+<p>在iOS4和iOS6以后：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UIViewController *vc = [[UIViewController alloc]init];
+</span><span class='line'>[self presentModalViewController:vc animated:NO];
+</span><span class='line'>[self dismissModalViewControllerAnimated:NO];
+</span><span class='line'>[vc release];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>iOS5中：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+</span><span class='line'>UIView *view = [window.subviews objectAtIndex:0];
+</span><span class='line'>[view removeFromSuperview];
+</span><span class='line'>[window addSubview:view];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这种方式会触发UIKit重新调用controller的orientation相关方法，以达到在device方向不变的情况下改变interface方向的目的。</p>
+
+<p>虽然不优雅，但却能解决问题，凑合吧。。</p>
+
+<p>PS：</p>
+
+<p>话说iOS8中的屏幕旋转相关方法又变化了，表示适配起来很蛋疼。。。</p>
+
+<h2>五、参考文档</h2>
+
+<ul>
+<li><a href="http://stackoverflow.com/a/14445888/2293677">How to force a UIViewController to Portait orientation in iOS 6</a></li>
+<li><a href="http://www.cnblogs.com/jhzhu/p/3480885.html">IOS Orientation, 想怎么转就怎么转</a></li>
+<li><a href="http://zhenby.com/blog/2013/08/20/talk-ios-orientation/">iOS 屏幕方向那点事儿</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">王中周</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-08T09:39:04+08:00" pubdate data-updated="true">Aug 8<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394012284741689" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<!-- UJian Button BEGIN -->
+	<div class="ujian-hook"></div>
+	<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js"></script>
+<!-- UJian Button END -->
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js"></script>
+<!-- UY END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/06/23/wwdc2014zhi-app-extensionsxue-xi-bi-ji/" title="Previous Post: WWDC2014之App Extensions学习笔记">&laquo; WWDC2014之App Extensions学习笔记</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>博主简介</h1>
+<li>
+<p>
+	<span style="color:#222222;font-family:inherit;font-size:18px;font-style:inherit;font-weight:inherit;line-height:1.5;">曾就职于高阳科技、北京拉手网，现在高德地图；</span>
+</p>
+<p>
+	<span style="font-family:inherit;font-style:inherit;font-weight:inherit;color:#222222;font-size:18px;line-height:1.5;">早期在<a href="http://blog.csdn.net/wzzvictory" target="_blank"><span style="color:#E53333;">CSND上写博客</span></a></span>
+</p>
+</li>
+</section>
+<section>
+    <h1>新浪微博</h1>
+    <ul id="weibo">
+    <li>
+    	
+<iframe width="100%" height="130" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1734555471&verifier=6c6f0bb3&dpc=1"></iframe>
+
+</li>
+    </ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/08/ping-mu-xuan-zhuan-xue-xi-bi-ji/">屏幕旋转学习笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/23/wwdc2014zhi-app-extensionsxue-xi-bi-ji/">WWDC2014之App Extensions学习笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/wwdc2014zhi-iosshi-yong-dong-tai-ku/">WWDC2014之iOS使用动态库</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/">iOS进程间通信之CFMessagePort</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an/">iOS模拟器Custom Location被重置解决方案</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/wwdc2014/'>WWDC2014 (2)</a></li>
+<li class='category'><a href='/blog/categories/xcode/'>Xcode (1)</a></li>
+<li class='category'><a href='/blog/categories/xcodesettings/'>XcodeSettings (1)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (2)</a></li>
+<li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
+
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - 王中周 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+
+<p>
+<script type="text/javascript">
+    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F9975063b89c363c67eac651132751ee6' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+
+</p></footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
