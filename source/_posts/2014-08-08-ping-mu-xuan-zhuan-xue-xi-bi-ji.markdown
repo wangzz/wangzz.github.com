@@ -1,19 +1,19 @@
 ---
 layout: post
-title: "屏幕旋转学习笔记"
+title: "iOS屏幕旋转学习笔记"
 date: 2014-08-08 09:39:04 +0800
 comments: true
 categories: iOS
 tags: [device orientation, iOS, interface orientation, 屏幕旋转]
 keywords: device orientation, iOS, interface orientation, 屏幕旋转
-description: 屏幕旋转学习笔记
+description: iOS屏幕旋转学习笔记
 
 ---
 
 
 ##一、两种orientation
 
-首先需要区分两种orientation
+了解屏幕旋转首先需要区分两种orientation
 
 ####1、device orientation
 
@@ -23,9 +23,7 @@ description: 屏幕旋转学习笔记
 
 界面显示的方向
 
-这两种orientation并不一定保持一致，比如app只支持竖屏，无论手机怎么旋转（即无论device orientation取什么值），对应的app仍然只有一个竖屏的值（即interface orientation只有一个竖屏的值）。
-
-我们面临的屏幕旋转问题其实就是device orientation改变的时候如何处理对应的interface orientation。
+iOS提供了在设备旋转时，界面显示发生相应适配的能力，已达到方便用户使用并提供最佳显示效果的目的。开发者需要指定应用支持的显示方向，并对界面显示做出对应的适配。由于界面适配的工作量相当大，目前国内的应用大都只支持默认的竖屏方向，
 
 <!-- more -->
 
