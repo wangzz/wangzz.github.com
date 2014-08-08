@@ -81,7 +81,7 @@ iOS6使用`NS_OPTIONS`的方式重新定义了UIInterfaceOrientationMaskPortrait
 
 第一个方法决定是否支持多方向旋转屏，如果返回NO则后面的两个方法都不会再被调用，而且只会支持默认的UIInterfaceOrientationMaskPortrait方向；
 
-第二个方法直接返回支持的旋转方向；
+第二个方法直接返回支持的旋转方向，该方法在iPad上的默认返回值是`UIInterfaceOrientationMaskAll`，iPhone上的默认返回值是`UIInterfaceOrientationMaskAllButUpsideDown`，详情见[官方Q&A文档](https://developer.apple.com/library/ios/qa/qa1688/_index.html)；
 
 第三个方法返回最优先显示的屏幕方向，比如同时支持Portrait和Landscape方向，但想优先显示Landscape方向，那软件启动的时候就会先显示Landscape，在手机切换旋转方向的时候仍然可以在Portrait和Landscape之间切换；
 
@@ -194,6 +194,7 @@ PS：
 
 ##五、参考文档
 
+* [Why won't my UIViewController rotate with the device?](https://developer.apple.com/library/ios/qa/qa1688/_index.html)；
 * [How to force a UIViewController to Portait orientation in iOS 6](http://stackoverflow.com/a/14445888/2293677)
 * [IOS Orientation, 想怎么转就怎么转](http://www.cnblogs.com/jhzhu/p/3480885.html)
 * [iOS 屏幕方向那点事儿](http://zhenby.com/blog/2013/08/20/talk-ios-orientation/)
