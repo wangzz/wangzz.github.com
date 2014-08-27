@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-08-27T14:28:20+08:00</updated>
+  <updated>2014-08-27T16:17:43+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -18,18 +18,11 @@
     <link href="http://wangzz.github.io/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan/"/>
     <updated>2014-08-27T12:21:50+08:00</updated>
     <id>http://wangzz.github.io/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan</id>
-    <content type="html"><![CDATA[<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
-
-
-<p>从<a href="">CSDN</a>时代开始，就有用一系列文章聊聊CoreAnimation的打算，这算是本系列中的第三篇了。一直以来都是哪天心情好的时候来一篇，真怀疑等把整个系列写完的时候CoreAnimation是不是都要被Apple换掉了。</p>
+    <content type="html"><![CDATA[<p>从<a href="http://blog.csdn.net/wzzvictory">CSDN</a>时代开始，就有用一系列文章聊聊CoreAnimation的打算，这算是本系列中的第三篇了。一直以来都是哪天心情好的时候来一篇，真怀疑等把整个系列写完的时候CoreAnimation是不是都要被Apple换掉了。</p>
 
 <p>本文打算介绍自己对基础变换的认识。</p>
 
-<h2>一、简介</h2>
-
-<p>CoreAnimation中基础变换包括平移（Translate）、缩放（Scale）、旋转（Rotate）。变换对于动画来说应该是最基础最核心的内容了</p>
-
-<h2>二、基础变换与数学</h2>
+<h2>一、基础变换与数学</h2>
 
 <h4>1.两种坐标系</h4>
 
@@ -49,7 +42,7 @@
 
 <p>iOS中CoreAnimation的CALayer默认使用的是<code>左手坐标系</code>（使用哪种坐标系可以通过CALayer的<code>geometryFlipped</code>属性更改，该值默认为NO，设为YES时表示使用右手坐标系），因此本文后面所说的所有坐标系都是之左手坐标系。</p>
 
-<p>假如三维空间中有一个点(x0, y0, z0)，该点经过一定条件的基础变换，变换后的坐标为(x, y, z)，则针对平移、缩放、旋转三种基础变换，对应的坐标变换关系如下：</p>
+<p>变换对于动画来说应该是最基础最核心的内容了，CoreAnimation中基础变换包括平移（Translate）、缩放（Scale）、旋转（Rotate）三种。假如三维空间中有一个点(x0, y0, z0)，该点经过一定条件的基础变换，变换后的坐标为(x, y, z)，则针对平移、缩放、旋转三种基础变换，对应的坐标变换关系如下：</p>
 
 <h6>2.1 平移</h6>
 
@@ -89,7 +82,7 @@
 
 <p>其它的大家感兴趣可以自己推倒下。</p>
 
-<h2>三、变换矩阵</h2>
+<h2>二、变换矩阵</h2>
 
 <p>在CoreAnimation中用CATransform3D来表示三维齐次坐标变换矩阵，在齐次坐标中n维空间的坐标需要用n+1个元素的坐标元组来表示（详情还请自行Google），因此CATransform3D定义如下：</p>
 
@@ -143,13 +136,219 @@
 
 <p>该矩阵为任意点(x, y, z)绕任意向量旋转旋转角度α的旋转向量。</p>
 
-<h2>四、CoreAnimation基础变换方法</h2>
+<h2>三、验证</h2>
 
-<h2>五、</h2>
+<p>前面总结了CoreAnimation中三种基础变换对应的变换矩阵，这样以来我们就能自己对任意的矩阵做变换了。平移、缩放、旋转对应的变换矩阵计算方法如下：</p>
 
-<h2>六、</h2>
+<h4>1. 平移</h4>
 
-<p>变换的核心在于变换矩阵。</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">CATransform3D</span><span class="p">)</span><span class="nf">translateWithMatrix:</span><span class="p">(</span><span class="n">CATransform3D</span><span class="p">)</span><span class="nv">t</span> <span class="nf">x:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">x</span> <span class="nf">y:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">y</span> <span class="nf">z:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">z</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">CATransform3D</span> <span class="n">matrixTransform</span> <span class="o">=</span> <span class="n">CATransform3DIdentity</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m41</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m42</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m43</span> <span class="o">=</span> <span class="n">z</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">CATransform3DConcat</span><span class="p">(</span><span class="n">matrixTransform</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该方法根据平移变换矩阵的计算方式，得到平移参数(x, y, z)对应的变换矩阵，然后和原始矩阵相乘，得到最终的变换矩阵。</p>
+
+<h4>2. 缩放</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">CATransform3D</span><span class="p">)</span><span class="nf">scaleWithMatrix:</span><span class="p">(</span><span class="n">CATransform3D</span><span class="p">)</span><span class="nv">t</span> <span class="nf">x:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">x</span> <span class="nf">y:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">y</span> <span class="nf">z:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">z</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">CATransform3D</span> <span class="n">matrixTransform</span> <span class="o">=</span> <span class="n">CATransform3DIdentity</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m11</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m22</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m33</span> <span class="o">=</span> <span class="n">z</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">CATransform3DConcat</span><span class="p">(</span><span class="n">matrixTransform</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该方法根据缩放变换矩阵的计算方式，得到缩放参数(x, y, z)对应的变换矩阵，然后和原始矩阵相乘，得到最终的变换矩阵。</p>
+
+<h4>3. 旋转</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">CATransform3D</span><span class="p">)</span><span class="nf">rotateWithMatrix:</span><span class="p">(</span><span class="n">CATransform3D</span><span class="p">)</span><span class="nv">t</span> <span class="nf">angle:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">angle</span> <span class="nf">x:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">x</span> <span class="nf">y:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">y</span> <span class="nf">z:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">z</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">CGFloat</span> <span class="n">unitValue</span> <span class="o">=</span> <span class="n">sqrtf</span><span class="p">(</span><span class="n">powf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">powf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">powf</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">CGFloat</span> <span class="n">x0</span> <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="n">unitValue</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">CGFloat</span> <span class="n">y0</span> <span class="o">=</span> <span class="n">y</span><span class="o">/</span><span class="n">unitValue</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">CGFloat</span> <span class="n">z0</span> <span class="o">=</span> <span class="n">z</span><span class="o">/</span><span class="n">unitValue</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CATransform3D</span> <span class="n">matrixTransform</span> <span class="o">=</span> <span class="n">CATransform3DIdentity</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m11</span> <span class="o">=</span> <span class="n">powf</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span><span class="o">+</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m12</span> <span class="o">=</span> <span class="n">x0</span><span class="o">*</span><span class="n">y0</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span><span class="o">+</span><span class="n">z0</span><span class="o">*</span><span class="n">sinf</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m13</span> <span class="o">=</span> <span class="n">x0</span><span class="o">*</span><span class="n">z0</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span><span class="o">-</span><span class="n">y0</span><span class="o">*</span><span class="n">sinf</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m21</span> <span class="o">=</span> <span class="n">x0</span><span class="o">*</span><span class="n">y0</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span><span class="o">-</span><span class="n">z0</span><span class="o">*</span><span class="n">sinf</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m22</span> <span class="o">=</span> <span class="n">powf</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span><span class="o">+</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m23</span> <span class="o">=</span> <span class="n">y0</span><span class="o">*</span><span class="n">z0</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span><span class="o">+</span><span class="n">x0</span><span class="o">*</span><span class="n">sinf</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m31</span> <span class="o">=</span> <span class="n">x0</span><span class="o">*</span><span class="n">z0</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span><span class="o">+</span><span class="n">y0</span><span class="o">*</span><span class="n">sinf</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m32</span> <span class="o">=</span> <span class="n">y0</span><span class="o">*</span><span class="n">z0</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span><span class="o">-</span><span class="n">x0</span><span class="o">*</span><span class="n">sinf</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">matrixTransform</span><span class="p">.</span><span class="n">m33</span> <span class="o">=</span> <span class="n">powf</span><span class="p">(</span><span class="n">z0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span><span class="o">+</span><span class="n">cosf</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">CATransform3DConcat</span><span class="p">(</span><span class="n">matrixTransform</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该方法根据旋转变换矩阵的计算方式，得到旋转参数(angle, x, y, z)对应的变换矩阵，然后和原始矩阵相乘，得到最终的变换矩阵。</p>
+
+<h4>4. demo</h4>
+
+<p>以旋转变换demo为例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">logTransform:</span><span class="p">(</span><span class="n">CATransform3D</span><span class="p">)</span><span class="nv">t</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;***************************&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%f,%f,%f,%f&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m11</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m12</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m13</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m14</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%f,%f,%f,%f&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m21</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m22</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m23</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m24</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%f,%f,%f,%f&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m31</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m32</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m33</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m34</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%f,%f,%f,%f&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m41</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m42</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m43</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">m44</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nf">onRotateButtonAction:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">//Rotate</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//随意的原始矩阵</span>
+</span><span class='line'>    <span class="n">CATransform3D</span> <span class="n">matrixOrigin</span> <span class="o">=</span> <span class="n">CATransform3DMakeRotation</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CGFloat</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="c1">//旋转向量（2,3,4）</span>
+</span><span class='line'>    <span class="n">CGFloat</span> <span class="n">angle</span> <span class="o">=</span> <span class="mf">30.0f</span> <span class="o">*</span> <span class="n">M_PI</span> <span class="o">/</span> <span class="mf">180.0f</span><span class="p">;</span> <span class="c1">//旋转角度30°，计算对应的弧度</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//通过系统函数计算变换矩阵</span>
+</span><span class='line'>    <span class="n">CATransform3D</span> <span class="n">matrixSystem</span> <span class="o">=</span> <span class="n">CATransform3DRotate</span><span class="p">(</span><span class="n">matrixOrigin</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">systemLayer</span><span class="p">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">matrixSystem</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">logTransform:</span><span class="n">matrixSystem</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//自定义方法计算3D旋转矩阵</span>
+</span><span class='line'>    <span class="n">CATransform3D</span> <span class="n">matrixCalculate</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="nl">rotateWithMatrix:</span><span class="n">matrixOrigin</span> <span class="nl">angle:</span><span class="n">angle</span> <span class="nl">x:</span><span class="n">x</span> <span class="nl">y:</span><span class="n">y</span> <span class="nl">z:</span><span class="n">z</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">customLayer</span><span class="p">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">matrixCalculate</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">logTransform:</span><span class="n">matrixCalculate</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>demo使用随意生成的参数<code>matrixOrigin</code>模拟一个CALayer的初始<code>transform</code>属性值，然后使用同一组变换参数，分别通过系统函数和自定义方法对原始<code>transform</code>做变换，然后对比变换结果。最终的计算得到的变换矩阵可以通过log的方式打印出来，同时能在界面上做直观的展示。</p>
+
+<p>平移和缩放变换矩阵的验证方式和旋转类似。</p>
+
+<p>经过对比发现两种计算方式得到的最终变换矩阵是完全相同的，这进一步验证了CoreAnimation中变换矩阵的计算方式。</p>
+
+<p>完整的<a href="https://github.com/wangzz/Demo/tree/master/CoreAnimationDemo">demo</a>放到了github上，欢迎大家下载。</p>
+
+<h2>四、说明</h2>
+
+<ul>
+<li>变换矩阵可以组合</li>
+</ul>
+
+
+<p>可以同时对CALayer进行多种变换，比如同时缩放和旋转，直接通过矩阵相乘得到组合变换的变换矩阵。CoreAnimation提供了变换矩阵组合的方法：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CATransform3D</span> <span class="n">CATransform3DConcat</span> <span class="p">(</span><span class="n">CATransform3D</span> <span class="n">a</span><span class="p">,</span> <span class="n">CATransform3D</span> <span class="n">b</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>需要注意的是，通常情况下矩阵乘法不支持交换律，因此两个矩阵a、b的顺序不能交换。</p>
+
+<ul>
+<li>最好不要手动修改变换矩阵的值</li>
+</ul>
+
+
+<p>CoreAnimation的3D变换对应的4维变换矩阵，单独修改其中的任何一个值都可能带来不可控的变换结果，因此不建议单独手动修改变换矩阵，而是通过基础变换或者基础变换组合的方式修改。</p>
+
+<ul>
+<li>理解有误的地方还望大家指出。</li>
+</ul>
+
+
+<h2>五、参考文档</h2>
+
+<ul>
+<li><a href="http://www.thinkandbuild.it/introduction-to-3d-drawing-in-core-animation-part-2/">INTRODUCTION TO 3D DRAWING IN CORE ANIMATION</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Rotation_matrix">Rotation matrix</a></li>
+</ul>
+
 ]]></content>
   </entry>
   
