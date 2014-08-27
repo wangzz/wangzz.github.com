@@ -249,4 +249,5 @@ CoreAnimation的3D变换对应的4维变换矩阵，单独修改其中的任何�
 
 * [INTRODUCTION TO 3D DRAWING IN CORE ANIMATION](http://www.thinkandbuild.it/introduction-to-3d-drawing-in-core-animation-part-2/)
 * [Rotation matrix](http://en.wikipedia.org/wiki/Rotation_matrix)
+* [右手坐标系](http://baike.baidu.com/view/2939423.htm)
 
