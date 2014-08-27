@@ -89,6 +89,205 @@ $(document).bind('DOMNodeInserted', function(event) {
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan/">CoreAnimation系列之基础变换</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-27T12:21:50+08:00" pubdate data-updated="true">Aug 27<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+
+<p>从<a href="">CSDN</a>时代开始，就有用一系列文章聊聊CoreAnimation的打算，这算是本系列中的第三篇了。一直以来都是哪天心情好的时候来一篇，真怀疑等把整个系列写完的时候CoreAnimation是不是都要被Apple换掉了。</p>
+
+<p>本文打算介绍自己对基础变换的认识。</p>
+
+<h2>一、简介</h2>
+
+<p>CoreAnimation中基础变换包括平移（Translate）、缩放（Scale）、旋转（Rotate）。变换对于动画来说应该是最基础最核心的内容了</p>
+
+<h2>二、基础变换与数学</h2>
+
+<h4>1.两种坐标系</h4>
+
+<p>不管是平面几何还是立体几何，笛卡尔坐标系都是我们学习和研究几何的最基础工具。的笛卡尔坐标系主要分两种：左手坐标系和右手坐标系。</p>
+
+<p>对于三维坐标系，<a href="http://baike.baidu.com/view/2939423.htm">百度百科</a>上给出了右手坐标系的判断方法：在空间直角坐标系中，让右手拇指指向x轴的正方向，食指指向y轴的正方向，如果中指能指向z轴的正方向，则称这个坐标系为右手直角坐标系。同理左手直角三维坐标系。</p>
+
+<p>下图直观的表示了上述判断方法（图片来自<a href="http://outofmemory.cn/wr/?u=http%3A%2F%2Fwonderffee.github.io%2Fblog%2F2013%2F10%2F17%2Fa-simple-method-to-determine-positive-rotation-in-in-three-dimensional-space%2F">这里</a>）：</p>
+
+<p><img src="/images/article6/coordinate-system.jpg" alt="left-right hand coordinate" /></p>
+
+<p>由此判断，从中学到大学的课堂上我们接触的立体几何都是右手系。</p>
+
+<h4>2.基础变换的数学公式</h4>
+
+<p>一个点在立体空间内的变换可以通过数学公式表示，前面讲那么多左手和右手坐标系相关的内容是因为<code>不同坐标系下计算公式不同</code>。</p>
+
+<p>iOS中CoreAnimation的CALayer默认使用的是<code>左手坐标系</code>（使用哪种坐标系可以通过CALayer的<code>geometryFlipped</code>属性更改，该值默认为NO，设为YES时表示使用右手坐标系），因此本文后面所说的所有坐标系都是之左手坐标系。</p>
+
+<p>假如三维空间中有一个点(x0, y0, z0)，该点经过一定条件的基础变换，变换后的坐标为(x, y, z)，则针对平移、缩放、旋转三种基础变换，对应的坐标变换关系如下：</p>
+
+<h6>2.1 平移</h6>
+
+<p>平移对应的变化量为(δx, δy, δz)。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>x = x0 + δx;
+</span><span class='line'>y = y0 + δy;
+</span><span class='line'>z = z0 + δz;</span></code></pre></td></tr></table></div></figure>
+
+
+<h6>2.2 缩放</h6>
+
+<p>缩放对应的缩放倍数为(δx, δy, δz)。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>x = x0 * δx;
+</span><span class='line'>y = y0 * δy;
+</span><span class='line'>z = z0 * δz;</span></code></pre></td></tr></table></div></figure>
+
+
+<h6>2.3 旋转</h6>
+
+<p>旋转的方式有很多，比如简单点的绕X轴、Y轴、Z轴旋转，复杂点的还有绕任意三维向量旋转。为了简单起见，旋转以绕Z轴旋转了角度α（注意这里及后文所有涉及角度的地方都是弧度制）为例，对应的变化关系为：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>x = y0*sinα + x0*cosα;
+</span><span class='line'>y = y0*conα - x0*sinα;
+</span><span class='line'>z = z0;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其它的大家感兴趣可以自己推倒下。</p>
+
+<h2>三、变换矩阵</h2>
+
+<p>在CoreAnimation中用CATransform3D来表示三维齐次坐标变换矩阵，在齐次坐标中n维空间的坐标需要用n+1个元素的坐标元组来表示（详情还请自行Google），因此CATransform3D定义如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>struct CATransform3D
+</span><span class='line'>{
+</span><span class='line'>  CGFloat m11, m12, m13, m14;
+</span><span class='line'>  CGFloat m21, m22, m23, m24;
+</span><span class='line'>  CGFloat m31, m32, m33, m34;
+</span><span class='line'>  CGFloat m41, m42, m43, m44;
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为什么实现变换要有变换矩阵呢？</p>
+
+<p>以上文中旋转的计算公式为例，可以使用如下矩阵运算表示：</p>
+
+<p>$$\begin{bmatrix}
+cosα &amp; sinα &amp; 0 &amp; 0&#92;
+-sinα &amp; consα &amp; 0 &amp; 0&#92;
+0 &amp; 0 &amp; 1 &amp; 0&#92;
+0 &amp; 0 &amp; 0 &amp; 1&#92;
+\end{bmatrix}
+×
+\begin{bmatrix}
+x0 &#92;
+y0 &#92;
+z0 &#92;
+1 &#92;
+\end{bmatrix}$$</p>
+
+<p>其中的矩阵：</p>
+
+<p>$$\begin{bmatrix}
+cosα &amp; sinα &amp; 0 &amp; 0&#92;
+-sinα &amp; consα &amp; 0 &amp; 0&#92;
+0 &amp; 0 &amp; 1 &amp; 0&#92;
+0 &amp; 0 &amp; 0 &amp; 1&#92;
+\end{bmatrix}$$</p>
+
+<p>就被称为点(x0, y0, z0)绕Z轴旋转角度α的变换矩阵。</p>
+
+<p>由于放射变换可以通过矩阵变换来实现，而且看起来更加直观，因此变换公式通常都用对应的变换矩阵表示。</p>
+
+<p>在CoreAnimation中平移、缩放、旋转对应的变换矩阵为：</p>
+
+<h4>1. 平移</h4>
+
+<p>$$\begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; 0&#92;
+0 &amp; 1 &amp; 0 &amp; 0&#92;
+0 &amp; 0 &amp; 1 &amp; 0&#92;
+δx &amp; δy &amp; δz &amp; 1&#92;
+\end{bmatrix}$$</p>
+
+<p>其中δx、δy、δz表示三个坐标上对应的平移量。</p>
+
+<h4>2. 缩放</h4>
+
+<p>$$\begin{bmatrix}
+δx &amp; 0 &amp; 0 &amp; 0&#92;
+0 &amp; δy &amp; 0 &amp; 0&#92;
+0 &amp; 0 &amp; δz &amp; 0&#92;
+0 &amp; 0 &amp; 0 &amp; 1&#92;
+\end{bmatrix}$$</p>
+
+<p>其中δx、δy、δz表示三个坐标上对应的缩放倍数。</p>
+
+<h4>3. 旋转</h4>
+
+<p>$$\begin{bmatrix}
+cosα+(1-cosα)x^{2} &amp; (1-cosα)yx+sinα*z &amp; (1-cosα)zx-sinα*y &amp; 0&#92;
+(1-cosα)xy-sinα*z &amp; cosα+(1-cosα)y^{2} &amp; (1-cosα)zy+sinα*x &amp; 0&#92;
+(1-cosα)xz+sinα*y &amp; (1-cosα)yz-sinα*x &amp; cosα+(1-cosα)z^{2} &amp; 0&#92;
+0 &amp; 0 &amp; 0 &amp; 1&#92;
+\end{bmatrix}$$</p>
+
+<p>该矩阵为任意点(x, y, z)绕任意向量旋转旋转角度α的旋转向量。</p>
+
+<h2>四、CoreAnimation基础变换方法</h2>
+
+<h2>五、</h2>
+
+<h2>六、</h2>
+
+<p>变换的核心在于变换矩阵。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/08/08/ping-mu-xuan-zhuan-xue-xi-bi-ji/">iOS屏幕旋转学习笔记</a></h1>
     
     
@@ -588,57 +787,6 @@ $(document).bind('DOMNodeInserted', function(event) {
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/02/ru-he-pei-zhi-rang-ni-de-octopressbo-ke-zai-duo-tai-macshang-tong-shi-shi-yong/">让你的Octopress博客在多台Mac上同时使用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-02T14:28:35+08:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前阵子在公司电脑上配置好了Octopress博客，但是想在家里的Mac上使用，开始以为简单的将仓库clone就可以了，不幸的是我想的太简单。后来在网上看到了前面列出的第一篇文章，终于解决问题。</p>
-
-<h2>一、Octopress目录结构</h2>
-
-<p>Octopress的仓库目录下有两个branch，<code>source</code>和<code>master</code>。</p>
-
-<ol>
-<li><p><code>source</code>分支下保存Octopress的源代码，我们需要用他们生成博客，该分支保存在Octopress本地仓库的根目录下；</p></li>
-<li><p><code>master</code>分支下保存生成的博客内容，该分支在Octopress本地仓库的根目录下一个叫<code>_deploy</code>得文件夹中。该文件夹是以下划线开头的，会在执行<code>git push origin source</code>命令时被忽略，这也是为什么一个目录中能同时存在两个不同分支的文件夹的原因。</p></li>
-</ol>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/04/02/ru-he-pei-zhi-rang-ni-de-octopressbo-ke-zai-duo-tai-macshang-tong-shi-shi-yong/">阅读更多 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -675,6 +823,10 @@ $(document).bind('DOMNodeInserted', function(event) {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan/">CoreAnimation系列之基础变换</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/08/ping-mu-xuan-zhuan-xue-xi-bi-ji/">iOS屏幕旋转学习笔记</a>
       </li>
     
@@ -690,10 +842,6 @@ $(document).bind('DOMNodeInserted', function(event) {
         <a href="/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/">iOS进程间通信之CFMessagePort</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an/">iOS模拟器Custom Location被重置解决方案</a>
-      </li>
-    
   </ul>
 </section>
 <section>
@@ -704,7 +852,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 <li class='category'><a href='/blog/categories/wwdc2014/'>WWDC2014 (2)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>Xcode (1)</a></li>
 <li class='category'><a href='/blog/categories/xcodesettings/'>XcodeSettings (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (2)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (3)</a></li>
 <li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
 
   </ul>

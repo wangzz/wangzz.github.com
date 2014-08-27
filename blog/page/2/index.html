@@ -89,6 +89,57 @@ $(document).bind('DOMNodeInserted', function(event) {
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/04/02/ru-he-pei-zhi-rang-ni-de-octopressbo-ke-zai-duo-tai-macshang-tong-shi-shi-yong/">让你的Octopress博客在多台Mac上同时使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-02T14:28:35+08:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前阵子在公司电脑上配置好了Octopress博客，但是想在家里的Mac上使用，开始以为简单的将仓库clone就可以了，不幸的是我想的太简单。后来在网上看到了前面列出的第一篇文章，终于解决问题。</p>
+
+<h2>一、Octopress目录结构</h2>
+
+<p>Octopress的仓库目录下有两个branch，<code>source</code>和<code>master</code>。</p>
+
+<ol>
+<li><p><code>source</code>分支下保存Octopress的源代码，我们需要用他们生成博客，该分支保存在Octopress本地仓库的根目录下；</p></li>
+<li><p><code>master</code>分支下保存生成的博客内容，该分支在Octopress本地仓库的根目录下一个叫<code>_deploy</code>得文件夹中。该文件夹是以下划线开头的，会在执行<code>git push origin source</code>命令时被忽略，这也是为什么一个目录中能同时存在两个不同分支的文件夹的原因。</p></li>
+</ol>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/02/ru-he-pei-zhi-rang-ni-de-octopressbo-ke-zai-duo-tai-macshang-tong-shi-shi-yong/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/03/31/kai-shi-xie-blogla/">开始写blog啦</a></h1>
     
     
@@ -156,6 +207,10 @@ $(document).bind('DOMNodeInserted', function(event) {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan/">CoreAnimation系列之基础变换</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/08/ping-mu-xuan-zhuan-xue-xi-bi-ji/">iOS屏幕旋转学习笔记</a>
       </li>
     
@@ -171,10 +226,6 @@ $(document).bind('DOMNodeInserted', function(event) {
         <a href="/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/">iOS进程间通信之CFMessagePort</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an/">iOS模拟器Custom Location被重置解决方案</a>
-      </li>
-    
   </ul>
 </section>
 <section>
@@ -185,7 +236,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 <li class='category'><a href='/blog/categories/wwdc2014/'>WWDC2014 (2)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>Xcode (1)</a></li>
 <li class='category'><a href='/blog/categories/xcodesettings/'>XcodeSettings (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (2)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (3)</a></li>
 <li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
 
   </ul>

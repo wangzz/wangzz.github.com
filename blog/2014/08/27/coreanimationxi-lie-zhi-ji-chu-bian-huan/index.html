@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>CoreAnimation系列之基础变换 - 王中周的技术博客</title>
+  <meta name="author" content="王中周">
+
+  
+  <meta name="description" content="CoreAnimation系列之基础变换">
+  <meta name="keywords" content="CoreAnimation, iOS, CATransform3D, Translate, Scale, Rotate, 平移, 缩放, 旋转">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wangzz.github.io/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="王中周的技术博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+<script type="text/javascript">
+
+function addBlankTargetForLinks () {
+
+  $('a[href^="http"]').each(function(){
+
+      $(this).attr('target', '_blank');
+
+  });
+
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+
+  addBlankTargetForLinks();
+
+});
+
+</script>
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">王中周的技术博客</a></h1>
+  
+    <h2>Stay hungry,stay foolish.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:wangzz.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">CoreAnimation系列之基础变换</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-27T12:21:50+08:00" pubdate data-updated="true">Aug 27<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+
+<p>从<a href="">CSDN</a>时代开始，就有用一系列文章聊聊CoreAnimation的打算，这算是本系列中的第三篇了。一直以来都是哪天心情好的时候来一篇，真怀疑等把整个系列写完的时候CoreAnimation是不是都要被Apple换掉了。</p>
+
+<p>本文打算介绍自己对基础变换的认识。</p>
+
+<h2>一、简介</h2>
+
+<p>CoreAnimation中基础变换包括平移（Translate）、缩放（Scale）、旋转（Rotate）。变换对于动画来说应该是最基础最核心的内容了</p>
+
+<h2>二、基础变换与数学</h2>
+
+<h4>1.两种坐标系</h4>
+
+<p>不管是平面几何还是立体几何，笛卡尔坐标系都是我们学习和研究几何的最基础工具。的笛卡尔坐标系主要分两种：左手坐标系和右手坐标系。</p>
+
+<p>对于三维坐标系，<a href="http://baike.baidu.com/view/2939423.htm">百度百科</a>上给出了右手坐标系的判断方法：在空间直角坐标系中，让右手拇指指向x轴的正方向，食指指向y轴的正方向，如果中指能指向z轴的正方向，则称这个坐标系为右手直角坐标系。同理左手直角三维坐标系。</p>
+
+<p>下图直观的表示了上述判断方法（图片来自<a href="http://outofmemory.cn/wr/?u=http%3A%2F%2Fwonderffee.github.io%2Fblog%2F2013%2F10%2F17%2Fa-simple-method-to-determine-positive-rotation-in-in-three-dimensional-space%2F">这里</a>）：</p>
+
+<p><img src="/images/article6/coordinate-system.jpg" alt="left-right hand coordinate" /></p>
+
+<p>由此判断，从中学到大学的课堂上我们接触的立体几何都是右手系。</p>
+
+<h4>2.基础变换的数学公式</h4>
+
+<p>一个点在立体空间内的变换可以通过数学公式表示，前面讲那么多左手和右手坐标系相关的内容是因为<code>不同坐标系下计算公式不同</code>。</p>
+
+<p>iOS中CoreAnimation的CALayer默认使用的是<code>左手坐标系</code>（使用哪种坐标系可以通过CALayer的<code>geometryFlipped</code>属性更改，该值默认为NO，设为YES时表示使用右手坐标系），因此本文后面所说的所有坐标系都是之左手坐标系。</p>
+
+<p>假如三维空间中有一个点(x0, y0, z0)，该点经过一定条件的基础变换，变换后的坐标为(x, y, z)，则针对平移、缩放、旋转三种基础变换，对应的坐标变换关系如下：</p>
+
+<h6>2.1 平移</h6>
+
+<p>平移对应的变化量为(δx, δy, δz)。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>x = x0 + δx;
+</span><span class='line'>y = y0 + δy;
+</span><span class='line'>z = z0 + δz;</span></code></pre></td></tr></table></div></figure>
+
+
+<h6>2.2 缩放</h6>
+
+<p>缩放对应的缩放倍数为(δx, δy, δz)。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>x = x0 * δx;
+</span><span class='line'>y = y0 * δy;
+</span><span class='line'>z = z0 * δz;</span></code></pre></td></tr></table></div></figure>
+
+
+<h6>2.3 旋转</h6>
+
+<p>旋转的方式有很多，比如简单点的绕X轴、Y轴、Z轴旋转，复杂点的还有绕任意三维向量旋转。为了简单起见，旋转以绕Z轴旋转了角度α（注意这里及后文所有涉及角度的地方都是弧度制）为例，对应的变化关系为：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>x = y0*sinα + x0*cosα;
+</span><span class='line'>y = y0*conα - x0*sinα;
+</span><span class='line'>z = z0;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其它的大家感兴趣可以自己推倒下。</p>
+
+<h2>三、变换矩阵</h2>
+
+<p>在CoreAnimation中用CATransform3D来表示三维齐次坐标变换矩阵，在齐次坐标中n维空间的坐标需要用n+1个元素的坐标元组来表示（详情还请自行Google），因此CATransform3D定义如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>struct CATransform3D
+</span><span class='line'>{
+</span><span class='line'>  CGFloat m11, m12, m13, m14;
+</span><span class='line'>  CGFloat m21, m22, m23, m24;
+</span><span class='line'>  CGFloat m31, m32, m33, m34;
+</span><span class='line'>  CGFloat m41, m42, m43, m44;
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为什么实现变换要有变换矩阵呢？</p>
+
+<p>以上文中旋转的计算公式为例，可以使用如下矩阵运算表示：</p>
+
+<p>$$\begin{bmatrix}
+cosα &amp; sinα &amp; 0 &amp; 0&#92;
+-sinα &amp; consα &amp; 0 &amp; 0&#92;
+0 &amp; 0 &amp; 1 &amp; 0&#92;
+0 &amp; 0 &amp; 0 &amp; 1&#92;
+\end{bmatrix}
+×
+\begin{bmatrix}
+x0 &#92;
+y0 &#92;
+z0 &#92;
+1 &#92;
+\end{bmatrix}$$</p>
+
+<p>其中的矩阵：</p>
+
+<p>$$\begin{bmatrix}
+cosα &amp; sinα &amp; 0 &amp; 0&#92;
+-sinα &amp; consα &amp; 0 &amp; 0&#92;
+0 &amp; 0 &amp; 1 &amp; 0&#92;
+0 &amp; 0 &amp; 0 &amp; 1&#92;
+\end{bmatrix}$$</p>
+
+<p>就被称为点(x0, y0, z0)绕Z轴旋转角度α的变换矩阵。</p>
+
+<p>由于放射变换可以通过矩阵变换来实现，而且看起来更加直观，因此变换公式通常都用对应的变换矩阵表示。</p>
+
+<p>在CoreAnimation中平移、缩放、旋转对应的变换矩阵为：</p>
+
+<h4>1. 平移</h4>
+
+<p>$$\begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; 0&#92;
+0 &amp; 1 &amp; 0 &amp; 0&#92;
+0 &amp; 0 &amp; 1 &amp; 0&#92;
+δx &amp; δy &amp; δz &amp; 1&#92;
+\end{bmatrix}$$</p>
+
+<p>其中δx、δy、δz表示三个坐标上对应的平移量。</p>
+
+<h4>2. 缩放</h4>
+
+<p>$$\begin{bmatrix}
+δx &amp; 0 &amp; 0 &amp; 0&#92;
+0 &amp; δy &amp; 0 &amp; 0&#92;
+0 &amp; 0 &amp; δz &amp; 0&#92;
+0 &amp; 0 &amp; 0 &amp; 1&#92;
+\end{bmatrix}$$</p>
+
+<p>其中δx、δy、δz表示三个坐标上对应的缩放倍数。</p>
+
+<h4>3. 旋转</h4>
+
+<p>$$\begin{bmatrix}
+cosα+(1-cosα)x^{2} &amp; (1-cosα)yx+sinα*z &amp; (1-cosα)zx-sinα*y &amp; 0&#92;
+(1-cosα)xy-sinα*z &amp; cosα+(1-cosα)y^{2} &amp; (1-cosα)zy+sinα*x &amp; 0&#92;
+(1-cosα)xz+sinα*y &amp; (1-cosα)yz-sinα*x &amp; cosα+(1-cosα)z^{2} &amp; 0&#92;
+0 &amp; 0 &amp; 0 &amp; 1&#92;
+\end{bmatrix}$$</p>
+
+<p>该矩阵为任意点(x, y, z)绕任意向量旋转旋转角度α的旋转向量。</p>
+
+<h2>四、CoreAnimation基础变换方法</h2>
+
+<h2>五、</h2>
+
+<h2>六、</h2>
+
+<p>变换的核心在于变换矩阵。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">王中周</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-27T12:21:50+08:00" pubdate data-updated="true">Aug 27<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394012284741689" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<!-- UJian Button BEGIN -->
+	<div class="ujian-hook"></div>
+	<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js"></script>
+<!-- UJian Button END -->
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js"></script>
+<!-- UY END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/08/ping-mu-xuan-zhuan-xue-xi-bi-ji/" title="Previous Post: iOS屏幕旋转学习笔记">&laquo; iOS屏幕旋转学习笔记</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>博主简介</h1>
+<li>
+<p>
+	<span style="color:#222222;font-family:inherit;font-size:18px;font-style:inherit;font-weight:inherit;line-height:1.5;">曾就职于高阳科技、北京拉手网，现在高德地图；</span>
+</p>
+<p>
+	<span style="font-family:inherit;font-style:inherit;font-weight:inherit;color:#222222;font-size:18px;line-height:1.5;">早期在<a href="http://blog.csdn.net/wzzvictory" target="_blank"><span style="color:#E53333;">CSND上写博客</span></a></span>
+</p>
+</li>
+</section>
+<section>
+    <h1>新浪微博</h1>
+    <ul id="weibo">
+    <li>
+    	
+<iframe width="100%" height="130" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1734555471&verifier=6c6f0bb3&dpc=1"></iframe>
+
+</li>
+    </ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan/">CoreAnimation系列之基础变换</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/08/ping-mu-xuan-zhuan-xue-xi-bi-ji/">iOS屏幕旋转学习笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/23/wwdc2014zhi-app-extensionsxue-xi-bi-ji/">WWDC2014之App Extensions学习笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/wwdc2014zhi-iosshi-yong-dong-tai-ku/">WWDC2014之iOS使用动态库</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/">iOS进程间通信之CFMessagePort</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/wwdc2014/'>WWDC2014 (2)</a></li>
+<li class='category'><a href='/blog/categories/xcode/'>Xcode (1)</a></li>
+<li class='category'><a href='/blog/categories/xcodesettings/'>XcodeSettings (1)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (3)</a></li>
+<li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
+
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div style="text-align:center;">
+	<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a>
+</div>
+<div style="text-align:center;">
+	<span style="line-height:1.5;">This work is licensed under a </span><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a><span style="line-height:1.5;">.</span>
+</div>
+<p style="text-align:center;">
+	<span style="line-height:1;">Copyright &copy; 2014 - 王中周 - </span><span class="credit"><span style="line-height:1;">Powered by </span><a href="http://octopress.org"><span style="line-height:1;">Octopress</span></a></span> 
+</p>
+
+<p>
+<script type="text/javascript">
+    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F9975063b89c363c67eac651132751ee6' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</p></footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

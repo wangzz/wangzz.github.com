@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-08-21T11:47:30+08:00</updated>
+  <updated>2014-08-27T12:25:54+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -12,6 +12,165 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[CoreAnimation系列之基础变换]]></title>
+    <link href="http://wangzz.github.io/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan/"/>
+    <updated>2014-08-27T12:21:50+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan</id>
+    <content type="html"><![CDATA[<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+
+<p>从<a href="">CSDN</a>时代开始，就有用一系列文章聊聊CoreAnimation的打算，这算是本系列中的第三篇了。一直以来都是哪天心情好的时候来一篇，真怀疑等把整个系列写完的时候CoreAnimation是不是都要被Apple换掉了。</p>
+
+<p>本文打算介绍自己对基础变换的认识。</p>
+
+<h2>一、简介</h2>
+
+<p>CoreAnimation中基础变换包括平移（Translate）、缩放（Scale）、旋转（Rotate）。变换对于动画来说应该是最基础最核心的内容了</p>
+
+<h2>二、基础变换与数学</h2>
+
+<h4>1.两种坐标系</h4>
+
+<p>不管是平面几何还是立体几何，笛卡尔坐标系都是我们学习和研究几何的最基础工具。的笛卡尔坐标系主要分两种：左手坐标系和右手坐标系。</p>
+
+<p>对于三维坐标系，<a href="http://baike.baidu.com/view/2939423.htm">百度百科</a>上给出了右手坐标系的判断方法：在空间直角坐标系中，让右手拇指指向x轴的正方向，食指指向y轴的正方向，如果中指能指向z轴的正方向，则称这个坐标系为右手直角坐标系。同理左手直角三维坐标系。</p>
+
+<p>下图直观的表示了上述判断方法（图片来自<a href="http://outofmemory.cn/wr/?u=http%3A%2F%2Fwonderffee.github.io%2Fblog%2F2013%2F10%2F17%2Fa-simple-method-to-determine-positive-rotation-in-in-three-dimensional-space%2F">这里</a>）：</p>
+
+<p><img src="/images/article6/coordinate-system.jpg" alt="left-right hand coordinate" /></p>
+
+<p>由此判断，从中学到大学的课堂上我们接触的立体几何都是右手系。</p>
+
+<h4>2.基础变换的数学公式</h4>
+
+<p>一个点在立体空间内的变换可以通过数学公式表示，前面讲那么多左手和右手坐标系相关的内容是因为<code>不同坐标系下计算公式不同</code>。</p>
+
+<p>iOS中CoreAnimation的CALayer默认使用的是<code>左手坐标系</code>（使用哪种坐标系可以通过CALayer的<code>geometryFlipped</code>属性更改，该值默认为NO，设为YES时表示使用右手坐标系），因此本文后面所说的所有坐标系都是之左手坐标系。</p>
+
+<p>假如三维空间中有一个点(x0, y0, z0)，该点经过一定条件的基础变换，变换后的坐标为(x, y, z)，则针对平移、缩放、旋转三种基础变换，对应的坐标变换关系如下：</p>
+
+<h6>2.1 平移</h6>
+
+<p>平移对应的变化量为(δx, δy, δz)。</p>
+
+<p><code>
+x = x0 + δx;
+y = y0 + δy;
+z = z0 + δz;
+</code></p>
+
+<h6>2.2 缩放</h6>
+
+<p>缩放对应的缩放倍数为(δx, δy, δz)。</p>
+
+<p><code>
+x = x0 * δx;
+y = y0 * δy;
+z = z0 * δz;
+</code></p>
+
+<h6>2.3 旋转</h6>
+
+<p>旋转的方式有很多，比如简单点的绕X轴、Y轴、Z轴旋转，复杂点的还有绕任意三维向量旋转。为了简单起见，旋转以绕Z轴旋转了角度α（注意这里及后文所有涉及角度的地方都是弧度制）为例，对应的变化关系为：</p>
+
+<p><code>
+x = y0*sinα + x0*cosα;
+y = y0*conα - x0*sinα;
+z = z0;
+</code></p>
+
+<p>其它的大家感兴趣可以自己推倒下。</p>
+
+<h2>三、变换矩阵</h2>
+
+<p>在CoreAnimation中用CATransform3D来表示三维齐次坐标变换矩阵，在齐次坐标中n维空间的坐标需要用n+1个元素的坐标元组来表示（详情还请自行Google），因此CATransform3D定义如下：</p>
+
+<p><code>
+struct CATransform3D
+{
+  CGFloat m11, m12, m13, m14;
+  CGFloat m21, m22, m23, m24;
+  CGFloat m31, m32, m33, m34;
+  CGFloat m41, m42, m43, m44;
+};
+</code>
+为什么实现变换要有变换矩阵呢？</p>
+
+<p>以上文中旋转的计算公式为例，可以使用如下矩阵运算表示：</p>
+
+<p>$$\begin{bmatrix}
+cosα &amp; sinα &amp; 0 &amp; 0\\
+-sinα &amp; consα &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 1 &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 1\\
+\end{bmatrix}
+×
+\begin{bmatrix}
+x0 \\
+y0 \\
+z0 \\
+1 \\
+\end{bmatrix}$$</p>
+
+<p>其中的矩阵：</p>
+
+<p>$$\begin{bmatrix}
+cosα &amp; sinα &amp; 0 &amp; 0\\
+-sinα &amp; consα &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 1 &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 1\\
+\end{bmatrix}$$</p>
+
+<p>就被称为点(x0, y0, z0)绕Z轴旋转角度α的变换矩阵。</p>
+
+<p>由于放射变换可以通过矩阵变换来实现，而且看起来更加直观，因此变换公式通常都用对应的变换矩阵表示。</p>
+
+<p>在CoreAnimation中平移、缩放、旋转对应的变换矩阵为：</p>
+
+<h4>1. 平移</h4>
+
+<p>$$\begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; 1 &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 1 &amp; 0\\
+δx &amp; δy &amp; δz &amp; 1\\
+\end{bmatrix}$$</p>
+
+<p>其中δx、δy、δz表示三个坐标上对应的平移量。</p>
+
+<h4>2. 缩放</h4>
+
+<p>$$\begin{bmatrix}
+δx &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; δy &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; δz &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 1\\
+\end{bmatrix}$$</p>
+
+<p>其中δx、δy、δz表示三个坐标上对应的缩放倍数。</p>
+
+<h4>3. 旋转</h4>
+
+<p>$$\begin{bmatrix}
+cosα+(1-cosα)x^{2} &amp; (1-cosα)yx+sinα*z &amp; (1-cosα)zx-sinα*y &amp; 0\\
+(1-cosα)xy-sinα*z &amp; cosα+(1-cosα)y^{2} &amp; (1-cosα)zy+sinα*x &amp; 0\\
+(1-cosα)xz+sinα*y &amp; (1-cosα)yz-sinα*x &amp; cosα+(1-cosα)z^{2} &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 1\\
+\end{bmatrix}$$</p>
+
+<p>该矩阵为任意点(x, y, z)绕任意向量旋转旋转角度α的旋转向量。</p>
+
+<h2>四、CoreAnimation基础变换方法</h2>
+
+<h2>五、</h2>
+
+<h2>六、</h2>
+
+<p>变换的核心在于变换矩阵。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS屏幕旋转学习笔记]]></title>
