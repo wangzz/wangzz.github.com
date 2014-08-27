@@ -93,30 +93,9 @@ struct CATransform3D
 
 以上文中旋转的计算公式为例，可以使用如下矩阵运算表示：
 
-$$\begin{bmatrix}
-cosα & sinα & 0 & 0 \\\
--sinα & consα & 0 & 0 \\\
-0 & 0 & 1 & 0 \\\
-0 & 0 & 0 & 1 \\\
-\end{bmatrix}
-×
-\begin{bmatrix}
-x0 \\\
-y0 \\\
-z0 \\\
-1 \\\
-\end{bmatrix}$$
-
 ![left-right hand coordinate](/images/article6/matrix1.png)
 
 其中的矩阵：
-
-$$\begin{bmatrix}
-cosα & sinα & 0 & 0\\\
--sinα & consα & 0 & 0\\\
-0 & 0 & 1 & 0\\\
-0 & 0 & 0 & 1\\\
-\end{bmatrix}$$
 
 ![left-right hand coordinate](/images/article6/matrix2.png)
 
@@ -128,38 +107,17 @@ cosα & sinα & 0 & 0\\\
 
 ####1. 平移
 
-$$\begin{bmatrix}
-1 & 0 & 0 & 0\\\
-0 & 1 & 0 & 0\\\
-0 & 0 & 1 & 0\\\
-δx & δy & δz & 1\\\
-\end{bmatrix}$$
-
 ![left-right hand coordinate](/images/article6/matrix3.png)
 
 其中δx、δy、δz表示三个坐标上对应的平移量。
 
 ####2. 缩放
 
-$$\begin{bmatrix}
-δx & 0 & 0 & 0\\\
-0 & δy & 0 & 0\\\
-0 & 0 & δz & 0\\\
-0 & 0 & 0 & 1\\\
-\end{bmatrix}$$
-
 ![left-right hand coordinate](/images/article6/matrix4.png)
 
 其中δx、δy、δz表示三个坐标上对应的缩放倍数。
 
 ####3. 旋转
-
-$$\begin{bmatrix}
-cosα+(1-cosα)x^{2} & (1-cosα)yx+sinα\*z & (1-cosα)zx-sinα\*y & 0\\\
-(1-cosα)xy-sinα\*z & cosα+(1-cosα)y^{2} & (1-cosα)zy+sinα\*x & 0\\\
-(1-cosα)xz+sinα\*y & (1-cosα)yz-sinα\*x & cosα+(1-cosα)z^{2} & 0\\\
-0 & 0 & 0 & 1\\\
-\end{bmatrix}$$
 
 ![left-right hand coordinate](/images/article6/matrix5.png)
 
