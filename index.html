@@ -208,10 +208,10 @@ $(document).bind('DOMNodeInserted', function(event) {
 <p>以上文中旋转的计算公式为例，可以使用如下矩阵运算表示：</p>
 
 <p>$$\begin{bmatrix}
-cosα &amp; sinα &amp; 0 &amp; 0&#92;
--sinα &amp; consα &amp; 0 &amp; 0&#92;
-0 &amp; 0 &amp; 1 &amp; 0&#92;
-0 &amp; 0 &amp; 0 &amp; 1&#92;
+cosα &amp; sinα &amp; 0 &amp; 0 &#92;
+-sinα &amp; consα &amp; 0 &amp; 0 &#92;
+0 &amp; 0 &amp; 1 &amp; 0 &#92;
+0 &amp; 0 &amp; 0 &amp; 1 &#92;
 \end{bmatrix}
 ×
 \begin{bmatrix}
@@ -221,6 +221,8 @@ z0 &#92;
 1 &#92;
 \end{bmatrix}$$</p>
 
+<p><img src="/images/article6/matrix1.png" alt="left-right hand coordinate" /></p>
+
 <p>其中的矩阵：</p>
 
 <p>$$\begin{bmatrix}
@@ -229,6 +231,8 @@ cosα &amp; sinα &amp; 0 &amp; 0&#92;
 0 &amp; 0 &amp; 1 &amp; 0&#92;
 0 &amp; 0 &amp; 0 &amp; 1&#92;
 \end{bmatrix}$$</p>
+
+<p><img src="/images/article6/matrix2.png" alt="left-right hand coordinate" /></p>
 
 <p>就被称为点(x0, y0, z0)绕Z轴旋转角度α的变换矩阵。</p>
 
@@ -245,6 +249,8 @@ cosα &amp; sinα &amp; 0 &amp; 0&#92;
 δx &amp; δy &amp; δz &amp; 1&#92;
 \end{bmatrix}$$</p>
 
+<p><img src="/images/article6/matrix3.png" alt="left-right hand coordinate" /></p>
+
 <p>其中δx、δy、δz表示三个坐标上对应的平移量。</p>
 
 <h4>2. 缩放</h4>
@@ -256,6 +262,8 @@ cosα &amp; sinα &amp; 0 &amp; 0&#92;
 0 &amp; 0 &amp; 0 &amp; 1&#92;
 \end{bmatrix}$$</p>
 
+<p><img src="/images/article6/matrix4.png" alt="left-right hand coordinate" /></p>
+
 <p>其中δx、δy、δz表示三个坐标上对应的缩放倍数。</p>
 
 <h4>3. 旋转</h4>
@@ -266,6 +274,8 @@ cosα+(1-cosα)x^{2} &amp; (1-cosα)yx+sinα*z &amp; (1-cosα)zx-sinα*y &amp; 0
 (1-cosα)xz+sinα*y &amp; (1-cosα)yz-sinα*x &amp; cosα+(1-cosα)z^{2} &amp; 0&#92;
 0 &amp; 0 &amp; 0 &amp; 1&#92;
 \end{bmatrix}$$</p>
+
+<p><img src="/images/article6/matrix5.png" alt="left-right hand coordinate" /></p>
 
 <p>该矩阵为任意点(x, y, z)绕任意向量旋转旋转角度α的旋转向量。</p>
 
