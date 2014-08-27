@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-08-27T16:22:49+08:00</updated>
+  <updated>2014-08-27T16:30:35+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -281,6 +281,7 @@ CATransform3D CATransform3DConcat (CATransform3D a, CATransform3D b)
 <ul>
 <li><a href="http://www.thinkandbuild.it/introduction-to-3d-drawing-in-core-animation-part-2/">INTRODUCTION TO 3D DRAWING IN CORE ANIMATION</a></li>
 <li><a href="http://en.wikipedia.org/wiki/Rotation_matrix">Rotation matrix</a></li>
+<li><a href="http://baike.baidu.com/view/2939423.htm">右手坐标系</a></li>
 </ul>
 
 ]]></content>
