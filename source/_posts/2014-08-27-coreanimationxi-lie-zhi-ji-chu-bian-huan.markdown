@@ -22,6 +22,8 @@ description: CoreAnimation系列之基础变换
 
 对于三维坐标系，[百度百科](http://baike.baidu.com/view/2939423.htm)上给出了右手坐标系的判断方法：在空间直角坐标系中，让右手拇指指向x轴的正方向，食指指向y轴的正方向，如果中指能指向z轴的正方向，则称这个坐标系为右手直角坐标系。同理左手直角三维坐标系。
 
+<!-- more -->
+
 下图直观的表示了上述判断方法（图片来自[这里](http://outofmemory.cn/wr/?u=http%3A%2F%2Fwonderffee.github.io%2Fblog%2F2013%2F10%2F17%2Fa-simple-method-to-determine-positive-rotation-in-in-three-dimensional-space%2F)）：
 
 ![left-right hand coordinate](/images/article6/coordinate-system.jpg)
@@ -218,7 +220,7 @@ struct CATransform3D
 }
 ```
 
-demo使用随意生成的参数`matrixOrigin`模拟一个CALayer的初始`transform`属性值，然后使用同一组变换参数，分别通过系统函数和自定义方法对原始`transform`做变换，然后对比变换结果。最终的计算得到的变换矩阵可以通过log的方式打印出来，同时能在界面上做直观的展示。
+demo使用随意生成的参数`matrixOrigin`模拟一个CALayer的初始`transform`属性值，然后使用同一组变换参数，分别通过系统函数和自定义方法对原始`transform`做变换，然后对比变换结果。最终的计算得到的变换矩阵可以通过log的方式打印出来，也可以在界面上做直观的展示。
 
 平移和缩放变换矩阵的验证方式和旋转类似。
 
