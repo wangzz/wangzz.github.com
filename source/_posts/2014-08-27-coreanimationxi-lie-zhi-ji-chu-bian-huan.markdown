@@ -10,18 +10,11 @@ description: CoreAnimation系列之基础变换
 
 ---
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
-
-从[CSDN]()时代开始，就有用一系列文章聊聊CoreAnimation的打算，这算是本系列中的第三篇了。一直以来都是哪天心情好的时候来一篇，真怀疑等把整个系列写完的时候CoreAnimation是不是都要被Apple换掉了。
+从[CSDN](http://blog.csdn.net/wzzvictory)时代开始，就有用一系列文章聊聊CoreAnimation的打算，这算是本系列中的第三篇了。一直以来都是哪天心情好的时候来一篇，真怀疑等把整个系列写完的时候CoreAnimation是不是都要被Apple换掉了。
 
 本文打算介绍自己对基础变换的认识。
 
-##一、简介
-
-CoreAnimation中基础变换包括平移（Translate）、缩放（Scale）、旋转（Rotate）。变换对于动画来说应该是最基础最核心的内容了
-
-
-##二、基础变换与数学
+##一、基础变换与数学
 
 ####1.两种坐标系
 
@@ -41,7 +34,7 @@ CoreAnimation中基础变换包括平移（Translate）、缩放（Scale）、�
 
 iOS中CoreAnimation的CALayer默认使用的是`左手坐标系`（使用哪种坐标系可以通过CALayer的`geometryFlipped`属性更改，该值默认为NO，设为YES时表示使用右手坐标系），因此本文后面所说的所有坐标系都是之左手坐标系。
 
-假如三维空间中有一个点(x0, y0, z0)，该点经过一定条件的基础变换，变换后的坐标为(x, y, z)，则针对平移、缩放、旋转三种基础变换，对应的坐标变换关系如下：
+变换对于动画来说应该是最基础最核心的内容了，CoreAnimation中基础变换包括平移（Translate）、缩放（Scale）、旋转（Rotate）三种。假如三维空间中有一个点(x0, y0, z0)，该点经过一定条件的基础变换，变换后的坐标为(x, y, z)，则针对平移、缩放、旋转三种基础变换，对应的坐标变换关系如下：
 
 ######2.1 平移
 
@@ -76,7 +69,7 @@ z = z0;
 其它的大家感兴趣可以自己推倒下。
 
 
-##三、变换矩阵
+##二、变换矩阵
 
 在CoreAnimation中用CATransform3D来表示三维齐次坐标变换矩阵，在齐次坐标中n维空间的坐标需要用n+1个元素的坐标元组来表示（详情还请自行Google），因此CATransform3D定义如下：
 
@@ -123,15 +116,135 @@ struct CATransform3D
 
 该矩阵为任意点(x, y, z)绕任意向量旋转旋转角度α的旋转向量。
 
+##三、验证
 
-##四、CoreAnimation基础变换方法
+前面总结了CoreAnimation中三种基础变换对应的变换矩阵，这样以来我们就能自己对任意的矩阵做变换了。平移、缩放、旋转对应的变换矩阵计算方法如下：
+
+####1. 平移
+
+```objective-c
+- (CATransform3D)translateWithMatrix:(CATransform3D)t x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z
+{
+    CATransform3D matrixTransform = CATransform3DIdentity;
+    matrixTransform.m41 = x;
+    matrixTransform.m42 = y;
+    matrixTransform.m43 = z;
+    
+    return CATransform3DConcat(matrixTransform, t);
+}
+```
+
+该方法根据平移变换矩阵的计算方式，得到平移参数(x, y, z)对应的变换矩阵，然后和原始矩阵相乘，得到最终的变换矩阵。
+
+####2. 缩放
+
+```objective-c
+- (CATransform3D)scaleWithMatrix:(CATransform3D)t x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z
+{
+    CATransform3D matrixTransform = CATransform3DIdentity;
+    matrixTransform.m11 = x;
+    matrixTransform.m22 = y;
+    matrixTransform.m33 = z;
+    
+    return CATransform3DConcat(matrixTransform, t);
+}
+```
+
+该方法根据缩放变换矩阵的计算方式，得到缩放参数(x, y, z)对应的变换矩阵，然后和原始矩阵相乘，得到最终的变换矩阵。
+
+####3. 旋转
+
+```objective-c
+- (CATransform3D)rotateWithMatrix:(CATransform3D)t angle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z
+{
+    CGFloat unitValue = sqrtf(powf(x, 2)+powf(y, 2)+powf(z, 2));
+    CGFloat x0 = x/unitValue;
+    CGFloat y0 = y/unitValue;
+    CGFloat z0 = z/unitValue;
+    
+    CATransform3D matrixTransform = CATransform3DIdentity;
+    matrixTransform.m11 = powf(x0, 2)*(1-cosf(angle))+cosf(angle);
+    matrixTransform.m12 = x0*y0*(1-cosf(angle))+z0*sinf(angle);
+    matrixTransform.m13 = x0*z0*(1-cosf(angle))-y0*sinf(angle);
+    
+    matrixTransform.m21 = x0*y0*(1-cosf(angle))-z0*sinf(angle);
+    matrixTransform.m22 = powf(y0, 2)*(1-cosf(angle))+cosf(angle);
+    matrixTransform.m23 = y0*z0*(1-cosf(angle))+x0*sinf(angle);
+    
+    matrixTransform.m31 = x0*z0*(1-cosf(angle))+y0*sinf(angle);
+    matrixTransform.m32 = y0*z0*(1-cosf(angle))-x0*sinf(angle);
+    matrixTransform.m33 = powf(z0, 2)*(1-cosf(angle))+cosf(angle);
+    
+    return CATransform3DConcat(matrixTransform, t);
+}
+```
+
+该方法根据旋转变换矩阵的计算方式，得到旋转参数(angle, x, y, z)对应的变换矩阵，然后和原始矩阵相乘，得到最终的变换矩阵。
 
 
-##五、
+####4. demo
 
-##六、
+以旋转变换demo为例：
 
+```objective-c
+- (void)logTransform:(CATransform3D)t
+{
+    NSLog(@"***************************");
+    NSLog(@"%f,%f,%f,%f",t.m11,t.m12,t.m13,t.m14);
+    NSLog(@"%f,%f,%f,%f",t.m21,t.m22,t.m23,t.m24);
+    NSLog(@"%f,%f,%f,%f",t.m31,t.m32,t.m33,t.m34);
+    NSLog(@"%f,%f,%f,%f",t.m41,t.m42,t.m43,t.m44);
+}
 
+- (IBAction)onRotateButtonAction:(id)sender
+{
+    //Rotate
+    
+    //随意的原始矩阵
+    CATransform3D matrixOrigin = CATransform3DMakeRotation(1, 4, 3, 6);
+    
+    CGFloat x = 2, y = 3, z = 4; //旋转向量（2,3,4）
+    CGFloat angle = 30.0f * M_PI / 180.0f; //旋转角度30°，计算对应的弧度
+    
+    //通过系统函数计算变换矩阵
+    CATransform3D matrixSystem = CATransform3DRotate(matrixOrigin, angle, x, y, z); 
+    systemLayer.transform = matrixSystem;
+    [self logTransform:matrixSystem];
+    
+    //自定义方法计算3D旋转矩阵
+    CATransform3D matrixCalculate = [self rotateWithMatrix:matrixOrigin angle:angle x:x y:y z:z]; 
+    customLayer.transform = matrixCalculate;
+    [self logTransform:matrixCalculate];
+}
+```
 
-变换的核心在于变换矩阵。
+demo使用随意生成的参数`matrixOrigin`模拟一个CALayer的初始`transform`属性值，然后使用同一组变换参数，分别通过系统函数和自定义方法对原始`transform`做变换，然后对比变换结果。最终的计算得到的变换矩阵可以通过log的方式打印出来，同时能在界面上做直观的展示。
+
+平移和缩放变换矩阵的验证方式和旋转类似。
+
+经过对比发现两种计算方式得到的最终变换矩阵是完全相同的，这进一步验证了CoreAnimation中变换矩阵的计算方式。
+
+完整的[demo](https://github.com/wangzz/Demo/tree/master/CoreAnimationDemo)放到了github上，欢迎大家下载。
+
+##四、说明
+
+* 变换矩阵可以组合
+
+可以同时对CALayer进行多种变换，比如同时缩放和旋转，直接通过矩阵相乘得到组合变换的变换矩阵。CoreAnimation提供了变换矩阵组合的方法：
+
+```objective-c
+CATransform3D CATransform3DConcat (CATransform3D a, CATransform3D b)
+```
+需要注意的是，通常情况下矩阵乘法不支持交换律，因此两个矩阵a、b的顺序不能交换。
+
+* 最好不要手动修改变换矩阵的值
+
+CoreAnimation的3D变换对应的4维变换矩阵，单独修改其中的任何一个值都可能带来不可控的变换结果，因此不建议单独手动修改变换矩阵，而是通过基础变换或者基础变换组合的方式修改。
+
+* 理解有误的地方还望大家指出。
+
+##五、参考文档
+
+* [INTRODUCTION TO 3D DRAWING IN CORE ANIMATION](http://www.thinkandbuild.it/introduction-to-3d-drawing-in-core-animation-part-2/)
+* [Rotation matrix](http://en.wikipedia.org/wiki/Rotation_matrix)
 
