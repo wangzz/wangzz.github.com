@@ -10,7 +10,7 @@ description: iPhone屏幕知识点解析
 
 ---
 
-<img src="/images/article7/iphone5-6.jpg" width="552" height="419">
+![iphone5-6](/images/article7/iphone5-6.jpg)
 
 ##一、屏幕相关知识点
 
