@@ -70,6 +70,10 @@ Edite Scheme -->  Options -->  Default Location -->  Add GPX File to Project
 
 不过这种做法有个缺点，我在实际使用的时候发现设置完`Default Location`以后，真机的位置信息也会被更改成设置的位置！！！还请记得在软件发布时删除该设置项。
 
+##2014年10月1日更新
+
+好消息，在最新版的`Xcode6.0.1`中，已经修复这个问题了，每次重新调试时`Custom Location`再也不会被更改了！
+
 
 ##参考文档
 
