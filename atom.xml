@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-09-29T16:08:08+08:00</updated>
+  <updated>2014-10-01T11:51:25+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -2222,6 +2222,10 @@
 <p>即可将刚才生成并下载到本地的GPX文件添加到工程里。从此以后不管是重新run程序还是重启模拟器都可以在程序启动的时候定到位。</p>
 
 <p>不过这种做法有个缺点，我在实际使用的时候发现设置完<code>Default Location</code>以后，真机的位置信息也会被更改成设置的位置！！！还请记得在软件发布时删除该设置项。</p>
+
+<h2>2014年10月1日更新</h2>
+
+<p>好消息，在最新版的<code>Xcode6.0.1</code>中，已经修复这个问题了，每次重新调试时<code>Custom Location</code>再也不会被更改了！</p>
 
 <h2>参考文档</h2>
 
