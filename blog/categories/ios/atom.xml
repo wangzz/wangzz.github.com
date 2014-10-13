@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-10-13T16:45:01+08:00</updated>
+  <updated>2014-10-13T17:01:29+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -325,7 +325,7 @@
 <h4>__block关键字</h4>
 
 <ul>
-<li>block内修改外部变量</li>
+<li>block内修改外部定义变量</li>
 </ul>
 
 
@@ -350,10 +350,8 @@ self.expireCostLabel.completionBlock = ^(){</p>
 
 <p>在ARC下的block中使用__block关键字修饰的对象时，block会retain该对象；而在MRC下却不会retain。关于这点在官方文档<a href="https://developer.apple.com/library/ios/releasenotes/objectivec/rn-transitioningtoarc/introduction/introduction.html">Transitioning to ARC Release Notes</a>中有详细的描述：</p>
 
-<p><code>
-In manual reference counting mode, __block id x; has the effect of not retaining x.
-In ARC mode, __block id x; defaults to retaining x (just like all other values).
-</code></p>
+<blockquote><p>In manual reference counting mode, <strong>block id x; has the effect of not retaining x.
+In ARC mode, </strong>block id x; defaults to retaining x (just like all other values).</p></blockquote>
 
 <p>下面的代码不管在MRC还是ARC中<code>myController</code>对象都是有内存泄露的：</p>
 
@@ -519,12 +517,7 @@ NSLog(@"%@",ocString);
 
 <p>对于IBOutLet属性应该用strong还是weak一直都有疑惑。关于这一点<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/LoadingResources/CocoaNibs/CocoaNibs.html#//apple_ref/doc/uid/10000051i-CH4-SW6">官方文档</a>是这么介绍的：</p>
 
-<blockquote><blockquote><blockquote><p>From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib >>>file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak, because:</p></blockquote></blockquote></blockquote>
-
-<p>Outlets that you create to subviews of a view controller’s view or a window controller’s window, for example, are arbitrary references between objects that do not imply ownership.
-The strong outlets are frequently specified by framework classes (for example, UIViewController’s view outlet, or NSWindowController’s window outlet).</p>
-
-<blockquote><blockquote><blockquote></blockquote></blockquote></blockquote>
+<blockquote><p>From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib >>>file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak.</p></blockquote>
 
 <p>那么长的一段英文想说的是：</p>
 

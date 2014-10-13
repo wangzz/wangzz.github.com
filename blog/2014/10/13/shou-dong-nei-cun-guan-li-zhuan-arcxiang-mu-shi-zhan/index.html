@@ -417,7 +417,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 <h4>__block关键字</h4>
 
 <ul>
-<li>block内修改外部变量</li>
+<li>block内修改外部定义变量</li>
 </ul>
 
 
@@ -443,12 +443,8 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>在ARC下的block中使用__block关键字修饰的对象时，block会retain该对象；而在MRC下却不会retain。关于这点在官方文档<a href="https://developer.apple.com/library/ios/releasenotes/objectivec/rn-transitioningtoarc/introduction/introduction.html">Transitioning to ARC Release Notes</a>中有详细的描述：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">In</span> <span class="n">manual</span> <span class="n">reference</span> <span class="n">counting</span> <span class="n">mode</span><span class="p">,</span> <span class="n">__block</span> <span class="kt">id</span> <span class="n">x</span><span class="p">;</span> <span class="n">has</span> <span class="n">the</span> <span class="n">effect</span> <span class="n">of</span> <span class="n">not</span> <span class="n">retaining</span> <span class="n">x</span><span class="p">.</span>
-</span><span class='line'><span class="n">In</span> <span class="n">ARC</span> <span class="n">mode</span><span class="p">,</span> <span class="n">__block</span> <span class="kt">id</span> <span class="n">x</span><span class="p">;</span> <span class="n">defaults</span> <span class="n">to</span> <span class="n">retaining</span> <span class="n">x</span> <span class="p">(</span><span class="n">just</span> <span class="n">like</span> <span class="n">all</span> <span class="n">other</span> <span class="n">values</span><span class="p">).</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<blockquote><p>In manual reference counting mode, <strong>block id x; has the effect of not retaining x.
+In ARC mode, </strong>block id x; defaults to retaining x (just like all other values).</p></blockquote>
 
 <p>下面的代码不管在MRC还是ARC中<code>myController</code>对象都是有内存泄露的：</p>
 
@@ -657,12 +653,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>对于IBOutLet属性应该用strong还是weak一直都有疑惑。关于这一点<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/LoadingResources/CocoaNibs/CocoaNibs.html#//apple_ref/doc/uid/10000051i-CH4-SW6">官方文档</a>是这么介绍的：</p>
 
-<blockquote><blockquote><blockquote><p>From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib >>>file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak, because:</p></blockquote></blockquote></blockquote>
-
-<p>Outlets that you create to subviews of a view controller’s view or a window controller’s window, for example, are arbitrary references between objects that do not imply ownership.
-The strong outlets are frequently specified by framework classes (for example, UIViewController’s view outlet, or NSWindowController’s window outlet).</p>
-
-<blockquote><blockquote><blockquote></blockquote></blockquote></blockquote>
+<blockquote><p>From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib >>>file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak.</p></blockquote>
 
 <p>那么长的一段英文想说的是：</p>
 
