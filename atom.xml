@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-10-13T16:25:16+08:00</updated>
+  <updated>2014-10-13T16:45:01+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -18,9 +18,12 @@
     <link href="http://wangzz.github.io/blog/2014/10/13/shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/"/>
     <updated>2014-10-13T16:10:05+08:00</updated>
     <id>http://wangzz.github.io/blog/2014/10/13/shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan</id>
-    <content type="html"><![CDATA[<p>在ARC之前，iOS内存管理无论对资深级还是菜鸟级开发者来说都是一件很头疼的事。我参加过几个使用手动内存管理的项目，印象最深刻的是<code>高德地图</code>。由于地图类应用本身就非常耗内存，当时为了解决内存泄露问题，每周都安排有人值班用Instruments挨个跑功能，关键是每次都总能检查出来不少。其实不管是菜鸟级还是资深级开发者都避免不了写出内存泄露的代码，规则大家都懂，可是天知道什么时候手一抖就少写了个release？</p>
+    <content type="html"><![CDATA[<p>在ARC之前，iOS内存管理无论对资深级还是菜鸟级开发者来说都是一件很头疼的事。我参加过几个使用手动内存管理的项目，印象最深刻的是一个地图类应用，由于应用本身就非常耗内存，当时为了解决内存泄露问题，每周都安排有人值班用Instruments挨个跑功能，关键是每次都总能检查出来不少。其实不管是菜鸟级还是资深级开发者都避免不了写出内存泄露的代码，规则大家都懂，可是天知道什么时候手一抖就少写了个release？</p>
 
 <p>好在项目决定转成ARC了，下面将自己转换的过程和中间遇到的问题写出来和大家共享，希望能减少大家解决同类问题的时间。</p>
+
+<!-- more -->
+
 
 <h2>一、前言</h2>
 
@@ -50,11 +53,11 @@
 
 <p>使用Xcode转换工具入口如图所示：</p>
 
-<p>refactor.png</p>
+<p><img src="http://wangzz.github.io/images/article8/refactor.png" alt="refactor" /></p>
 
 <p>点击<code>Convert to Objective-C ARC</code>后会进入检查操作入口，如图：</p>
 
-<p>check.png</p>
+<p><img src="http://wangzz.github.io/images/article8/check.png" alt="check" /></p>
 
 <p>该步骤要选择哪些文件需要转换，如果前面将无需转换的文件都添加了<code>-fno-objc-arc</code>标记后，这里可以全选。</p>
 
@@ -64,7 +67,7 @@
 
 <p>执行完check操作后，会给出提示：</p>
 
-<p>error.png</p>
+<p><img src="http://wangzz.github.io/images/article8/error.png" alt="error" /></p>
 
 <p>三百多个错误，同时还有一千两百多个警告信息，都要哭了。。。</p>
 
@@ -74,17 +77,17 @@
 
 <p>解决完所有的error后，会弹出下述提示界面：</p>
 
-<p>notice.png</p>
+<p><img src="http://wangzz.github.io/images/article8/notice.png" alt="notice" /></p>
 
 <p>大意是Xcode将要将你的工程转换成使用ARC管理内存，所有更改的代码在真正更改之前会在一个review界面展示。同时所有的更改完成以后，Xcode会讲项目Target对应的工程设置的使用ARC设置（<code>Objective-C Automatic Reference Counting</code>）会被置成YES（上图右上角的警告标识就是在告诉我们项目已经支持ARC了，但工程中有文件还不支持）：</p>
 
-<p>use_arc.png</p>
+<p><img src="http://wangzz.github.io/images/article8/use_arc.png" alt="use_arc" /></p>
 
 <p>这时离成功就不远了，胜利在望！</p>
 
 <p>点击next按钮后跳转到review界面，样式类似于使用Xcode提交SVN的确认提交界面，如下图所示：</p>
 
-<p>review.png</p>
+<p><img src="http://wangzz.github.io/images/article8/review.png" alt="review" /></p>
 
 <p>该界面列出了所有需要有代码更改的文件，同时能够直接对比转换前和转换后的代码变化。为了稳妥起见，我选择了每个文件都点进去扫了一眼，这也给我们一次机会检查是否漏掉了不能转换的文件。确定一切无误以后，点击右下角的save按钮，一切就大功告成了！</p>
 
@@ -97,7 +100,7 @@
 </ul>
 
 
-<p>readonly_error.png</p>
+<p><img src="http://wangzz.github.io/images/article8/readonly_error.png" alt="readonly_error" /></p>
 
 <p>property属性必须指定一个内存管理关键字，在属性定义处增加strong关键字即可。</p>
 
@@ -106,7 +109,7 @@
 </ul>
 
 
-<p>release_error.png</p>
+<p><img src="http://wangzz.github.io/images/article8/release_error.png" alt="release_error" /></p>
 
 <p>这种情况通常是使用包含release的宏定义，将该宏和使用该宏的地方删除即可。</p>
 
@@ -115,7 +118,7 @@
 </ul>
 
 
-<p>init_return_type.png</p>
+<p><img src="http://wangzz.github.io/images/article8/init_return_type.png" alt="init_return_type" /></p>
 
 <p>错误原因是A类里的一个方法以init开头，而且返回的是B类型，好吧，乖乖改方法名。</p>
 
@@ -124,7 +127,7 @@
 </ul>
 
 
-<p>cast_pointer_objective-c.png</p>
+<p><img src="http://wangzz.github.io/images/article8/cast_pointer_objective-c.png" alt="cast_pointer_objective-c" /></p>
 
 <p>这是<code>Toll-Free Bridging</code>转换问题，在ARC下根据情况使用对应的转换关键字就行了，后文会专门介绍。</p>
 
@@ -137,7 +140,7 @@
 </ul>
 
 
-<p>block_capturing_self.png</p>
+<p><img src="http://wangzz.github.io/images/article8/block_capturing_self.png" alt="block_capturing_self" /></p>
 
 <p>这是典型的block循环引用问题，将block中的self改成使用指向self的weak指针即可。</p>
 
@@ -146,18 +149,18 @@
 </ul>
 
 
-<p>literal_is_redundant.png</p>
+<p><img src="http://wangzz.github.io/images/article8/literal_is_redundant.png" alt="literal_is_redundant" /></p>
 
 <p>好吧，原来是没必要的alloc操作，直接按Xcode提示将alloc删除即可：</p>
 
-<p>literal_is_redundant_fix.png</p>
+<p><img src="http://wangzz.github.io/images/article8/literal_is_redundant_fix.png" alt="literal_is_redundant_fix.png" /></p>
 
 <ul>
 <li>Init methods must return a type related to the receiver type</li>
 </ul>
 
 
-<p>init_methods.png</p>
+<p><img src="http://wangzz.github.io/images/article8/init_methods.png" alt="init_methods.png" /></p>
 
 <p>原来是A类里的一个方法以init开头，而且返回的是B类型，好吧，乖乖改方法名。</p>
 
@@ -166,11 +169,11 @@
 </ul>
 
 
-<p>property_follows.png</p>
+<p><img src="http://wangzz.github.io/images/article8/property_follows.png" alt="property_follows.png" /></p>
 
 <p>这是因为@property属性的命名以new开头了，可恶。。。修改方法是将对应的getter方法改成非new开头命名的：</p>
 
-<p>property_follows_fix.png</p>
+<p><img src="http://wangzz.github.io/images/article8/property_follows_fix.png" alt="property_follows_fix.png" /></p>
 
 <p>ARC下方法名如果是以new/alloc/init等开头的，而且还不是类的初始化方法，就该小心了，要么报错，要么警告，原因你懂的。</p>
 
@@ -179,49 +182,49 @@
 </ul>
 
 
-<p>block_implicitly_retains.png</p>
+<p><img src="http://wangzz.github.io/images/article8/block_implicitly_retains.png" alt="block_implicitly_retains.png" /></p>
 
 <p>意思是block中使用了self的实例变量_selectedModeMarkerView，因此block会隐式的retain住self。Xcode认为这可能会给开发者造成困惑，或者因此而因袭循环引用，所以警告我们要显示的在block中使用self，以达到block显示retain住self的目的。</p>
 
 <p>该警告有两种改法：
 ①按照Xcode提示，改成self->_selectedModeMarkerView：</p>
 
-<p>block_implicitly_retains_fix1.png</p>
+<p><img src="http://wangzz.github.io/images/article8/block_implicitly_retains_fix1.png" alt="block_implicitly_retains_fix1.png" /></p>
 
 <p>②直接将该警告关闭
 警告名称为：<code>Implicit retain of ‘self’ within blocks</code>
 对应的Clang关键字是：<code>-Wimplicit-retain-self</code></p>
 
-<p>block_implicitly_retains_fix2.png</p>
+<p><img src="http://wangzz.github.io/images/article8/block_implicitly_retains_fix2.png" alt="block_implicitly_retains_fix2.png" /></p>
 
 <ul>
 <li>Weak property may be unpredictably set to nil 和 Weak property &lsquo;delegate&rsquo; is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive</li>
 </ul>
 
 
-<p>weak_property_unpredictably.png</p>
+<p><img src="http://wangzz.github.io/images/article8/weak_property_unpredictably.png" alt="weak_property_unpredictably.png" /></p>
 
 <p>这是工程中数目最多的警告，这是因为所有的delegate属性都是weak的，Xcode默认开启了下图中的两个警告设置，将其关闭即可：</p>
 
-<p>weak_property_unpredictably_fix.png</p>
+<p><img src="http://wangzz.github.io/images/article8/weak_property_unpredictably_fix.png" alt="weak_property_unpredictably_fix.png" /></p>
 
 <ul>
 <li>Capturing &lsquo;self&rsquo; strongly in this block is likely to lead to a retain cycle</li>
 </ul>
 
 
-<p>retain_cycle.png</p>
+<p><img src="http://wangzz.github.io/images/article8/retain_cycle.png" alt="retain_cycle.png" /></p>
 
 <p>这是明显的block导致循环引用内存泄露的情况，之前代码中坑啊！修改方案：</p>
 
-<p>retain_cycle_fix.png</p>
+<p><img src="http://wangzz.github.io/images/article8/retain_cycle_fix.png" alt="retain_cycle_fix.png" /></p>
 
 <ul>
 <li>Method parameter of type &lsquo;NSError <em>__autoreleasing </em>&rsquo; with no explicit ownership</li>
 </ul>
 
 
-<p>autorelease_error.png</p>
+<p><img src="http://wangzz.github.io/images/article8/autorelease_error.png" alt="autorelease_error.png" /></p>
 
 <p>这种就不用说了，按警告中的提示添加<code>__autoreleasing</code>关键字即可。</p>
 
@@ -240,7 +243,7 @@
 </ul>
 
 
-<p>retain_strong.png</p>
+<p><img src="http://wangzz.github.io/images/article8/retain_strong.png" alt="retain_strong.png" /></p>
 
 <ul>
 <li>assign关键字转成weak</li>
@@ -249,11 +252,11 @@
 
 <p>修饰Objective-C对象或者id类型对象的assign关键字会被转成weak，如图：</p>
 
-<p>assign_weak.png</p>
+<p><img src="http://wangzz.github.io/images/article8/assign_weak.png" alt="assign_weak.png" /></p>
 
 <p>但是修饰Int/bool等数值型变量的assign不会自动转换成weak，如图：</p>
 
-<p>assign_not_weak.png</p>
+<p><img src="http://wangzz.github.io/images/article8/assign_not_weak.png" alt="assign_not_weak.png" /></p>
 
 <h4>关键字删除</h4>
 
@@ -261,11 +264,11 @@
 
 <p>dealloc方法中如果除了release/super dealloc语句外，如果别的代码，dealloc方法会保留,如图：</p>
 
-<p>retain_dealloc.png</p>
+<p><img src="http://wangzz.github.io/images/article8/retain_dealloc.png" alt="retain_dealloc.png" /></p>
 
 <p>如果没有整个方法都会被删除：</p>
 
-<p>delete_dealloc.png</p>
+<p><img src="http://wangzz.github.io/images/article8/delete_dealloc.png" alt="delete_dealloc.png" /></p>
 
 <h4>关键字替换</h4>
 
@@ -274,7 +277,7 @@
 </ul>
 
 
-<p>block_weak.png</p>
+<p><img src="http://wangzz.github.io/images/article8/block_weak.png" alt="block_weak.png" /></p>
 
 <ul>
 <li>@autoreleasepool</li>
@@ -283,7 +286,7 @@
 
 <p>NSAutoreleasePool不支持ARC，会被替换成@autoreleasepool：</p>
 
-<p>autoreleasepool.png</p>
+<p><img src="http://wangzz.github.io/images/article8/autoreleasepool.png" alt="autoreleasepool.png" /></p>
 
 <h4>关于被宏注释代码</h4>
 
@@ -303,7 +306,7 @@
 
 <p>在执行ARC转换检查操作时，Xcode会在使用该宏的地方报错：</p>
 
-<p>release_error.png</p>
+<p><img src="http://wangzz.github.io/images/article8/release_error.png" alt="release_error.png" /></p>
 
 <p>将该宏和使用该宏的地方删除即可。</p>
 
@@ -312,7 +315,7 @@
 </ul>
 
 
-<p>marco_arc.png</p>
+<p><img src="http://wangzz.github.io/images/article8/marco_arc.png" alt="marco_arc.png" /></p>
 
 <p>PS：这是相当坑的一点，因为你根本预料不到工程中使用了多少宏，注释掉了多少代码。当你执行完转换操作，以为就大功告成的时候，却在某天因为一个宏的开启遇到了一堆新的转ARC不彻底的问题。这种问题也没招，只能遇到一个改一个了。</p>
 
@@ -563,9 +566,7 @@
 
 <p>对于IBOutLet属性应该用strong还是weak一直都有疑惑。关于这一点<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/LoadingResources/CocoaNibs/CocoaNibs.html#//apple_ref/doc/uid/10000051i-CH4-SW6">官方文档</a>是这么介绍的：</p>
 
-<blockquote><blockquote><blockquote></blockquote></blockquote></blockquote>
-
-<p>From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak, because:</p>
+<blockquote><blockquote><blockquote><p>From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib >>>file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak, because:</p></blockquote></blockquote></blockquote>
 
 <p>Outlets that you create to subviews of a view controller’s view or a window controller’s window, for example, are arbitrary references between objects that do not imply ownership.
 The strong outlets are frequently specified by framework classes (for example, UIViewController’s view outlet, or NSWindowController’s window outlet).</p>
