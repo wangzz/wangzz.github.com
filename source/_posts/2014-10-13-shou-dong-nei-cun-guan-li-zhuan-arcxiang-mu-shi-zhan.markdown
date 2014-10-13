@@ -268,7 +268,7 @@ PS：这是相当坑的一点，因为你根本预料不到工程中使用了多
 
 #### __block关键字
 
-* block内修改外部变量
+* block内修改外部定义变量
 
 和手动内存管理一样，ARC如果在block中需要修改block之外定义的变量需要使用`__block`关键字修饰，比如：
 
@@ -285,10 +285,10 @@ self.expireCostLabel.completionBlock = ^(){
 
 在ARC下的block中使用__block关键字修饰的对象时，block会retain该对象；而在MRC下却不会retain。关于这点在官方文档[Transitioning to ARC Release Notes](https://developer.apple.com/library/ios/releasenotes/objectivec/rn-transitioningtoarc/introduction/introduction.html)中有详细的描述：
 
-```
+>
 In manual reference counting mode, __block id x; has the effect of not retaining x. 
 In ARC mode, __block id x; defaults to retaining x (just like all other values). 
-```
+>
 
 下面的代码不管在MRC还是ARC中`myController`对象都是有内存泄露的：
 
@@ -432,12 +432,9 @@ NSLog(@"%@",ocString);
 
 对于IBOutLet属性应该用strong还是weak一直都有疑惑。关于这一点[官方文档](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/LoadingResources/CocoaNibs/CocoaNibs.html#//apple_ref/doc/uid/10000051i-CH4-SW6)是这么介绍的：
 
->>>
-From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib >>>file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak, because:
-
-Outlets that you create to subviews of a view controller’s view or a window controller’s window, for example, are arbitrary references between objects that do not imply ownership.
-The strong outlets are frequently specified by framework classes (for example, UIViewController’s view outlet, or NSWindowController’s window outlet).
->>>
+>
+From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib >>>file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak.
+>
 
 那么长的一段英文想说的是：
 
