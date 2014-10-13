@@ -10,9 +10,11 @@ description: 手动内存管理转ARC项目实战
 
 ---
 
-在ARC之前，iOS内存管理无论对资深级还是菜鸟级开发者来说都是一件很头疼的事。我参加过几个使用手动内存管理的项目，印象最深刻的是`高德地图`。由于地图类应用本身就非常耗内存，当时为了解决内存泄露问题，每周都安排有人值班用Instruments挨个跑功能，关键是每次都总能检查出来不少。其实不管是菜鸟级还是资深级开发者都避免不了写出内存泄露的代码，规则大家都懂，可是天知道什么时候手一抖就少写了个release？
+在ARC之前，iOS内存管理无论对资深级还是菜鸟级开发者来说都是一件很头疼的事。我参加过几个使用手动内存管理的项目，印象最深刻的是一个地图类应用，由于应用本身就非常耗内存，当时为了解决内存泄露问题，每周都安排有人值班用Instruments挨个跑功能，关键是每次都总能检查出来不少。其实不管是菜鸟级还是资深级开发者都避免不了写出内存泄露的代码，规则大家都懂，可是天知道什么时候手一抖就少写了个release？
 
 好在项目决定转成ARC了，下面将自己转换的过程和中间遇到的问题写出来和大家共享，希望能减少大家解决同类问题的时间。
+
+<!-- more -->
 
 ## 一、前言
 
@@ -42,11 +44,11 @@ Xcode自动转换工具只针对Objective-C对象，只会处理`Objective-C/Obj
 
 使用Xcode转换工具入口如图所示：
 
-refactor.png
+![refactor](/images/article8/refactor.png)
 
 点击`Convert to Objective-C ARC`后会进入检查操作入口，如图：
 
-check.png
+![check](/images/article8/check.png)
 
 该步骤要选择哪些文件需要转换，如果前面将无需转换的文件都添加了`-fno-objc-arc`标记后，这里可以全选。
 
@@ -56,7 +58,7 @@ check.png
 
 执行完check操作后，会给出提示：
 
-error.png
+![error](/images/article8/error.png)
 
 三百多个错误，同时还有一千两百多个警告信息，都要哭了。。。
 
@@ -66,17 +68,17 @@ error.png
 
 解决完所有的error后，会弹出下述提示界面：
 
-notice.png
+![notice](/images/article8/notice.png)
 
 大意是Xcode将要将你的工程转换成使用ARC管理内存，所有更改的代码在真正更改之前会在一个review界面展示。同时所有的更改完成以后，Xcode会讲项目Target对应的工程设置的使用ARC设置（`Objective-C Automatic Reference Counting`）会被置成YES（上图右上角的警告标识就是在告诉我们项目已经支持ARC了，但工程中有文件还不支持）：
 
-use_arc.png
+![use_arc](/images/article8/use_arc.png)
 
 这时离成功就不远了，胜利在望！
 
 点击next按钮后跳转到review界面，样式类似于使用Xcode提交SVN的确认提交界面，如下图所示：
 
-review.png
+![review](/images/article8/review.png)
 
 该界面列出了所有需要有代码更改的文件，同时能够直接对比转换前和转换后的代码变化。为了稳妥起见，我选择了每个文件都点进去扫了一眼，这也给我们一次机会检查是否漏掉了不能转换的文件。确定一切无误以后，点击右下角的save按钮，一切就大功告成了！
 
@@ -88,25 +90,25 @@ review.png
 
 * ARC forbids synthesizing a property of an Objective-C object with unspecified ownership or storage attribute
 
-readonly_error.png
+![readonly_error](/images/article8/readonly_error.png)
 
 property属性必须指定一个内存管理关键字，在属性定义处增加strong关键字即可。
 
 * ARC forbids explicit message send of 'release'
 
-release_error.png
+![release_error](/images/article8/release_error.png)
 
 这种情况通常是使用包含release的宏定义，将该宏和使用该宏的地方删除即可。
 
 * Init methods must return a type related to the receiver type
 
-init_return_type.png
+![init_return_type](/images/article8/init_return_type.png)
 
 错误原因是A类里的一个方法以init开头，而且返回的是B类型，好吧，乖乖改方法名。
 
 * Cast of C pointer type 'ivPointer' (aka 'void *') to Objective-C pointer type 'iFlyTTSManager_old *' requires a bridged cast
 
-cast_pointer_objective-c.png
+![cast_pointer_objective-c](/images/article8/cast_pointer_objective-c.png)
 
 这是`Toll-Free Bridging`转换问题，在ARC下根据情况使用对应的转换关键字就行了，后文会专门介绍。
 
@@ -117,72 +119,71 @@ cast_pointer_objective-c.png
 
 * Capturing `self` in this block is likely to lead to a retain cycle
 
-block_capturing_self.png
+![block_capturing_self](/images/article8/block_capturing_self.png)
 
 这是典型的block循环引用问题，将block中的self改成使用指向self的weak指针即可。
 
 
 * Using 'initWithArray:' with a literal is redundant
 
-literal_is_redundant.png
+![literal_is_redundant](/images/article8/literal_is_redundant.png)
 
 好吧，原来是没必要的alloc操作，直接按Xcode提示将alloc删除即可：
 
-literal_is_redundant_fix.png
+![literal_is_redundant_fix.png](/images/article8/literal_is_redundant_fix.png)
 
 * Init methods must return a type related to the receiver type
 
-init_methods.png
+![init_methods.png](/images/article8/init_methods.png)
 
 原来是A类里的一个方法以init开头，而且返回的是B类型，好吧，乖乖改方法名。
 
 * Property follows Cocoa naming convention for returning ‘owned’ objects
 
-property_follows.png
+![property_follows.png](/images/article8/property_follows.png)
 
 这是因为@property属性的命名以new开头了，可恶。。。修改方法是将对应的getter方法改成非new开头命名的：
 
-property_follows_fix.png
+![property_follows_fix.png](/images/article8/property_follows_fix.png)
 
 ARC下方法名如果是以new/alloc/init等开头的，而且还不是类的初始化方法，就该小心了，要么报错，要么警告，原因你懂的。
 
 * Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior
 
-block_implicitly_retains.png
+![block_implicitly_retains.png](/images/article8/block_implicitly_retains.png)
 
 意思是block中使用了self的实例变量_selectedModeMarkerView，因此block会隐式的retain住self。Xcode认为这可能会给开发者造成困惑，或者因此而因袭循环引用，所以警告我们要显示的在block中使用self，以达到block显示retain住self的目的。
 
 该警告有两种改法：
 ①按照Xcode提示，改成self->_selectedModeMarkerView：
 
-block_implicitly_retains_fix1.png
+![block_implicitly_retains_fix1.png](/images/article8/block_implicitly_retains_fix1.png)
 
 ②直接将该警告关闭
 警告名称为：`Implicit retain of ‘self’ within blocks`
 对应的Clang关键字是：`-Wimplicit-retain-self`
 
-block_implicitly_retains_fix2.png
+![block_implicitly_retains_fix2.png](/images/article8/block_implicitly_retains_fix2.png)
 
 * Weak property may be unpredictably set to nil 和 Weak property 'delegate' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 
-weak_property_unpredictably.png
+![weak_property_unpredictably.png](/images/article8/weak_property_unpredictably.png)
 
 这是工程中数目最多的警告，这是因为所有的delegate属性都是weak的，Xcode默认开启了下图中的两个警告设置，将其关闭即可：
 
-weak_property_unpredictably_fix.png
-
+![weak_property_unpredictably_fix.png](/images/article8/weak_property_unpredictably_fix.png)
 
 * Capturing 'self' strongly in this block is likely to lead to a retain cycle
 
-retain_cycle.png
+![retain_cycle.png](/images/article8/retain_cycle.png)
 
 这是明显的block导致循环引用内存泄露的情况，之前代码中坑啊！修改方案：
 
-retain_cycle_fix.png
+![retain_cycle_fix.png](/images/article8/retain_cycle_fix.png)
 
 * Method parameter of type 'NSError *__autoreleasing *' with no explicit ownership
 
-autorelease_error.png
+![autorelease_error.png](/images/article8/autorelease_error.png)
 
 这种就不用说了，按警告中的提示添加`__autoreleasing`关键字即可。
 
@@ -199,17 +200,17 @@ Xcode会自动将某些关键字自动转换成ARC的对应版本。
 
 * retain自动转成strong，如图：
 
-retain_strong.png
+![retain_strong.png](/images/article8/retain_strong.png)
 
 * assign关键字转成weak
 
 修饰Objective-C对象或者id类型对象的assign关键字会被转成weak，如图：
 
-assign_weak.png
+![assign_weak.png](/images/article8/assign_weak.png)
 
 但是修饰Int/bool等数值型变量的assign不会自动转换成weak，如图：
 
-assign_not_weak.png
+![assign_not_weak.png](/images/article8/assign_not_weak.png)
 
 
 #### 关键字删除
@@ -218,23 +219,23 @@ assign_not_weak.png
 
 dealloc方法中如果除了release/super dealloc语句外，如果别的代码，dealloc方法会保留,如图：
 
-retain_dealloc.png
+![retain_dealloc.png](/images/article8/retain_dealloc.png)
 
 如果没有整个方法都会被删除：
 
-delete_dealloc.png
+![delete_dealloc.png](/images/article8/delete_dealloc.png)
 
 #### 关键字替换
 
 * 在转换时__block关键字会被自动替换成__weak：
 
-block_weak.png
+![block_weak.png](/images/article8/block_weak.png)
 
 * @autoreleasepool
 
 NSAutoreleasePool不支持ARC，会被替换成@autoreleasepool：
 
-autoreleasepool.png
+![autoreleasepool.png](/images/article8/autoreleasepool.png)
 
 
 #### 关于被宏注释代码
@@ -249,14 +250,14 @@ autoreleasepool.png
 ```
 在执行ARC转换检查操作时，Xcode会在使用该宏的地方报错：
 
-release_error.png
+![release_error.png](/images/article8/release_error.png)
 
 将该宏和使用该宏的地方删除即可。
 
 
 * 被宏注释掉的代码，Xcode在转换时是不会处理的，如图：
 
-marco_arc.png
+![marco_arc.png](/images/article8/marco_arc.png)
 
 PS：这是相当坑的一点，因为你根本预料不到工程中使用了多少宏，注释掉了多少代码。当你执行完转换操作，以为就大功告成的时候，却在某天因为一个宏的开启遇到了一堆新的转ARC不彻底的问题。这种问题也没招，只能遇到一个改一个了。
 
@@ -276,7 +277,6 @@ __block NSString *name = @"foggry";
 self.expireCostLabel.completionBlock = ^(){
     name = @"wangzz";
 };
-
 ```
 
 上例中name变量需要在block中修改，因此必须使用__block关键字。
@@ -433,8 +433,7 @@ NSLog(@"%@",ocString);
 对于IBOutLet属性应该用strong还是weak一直都有疑惑。关于这一点[官方文档](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/LoadingResources/CocoaNibs/CocoaNibs.html#//apple_ref/doc/uid/10000051i-CH4-SW6)是这么介绍的：
 
 >>>
-
-From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak, because:
+From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib >>>file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak, because:
 
 Outlets that you create to subviews of a view controller’s view or a window controller’s window, for example, are arbitrary references between objects that do not imply ownership.
 The strong outlets are frequently specified by framework classes (for example, UIViewController’s view outlet, or NSWindowController’s window outlet).
