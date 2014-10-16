@@ -89,6 +89,63 @@ $(document).bind('DOMNodeInserted', function(event) {
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/05/09/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/">Xcode设置项之Architectures和Valid Architectures</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-09T17:45:33+08:00" pubdate data-updated="true">May 9<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>iPhone指令集</h2>
+
+<p>本文所讲的内容都是围绕iPhone的CPU指令集(想了解ARM指令集的同学请点击<a href="http://en.wikipedia.org/wiki/ARM_architecture">这里</a>)，现在先说说不同型号的iPhone都使用的是什么指令集：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ARMv8/ARM64 = iPhone 5s, iPad Air, Retina iPad Mini
+</span><span class='line'>ARMv7s = iPhone 5, iPhone 5c, iPad 4
+</span><span class='line'>ARMv7  = iPhone 3GS, iPhone 4, iPhone 4S, iPod 3G/4G/5G, iPad, iPad 2, iPad 3, iPad Mini  
+</span><span class='line'>ARMv6  = iPhone, iPhone 3G, iPod 1G/2G</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>设置你想支持的指令集</h2>
+
+<p>Xcode中关于生成二进制包指令集相关的设置项有以下三个：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/05/09/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/04/28/custom-your-octopress-blog/">自定义你的Octopress博客</a></h1>
     
     
@@ -325,6 +382,10 @@ $(document).bind('DOMNodeInserted', function(event) {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/16/ios-code-signing-xue-xi-bi-ji/">iOS Code Signing 学习笔记</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/10/13/shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/">手动内存管理转ARC项目实战</a>
       </li>
     
@@ -338,10 +399,6 @@ $(document).bind('DOMNodeInserted', function(event) {
     
       <li class="post">
         <a href="/blog/2014/08/08/ping-mu-xuan-zhuan-xue-xi-bi-ji/">iOS屏幕旋转学习笔记</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/23/wwdc2014zhi-app-extensionsxue-xi-bi-ji/">WWDC2014之App Extensions学习笔记</a>
       </li>
     
   </ul>
