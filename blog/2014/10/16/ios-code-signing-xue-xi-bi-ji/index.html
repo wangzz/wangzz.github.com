@@ -113,28 +113,22 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>下面是对此文章的理解再结合自己之前对该部分的认识写出的学习笔记。本文的前提是已经对非对称加密有了一定的了解。</p>
 
-<h4>数字签名（digital signature）</h4>
+<h2>一、数字签名（digital signature）</h2>
 
 <p>对指定信息使用哈希算法，得到一个固定长度的信息摘要，然后再使用<code>私钥</code>（注意必须是私钥）对该摘要加密，就得到了数字签名。所谓的代码签名就是这个意思。</p>
 
 <!-- more -->
 
 
-<h4>数字证书（digital certificate）</h4>
+<h2>二、数字证书（digital certificate）</h2>
 
-<ul>
-<li>证书生成</li>
-</ul>
-
+<h4>证书生成</h4>
 
 <p>开发者在申请iOS开发证书时，需要通过keychain生成一个CSR文件（Certificate Signing Request），提交给苹果的<code>Apple Worldwide Developer Relations Certification Authority</code>(WWDR)证书认证中心进行签名，最后从苹果官网下载并安装使用。这个过程中还会产生一个私钥，证书和私钥在keychain中得位置如图：</p>
 
 <p><img src="http://img.objccn.io/issue-17/iphone-developer-keychain.png" alt="cer_private_key" /></p>
 
-<ul>
-<li>证书组成</li>
-</ul>
-
+<h4>证书组成</h4>
 
 <p>经过<code>WWDR</code>数字签名后的数字证书长这个样子：</p>
 
@@ -142,20 +136,23 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>其中包含两大部分：</p>
 
-<p>①证书本身</p>
+<ul>
+<li>证书本身</li>
+</ul>
+
 
 <p>包含用户的公钥、用户个人信息、证书颁发机构信息、证书有效期等信息。</p>
 
-<p>②证书签名</p>
+<ul>
+<li>证书签名</li>
+</ul>
+
 
 <p><code>WWDR</code>将上述证书本身内容的使用哈希算法得到一个固定长度的信息摘要，然后使用自己的<code>私钥</code>对该信息摘要加密生成数字签名，整个过程如图所示：</p>
 
 <p><img src="http://img.blog.csdn.net/20130603170752859" alt="digital signature" /></p>
 
-<ul>
-<li>证书使用</li>
-</ul>
-
+<h4>证书使用</h4>
 
 <p>iOS系统原本就持有<code>WWDR</code>的公钥，系统首先会对证书内容通过指定的哈希算法计算得到一个信息摘要；然后使用<code>WWDR</code>的公钥对证书中包含的数字签名解密，从而得到经过<code>WWDR</code>的私钥加密过的信息摘要；最后对比两个信息摘要，如果内容相同就说明该证书可信。整个过程如图所示：</p>
 
@@ -163,10 +160,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>在验证了证书是可信的以后，iOS系统就可以获取到证书中包含的开发者的公钥，并使用该公钥来判断代码签名的可用性了。</p>
 
-<ul>
-<li>证书存在的意义</li>
-</ul>
-
+<h4>证书存在的意义</h4>
 
 <p>通过证书使用过程可以看出，证书本身只是一个中间媒介，iOS系统对证书并不关心，它其实只想要证书中包含的开发者的公钥！！</p>
 
@@ -174,24 +168,23 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>不管是哪一个开发者对iOS的安全系统说，这个公钥就是我的，系统是都不相信的，即系统对开发者有着百分之百的不信任感。但是iOS安全系统对自家的<code>WWDR</code>是可信任的，苹果将<code>WWDR</code>的公钥内置在了iOS系统中。有了证书，iOS安全系统只需要通过<code>WWDR</code>的公钥就可以获取到任何一个开发者的可信任的公钥了，这就是证书存在的意义！！</p>
 
-<h4>公钥（public key）</h4>
+<h2>三、公钥（public key）</h2>
 
 <p>公钥被包含在数字证书里，数字证书又被包含在<code>描述文件</code>(Provisioning File)中，<code>描述文件</code>在应用被安装的时候会被拷贝到iOS设备中。</p>
 
 <p>iOS安全系统通过证书就能够确定开发者身份，就能够通过从证书中获取到的公钥来验证开发者用该公钥对应的私钥签名后的代码、资源文件等有没有被更改破坏，最终确定应用能否合法的在iOS设备上合法运行。</p>
 
-<h4>私钥（private key）</h4>
+<h2>四、私钥（private key）</h2>
 
 <p>每个证书（其实是公钥）都对应有一个私钥，</p>
 
 <p>私钥会被用来对代码、资源文件等签名。只有开发证书和描述文件是没办法正常调试的，因为没有私钥根本无法签名。</p>
 
-<h4>签名相关命令</h4>
+<p>此后的内容基本都是从<a href="http://objccn.io/issue-17-2/">《代码签名探析》</a>摘抄过来的笔记，建议大家看原文好了。</p>
 
-<ul>
-<li>快捷查看系统中能用来对代码进行签名的证书</li>
-</ul>
+<h2>五、签名相关命令</h2>
 
+<h4>快捷查看系统中能用来对代码进行签名的证书</h4>
 
 <p>可以使用如下命令：</p>
 
@@ -205,10 +198,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>这就说明当前有一个同时有公钥和私钥的可用证书。</p>
 
-<ul>
-<li>对未签名app手动签名</li>
-</ul>
-
+<h4>对未签名app手动签名</h4>
 
 <p>使用如下命令：</p>
 
@@ -216,10 +206,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </pre></td><td class='code'><pre><code class=''><span class='line'>$ codesign -s 'iPhone Developer: Thomas Kollbach (7TPNXN7G6K)' Example.app</span></code></pre></td></tr></table></div></figure>
 
 
-<ul>
-<li>对已签名app重新签名</li>
-</ul>
-
+<h4>对已签名app重新签名</h4>
 
 <p>为了重新设置签名，你必须带上 -f 参数，有了这个参数，codesign 会用你选择的签名替换掉已经存在的那一个：：</p>
 
@@ -227,10 +214,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </pre></td><td class='code'><pre><code class=''><span class='line'>$ codesign -f -s 'iPhone Developer: Thomas Kollbach (7TPNXN7G6K)' Example.app</span></code></pre></td></tr></table></div></figure>
 
 
-<ul>
-<li>查看指定app的签名信息</li>
-</ul>
-
+<h4>查看指定app的签名信息</h4>
 
 <p>codesign 还可以为你提供有关一个可执行文件签名状态的信息，这些信息在出现不明错误时会提供巨大的帮助：</p>
 
@@ -268,10 +252,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </span><span class='line'>Internal requirements count=1 size=184  </span></code></pre></td></tr></table></div></figure>
 
 
-<ul>
-<li>验证签名文件的完整性</li>
-</ul>
-
+<h4>验证签名文件的完整性</h4>
 
 <p>检查已签名的文件是否完整可以使用如下命令：</p>
 
@@ -291,7 +272,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>和预料中的一样，修改已经签名的应用会导致数字签名验证不通过。</p>
 
-<h4>资源文件签名</h4>
+<h2>六、资源文件签名</h2>
 
 <p>iOS 和 OS X 的应用和框架则是包含了它们所需要的资源在其中的。这些资源包括图片和不同的语言文件，资源中也包括很重要的应用组成部分例如 XIB/NIB 文件，存档文件(archives)，甚至是证书文件。所以为一个程序包设置签名时，这个包中的所有资源文件也都会被设置签名。</p>
 
@@ -299,7 +280,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>这个列表文件中不光包含了文件和它们的签名的列表，还包含了一系列规则，这些规则决定了哪些资源文件应当被设置签名。伴随 OS X 10.10 DP 5 和 10.9.5 版本的发布，苹果改变了代码签名的格式，也改变了有关资源的规则。如果你使用10.9.5或者更高版本的 codesign 工具，在 CodeResources 文件中会有4个不同区域，其中的 <code>rules</code> 和 <code>files</code> 是为老版本准备的，而 <code>files2</code> 和 <code>rules2</code> 是为新的第二版的代码签名准备的。最主要的区别是在新版本中你无法再将某些资源文件排除在代码签名之外，在过去你是可以的，只要在被设置签名的程序包中添加一个名为 <code>ResourceRules.plist</code> 的文件，这个文件会规定哪些资源文件在检查代码签名是否完好时应该被忽略。但是在新版本的代码签名中，这种做法不再有效。所有的代码文件和资源文件都必须设置签名，不再可以有例外。在新版本的代码签名规定中，一个程序包中的可执行程序包，例如扩展 (extension)，是一个独立的需要设置签名的个体，在检查签名是否完整时应当被单独对待。</p>
 
-<h4>授权文件（entitlements）</h4>
+<h2>七、授权文件（entitlements）</h2>
 
 <p>在 iOS 上你的应用能做什么依然是沙盒限制的，这些限制大多情况下都由授权文件（entitlements）来决定。授权机制决定了哪些系统资源在什么情况下允许被一个应用使用，简单的说它就是一个沙盒的配置列表。</p>
 
@@ -365,14 +346,11 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>在新版本的 Xcode 6 之后，授权信息列表会以 Example.app.xcent 这样的名字的文件形式包含在应用包中。这么做或许是为了在出现配置错误时提供更加有用的错误信息。</p>
 
-<h4>描述文件（provisioning file）</h4>
+<h2>八、描述文件（provisioning file）</h2>
 
 <p>在整个代码签名和沙盒机制中有一个组成部分将签名，授权和沙盒联系了起来，那就是描述文件 (provisioning profiles)。</p>
 
-<ul>
-<li>OS X中保存目录</li>
-</ul>
-
+<h4>OS X中保存目录</h4>
 
 <p>Xcode 将从开发者中心下载的全部配置文件都放在了这里：</p>
 
@@ -380,10 +358,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </pre></td><td class='code'><pre><code class=''><span class='line'>~/Library/MobileDevice/Provisioning Profiles</span></code></pre></td></tr></table></div></figure>
 
 
-<ul>
-<li>文件格式</li>
-</ul>
-
+<h4>文件格式</h4>
 
 <p>描述文件并不是一个普通的plist文件，它是一个根据密码讯息语法 (Cryptographic Message Syntax) 加密的文件。</p>
 
@@ -393,30 +368,39 @@ $(document).bind('DOMNodeInserted', function(event) {
 </pre></td><td class='code'><pre><code class=''><span class='line'>$ security cms -D -i example.mobileprovision</span></code></pre></td></tr></table></div></figure>
 
 
-<ul>
-<li>文件内容</li>
-</ul>
-
+<h4>文件内容</h4>
 
 <p>描述文件主要包含以下内容：</p>
 
-<p>①UUID</p>
+<ul>
+<li>UUID</li>
+</ul>
+
 
 <p>每一个配置文件都有它自己的 UUID 。Xcode 会用这个 UUID 来作为标识，记录你在 build settings 中选择了哪一个配置文件。</p>
 
-<p>②ProvisionedDevices</p>
+<ul>
+<li>ProvisionedDevices</li>
+</ul>
+
 
 <p>记录所有可用于调试的设备ID。</p>
 
-<p>③DeveloperCertificates</p>
+<ul>
+<li>DeveloperCertificates</li>
+</ul>
+
 
 <p>包含了可以为使用这个配置文件的应用签名的所有证书。所有的证书都是基于 Base64 编码符合 PEM (Privacy Enhanced Mail, RFC 1848) 格式的。</p>
 
-<p>④Entitlements</p>
+<ul>
+<li>Entitlements</li>
+</ul>
+
 
 <p>有关前面讲到的配置文件的所有内容都会被保存在这里。</p>
 
-<h4>参考文档</h4>
+<h2>参考文档</h2>
 
 <ul>
 <li><p><a href="http://www.objc.io/issue-17/inside-code-signing.html">Inside Code Signing</a></p></li>
