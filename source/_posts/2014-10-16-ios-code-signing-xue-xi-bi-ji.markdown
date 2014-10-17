@@ -3,7 +3,7 @@ layout: post
 title: "iOS Code Signing 学习笔记"
 date: 2014-10-16 19:09:38 +0800
 comments: true
-categories: 
+categories: iOS
 tags: [iPhone, iOS, 代码签名, Code Signing]
 keywords: iPhone, iOS, 代码签名, Code Signing
 description: iOS Code Signing 学习笔记
@@ -256,4 +256,7 @@ $ security cms -D -i example.mobileprovision
 * [数字签名是什么？](http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html)
 
 * [非对称加密原理解析](http://blog.csdn.net/wzzvictory/article/details/9015155)
+
+* [数字证书原理](http://www.2cto.com/Article/201203/122095.html)
+
 
