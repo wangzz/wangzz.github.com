@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-10-16T19:22:30+08:00</updated>
+  <updated>2014-10-17T09:54:44+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -316,6 +316,7 @@
 <li><p><a href="http://objccn.io/issue-17-2/">代码签名探析</a></p></li>
 <li><p><a href="http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html">数字签名是什么？</a></p></li>
 <li><p><a href="http://blog.csdn.net/wzzvictory/article/details/9015155">非对称加密原理解析</a></p></li>
+<li><p><a href="http://www.2cto.com/Article/201203/122095.html">数字证书原理</a></p></li>
 </ul>
 
 ]]></content>
