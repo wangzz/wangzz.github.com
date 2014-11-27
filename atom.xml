@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-11-27T11:17:21+08:00</updated>
+  <updated>2014-11-27T19:02:56+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -313,6 +313,7 @@
 
 <ul>
 <li><p><a href="http://www.objc.io/issue-17/inside-code-signing.html">Inside Code Signing</a></p></li>
+<li><p><a href="https://developer.apple.com/legacy/library/technotes/tn2250/_index.html#//apple_ref/doc/uid/DTS40009933-CH1-CODE_SIGNING_IN_A_NUTSHELL">iOS Code Signing Troubleshooting</a></p></li>
 <li><p><a href="http://objccn.io/issue-17-2/">代码签名探析</a></p></li>
 <li><p><a href="http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html">数字签名是什么？</a></p></li>
 <li><p><a href="http://blog.csdn.net/wzzvictory/article/details/9015155">非对称加密原理解析</a></p></li>
@@ -4351,7 +4352,7 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[让你的Octopress博客在多台Mac上同时使用]]></title>
+    <title type="html"><![CDATA[让Octopress博客在多台Mac上同时使用]]></title>
     <link href="http://wangzz.github.io/blog/2014/04/02/ru-he-pei-zhi-rang-ni-de-octopressbo-ke-zai-duo-tai-macshang-tong-shi-shi-yong/"/>
     <updated>2014-04-02T14:28:35+08:00</updated>
     <id>http://wangzz.github.io/blog/2014/04/02/ru-he-pei-zhi-rang-ni-de-octopressbo-ke-zai-duo-tai-macshang-tong-shi-shi-yong</id>
