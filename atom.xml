@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-10-17T09:54:44+08:00</updated>
+  <updated>2014-11-27T10:54:34+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -905,7 +905,7 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
 
 <h4>1、屏幕尺寸</h4>
 
-<p>在显示器世界里，屏幕尺寸都是由屏幕对脚线长度表示的，单位是英寸。比如iPhone4的3.5寸屏就意味着屏幕对角线的长度是3.5英寸。</p>
+<p>在显示器世界里，屏幕尺寸都是由屏幕对角线长度表示的，单位是英寸。比如iPhone4的3.5寸屏就意味着屏幕对角线的长度是3.5英寸。</p>
 
 <h4>2、分辨率</h4>
 
