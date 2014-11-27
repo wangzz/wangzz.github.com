@@ -251,6 +251,8 @@ $ security cms -D -i example.mobileprovision
 
 * [Inside Code Signing](http://www.objc.io/issue-17/inside-code-signing.html)
 
+* [iOS Code Signing Troubleshooting](https://developer.apple.com/legacy/library/technotes/tn2250/_index.html#//apple_ref/doc/uid/DTS40009933-CH1-CODE_SIGNING_IN_A_NUTSHELL)
+
 * [代码签名探析](http://objccn.io/issue-17-2/)
 
 * [数字签名是什么？](http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html)

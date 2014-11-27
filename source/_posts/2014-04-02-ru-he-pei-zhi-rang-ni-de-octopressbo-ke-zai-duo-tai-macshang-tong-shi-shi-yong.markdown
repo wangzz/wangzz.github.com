@@ -1,7 +1,7 @@
 ---
 
 layout: post
-title: "让你的Octopress博客在多台Mac上同时使用"
+title: "让Octopress博客在多台Mac上同时使用"
 date: 2014-04-02 14:28:35 +0800
 comments: true
 categories: Octopress
