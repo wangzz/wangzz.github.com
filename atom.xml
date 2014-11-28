@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-11-27T19:02:56+08:00</updated>
+  <updated>2014-11-28T21:11:47+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -3767,6 +3767,49 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
 <p>记得把左侧的<code>&gt;</code>符号都去掉。</p>
 
 <p>不过本站的链接还是会在当前界面中打开。</p>
+
+<h2>自定义域名</h2>
+
+<p>使用<a href="https://pages.github.com/">Github Pages</a>服务搭建好博客以后，默认的访问地址是<code>yourname.github.io</code>形式的二级域名。大家一定迫不及待的想换成自己的个性域名了。</p>
+
+<ul>
+<li>购买域名</li>
+</ul>
+
+
+<p>到各大域名购买网站购买自己心仪的域名</p>
+
+<ul>
+<li>获取自己github二级域名的IP</li>
+</ul>
+
+
+<p>以我的域名<code>wangzz.github.io</code>为例，输入以下命令：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$dig wangzz.github.io</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在输出内容中找到<code>ANSWER SECTION</code>一项，比如我的：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ANSWER SECTION:
+</span><span class='line'>wangzz.github.io. 3599    IN  CNAME   github.map.fastly.net.
+</span><span class='line'>github.map.fastly.net.    29  IN  A   103.235.222.168</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到我的IP是<code>103.235.222.168</code>。</p>
+
+<ul>
+<li>添加A记录</li>
+</ul>
+
+
+<p>得到IP以后，需要到你的域名解析服务商处添加一个A记录，将你的域名解析成对应的IP。</p>
+
+<p>经过以上步骤，访问<code>wangzz.github.io</code>的地址就会自动跳转到自己的域名了。不过更改需要等一段时间才能生效。</p>
 
 <h2>参考文章</h2>
 
