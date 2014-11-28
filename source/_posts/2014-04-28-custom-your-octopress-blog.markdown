@@ -264,7 +264,37 @@ Octopress博客中，默认是在当前界面中打开第三方链接，这导�
 
 不过本站的链接还是会在当前界面中打开。
 
+## 自定义域名
 
+使用[Github Pages](https://pages.github.com/)服务搭建好博客以后，默认的访问地址是`yourname.github.io`形式的二级域名。大家一定迫不及待的想换成自己的个性域名了。
+
+* 购买域名
+
+到各大域名购买网站购买自己心仪的域名
+
+* 获取自己github二级域名的IP
+
+以我的域名`wangzz.github.io`为例，输入以下命令：
+
+```
+$dig wangzz.github.io
+```
+
+在输出内容中找到`ANSWER SECTION`一项，比如我的：
+
+```
+ANSWER SECTION:
+wangzz.github.io.	3599	IN	CNAME	github.map.fastly.net.
+github.map.fastly.net.	29	IN	A	103.235.222.168
+```
+
+可以看到我的IP是`103.235.222.168`。
+
+* 添加A记录
+
+得到IP以后，需要到你的域名解析服务商处添加一个A记录，将你的域名解析成对应的IP。
+
+经过以上步骤，访问`wangzz.github.io`的地址就会自动跳转到自己的域名了。不过更改需要等一段时间才能生效。
 
 
 ##参考文章
