@@ -17,22 +17,77 @@ description: iOS屏幕旋转学习笔记
 
 ####1、device orientation
 
-设备的物理方向
+设备的物理方向，由类型`UIDeviceOrientation`表示，当前设备方向获取方式：
+
+```objective-c
+[UIDevice currentDevice].orientation
+```
+该属性的值一般是与当前设备方向保持一致的，但须注意以下几点：
+
+①文档中对该属性的注释：
+
+```objective-c
+@property(nonatomic,readonly) UIDeviceOrientation orientation;       // return current device orientation.  this will return UIDeviceOrientationUnknown unless device orientation notifications are being generated.
+```
+所以更推荐下面这种用法：
+
+```objective-c
+if (![UIDevice currentDevice].generatesDeviceOrientationNotifications) {
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+ }
+NSLog(@"%d",[UIDevice currentDevice].orientation);
+    
+[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    
+```
+
+②系统横竖屏开关关闭时
+
+如果关闭了系统的横竖屏切换开关，即系统层级只允许竖屏时，再通过上述方式获取到的设备方向将永远是`UIDeviceOrientationUnknown`。可以通过`Core Motion`中的`CMMotionManager`来获取当前设备方向。
 
 ####2、interface orientation
 
-界面显示的方向
+界面显示的方向，由类型`UIInterfaceOrientation`表示。当前界面显示方向有以下两种方式获取：
 
-iOS提供了在设备旋转时，界面显示发生相应适配的能力，已达到方便用户使用并提供最佳显示效果的目的。开发者需要指定应用支持的显示方向，并对界面显示做出对应的适配。由于界面适配的工作量相当大，目前国内的应用大都只支持默认的竖屏方向，
+```objective-c
+NSLog(@"%d",[UIApplication sharedApplication].statusBarOrientation);
+NSLog(@"%d",viewController.interfaceOrientation);
+```
+
+即可以通过系统statusBar的方向或者viewController的方向来获取当前界面方向。
+
+####3、二者区别
+
+通过`UIDevice`获取到的设备方向在手机旋转时是实时的，通过`UIApplication`的statusBar或者viewController获取到的界面方向在下述方法：
+
+```objective-c
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:
+```
+调用以后才会被更改成最新的值。
 
 <!-- more -->
 
 ##二、相关枚举定义
  
-####1、iOS5和之前版本（后文均简称iOS5）：
+####1、UIDeviceOrientation：
 
+```objective-c
+typedef NS_ENUM(NSInteger, UIDeviceOrientation) {
+    UIDeviceOrientationUnknown,
+    UIDeviceOrientationPortrait,            // Device oriented vertically, home button on the bottom
+    UIDeviceOrientationPortraitUpsideDown,  // Device oriented vertically, home button on the top
+    UIDeviceOrientationLandscapeLeft,       // Device oriented horizontally, home button on the right
+    UIDeviceOrientationLandscapeRight,      // Device oriented horizontally, home button on the left
+    UIDeviceOrientationFaceUp,              // Device oriented flat, face up
+    UIDeviceOrientationFaceDown             // Device oriented flat, face down
+};
 ```
+
+####2、UIInterfaceOrientation：
+
+```objective-c
 typedef NS_ENUM(NSInteger, UIInterfaceOrientation) {
+    UIInterfaceOrientationUnknown            = UIDeviceOrientationUnknown,
     UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
     UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
     UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
@@ -40,28 +95,14 @@ typedef NS_ENUM(NSInteger, UIInterfaceOrientation) {
 };
 ```
 
-####2、iOS6和之后版本（后文均简称iOS6）又新增了：
 
-```
-typedef NS_OPTIONS(NSUInteger, UIInterfaceOrientationMask) {
-    UIInterfaceOrientationMaskPortrait = (1 << UIInterfaceOrientationPortrait),
-    UIInterfaceOrientationMaskLandscapeLeft = (1 << UIInterfaceOrientationLandscapeLeft),
-    UIInterfaceOrientationMaskLandscapeRight = (1 << UIInterfaceOrientationLandscapeRight),
-    UIInterfaceOrientationMaskPortraitUpsideDown = (1 << UIInterfaceOrientationPortraitUpsideDown),
-    UIInterfaceOrientationMaskLandscape = (UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight),
-    UIInterfaceOrientationMaskAll = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskPortraitUpsideDown),
-    UIInterfaceOrientationMaskAllButUpsideDown = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight),
-};
-```
-
-
-iOS6使用`NS_OPTIONS`的方式重新定义了UIInterfaceOrientationMaskPortrait、UIInterfaceOrientationMaskLandscapeLeft、UIInterfaceOrientationMaskLandscapeRight、UIInterfaceOrientationMaskPortraitUpsideDown几种基础枚举，这就意味着能以组合的方式更加方便的使用这些枚举值。
+从宏定义可知，device方向比interface多了两个定义：`UIDeviceOrientationFaceUp`和`UIDeviceOrientationFaceDown`，分别表示手机水平放置，屏幕向上和屏幕向下。
 
 ##三、相关方法
 
 ####1、iOS5中控制屏幕旋转的方法：
 
-```
+```objective-c
 // Applications should use supportedInterfaceOrientations and/or shouldAutorotate..
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation NS_DEPRECATED_IOS(2_0, 6_0);
 ```
@@ -70,7 +111,7 @@ iOS6使用`NS_OPTIONS`的方式重新定义了UIInterfaceOrientationMaskPortrait
 
 ####2、iOS6中控制屏幕旋转相关方法：
 
-```
+```objective-c
 // New Autorotation support.
 - (BOOL)shouldAutorotate NS_AVAILABLE_IOS(6_0);
 - (NSUInteger)supportedInterfaceOrientations NS_AVAILABLE_IOS(6_0);
@@ -90,7 +131,7 @@ iOS6使用`NS_OPTIONS`的方式重新定义了UIInterfaceOrientationMaskPortrait
 
 从iOS5开始有了这个新方法：
 
-```
+```objective-c
 // call this method when your return value from shouldAutorotateToInterfaceOrientation: changes
 // if the current interface orientation does not match the current device orientation, a rotation may occur provided all relevant view controllers now return YES from shouldAutorotateToInterfaceOrientation:
 + (void)attemptRotationToDeviceOrientation NS_AVAILABLE_IOS(5_0);
@@ -116,7 +157,7 @@ Info.plist文件中，有一个`Supported interface orientations`，可以配置
 
 iOS6的UIApplicationDelegate提供了下述方法，能够指定 UIWindow 中的界面的屏幕方向：
 
-```
+```objective-c
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window  NS_AVAILABLE_IOS(6_0);
 ```
 该方法默认值为Info.plist中配置的`Supported interface orientations`项的值。
@@ -147,10 +188,10 @@ iOS中通常只有一个window，所以此处的控制也可以视为全局控�
 
 ####1、私有方法
 
-```
+```objective-c
 [[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];
 ```
-但是现在苹果已经将该方法私有化了，越狱开发的同学可以试试。
+但是现在苹果已经将该方法私有化了，越狱开发的同学可以试试，或者自己想法子骗过苹果审核吧。
 
 
 ####2、旋转view的transform
@@ -167,7 +208,7 @@ iOS中通常只有一个window，所以此处的控制也可以视为全局控�
 
 在iOS4和iOS6以后：
 
-```
+```objective-c
 UIViewController *vc = [[UIViewController alloc]init];
 [self presentModalViewController:vc animated:NO];
 [self dismissModalViewControllerAnimated:NO];
@@ -176,7 +217,7 @@ UIViewController *vc = [[UIViewController alloc]init];
 
 iOS5中：
 
-```
+```objective-c
 UIWindow *window = [[UIApplication sharedApplication] keyWindow];
 UIView *view = [window.subviews objectAtIndex:0];
 [view removeFromSuperview];
