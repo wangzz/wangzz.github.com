@@ -31,6 +31,8 @@ description: iOS屏幕旋转学习笔记
 ```
 所以更推荐下面这种用法：
 
+<!-- more -->
+
 ```objective-c
 if (![UIDevice currentDevice].generatesDeviceOrientationNotifications) {
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
@@ -65,7 +67,6 @@ NSLog(@"%d",viewController.interfaceOrientation);
 ```
 调用以后才会被更改成最新的值。
 
-<!-- more -->
 
 ##二、相关枚举定义
  
