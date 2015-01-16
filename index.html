@@ -310,13 +310,68 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <h4>1、device orientation</h4>
 
-<p>设备的物理方向</p>
+<p>设备的物理方向，由类型<code>UIDeviceOrientation</code>表示，当前设备方向获取方式：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">].</span><span class="n">orientation</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该属性的值一般是与当前设备方向保持一致的，但须注意以下几点：</p>
+
+<p>①文档中对该属性的注释：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span><span class="n">readonly</span><span class="p">)</span> <span class="n">UIDeviceOrientation</span> <span class="n">orientation</span><span class="p">;</span>       <span class="c1">// return current device orientation.  this will return UIDeviceOrientationUnknown unless device orientation notifications are being generated.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>所以更推荐下面这种用法：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">].</span><span class="n">generatesDeviceOrientationNotifications</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">[[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">]</span> <span class="n">beginGeneratingDeviceOrientationNotifications</span><span class="p">];</span>
+</span><span class='line'> <span class="p">}</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%d&quot;</span><span class="p">,[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">].</span><span class="n">orientation</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">]</span> <span class="n">endGeneratingDeviceOrientationNotifications</span><span class="p">];</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>②系统横竖屏开关关闭时</p>
+
+<p>如果关闭了系统的横竖屏切换开关，即系统层级只允许竖屏时，再通过上述方式获取到的设备方向将永远是<code>UIDeviceOrientationUnknown</code>。可以通过<code>Core Motion</code>中的<code>CMMotionManager</code>来获取当前设备方向。</p>
 
 <h4>2、interface orientation</h4>
 
-<p>界面显示的方向</p>
+<p>界面显示的方向，由类型<code>UIInterfaceOrientation</code>表示。当前界面显示方向有以下两种方式获取：</p>
 
-<p>iOS提供了在设备旋转时，界面显示发生相应适配的能力，已达到方便用户使用并提供最佳显示效果的目的。开发者需要指定应用支持的显示方向，并对界面显示做出对应的适配。由于界面适配的工作量相当大，目前国内的应用大都只支持默认的竖屏方向，</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%d&quot;</span><span class="p">,[</span><span class="n">UIApplication</span> <span class="n">sharedApplication</span><span class="p">].</span><span class="n">statusBarOrientation</span><span class="p">);</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%d&quot;</span><span class="p">,</span><span class="n">viewController</span><span class="p">.</span><span class="n">interfaceOrientation</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>即可以通过系统statusBar的方向或者viewController的方向来获取当前界面方向。</p>
+
+<h4>3、二者区别</h4>
+
+<p>通过<code>UIDevice</code>获取到的设备方向在手机旋转时是实时的，通过<code>UIApplication</code>的statusBar或者viewController获取到的界面方向在下述方法：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">willRotateToInterfaceOrientation:</span><span class="p">(</span><span class="n">UIInterfaceOrientation</span><span class="p">)</span><span class="nv">toInterfaceOrientation</span> <span class="nf">duration:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>调用以后才会被更改成最新的值。</p>
 
 </div>
   
@@ -682,9 +737,11 @@ $(document).bind('DOMNodeInserted', function(event) {
     	
 
 <!-- 广告位：Google -->
- 
+<!-- 
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+&#8211;>
 <!-- 王中周的技术博客 -->
+<!-- 
 <ins class="adsbygoogle"
      style="display:inline-block;width:250px;height:250px"
      data-ad-client="ca-pub-4428888818448200"
@@ -692,7 +749,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-
+&#8211;>
 
 
 
@@ -716,7 +773,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 	<span style="line-height:1.5;">This work is licensed under a </span><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a><span style="line-height:1.5;">.</span>
 </div>
 <p style="text-align:center;">
-	<span style="line-height:1;">Copyright &copy; 2014 - 王中周 - </span><span class="credit"><span style="line-height:1;">Powered by </span><a href="http://octopress.org"><span style="line-height:1;">Octopress</span></a></span> 
+	<span style="line-height:1;">Copyright &copy; 2015 - 王中周 - </span><span class="credit"><span style="line-height:1;">Powered by </span><a href="http://octopress.org"><span style="line-height:1;">Octopress</span></a></span> 
 </p>
 
 <p>

@@ -115,38 +115,77 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <h4>1、device orientation</h4>
 
-<p>设备的物理方向</p>
+<p>设备的物理方向，由类型<code>UIDeviceOrientation</code>表示，当前设备方向获取方式：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">].</span><span class="n">orientation</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该属性的值一般是与当前设备方向保持一致的，但须注意以下几点：</p>
+
+<p>①文档中对该属性的注释：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span><span class="n">readonly</span><span class="p">)</span> <span class="n">UIDeviceOrientation</span> <span class="n">orientation</span><span class="p">;</span>       <span class="c1">// return current device orientation.  this will return UIDeviceOrientationUnknown unless device orientation notifications are being generated.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>所以更推荐下面这种用法：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">].</span><span class="n">generatesDeviceOrientationNotifications</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">[[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">]</span> <span class="n">beginGeneratingDeviceOrientationNotifications</span><span class="p">];</span>
+</span><span class='line'> <span class="p">}</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%d&quot;</span><span class="p">,[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">].</span><span class="n">orientation</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">]</span> <span class="n">endGeneratingDeviceOrientationNotifications</span><span class="p">];</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>②系统横竖屏开关关闭时</p>
+
+<p>如果关闭了系统的横竖屏切换开关，即系统层级只允许竖屏时，再通过上述方式获取到的设备方向将永远是<code>UIDeviceOrientationUnknown</code>。可以通过<code>Core Motion</code>中的<code>CMMotionManager</code>来获取当前设备方向。</p>
 
 <h4>2、interface orientation</h4>
 
-<p>界面显示的方向</p>
+<p>界面显示的方向，由类型<code>UIInterfaceOrientation</code>表示。当前界面显示方向有以下两种方式获取：</p>
 
-<p>iOS提供了在设备旋转时，界面显示发生相应适配的能力，已达到方便用户使用并提供最佳显示效果的目的。开发者需要指定应用支持的显示方向，并对界面显示做出对应的适配。由于界面适配的工作量相当大，目前国内的应用大都只支持默认的竖屏方向，</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%d&quot;</span><span class="p">,[</span><span class="n">UIApplication</span> <span class="n">sharedApplication</span><span class="p">].</span><span class="n">statusBarOrientation</span><span class="p">);</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%d&quot;</span><span class="p">,</span><span class="n">viewController</span><span class="p">.</span><span class="n">interfaceOrientation</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>即可以通过系统statusBar的方向或者viewController的方向来获取当前界面方向。</p>
+
+<h4>3、二者区别</h4>
+
+<p>通过<code>UIDevice</code>获取到的设备方向在手机旋转时是实时的，通过<code>UIApplication</code>的statusBar或者viewController获取到的界面方向在下述方法：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">willRotateToInterfaceOrientation:</span><span class="p">(</span><span class="n">UIInterfaceOrientation</span><span class="p">)</span><span class="nv">toInterfaceOrientation</span> <span class="nf">duration:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>调用以后才会被更改成最新的值。</p>
 
 <!-- more -->
 
 
 <h2>二、相关枚举定义</h2>
 
-<h4>1、iOS5和之前版本（后文均简称iOS5）：</h4>
+<h4>1、UIDeviceOrientation：</h4>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>typedef NS_ENUM(NSInteger, UIInterfaceOrientation) {
-</span><span class='line'>    UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
-</span><span class='line'>    UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
-</span><span class='line'>    UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
-</span><span class='line'>    UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
-</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>2、iOS6和之后版本（后文均简称iOS6）又新增了：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -155,43 +194,64 @@ $(document).bind('DOMNodeInserted', function(event) {
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>typedef NS_OPTIONS(NSUInteger, UIInterfaceOrientationMask) {
-</span><span class='line'>    UIInterfaceOrientationMaskPortrait = (1 &lt;&lt; UIInterfaceOrientationPortrait),
-</span><span class='line'>    UIInterfaceOrientationMaskLandscapeLeft = (1 &lt;&lt; UIInterfaceOrientationLandscapeLeft),
-</span><span class='line'>    UIInterfaceOrientationMaskLandscapeRight = (1 &lt;&lt; UIInterfaceOrientationLandscapeRight),
-</span><span class='line'>    UIInterfaceOrientationMaskPortraitUpsideDown = (1 &lt;&lt; UIInterfaceOrientationPortraitUpsideDown),
-</span><span class='line'>    UIInterfaceOrientationMaskLandscape = (UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight),
-</span><span class='line'>    UIInterfaceOrientationMaskAll = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskPortraitUpsideDown),
-</span><span class='line'>    UIInterfaceOrientationMaskAllButUpsideDown = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight),
-</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">typedef</span> <span class="nf">NS_ENUM</span><span class="p">(</span><span class="n">NSInteger</span><span class="p">,</span> <span class="n">UIDeviceOrientation</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">UIDeviceOrientationUnknown</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIDeviceOrientationPortrait</span><span class="p">,</span>            <span class="c1">// Device oriented vertically, home button on the bottom</span>
+</span><span class='line'>    <span class="n">UIDeviceOrientationPortraitUpsideDown</span><span class="p">,</span>  <span class="c1">// Device oriented vertically, home button on the top</span>
+</span><span class='line'>    <span class="n">UIDeviceOrientationLandscapeLeft</span><span class="p">,</span>       <span class="c1">// Device oriented horizontally, home button on the right</span>
+</span><span class='line'>    <span class="n">UIDeviceOrientationLandscapeRight</span><span class="p">,</span>      <span class="c1">// Device oriented horizontally, home button on the left</span>
+</span><span class='line'>    <span class="n">UIDeviceOrientationFaceUp</span><span class="p">,</span>              <span class="c1">// Device oriented flat, face up</span>
+</span><span class='line'>    <span class="n">UIDeviceOrientationFaceDown</span>             <span class="c1">// Device oriented flat, face down</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>iOS6使用<code>NS_OPTIONS</code>的方式重新定义了UIInterfaceOrientationMaskPortrait、UIInterfaceOrientationMaskLandscapeLeft、UIInterfaceOrientationMaskLandscapeRight、UIInterfaceOrientationMaskPortraitUpsideDown几种基础枚举，这就意味着能以组合的方式更加方便的使用这些枚举值。</p>
+<h4>2、UIInterfaceOrientation：</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">typedef</span> <span class="nf">NS_ENUM</span><span class="p">(</span><span class="n">NSInteger</span><span class="p">,</span> <span class="n">UIInterfaceOrientation</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">UIInterfaceOrientationUnknown</span>            <span class="o">=</span> <span class="n">UIDeviceOrientationUnknown</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIInterfaceOrientationPortrait</span>           <span class="o">=</span> <span class="n">UIDeviceOrientationPortrait</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIInterfaceOrientationPortraitUpsideDown</span> <span class="o">=</span> <span class="n">UIDeviceOrientationPortraitUpsideDown</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIInterfaceOrientationLandscapeLeft</span>      <span class="o">=</span> <span class="n">UIDeviceOrientationLandscapeRight</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIInterfaceOrientationLandscapeRight</span>     <span class="o">=</span> <span class="n">UIDeviceOrientationLandscapeLeft</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从宏定义可知，device方向比interface多了两个定义：<code>UIDeviceOrientationFaceUp</code>和<code>UIDeviceOrientationFaceDown</code>，分别表示手机水平放置，屏幕向上和屏幕向下。</p>
 
 <h2>三、相关方法</h2>
 
 <h4>1、iOS5中控制屏幕旋转的方法：</h4>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// Applications should use supportedInterfaceOrientations and/or shouldAutorotate..
-</span><span class='line'>- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation NS_DEPRECATED_IOS(2_0, 6_0);</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="c1">// Applications should use supportedInterfaceOrientations and/or shouldAutorotate..</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">shouldAutorotateToInterfaceOrientation:</span><span class="p">(</span><span class="n">UIInterfaceOrientation</span><span class="p">)</span><span class="nv">toInterfaceOrientation</span> <span class="n">NS_DEPRECATED_IOS</span><span class="p">(</span><span class="mi">2</span><span class="n">_0</span><span class="p">,</span> <span class="mi">6</span><span class="n">_0</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>如果打算支持toInterfaceOrientation对应的方向就返回YES，否则返回NO。</p>
 
 <h4>2、iOS6中控制屏幕旋转相关方法：</h4>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// New Autorotation support.
-</span><span class='line'>- (BOOL)shouldAutorotate NS_AVAILABLE_IOS(6_0);
-</span><span class='line'>- (NSUInteger)supportedInterfaceOrientations NS_AVAILABLE_IOS(6_0);
-</span><span class='line'>// Returns interface orientation masks.
-</span><span class='line'>- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation NS_AVAILABLE_IOS(6_0);
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="c1">// New Autorotation support.</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">shouldAutorotate</span> <span class="n">NS_AVAILABLE_IOS</span><span class="p">(</span><span class="mi">6</span><span class="n">_0</span><span class="p">);</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nf">supportedInterfaceOrientations</span> <span class="n">NS_AVAILABLE_IOS</span><span class="p">(</span><span class="mi">6</span><span class="n">_0</span><span class="p">);</span>
+</span><span class='line'><span class="c1">// Returns interface orientation masks.</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">UIInterfaceOrientation</span><span class="p">)</span><span class="nf">preferredInterfaceOrientationForPresentation</span> <span class="n">NS_AVAILABLE_IOS</span><span class="p">(</span><span class="mi">6</span><span class="n">_0</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -205,12 +265,13 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>从iOS5开始有了这个新方法：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// call this method when your return value from shouldAutorotateToInterfaceOrientation: changes
-</span><span class='line'>// if the current interface orientation does not match the current device orientation, a rotation may occur provided all relevant view controllers now return YES from shouldAutorotateToInterfaceOrientation:
-</span><span class='line'>+ (void)attemptRotationToDeviceOrientation NS_AVAILABLE_IOS(5_0);</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="c1">// call this method when your return value from shouldAutorotateToInterfaceOrientation: changes</span>
+</span><span class='line'><span class="c1">// if the current interface orientation does not match the current device orientation, a rotation may occur provided all relevant view controllers now return YES from shouldAutorotateToInterfaceOrientation:</span>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">attemptRotationToDeviceOrientation</span> <span class="n">NS_AVAILABLE_IOS</span><span class="p">(</span><span class="mi">5</span><span class="n">_0</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>该方法的使用场景是interface orientation和device orientation不一致，但希望通过重新指定interface orientation的值，立即实现二者一致；如果这时只是更改了支持的interface orientation的值，没有调用attemptRotationToDeviceOrientation，那么下次device orientation变化的时候才会实现二者一致，关键点在于能不能立即实现。</p>
@@ -231,8 +292,9 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>iOS6的UIApplicationDelegate提供了下述方法，能够指定 UIWindow 中的界面的屏幕方向：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window  NS_AVAILABLE_IOS(6_0);</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="n">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="nv">application</span> <span class="nf">supportedInterfaceOrientationsForWindow:</span><span class="p">(</span><span class="n">UIWindow</span> <span class="o">*</span><span class="p">)</span><span class="nv">window</span>  <span class="n">NS_AVAILABLE_IOS</span><span class="p">(</span><span class="mi">6</span><span class="n">_0</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>该方法默认值为Info.plist中配置的<code>Supported interface orientations</code>项的值。</p>
@@ -265,11 +327,12 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <h4>1、私有方法</h4>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">[[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">]</span> <span class="nl">setOrientation:</span><span class="n">UIInterfaceOrientationPortrait</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>但是现在苹果已经将该方法私有化了，越狱开发的同学可以试试。</p>
+<p>但是现在苹果已经将该方法私有化了，越狱开发的同学可以试试，或者自己想法子骗过苹果审核吧。</p>
 
 <h4>2、旋转view的transform</h4>
 
@@ -283,26 +346,28 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>在iOS4和iOS6以后：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>UIViewController *vc = [[UIViewController alloc]init];
-</span><span class='line'>[self presentModalViewController:vc animated:NO];
-</span><span class='line'>[self dismissModalViewControllerAnimated:NO];
-</span><span class='line'>[vc release];</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">UIViewController</span> <span class="o">*</span><span class="n">vc</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIViewController</span> <span class="n">alloc</span><span class="p">]</span><span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">presentModalViewController:</span><span class="n">vc</span> <span class="nl">animated:</span><span class="n">NO</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">dismissModalViewControllerAnimated:</span><span class="n">NO</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">vc</span> <span class="n">release</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>iOS5中：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-</span><span class='line'>UIView *view = [window.subviews objectAtIndex:0];
-</span><span class='line'>[view removeFromSuperview];
-</span><span class='line'>[window addSubview:view];</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">UIWindow</span> <span class="o">*</span><span class="n">window</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIApplication</span> <span class="n">sharedApplication</span><span class="p">]</span> <span class="n">keyWindow</span><span class="p">];</span>
+</span><span class='line'><span class="n">UIView</span> <span class="o">*</span><span class="n">view</span> <span class="o">=</span> <span class="p">[</span><span class="n">window</span><span class="p">.</span><span class="n">subviews</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">view</span> <span class="n">removeFromSuperview</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">window</span> <span class="nl">addSubview:</span><span class="n">view</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>这种方式会触发UIKit重新调用controller的orientation相关方法，以达到在device方向不变的情况下改变interface方向的目的。</p>
@@ -468,9 +533,11 @@ $(document).bind('DOMNodeInserted', function(event) {
     	
 
 <!-- 广告位：Google -->
- 
+<!-- 
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+-->
 <!-- 王中周的技术博客 -->
+<!-- 
 <ins class="adsbygoogle"
      style="display:inline-block;width:250px;height:250px"
      data-ad-client="ca-pub-4428888818448200"
@@ -478,7 +545,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-
+-->
 
 
 
@@ -503,7 +570,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 	<span style="line-height:1.5;">This work is licensed under a </span><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a><span style="line-height:1.5;">.</span>
 </div>
 <p style="text-align:center;">
-	<span style="line-height:1;">Copyright &copy; 2014 - 王中周 - </span><span class="credit"><span style="line-height:1;">Powered by </span><a href="http://octopress.org"><span style="line-height:1;">Octopress</span></a></span> 
+	<span style="line-height:1;">Copyright &copy; 2015 - 王中周 - </span><span class="credit"><span style="line-height:1;">Powered by </span><a href="http://octopress.org"><span style="line-height:1;">Octopress</span></a></span> 
 </p>
 
 <p>

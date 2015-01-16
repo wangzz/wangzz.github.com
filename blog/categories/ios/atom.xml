@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2014-12-05T15:01:25+08:00</updated>
+  <updated>2015-01-16T21:42:42+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -1193,25 +1193,86 @@ CATransform3D CATransform3DConcat (CATransform3D a, CATransform3D b)
 
 <h4>1、device orientation</h4>
 
-<p>设备的物理方向</p>
+<p>设备的物理方向，由类型<code>UIDeviceOrientation</code>表示，当前设备方向获取方式：</p>
+
+<p><code>objective-c
+[UIDevice currentDevice].orientation
+</code>
+该属性的值一般是与当前设备方向保持一致的，但须注意以下几点：</p>
+
+<p>①文档中对该属性的注释：</p>
+
+<p><code>objective-c
+@property(nonatomic,readonly) UIDeviceOrientation orientation;       // return current device orientation.  this will return UIDeviceOrientationUnknown unless device orientation notifications are being generated.
+</code>
+所以更推荐下面这种用法：</p>
+
+<p>```objective-c
+if (![UIDevice currentDevice].generatesDeviceOrientationNotifications) {</p>
+
+<pre><code>    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+</code></pre>
+
+<p> }
+NSLog(@&ldquo;%d&rdquo;,[UIDevice currentDevice].orientation);</p>
+
+<p>[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];</p>
+
+<p>```</p>
+
+<p>②系统横竖屏开关关闭时</p>
+
+<p>如果关闭了系统的横竖屏切换开关，即系统层级只允许竖屏时，再通过上述方式获取到的设备方向将永远是<code>UIDeviceOrientationUnknown</code>。可以通过<code>Core Motion</code>中的<code>CMMotionManager</code>来获取当前设备方向。</p>
 
 <h4>2、interface orientation</h4>
 
-<p>界面显示的方向</p>
+<p>界面显示的方向，由类型<code>UIInterfaceOrientation</code>表示。当前界面显示方向有以下两种方式获取：</p>
 
-<p>iOS提供了在设备旋转时，界面显示发生相应适配的能力，已达到方便用户使用并提供最佳显示效果的目的。开发者需要指定应用支持的显示方向，并对界面显示做出对应的适配。由于界面适配的工作量相当大，目前国内的应用大都只支持默认的竖屏方向，</p>
+<p><code>objective-c
+NSLog(@"%d",[UIApplication sharedApplication].statusBarOrientation);
+NSLog(@"%d",viewController.interfaceOrientation);
+</code></p>
+
+<p>即可以通过系统statusBar的方向或者viewController的方向来获取当前界面方向。</p>
+
+<h4>3、二者区别</h4>
+
+<p>通过<code>UIDevice</code>获取到的设备方向在手机旋转时是实时的，通过<code>UIApplication</code>的statusBar或者viewController获取到的界面方向在下述方法：</p>
+
+<p><code>objective-c
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:
+</code>
+调用以后才会被更改成最新的值。</p>
 
 <!-- more -->
 
 
 <h2>二、相关枚举定义</h2>
 
-<h4>1、iOS5和之前版本（后文均简称iOS5）：</h4>
+<h4>1、UIDeviceOrientation：</h4>
 
-<p>```
+<p>```objective-c
+typedef NS_ENUM(NSInteger, UIDeviceOrientation) {</p>
+
+<pre><code>UIDeviceOrientationUnknown,
+UIDeviceOrientationPortrait,            // Device oriented vertically, home button on the bottom
+UIDeviceOrientationPortraitUpsideDown,  // Device oriented vertically, home button on the top
+UIDeviceOrientationLandscapeLeft,       // Device oriented horizontally, home button on the right
+UIDeviceOrientationLandscapeRight,      // Device oriented horizontally, home button on the left
+UIDeviceOrientationFaceUp,              // Device oriented flat, face up
+UIDeviceOrientationFaceDown             // Device oriented flat, face down
+</code></pre>
+
+<p>};
+```</p>
+
+<h4>2、UIInterfaceOrientation：</h4>
+
+<p>```objective-c
 typedef NS_ENUM(NSInteger, UIInterfaceOrientation) {</p>
 
-<pre><code>UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
+<pre><code>UIInterfaceOrientationUnknown            = UIDeviceOrientationUnknown,
+UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,
 UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,
 UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,
 UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
@@ -1220,30 +1281,13 @@ UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft
 <p>};
 ```</p>
 
-<h4>2、iOS6和之后版本（后文均简称iOS6）又新增了：</h4>
-
-<p>```
-typedef NS_OPTIONS(NSUInteger, UIInterfaceOrientationMask) {</p>
-
-<pre><code>UIInterfaceOrientationMaskPortrait = (1 &lt;&lt; UIInterfaceOrientationPortrait),
-UIInterfaceOrientationMaskLandscapeLeft = (1 &lt;&lt; UIInterfaceOrientationLandscapeLeft),
-UIInterfaceOrientationMaskLandscapeRight = (1 &lt;&lt; UIInterfaceOrientationLandscapeRight),
-UIInterfaceOrientationMaskPortraitUpsideDown = (1 &lt;&lt; UIInterfaceOrientationPortraitUpsideDown),
-UIInterfaceOrientationMaskLandscape = (UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight),
-UIInterfaceOrientationMaskAll = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskPortraitUpsideDown),
-UIInterfaceOrientationMaskAllButUpsideDown = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight),
-</code></pre>
-
-<p>};
-```</p>
-
-<p>iOS6使用<code>NS_OPTIONS</code>的方式重新定义了UIInterfaceOrientationMaskPortrait、UIInterfaceOrientationMaskLandscapeLeft、UIInterfaceOrientationMaskLandscapeRight、UIInterfaceOrientationMaskPortraitUpsideDown几种基础枚举，这就意味着能以组合的方式更加方便的使用这些枚举值。</p>
+<p>从宏定义可知，device方向比interface多了两个定义：<code>UIDeviceOrientationFaceUp</code>和<code>UIDeviceOrientationFaceDown</code>，分别表示手机水平放置，屏幕向上和屏幕向下。</p>
 
 <h2>三、相关方法</h2>
 
 <h4>1、iOS5中控制屏幕旋转的方法：</h4>
 
-<p><code>
+<p><code>objective-c
 // Applications should use supportedInterfaceOrientations and/or shouldAutorotate..
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation NS_DEPRECATED_IOS(2_0, 6_0);
 </code>
@@ -1251,7 +1295,7 @@ UIInterfaceOrientationMaskAllButUpsideDown = (UIInterfaceOrientationMaskPortrait
 
 <h4>2、iOS6中控制屏幕旋转相关方法：</h4>
 
-<p>```
+<p>```objective-c
 // New Autorotation support.
 &ndash; (BOOL)shouldAutorotate NS_AVAILABLE_IOS(6_0);
 &ndash; (NSUInteger)supportedInterfaceOrientations NS_AVAILABLE_IOS(6_0);
@@ -1270,7 +1314,7 @@ UIInterfaceOrientationMaskAllButUpsideDown = (UIInterfaceOrientationMaskPortrait
 
 <p>从iOS5开始有了这个新方法：</p>
 
-<p><code>
+<p><code>objective-c
 // call this method when your return value from shouldAutorotateToInterfaceOrientation: changes
 // if the current interface orientation does not match the current device orientation, a rotation may occur provided all relevant view controllers now return YES from shouldAutorotateToInterfaceOrientation:
 + (void)attemptRotationToDeviceOrientation NS_AVAILABLE_IOS(5_0);
@@ -1294,7 +1338,7 @@ UIInterfaceOrientationMaskAllButUpsideDown = (UIInterfaceOrientationMaskPortrait
 
 <p>iOS6的UIApplicationDelegate提供了下述方法，能够指定 UIWindow 中的界面的屏幕方向：</p>
 
-<p><code>
+<p><code>objective-c
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window  NS_AVAILABLE_IOS(6_0);
 </code>
 该方法默认值为Info.plist中配置的<code>Supported interface orientations</code>项的值。</p>
@@ -1327,10 +1371,10 @@ UIInterfaceOrientationMaskAllButUpsideDown = (UIInterfaceOrientationMaskPortrait
 
 <h4>1、私有方法</h4>
 
-<p><code>
+<p><code>objective-c
 [[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];
 </code>
-但是现在苹果已经将该方法私有化了，越狱开发的同学可以试试。</p>
+但是现在苹果已经将该方法私有化了，越狱开发的同学可以试试，或者自己想法子骗过苹果审核吧。</p>
 
 <h4>2、旋转view的transform</h4>
 
@@ -1344,7 +1388,7 @@ UIInterfaceOrientationMaskAllButUpsideDown = (UIInterfaceOrientationMaskPortrait
 
 <p>在iOS4和iOS6以后：</p>
 
-<p><code>
+<p><code>objective-c
 UIViewController *vc = [[UIViewController alloc]init];
 [self presentModalViewController:vc animated:NO];
 [self dismissModalViewControllerAnimated:NO];
@@ -1353,7 +1397,7 @@ UIViewController *vc = [[UIViewController alloc]init];
 
 <p>iOS5中：</p>
 
-<p><code>
+<p><code>objective-c
 UIWindow *window = [[UIApplication sharedApplication] keyWindow];
 UIView *view = [window.subviews objectAtIndex:0];
 [view removeFromSuperview];
