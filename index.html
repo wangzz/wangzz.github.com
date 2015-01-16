@@ -328,51 +328,6 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>所以更推荐下面这种用法：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">].</span><span class="n">generatesDeviceOrientationNotifications</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="p">[[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">]</span> <span class="n">beginGeneratingDeviceOrientationNotifications</span><span class="p">];</span>
-</span><span class='line'> <span class="p">}</span>
-</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%d&quot;</span><span class="p">,[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">].</span><span class="n">orientation</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">[[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">]</span> <span class="n">endGeneratingDeviceOrientationNotifications</span><span class="p">];</span>
-</span><span class='line'>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>②系统横竖屏开关关闭时</p>
-
-<p>如果关闭了系统的横竖屏切换开关，即系统层级只允许竖屏时，再通过上述方式获取到的设备方向将永远是<code>UIDeviceOrientationUnknown</code>。可以通过<code>Core Motion</code>中的<code>CMMotionManager</code>来获取当前设备方向。</p>
-
-<h4>2、interface orientation</h4>
-
-<p>界面显示的方向，由类型<code>UIInterfaceOrientation</code>表示。当前界面显示方向有以下两种方式获取：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%d&quot;</span><span class="p">,[</span><span class="n">UIApplication</span> <span class="n">sharedApplication</span><span class="p">].</span><span class="n">statusBarOrientation</span><span class="p">);</span>
-</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%d&quot;</span><span class="p">,</span><span class="n">viewController</span><span class="p">.</span><span class="n">interfaceOrientation</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>即可以通过系统statusBar的方向或者viewController的方向来获取当前界面方向。</p>
-
-<h4>3、二者区别</h4>
-
-<p>通过<code>UIDevice</code>获取到的设备方向在手机旋转时是实时的，通过<code>UIApplication</code>的statusBar或者viewController获取到的界面方向在下述方法：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">willRotateToInterfaceOrientation:</span><span class="p">(</span><span class="n">UIInterfaceOrientation</span><span class="p">)</span><span class="nv">toInterfaceOrientation</span> <span class="nf">duration:</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>调用以后才会被更改成最新的值。</p>
-
 </div>
   
   

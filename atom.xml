@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2015-01-16T21:43:25+08:00</updated>
+  <updated>2015-01-16T21:47:04+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -1360,6 +1360,11 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
 
 <p>所以更推荐下面这种用法：</p>
 
+<!-- more -->
+
+
+
+
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -1404,9 +1409,6 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
 
 
 <p>调用以后才会被更改成最新的值。</p>
-
-<!-- more -->
-
 
 <h2>二、相关枚举定义</h2>
 

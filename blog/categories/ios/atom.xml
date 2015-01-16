@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2015-01-16T21:43:25+08:00</updated>
+  <updated>2015-01-16T21:47:04+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -1207,6 +1207,9 @@ CATransform3D CATransform3DConcat (CATransform3D a, CATransform3D b)
 </code>
 所以更推荐下面这种用法：</p>
 
+<!-- more -->
+
+
 <p>```objective-c
 if (![UIDevice currentDevice].generatesDeviceOrientationNotifications) {</p>
 
@@ -1243,9 +1246,6 @@ NSLog(@"%d",viewController.interfaceOrientation);
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:
 </code>
 调用以后才会被更改成最新的值。</p>
-
-<!-- more -->
-
 
 <h2>二、相关枚举定义</h2>
 
