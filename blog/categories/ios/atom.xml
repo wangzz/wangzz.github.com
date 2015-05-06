@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2015-05-06T17:52:26+08:00</updated>
+  <updated>2015-05-06T17:55:13+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -22,11 +22,17 @@
 
 <p>OpenGL中，GPU屏幕渲染有以下两种方式：</p>
 
-<h4>On-Screen Rendering</h4>
+<ul>
+<li>On-Screen Rendering</li>
+</ul>
+
 
 <p>意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。</p>
 
-<h4>Off-Screen Rendering</h4>
+<ul>
+<li>Off-Screen Rendering</li>
+</ul>
+
 
 <p>意为离屏渲染，指的是GPU在当前屏幕缓冲区以外新开辟一个缓冲区进行渲染操作。</p>
 
@@ -37,11 +43,17 @@
 
 <p>相比于当前屏幕渲染，离屏渲染的代价是很高的，主要体现在两个方面：</p>
 
-<h4>创建新缓冲区</h4>
+<ul>
+<li>创建新缓冲区</li>
+</ul>
+
 
 <p>要想进行离屏渲染，首先要创建一个新的缓冲区。</p>
 
-<h4>上下文切换</h4>
+<ul>
+<li>上下文切换</li>
+</ul>
+
 
 <p>离屏渲染的整个过程，需要多次切换上下文环境：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上有需要将上下文环境从离屏切换到当前屏幕。而上下文环境的切换是要付出很大代价的。</p>
 
@@ -72,11 +84,17 @@
 
 <p>Instruments的Core Animation工具中有几个和离屏渲染相关的检查选项：</p>
 
-<h4>Color Offscreen-Rendered Yellow</h4>
+<ul>
+<li>Color Offscreen-Rendered Yellow</li>
+</ul>
+
 
 <p>开启后会把那些需要离屏渲染的图层高亮成黄色，这就意味着黄色图层可能存在性能问题。</p>
 
-<h4>Color Hits Green and Misses Red</h4>
+<ul>
+<li>Color Hits Green and Misses Red</li>
+</ul>
+
 
 <p>如果shouldRasterize被设置成YES，对应的渲染结果会被缓存，如果图层是绿色，就表示这些缓存被复用；如果是红色就表示缓存会被重复创建，这就表示该处存在性能问题了。</p>
 
@@ -84,11 +102,17 @@
 
 <p>现在摆在我们面前得有三个选择：当前屏幕渲染、离屏渲染、CPU渲染，该用哪个呢？这需要根据具体的使用场景来决定。</p>
 
-<h4>尽量使用当前屏幕渲染</h4>
+<ul>
+<li>尽量使用当前屏幕渲染</li>
+</ul>
+
 
 <p>鉴于离屏渲染、CPU渲染可能带来的性能问题，一般情况下，我们要尽量使用当前屏幕渲染。</p>
 
-<h4>离屏渲染 VS CPU渲染</h4>
+<ul>
+<li>离屏渲染 VS CPU渲染</li>
+</ul>
+
 
 <p>由于GPU的浮点运算能力比CPU强，CPU渲染的效率可能不如离屏渲染；但如果仅仅是实现一个简单的效果，直接使用CPU渲染的效率又可能比离屏渲染好，毕竟离屏渲染要涉及到缓冲区创建和上下文切换等耗时操作。</p>
 
@@ -98,7 +122,7 @@
 
 <p>在赵岩同学的点拨下才理解了离屏渲染的概念，在此表示感谢！</p>
 
-<p>理解有误指出还请大家指出。</p>
+<p>如理解有误还请大家指出。</p>
 
 <h2>参考文档</h2>
 
