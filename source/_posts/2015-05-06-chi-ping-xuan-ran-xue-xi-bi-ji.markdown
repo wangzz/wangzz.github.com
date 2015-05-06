@@ -4,9 +4,10 @@ title: "离屏渲染学习笔记"
 date: 2015-05-06 17:17:55 +0800
 comments: true
 categories: iOS
-tags: [iPhone, iOS, on-screen rendering, off-screen rendering]
-keywords: iPhone, iOS, on-screen rendering, off-screen rendering
+tags: [iPhone, iOS, on-screen rendering, off-screen rendering, 离屏渲染]
+keywords: iPhone, iOS, off-screen rendering, 离屏渲染
 description: 离屏渲染学习笔记
+
 ---
 
 #### 概念理解OpenGL中，GPU屏幕渲染有以下两种方式：* On-Screen Rendering意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。* Off-Screen Rendering意为离屏渲染，指的是GPU在当前屏幕缓冲区以外新开辟一个缓冲区进行渲染操作。
