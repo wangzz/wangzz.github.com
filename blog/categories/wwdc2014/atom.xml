@@ -4,7 +4,7 @@
   <title><![CDATA[Category: WWDC2014 | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/wwdc2014/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2015-05-06T17:55:13+08:00</updated>
+  <updated>2015-05-06T18:00:03+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -554,28 +554,6 @@ Jun 23 19:37:49 autonavis-iPad com.foogry.AppExtensionDemo.TodayExtension[7638] 
 <p>和静态库在编译时和app代码链接并打进同一个二进制包中不同，动态库可以在运行时手动加载，这样就可以做很多事情，比如：</p>
 
 <ul>
-<li>应用插件化</li>
-</ul>
-
-
-<p>目前很多应用功能越做越多，软件显得越来越臃肿。因此插件化就成了很多软件发展的必经之路，比如支付宝这种平台级别的软件：</p>
-
-<p><img src="http://wangzz.github.io/images/article4/AliPay.png" width="320" height="480"></p>
-
-<p>首页上密密麻麻的功能，而且还在增多，照这个趋势发展下去，软件包的大小将会不可想象。目前常用的解决方案是使用web页面，但用户体验和Native界面是没法比的。</p>
-
-<p>设想，如果每一个功能点都是一个动态库，在用户想使用某个功能的时候让其从网络下载，然后手动加载动态库，实现功能的的插件化，就再也不用担心功能点的无限增多了，这该是件多么美好的事！</p>
-
-<ul>
-<li>软件版本实时模块升级</li>
-</ul>
-
-
-<p>还在忍受苹果动辄一周，甚至更长的审核周期吗？有了动态库妈妈就再也不用担心你的软件升级了！</p>
-
-<p>如果软件中的某个功能点出现了严重的bug，或者想在其中新增功能，你的这个功能点又是通过动态库实现的，这时候你只需要在适当的时候从服务器上将新版本的动态库文件下载到本地，然后在用户重启应用的时候即可实现新功能的展现。</p>
-
-<ul>
 <li>共享可执行文件</li>
 </ul>
 
@@ -584,12 +562,9 @@ Jun 23 19:37:49 autonavis-iPad com.foogry.AppExtensionDemo.TodayExtension[7638] 
 
 <p>不过iOS8上开放了<code>App Extension</code>功能，可以为一个应用创建插件，这样主app和插件之间共享动态库还是可行的。</p>
 
-<p>PS：
-上述关于动态库在iOS平台的使用，在技术上都是可行的，但本人并没有真正尝试过做出一个上线AppStore的应用，因此并不保证按照上述方式使用动态库一定能通过苹果审核！</p>
-
 <p>2014-6-23修正：</p>
 
-<p>经<a href="http://weibo.com/tangqiaoboy?topnav=1&amp;wvr=5&amp;topsug=1">@唐巧_boy</a>提醒，sandbox会验证动态库的签名，所以如果是动态从服务器更新的动态库，应该是签名不了的，因此应用插件化、软件版本实时模块升级估计很难实现，一切都只能等到iOS8正式版发布以后再验证了。感谢<a href="http://weibo.com/tangqiaoboy?topnav=1&amp;wvr=5&amp;topsug=1">@唐巧_boy</a>！</p>
+<p>经<a href="http://weibo.com/tangqiaoboy?topnav=1&amp;wvr=5&amp;topsug=1">@唐巧_boy</a>提醒，sandbox会验证动态库的签名，所以如果是动态从服务器更新的动态库，是签名不了的，因此应用插件化、软件版本实时模块升级等功能在iOS上无法实现。</p>
 
 <h2>创建动态库</h2>
 
