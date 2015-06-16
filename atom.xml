@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2015-06-16T20:17:58+08:00</updated>
+  <updated>2015-06-16T20:29:24+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -3932,6 +3932,121 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
 
 <p>不过本站的链接还是会在当前界面中打开。</p>
 
+<h2>返回顶部按钮</h2>
+
+<p>文章较长时，返回顶部按钮还是很有用的。下面方法介绍了如何添加一个返回顶部按钮：</p>
+
+<ul>
+<li>实现返回按钮功能</li>
+</ul>
+
+
+<p>首先创建<code>source/javascripts/top.js</code>，添加如下代码实现滑动返回顶部效果:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function goTop(acceleration, time)
+</span><span class='line'>{
+</span><span class='line'>        acceleration = acceleration || 0.1;
+</span><span class='line'>        time = time || 16;
+</span><span class='line'>
+</span><span class='line'>        var x1 = 0;
+</span><span class='line'>        var y1 = 0;
+</span><span class='line'>        var x2 = 0;
+</span><span class='line'>        var y2 = 0;
+</span><span class='line'>        var x3 = 0;
+</span><span class='line'>        var y3 = 0;
+</span><span class='line'>
+</span><span class='line'>        if (document.documentElement)
+</span><span class='line'>        {
+</span><span class='line'>                x1 = document.documentElement.scrollLeft || 0;
+</span><span class='line'>                y1 = document.documentElement.scrollTop || 0;
+</span><span class='line'>        }
+</span><span class='line'>        if (document.body)
+</span><span class='line'>        {
+</span><span class='line'>                x2 = document.body.scrollLeft || 0;
+</span><span class='line'>                y2 = document.body.scrollTop || 0;
+</span><span class='line'>        }
+</span><span class='line'>        var x3 = window.scrollX || 0;
+</span><span class='line'>        var y3 = window.scrollY || 0;
+</span><span class='line'>
+</span><span class='line'>        var x = Math.max(x1, Math.max(x2, x3));
+</span><span class='line'>        var y = Math.max(y1, Math.max(y2, y3));
+</span><span class='line'>
+</span><span class='line'>        var speed = 1 + acceleration;
+</span><span class='line'>        window.scrollTo(Math.floor(x / speed), Math.floor(y / speed));
+</span><span class='line'>
+</span><span class='line'>        if(x &gt; 0 || y &gt; 0)
+</span><span class='line'>        {
+</span><span class='line'>                var invokeFunction = "goTop(" + acceleration + ", " + time + ")";
+</span><span class='line'>                window.setTimeout(invokeFunction, time);
+</span><span class='line'>        }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>自定义返回按钮格式</li>
+</ul>
+
+
+<p>创建<code>source/_includes/custom/totop.html</code>，设置返回顶部按钮样式和位置，代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!--返回顶部开始--&gt;
+</span><span class='line'>&lt;div id="full" style="width:0px; height:0px; position:fixed; right:180px; bottom:150px; z-index:100; text-align:center; background-color:transparent; cursor:pointer;"&gt;
+</span><span class='line'>  &lt;a href="#" onclick="goTop();return false;"&gt;&lt;img src="http://wangzz.github.io/images/top.png" border=0 alt="返回顶部"&gt;&lt;/a&gt;
+</span><span class='line'>&lt;/div&gt;
+</span><span class='line'>&lt;script src="http://wangzz.github.io/javascripts/top.js" type="text/javascript"&gt;&lt;/script&gt;
+</span><span class='line'>&lt;!--返回顶部结束--&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>选择按钮图片</li>
+</ul>
+
+
+<p>找到自己喜爱的返回按钮图片，命名为<code>top.png</code>后添加到<code>source/images</code>目录中（或修改<code>totop.html</code>中图片的路径）。</p>
+
 <h2>自定义域名</h2>
 
 <p>使用<a href="https://pages.github.com/">Github Pages</a>服务搭建好博客以后，默认的访问地址是<code>yourname.github.io</code>形式的二级域名。大家一定迫不及待的想换成自己的个性域名了。</p>
@@ -3984,6 +4099,7 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
 <li><p><a href="http://asaf.github.io/blog/2013/07/08/blogging-with-octopress-add-about-page/">Add About Page</a></p></li>
 <li><p><a href="http://www.blogjava.net/lishunli/archive/2013/01/20/394478.html">新标签页打开第三方链接</a></p></li>
 <li><p><a href="http://blog.csdn.net/lcliliil/article/details/13725895">增加新浪微博秀</a></p></li>
+<li><p><a href="http://812lcl.com/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a></p></li>
 </ul>
 
 ]]></content>
