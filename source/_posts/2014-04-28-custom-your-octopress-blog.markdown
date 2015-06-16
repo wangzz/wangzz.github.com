@@ -264,6 +264,70 @@ Octopress博客中，默认是在当前界面中打开第三方链接，这导�
 
 不过本站的链接还是会在当前界面中打开。
 
+## 返回顶部按钮
+
+文章较长时，返回顶部按钮还是很有用的。下面方法介绍了如何添加一个返回顶部按钮：
+
+* 实现返回按钮功能
+
+首先创建`source/javascripts/top.js`，添加如下代码实现滑动返回顶部效果:
+```
+function goTop(acceleration, time)
+{
+        acceleration = acceleration || 0.1;
+        time = time || 16;
+
+        var x1 = 0;
+        var y1 = 0;
+        var x2 = 0;
+        var y2 = 0;
+        var x3 = 0;
+        var y3 = 0;
+
+        if (document.documentElement)
+        {
+                x1 = document.documentElement.scrollLeft || 0;
+                y1 = document.documentElement.scrollTop || 0;
+        }
+        if (document.body)
+        {
+                x2 = document.body.scrollLeft || 0;
+                y2 = document.body.scrollTop || 0;
+        }
+        var x3 = window.scrollX || 0;
+        var y3 = window.scrollY || 0;
+
+        var x = Math.max(x1, Math.max(x2, x3));
+        var y = Math.max(y1, Math.max(y2, y3));
+
+        var speed = 1 + acceleration;
+        window.scrollTo(Math.floor(x / speed), Math.floor(y / speed));
+
+        if(x > 0 || y > 0)
+        {
+                var invokeFunction = "goTop(" + acceleration + ", " + time + ")";
+                window.setTimeout(invokeFunction, time);
+        }
+}
+```
+
+* 自定义返回按钮格式
+
+创建`source/_includes/custom/totop.html`，设置返回顶部按钮样式和位置，代码如下：
+
+```
+<!--返回顶部开始-->
+<div id="full" style="width:0px; height:0px; position:fixed; right:180px; bottom:150px; z-index:100; text-align:center; background-color:transparent; cursor:pointer;">
+	<a href="#" onclick="goTop();return false;"><img src="/images/top.png" border=0 alt="返回顶部"></a>
+</div>
+<script src="/javascripts/top.js" type="text/javascript"></script>
+<!--返回顶部结束-->
+```
+
+* 选择按钮图片
+
+找到自己喜爱的返回按钮图片，命名为`top.png`后添加到`source/images`目录中（或修改`totop.html`中图片的路径）。
+
 ## 自定义域名
 
 使用[Github Pages](https://pages.github.com/)服务搭建好博客以后，默认的访问地址是`yourname.github.io`形式的二级域名。大家一定迫不及待的想换成自己的个性域名了。
@@ -311,6 +375,6 @@ github.map.fastly.net.	29	IN	A	103.235.222.168
 
 * [增加新浪微博秀](http://blog.csdn.net/lcliliil/article/details/13725895)
 
-
+* [Octopress主题样式修改](http://812lcl.com/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/)
 
 
