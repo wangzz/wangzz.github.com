@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2015-06-16T20:29:24+08:00</updated>
+  <updated>2015-06-17T19:41:07+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -929,7 +929,7 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
 </ul>
 
 
-<p>它告诉编译器仍然负责管理好在OC一端的引用计数的事情,开发者也继续负责管理好在CF一端的事情，比如：</p>
+<p>该关键字在桥接过程中不会增加被桥接对象的引用计数，比如：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -942,6 +942,23 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>由于ARC下<code>NSString *ocString</code>定义的对象指针默认是strong的，所以在执行<code>CFRelease(cfString);</code>后<code>ocString</code>指针还持有桥接过来的对象，<code>ocString</code>指针仍能正常使用。但如果做出如下改动：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CFStringRef</span> <span class="n">cfString</span> <span class="o">=</span> <span class="n">CFStringCreateWithCString</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="s">&quot;CFString&quot;</span><span class="p">,</span> <span class="n">kCFStringEncodingUTF8</span><span class="p">);</span>
+</span><span class='line'><span class="n">__weak</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">ocString</span> <span class="o">=</span> <span class="p">(</span><span class="n">__bridge</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">cfString</span><span class="p">;</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">cfString</span><span class="p">);</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;###%@&quot;</span><span class="p">,</span><span class="n">ocString</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>即将定义方式改成<code>__weak NSString *ocString</code>，在执行<code>CFRelease(cfString);</code>后<code>ocString</code>将因不再持有被桥接对象所有权而无法正常使用。</p>
+
+<p>反之从OC对象桥接到CF对象也是一个道理，该关键字有点像<code>__weak</code>关键字的作用。</p>
+
 <ul>
 <li>__bridge_retained 或 CFBridgingRetain</li>
 </ul>
@@ -949,7 +966,7 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
 
 <p>二者作用是一样的，只是用法不同。</p>
 
-<p>告诉编译器需要retain对象,而开发者在CF一端负责释放。这样就算对象在OC一端被释放,只要开发者不释放CF一端的对象, 对象就不会被真的销毁。</p>
+<p>该关键字在桥接的过程中会retain被桥接对象，相当于桥接方也持有了被桥接对象。需要注意的是，如果是CF对象桥接到OC对象，编译器会做好OC对象的内存管理工作；但如果是OC对象桥接到CF对象，那么CF需要执行内存释放操作，如下例所示：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -973,7 +990,7 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
 
 <p>二者作用也是一样的，只是用法不同。</p>
 
-<p>该关键字告诉编译器bridge的同时,也转移了对象的所有权，比如：</p>
+<p>该关键字将对象所有权由被桥接对象转移给了桥接对象，比如：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -986,7 +1003,9 @@ In ARC mode, </strong>block id x; defaults to retaining x (just like all other v
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>转换过程中大家只需要根据具体需求选用适当的关键字即可。</p>
+<p>此例中被桥接对象cfString的所有权就转移给了桥接对象ocString。</p>
+
+<p>总之，理解了桥接关键字的作用，桥接转换过程中大家只需要根据具体需求选用适当的关键字即可。</p>
 
 <p>另外，在ARC中<code>id</code>和<code>void *</code>也不能直接相互转换了，必须通过<code>Toll-FreeBridging</code>使用适当的关键字修饰。</p>
 
