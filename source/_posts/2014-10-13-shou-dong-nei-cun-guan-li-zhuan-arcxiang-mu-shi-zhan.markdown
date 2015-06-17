@@ -387,7 +387,7 @@ CFLocaleRef gbCFLocale = (CFLocaleRef)gbNSLocale;
 
 * __bridge
 
-它告诉编译器仍然负责管理好在OC一端的引用计数的事情,开发者也继续负责管理好在CF一端的事情，比如：
+该关键字在桥接过程中不会增加被桥接对象的引用计数，比如：
 
 ```objective-c
 CFStringRef cfString = CFStringCreateWithCString(kCFAllocatorDefault, "CFString", kCFStringEncodingUTF8);
@@ -396,11 +396,24 @@ CFRelease(cfString);
 NSLog(@"%@",ocString);
 ```
 
+由于ARC下`NSString *ocString`定义的对象指针默认是strong的，所以在执行`CFRelease(cfString);`后`ocString `指针还持有桥接过来的对象，`ocString`指针仍能正常使用。但如果做出如下改动：
+
+```objective-c
+CFStringRef cfString = CFStringCreateWithCString(kCFAllocatorDefault, "CFString", kCFStringEncodingUTF8);
+__weak NSString *ocString = (__bridge NSString *)cfString;
+CFRelease(cfString);
+NSLog(@"###%@",ocString);
+```
+
+即将定义方式改成`__weak NSString *ocString`，在执行`CFRelease(cfString);`后`ocString`将因不再持有被桥接对象所有权而无法正常使用。
+
+反之从OC对象桥接到CF对象也是一个道理，该关键字有点像`__weak`关键字的作用。
+
 * __bridge_retained 或 CFBridgingRetain
 
 二者作用是一样的，只是用法不同。
 
-告诉编译器需要retain对象,而开发者在CF一端负责释放。这样就算对象在OC一端被释放,只要开发者不释放CF一端的对象, 对象就不会被真的销毁。
+该关键字在桥接的过程中会retain被桥接对象，相当于桥接方也持有了被桥接对象。需要注意的是，如果是CF对象桥接到OC对象，编译器会做好OC对象的内存管理工作；但如果是OC对象桥接到CF对象，那么CF需要执行内存释放操作，如下例所示：
 
 ```objective-c
 NSArray *ocArray = [[NSArray alloc] initWithObjects:@"foggry", nil];
@@ -415,7 +428,7 @@ CFRelease(cfArray);
 
 二者作用也是一样的，只是用法不同。
 
-该关键字告诉编译器bridge的同时,也转移了对象的所有权，比如：
+该关键字将对象所有权由被桥接对象转移给了桥接对象，比如：
 
 ```objective-c
 CFStringRef cfString = CFStringCreateWithCString(kCFAllocatorDefault, "CFString", kCFStringEncodingUTF8);
@@ -424,7 +437,9 @@ NSString *ocString = (__bridge_transfer NSString *)cfString;
 NSLog(@"%@",ocString);
 ```
 
-转换过程中大家只需要根据具体需求选用适当的关键字即可。
+此例中被桥接对象cfString的所有权就转移给了桥接对象ocString。
+
+总之，理解了桥接关键字的作用，桥接转换过程中大家只需要根据具体需求选用适当的关键字即可。
 
 另外，在ARC中`id`和`void *`也不能直接相互转换了，必须通过`Toll-FreeBridging`使用适当的关键字修饰。
 
