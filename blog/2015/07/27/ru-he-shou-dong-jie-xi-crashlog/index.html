@@ -114,9 +114,9 @@ $(document).bind('DOMNodeInserted', function(event) {
   </header>
 
 
-<div class="entry-content"><p>解决崩溃问题是我们移动应用开发者最基本的工作之一，经常需要面对形形色色的崩溃问题。如果是开发过程中遇到的崩溃，还可以根据重现步骤调试，但线上版本就无能为力了。好在目前已经有很多不错的第三方CrashLog搜集平台（如友盟、Crashlytics等）为我们做好了解析工作，甚至在Xcode7里苹果也跟进了解析线上版本崩溃日志的功能，为开发者减轻了不少负担。尽管通常已经不需要我们手工处理CrashLog，了解CrashLog的还原原理和方法还是有必要的。</p>
+<div class="entry-content"><p>解决崩溃问题是移动应用开发者最日常的工作之一。如果是开发过程中遇到的崩溃，可以根据重现步骤调试，但线上版本就无能为力了。好在目前已经有很多不错的第三方CrashLog搜集平台（如友盟、Crashlytics等）为我们做好了解析工作，甚至在Xcode7里苹果也跟进了解析线上版本崩溃日志的功能，为开发者减轻了不少负担。尽管通常已经不需要我们手工处理CrashLog，了解CrashLog的还原原理和方法还是有必要的。</p>
 
-<p>一、.dSYM</p>
+<h2>一、.dSYM</h2>
 
 <p><code>.dSYM</code>(debugging SYMbols)又称为调试符号表，是苹果为了方便调试和定位问题而使用的一种调试方案，本质上使用的是起源于贝尔实验室的<code>DWARF</code>（Debugging With Attributed Record Formats），其在.xcarchive目录中的层次结构为：</p>
 
@@ -134,13 +134,15 @@ $(document).bind('DOMNodeInserted', function(event) {
 </span><span class='line'>        |--DWARF</span></code></pre></td></tr></table></div></figure>
 
 
-<p>关于DWARF的具体内容以后有机会再说。我们能解析CrashLog全靠.dSYM文件。</p>
+<p>关于DWARF的具体内容以后有机会再说。我们能解析CrashLog全靠.dSYM文件，解析方式见后文。</p>
 
-<p>二、确定符号表和崩溃日志的一致性</p>
+<h2>二、确定符号表和崩溃日志的一致性</h2>
 
 <p>有了符号表文件，有了崩溃日志文件，在解析之前一定要确保二者的对应关系，否则就算按照下述步骤解析出内容也肯定是不准确的。二者的对应关系可以通过UUID来确定。</p>
 
-<p>1、从崩溃日志中获取UUID</p>
+<p> <!-- more --></p>
+
+<h4>1、从崩溃日志中获取UUID</h4>
 
 <p>崩溃日志比较靠下的位置有个<code>Binary Images</code>模块，其第一行内容如下：</p>
 
@@ -159,7 +161,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </ul>
 
 
-<p>2、从符号表中获取UUID</p>
+<h4>2、从符号表中获取UUID</h4>
 
 <p>执行以下命令从符号表中提取UUID：</p>
 
@@ -181,7 +183,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>由此得到armv7指令集的UUID为：A5C8D3CF-DA65-3966-89E4-370BF3A0AC64（如果你的二进制文件支持多个指令集，这里会列出每个指令集对应符号表的UUID），通过和崩溃日志中的对比发现二者一致，才可进行进一步的解析操作。</p>
 
-<p>三、计算崩溃符号表地址</p>
+<h2>三、计算崩溃符号表地址</h2>
 
 <p>以下面的崩溃堆栈为例：</p>
 
@@ -249,7 +251,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </span><span class='line'>29  libdyld.dylib                     0x34484aac 0x34483000 + 6828</span></code></pre></td></tr></table></div></figure>
 
 
-<p>1、 符号表堆栈地址计算方式</p>
+<h4>1、 符号表堆栈地址计算方式</h4>
 
 <p>要想利用符号表解析出崩溃对应位置，需要计算出符号表中对应的崩溃堆栈地址。而从上述堆栈中第9行可以看到，应用崩溃发生在运行时地址<code>0x000f0846</code>，该进程的运行时起始地址是<code>0xa2000</code>，崩溃处距离进程起始地址的偏移量为十进制的<code>321606</code>(对应十六进制为0x4E846)。三者对应关系：</p>
 
@@ -269,7 +271,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </pre></td><td class='code'><pre><code class=''><span class='line'>符号表堆栈地址 = 符号表起始地址 + 偏移量</span></code></pre></td></tr></table></div></figure>
 
 
-<p>2、获取符号表中的TEXT段起始地址</p>
+<h4>2、获取符号表中的TEXT段起始地址</h4>
 
 <p>符号表中TEXT段的起始地址可以通过以下命令获得：</p>
 
@@ -307,7 +309,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>其中的<code>vmaddr 0x00004000</code>字段即为TEXT段的起始地址。</p>
 
-<p>3、计算符号表地址</p>
+<h4>3、计算符号表地址</h4>
 
 <p>由公式：</p>
 
@@ -323,11 +325,11 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>即符号表中的崩溃地址为<code>0x52846</code>，接下来就可以根据这个地址解析出崩溃位置了。</p>
 
-<p>三、崩溃信息还原</p>
+<h2>四、崩溃信息还原</h2>
 
 <p>有了符号表的崩溃地址，有以下几种方式解析崩溃信息：</p>
 
-<p>1、dwarfdump</p>
+<h4>1、dwarfdump</h4>
 
 <p>命令如下：</p>
 
@@ -360,7 +362,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>其中第一行是编译时文件目录，第二行包含了崩溃发生的文件名称以及文件中具体行号等信息，有了这些信息就能准确定位崩溃原因啦。</p>
 
-<p>2、atos</p>
+<h4>2、atos</h4>
 
 <p>atos是另一种更加简洁的崩溃日志解析方法，使用方式如下：</p>
 
@@ -376,7 +378,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>相对<code>dwarfdump</code>命令的解析结果，更加简洁直观的指出了崩溃发生的位置。</p>
 
-<p>3、无需符号表崩溃地址的解析方式</p>
+<h4>3、无需符号表崩溃地址的解析方式</h4>
 
 <p>实际上，<code>atos</code>还提供了另外一种无需计算崩溃地址对应的符号表地址的方式，命令格式如下：</p>
 
@@ -390,7 +392,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </pre></td><td class='code'><pre><code class=''><span class='line'>-[OBDFirstConnectViewController showOilPricePickerView] (in Your) (OBDFirstConnectViewController.m:882)</span></code></pre></td></tr></table></div></figure>
 
 
-<p>六、参考文档</p>
+<h2>五、参考文档</h2>
 
 <ul>
 <li><a href="https://developer.apple.com/library/mac/qa/qa1765/_index.html">How to Match a Crash Report to a Build</a></li>
