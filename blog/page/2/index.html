@@ -94,6 +94,61 @@ $(document).bind('DOMNodeInserted', function(event) {
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an/">iOS模拟器Custom Location被重置解决方案</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-25T17:29:18+08:00" pubdate data-updated="true">May 25<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>问题说明</h2>
+
+<p>在做地图类应用时，经常需要用到位置模拟功能。iOS模拟器提供了该功能，我们可以设置指定的经纬度，选中模拟器后，按照以下菜单层次进入即可设置：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Debug --&gt; Location --&gt; Custom Location</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是该功能存在的问题是设置完经纬度每次重新run程序，或者重启模拟器的时候都有可能使之前设置的Location状态从<code>Custom Location</code>变成<code>None</code>，导致设置的经纬度信息无效。</p>
+
+<p>因此经常需要重新选择<code>Custom Location</code>，对于每天需要run程序n次的我们来说苦不堪言&hellip;</p>
+
+<h2>解决方案</h2>
+
+<p>好在Xcode的target设置项中提供了设置位置信息的方法，允许我们使用GPX文件来设置自定义位置信息，步骤如下：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/05/19/jia-mi-ni-de-sqlite/">加密你的SQLite</a></h1>
     
     
@@ -434,6 +489,10 @@ $(document).bind('DOMNodeInserted', function(event) {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">如何手动解析CrashLog</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/05/06/chi-ping-xuan-ran-xue-xi-bi-ji/">离屏渲染学习笔记</a>
       </li>
     
@@ -449,10 +508,6 @@ $(document).bind('DOMNodeInserted', function(event) {
         <a href="/blog/2014/09/28/iphoneping-mu-zhi-shi-dian-jie-xi/">iPhone屏幕知识点解析</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan/">CoreAnimation系列之基础变换</a>
-      </li>
-    
   </ul>
 </section>
 <section>
@@ -463,7 +518,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 <li class='category'><a href='/blog/categories/wwdc2014/'>WWDC2014 (2)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>Xcode (1)</a></li>
 <li class='category'><a href='/blog/categories/xcodesettings/'>XcodeSettings (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (7)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (8)</a></li>
 <li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
 
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2015-06-17T19:41:07+08:00</updated>
+  <updated>2015-07-27T19:02:20+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -12,6 +12,249 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[如何手动解析CrashLog]]></title>
+    <link href="http://wangzz.github.io/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/"/>
+    <updated>2015-07-27T18:59:27+08:00</updated>
+    <id>http://wangzz.github.io/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog</id>
+    <content type="html"><![CDATA[<p>解决崩溃问题是我们移动应用开发者最基本的工作之一，经常需要面对形形色色的崩溃问题。如果是开发过程中遇到的崩溃，还可以根据重现步骤调试，但线上版本就无能为力了。好在目前已经有很多不错的第三方CrashLog搜集平台（如友盟、Crashlytics等）为我们做好了解析工作，甚至在Xcode7里苹果也跟进了解析线上版本崩溃日志的功能，为开发者减轻了不少负担。尽管通常已经不需要我们手工处理CrashLog，了解CrashLog的还原原理和方法还是有必要的。</p>
+
+<p>一、.dSYM</p>
+
+<p><code>.dSYM</code>(debugging SYMbols)又称为调试符号表，是苹果为了方便调试和定位问题而使用的一种调试方案，本质上使用的是起源于贝尔实验室的<code>DWARF</code>（Debugging With Attributed Record Formats），其在.xcarchive目录中的层次结构为：</p>
+
+<p>```
+.xcarchive
+&mdash;dSYMs
+  |&mdash;Your.app.dSYM</p>
+
+<pre><code>|--Contents
+  |--Resources
+    |--DWARF
+</code></pre>
+
+<p>```
+关于DWARF的具体内容以后有机会再说。我们能解析CrashLog全靠.dSYM文件。</p>
+
+<p>二、确定符号表和崩溃日志的一致性</p>
+
+<p>有了符号表文件，有了崩溃日志文件，在解析之前一定要确保二者的对应关系，否则就算按照下述步骤解析出内容也肯定是不准确的。二者的对应关系可以通过UUID来确定。</p>
+
+<p>1、从崩溃日志中获取UUID</p>
+
+<p>崩溃日志比较靠下的位置有个<code>Binary Images</code>模块，其第一行内容如下：</p>
+
+<p><code>
+Binary Images:
+0xa2000 - 0x541fff Your armv7  &lt;a5c8d3cfda65396689e4370bf3a0ac64&gt; /var/mobile/Containers/Bundle/Application/645D3184-4C20-4161-924B-BDE170FA64CC/Your.app/Your
+</code>
+从中可以看到关于你应用的若干信息：</p>
+
+<ul>
+<li>代码段的起终地址为：0xa2000 &ndash; 0x541fff</li>
+<li>运行你应用的CPU指令集为：armv7</li>
+<li>应用的UUID为：a5c8d3cfda65396689e4370bf3a0ac64（不区分大小写）</li>
+</ul>
+
+
+<p>2、从符号表中获取UUID</p>
+
+<p>执行以下命令从符号表中提取UUID：</p>
+
+<p><code>
+dwarfdump --uuid Your.app.dSYM
+</code>
+或者：</p>
+
+<p><code>
+dwarfdump --uuid Your.app.dSYM/Contents/Resources/DWARF/Your
+</code></p>
+
+<p>执行结果为：</p>
+
+<p><code>
+UUID: A5C8D3CF-DA65-3966-89E4-370BF3A0AC64 (armv7) Your.app.dSYM/Contents/Resources/DWARF/Your
+</code>
+由此得到armv7指令集的UUID为：A5C8D3CF-DA65-3966-89E4-370BF3A0AC64（如果你的二进制文件支持多个指令集，这里会列出每个指令集对应符号表的UUID），通过和崩溃日志中的对比发现二者一致，才可进行进一步的解析操作。</p>
+
+<p>三、计算崩溃符号表地址</p>
+
+<p>以下面的崩溃堆栈为例：
+<code>
+Thread 0:
+0   libobjc.A.dylib                 0x33f10f60 0x33efe000 + 77664
+1   Foundation                      0x273526ac 0x2734a000 + 34476
+2   Foundation                      0x27355c3e 0x2734a000 + 48190
+3   UIKit                           0x29ef9d1c 0x29bbc000 + 3398940
+4   UIKit                           0x29ef9c9a 0x29bbc000 + 3398810
+5   UIKit                           0x29ef954c 0x29bbc000 + 3396940
+6   UIKit                           0x29c3a16a 0x29bbc000 + 516458
+7   UIKit                           0x29e4b8e6 0x29bbc000 + 2685158
+8   UIKit                           0x29c3a128 0x29bbc000 + 516392
+9   Your                            0x000f0846 0xa2000 + 321606
+10  UIKit                           0x29e90fb2 0x29bbc000 + 2969522
+11  UIKit                           0x29e91076 0x29bbc000 + 2969718
+12  UIKit                           0x29e867cc 0x29bbc000 + 2926540
+13  UIKit                           0x29c9e8ea 0x29bbc000 + 927978
+14  UIKit                           0x29bc8a6a 0x29bbc000 + 51818
+15  QuartzCore                      0x295f0a08 0x295e4000 + 51720
+16  QuartzCore                      0x295ec3e0 0x295e4000 + 33760
+17  QuartzCore                      0x295ec268 0x295e4000 + 33384
+18  QuartzCore                      0x295ebc4c 0x295e4000 + 31820
+19  QuartzCore                      0x295eba50 0x295e4000 + 31312
+20  QuartzCore                      0x295e5928 0x295e4000 + 6440
+21  CoreFoundation                  0x266d0d92 0x26604000 + 839058
+22  CoreFoundation                  0x266ce44e 0x26604000 + 828494
+23  CoreFoundation                  0x266ce856 0x26604000 + 829526
+24  CoreFoundation                  0x2661c3bc 0x26604000 + 99260
+25  CoreFoundation                  0x2661c1ce 0x26604000 + 98766
+26  GraphicsServices                0x2da1a0a4 0x2da11000 + 37028
+27  UIKit                           0x29c2a7ac 0x29bbc000 + 452524
+28  Your                            0x0024643a 0xa2000 + 1721402
+29  libdyld.dylib                   0x34484aac 0x34483000 + 6828
+</code></p>
+
+<p>1、 符号表堆栈地址计算方式</p>
+
+<p>要想利用符号表解析出崩溃对应位置，需要计算出符号表中对应的崩溃堆栈地址。而从上述堆栈中第9行可以看到，应用崩溃发生在运行时地址<code>0x000f0846</code>，该进程的运行时起始地址是<code>0xa2000</code>，崩溃处距离进程起始地址的偏移量为十进制的<code>321606</code>(对应十六进制为0x4E846)。三者对应关系：</p>
+
+<p><code>
+0x000f0846 = 0xa2000 + 0x4E846
+</code>
+对应的公式为：</p>
+
+<p><code>
+运行时堆栈地址 = 运行时起始地址 + 偏移量
+</code></p>
+
+<p>崩溃堆栈中的起始地址和崩溃地址均为运行时地址，根据虚拟内存偏移量不变原理，只要提供了符号表TEXT段的起始地址，再加上偏移量（这里为0x4E846）就能得到符号表中的堆栈地址，即：</p>
+
+<p><code>
+符号表堆栈地址 = 符号表起始地址 + 偏移量
+</code></p>
+
+<p>2、获取符号表中的TEXT段起始地址</p>
+
+<p>符号表中TEXT段的起始地址可以通过以下命令获得：</p>
+
+<p><code>
+$otool -l Your.app.dSYM/Contents/Resources/DWARF/Your
+</code></p>
+
+<p>运行结果中的片段如下：</p>
+
+<p>```
+Load command 3</p>
+
+<pre><code>  cmd LC_SEGMENT
+</code></pre>
+
+<p>  cmdsize 736
+  segname __TEXT
+   vmaddr 0x00004000
+   vmsize 0x00700000
+  fileoff 0
+ filesize 0
+  maxprot 0x00000005
+ initprot 0x00000005
+   nsects 10</p>
+
+<pre><code>flags 0x0
+</code></pre>
+
+<p>```</p>
+
+<p>其中的<code>vmaddr 0x00004000</code>字段即为TEXT段的起始地址。</p>
+
+<p>3、计算符号表地址</p>
+
+<p>由公式：</p>
+
+<p><code>
+符号表堆栈地址 = 符号表起始地址 + 偏移量
+</code>
+可得：</p>
+
+<p><code>
+0x52846 = 0x4E846 + 0x4000
+</code>
+即符号表中的崩溃地址为<code>0x52846</code>，接下来就可以根据这个地址解析出崩溃位置了。</p>
+
+<p>三、崩溃信息还原</p>
+
+<p>有了符号表的崩溃地址，有以下几种方式解析崩溃信息：</p>
+
+<p>1、dwarfdump</p>
+
+<p>命令如下：</p>
+
+<p><code>
+$dwarfdump --arch armv7 Your.app.dSYM --lookup 0x52846 | grep 'Line table'
+</code>
+需要注意的是：</p>
+
+<ul>
+<li>这里的armv7是运行设备的CPU指令集，而不是二进制文件的指令集</li>
+</ul>
+
+
+<p>比如armv7指令集的二进制文件运行在arm64指令集的设备上，这个地方应该写arm64。</p>
+
+<ul>
+<li>&mdash;lookup后面跟的一定是经过准确计算的符号表中的崩溃地址</li>
+<li>使用dwarfdump解析的结果较杂乱，因此使用<code>grep</code>命令抓取其中关键点展示出来</li>
+</ul>
+
+
+<p>运行结果如下：</p>
+
+<p><code>
+Line table dir : '/data/.../Src/OBDConnectSetting/Controller'
+Line table file: 'OBDFirstConnectViewController.m' line 882, column 5 with start address 0x000000000052768
+</code>
+其中第一行是编译时文件目录，第二行包含了崩溃发生的文件名称以及文件中具体行号等信息，有了这些信息就能准确定位崩溃原因啦。</p>
+
+<p>2、atos</p>
+
+<p>atos是另一种更加简洁的崩溃日志解析方法，使用方式如下：</p>
+
+<p><code>
+ $atos -o LuBao -arch armv7 0x52846
+</code></p>
+
+<p>其执行结果如下：</p>
+
+<p><code>
+-[OBDFirstConnectViewController showOilPricePickerView] (in Your) (OBDFirstConnectViewController.m:882)
+</code>
+相对<code>dwarfdump</code>命令的解析结果，更加简洁直观的指出了崩溃发生的位置。</p>
+
+<p>3、无需符号表崩溃地址的解析方式</p>
+
+<p>实际上，<code>atos</code>还提供了另外一种无需计算崩溃地址对应的符号表地址的方式，命令格式如下：</p>
+
+<p><code>
+$atos -o Your.app.dSYM/Contents/Resources/DWARF/Your -arch armv7 -l 0xa2000 0x000f0846
+</code></p>
+
+<p>其中<code>-l</code>选项指定了二进制文件在运行时的起始地址<code>0xa2000</code>（获取方式见<code>Binary Images</code>相关内容）,后面跟的是崩溃发生的运行时地址<code>0x000f0846</code>，解析结果和使用计算得到的符号表中崩溃地址一致：</p>
+
+<p><code>
+-[OBDFirstConnectViewController showOilPricePickerView] (in Your) (OBDFirstConnectViewController.m:882)
+</code></p>
+
+<p>六、参考文档</p>
+
+<ul>
+<li><a href="https://developer.apple.com/library/mac/qa/qa1765/_index.html">How to Match a Crash Report to a Build</a></li>
+<li><a href="https://developer.apple.com/library/mac/technotes/tn2004/tn2123.html">CrashReporter</a></li>
+<li><a href="https://developer.apple.com/library/ios/technotes/tn2151/_index.html">Understanding and Analyzing iOS Application Crash Reports</a></li>
+<li><a href="http://stackoverflow.com/a/12464678/2293677">atos and dwarfdump won&rsquo;t symbolicate my address</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[离屏渲染学习笔记]]></title>
@@ -1040,280 +1283,6 @@ NSLog(@"%@",ocString);
 <li><a href="https://developer.apple.com/library/ios/documentation/2DDrawing/Conceptual/DrawingPrintingios/GraphicsDrawingOverview/GraphicsDrawingOverview.html">Drawing and Printing Guide for iOS</a></li>
 <li><a href="http://baike.baidu.com/view/7687.htm">分辨率</a></li>
 <li><a href="http://blog.ibireme.com/2014/09/16/adapted_to_iphone6/#rd?sukey=f3735aed1ca7f2658e86e2e18cb36d80fed889a7bdfd2d651a1aaef8f9941b691c71e4e8353e61cd57237e4cd0b3edc6#jtss-tsina">大屏iPhone的适配</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CoreAnimation系列之基础变换]]></title>
-    <link href="http://wangzz.github.io/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan/"/>
-    <updated>2014-08-27T12:21:50+08:00</updated>
-    <id>http://wangzz.github.io/blog/2014/08/27/coreanimationxi-lie-zhi-ji-chu-bian-huan</id>
-    <content type="html"><![CDATA[<p>从<a href="http://blog.csdn.net/wzzvictory">CSDN</a>时代开始，就有用一系列文章聊聊CoreAnimation的打算，这算是本系列中的第三篇了。一直以来都是哪天心情好的时候来一篇，真怀疑等把整个系列写完的时候CoreAnimation是不是都要被Apple换掉了。</p>
-
-<p>本文打算介绍自己对基础变换的认识。</p>
-
-<h2>一、基础变换与数学</h2>
-
-<h4>1.两种坐标系</h4>
-
-<p>不管是平面几何还是立体几何，笛卡尔坐标系都是我们学习和研究几何的最基础工具。的笛卡尔坐标系主要分两种：左手坐标系和右手坐标系。</p>
-
-<p>对于三维坐标系，<a href="http://baike.baidu.com/view/2939423.htm">百度百科</a>上给出了右手坐标系的判断方法：在空间直角坐标系中，让右手拇指指向x轴的正方向，食指指向y轴的正方向，如果中指能指向z轴的正方向，则称这个坐标系为右手直角坐标系。同理左手直角三维坐标系。</p>
-
-<!-- more -->
-
-
-<p>下图直观的表示了上述判断方法（图片来自<a href="http://outofmemory.cn/wr/?u=http%3A%2F%2Fwonderffee.github.io%2Fblog%2F2013%2F10%2F17%2Fa-simple-method-to-determine-positive-rotation-in-in-three-dimensional-space%2F">这里</a>）：</p>
-
-<p><img src="/images/article6/coordinate-system.jpg" alt="left-right hand coordinate" /></p>
-
-<p>由此判断，从中学到大学的课堂上我们接触的立体几何都是右手系。</p>
-
-<h4>2.基础变换的数学公式</h4>
-
-<p>一个点在立体空间内的变换可以通过数学公式表示，前面讲那么多左手和右手坐标系相关的内容是因为<code>不同坐标系下计算公式不同</code>。</p>
-
-<p>iOS中CoreAnimation的CALayer默认使用的是<code>左手坐标系</code>（使用哪种坐标系可以通过CALayer的<code>geometryFlipped</code>属性更改，该值默认为NO，设为YES时表示使用右手坐标系），因此本文后面所说的所有坐标系都是之左手坐标系。</p>
-
-<p>变换对于动画来说应该是最基础最核心的内容了，CoreAnimation中基础变换包括平移（Translate）、缩放（Scale）、旋转（Rotate）三种。假如三维空间中有一个点(x0, y0, z0)，该点经过一定条件的基础变换，变换后的坐标为(x, y, z)，则针对平移、缩放、旋转三种基础变换，对应的坐标变换关系如下：</p>
-
-<h6>2.1 平移</h6>
-
-<p>平移对应的变化量为(δx, δy, δz)。</p>
-
-<p><code>
-x = x0 + δx;
-y = y0 + δy;
-z = z0 + δz;
-</code></p>
-
-<h6>2.2 缩放</h6>
-
-<p>缩放对应的缩放倍数为(δx, δy, δz)。</p>
-
-<p><code>
-x = x0 * δx;
-y = y0 * δy;
-z = z0 * δz;
-</code></p>
-
-<h6>2.3 旋转</h6>
-
-<p>旋转的方式有很多，比如简单点的绕X轴、Y轴、Z轴旋转，复杂点的还有绕任意三维向量旋转。为了简单起见，旋转以绕Z轴旋转了角度α（注意这里及后文所有涉及角度的地方都是弧度制）为例，对应的变化关系为：</p>
-
-<p><code>
-x = y0*sinα + x0*cosα;
-y = y0*conα - x0*sinα;
-z = z0;
-</code></p>
-
-<p>其它的大家感兴趣可以自己推倒下。</p>
-
-<h2>二、变换矩阵</h2>
-
-<p>在CoreAnimation中用CATransform3D来表示三维齐次坐标变换矩阵，在齐次坐标中n维空间的坐标需要用n+1个元素的坐标元组来表示（详情还请自行Google），因此CATransform3D定义如下：</p>
-
-<p><code>
-struct CATransform3D
-{
-  CGFloat m11, m12, m13, m14;
-  CGFloat m21, m22, m23, m24;
-  CGFloat m31, m32, m33, m34;
-  CGFloat m41, m42, m43, m44;
-};
-</code>
-为什么实现变换要有变换矩阵呢？</p>
-
-<p>以上文中旋转的计算公式为例，可以使用如下矩阵运算表示：</p>
-
-<p><img src="/images/article6/matrix1.png" alt="left-right hand coordinate" /></p>
-
-<p>其中的矩阵：</p>
-
-<p><img src="/images/article6/matrix2.png" alt="left-right hand coordinate" /></p>
-
-<p>就被称为点(x0, y0, z0)绕Z轴旋转角度α的变换矩阵。</p>
-
-<p>由于放射变换可以通过矩阵变换来实现，而且看起来更加直观，因此变换公式通常都用对应的变换矩阵表示。</p>
-
-<p>在CoreAnimation中平移、缩放、旋转对应的变换矩阵为：</p>
-
-<h4>1. 平移</h4>
-
-<p><img src="/images/article6/matrix3.png" alt="left-right hand coordinate" /></p>
-
-<p>其中δx、δy、δz表示三个坐标上对应的平移量。</p>
-
-<h4>2. 缩放</h4>
-
-<p><img src="/images/article6/matrix4.png" alt="left-right hand coordinate" /></p>
-
-<p>其中δx、δy、δz表示三个坐标上对应的缩放倍数。</p>
-
-<h4>3. 旋转</h4>
-
-<p><img src="/images/article6/matrix5.png" alt="left-right hand coordinate" /></p>
-
-<p>该矩阵为任意点(x, y, z)绕任意向量旋转旋转角度α的旋转向量。</p>
-
-<h2>三、验证</h2>
-
-<p>前面总结了CoreAnimation中三种基础变换对应的变换矩阵，这样以来我们就能自己对任意的矩阵做变换了。平移、缩放、旋转对应的变换矩阵计算方法如下：</p>
-
-<h4>1. 平移</h4>
-
-<p>```objective-c
-&ndash; (CATransform3D)translateWithMatrix:(CATransform3D)t x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z
-{</p>
-
-<pre><code>CATransform3D matrixTransform = CATransform3DIdentity;
-matrixTransform.m41 = x;
-matrixTransform.m42 = y;
-matrixTransform.m43 = z;
-
-return CATransform3DConcat(matrixTransform, t);
-</code></pre>
-
-<p>}
-```</p>
-
-<p>该方法根据平移变换矩阵的计算方式，得到平移参数(x, y, z)对应的变换矩阵，然后和原始矩阵相乘，得到最终的变换矩阵。</p>
-
-<h4>2. 缩放</h4>
-
-<p>```objective-c
-&ndash; (CATransform3D)scaleWithMatrix:(CATransform3D)t x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z
-{</p>
-
-<pre><code>CATransform3D matrixTransform = CATransform3DIdentity;
-matrixTransform.m11 = x;
-matrixTransform.m22 = y;
-matrixTransform.m33 = z;
-
-return CATransform3DConcat(matrixTransform, t);
-</code></pre>
-
-<p>}
-```</p>
-
-<p>该方法根据缩放变换矩阵的计算方式，得到缩放参数(x, y, z)对应的变换矩阵，然后和原始矩阵相乘，得到最终的变换矩阵。</p>
-
-<h4>3. 旋转</h4>
-
-<p>```objective-c
-&ndash; (CATransform3D)rotateWithMatrix:(CATransform3D)t angle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z
-{</p>
-
-<pre><code>CGFloat unitValue = sqrtf(powf(x, 2)+powf(y, 2)+powf(z, 2));
-CGFloat x0 = x/unitValue;
-CGFloat y0 = y/unitValue;
-CGFloat z0 = z/unitValue;
-
-CATransform3D matrixTransform = CATransform3DIdentity;
-matrixTransform.m11 = powf(x0, 2)*(1-cosf(angle))+cosf(angle);
-matrixTransform.m12 = x0*y0*(1-cosf(angle))+z0*sinf(angle);
-matrixTransform.m13 = x0*z0*(1-cosf(angle))-y0*sinf(angle);
-
-matrixTransform.m21 = x0*y0*(1-cosf(angle))-z0*sinf(angle);
-matrixTransform.m22 = powf(y0, 2)*(1-cosf(angle))+cosf(angle);
-matrixTransform.m23 = y0*z0*(1-cosf(angle))+x0*sinf(angle);
-
-matrixTransform.m31 = x0*z0*(1-cosf(angle))+y0*sinf(angle);
-matrixTransform.m32 = y0*z0*(1-cosf(angle))-x0*sinf(angle);
-matrixTransform.m33 = powf(z0, 2)*(1-cosf(angle))+cosf(angle);
-
-return CATransform3DConcat(matrixTransform, t);
-</code></pre>
-
-<p>}
-```</p>
-
-<p>该方法根据旋转变换矩阵的计算方式，得到旋转参数(angle, x, y, z)对应的变换矩阵，然后和原始矩阵相乘，得到最终的变换矩阵。</p>
-
-<h4>4. demo</h4>
-
-<p>以旋转变换demo为例：</p>
-
-<p>```objective-c
-&ndash; (void)logTransform:(CATransform3D)t
-{</p>
-
-<pre><code>NSLog(@"***************************");
-NSLog(@"%f,%f,%f,%f",t.m11,t.m12,t.m13,t.m14);
-NSLog(@"%f,%f,%f,%f",t.m21,t.m22,t.m23,t.m24);
-NSLog(@"%f,%f,%f,%f",t.m31,t.m32,t.m33,t.m34);
-NSLog(@"%f,%f,%f,%f",t.m41,t.m42,t.m43,t.m44);
-</code></pre>
-
-<p>}</p>
-
-<ul>
-<li><p>(IBAction)onRotateButtonAction:(id)sender
-{
-  //Rotate</p>
-
-<p>  //随意的原始矩阵
-  CATransform3D matrixOrigin = CATransform3DMakeRotation(1, 4, 3, 6);</p>
-
-<p>  CGFloat x = 2, y = 3, z = 4; //旋转向量（2,3,4）
-  CGFloat angle = 30.0f * M_PI / 180.0f; //旋转角度30°，计算对应的弧度</p>
-
-<p>  //通过系统函数计算变换矩阵
-  CATransform3D matrixSystem = CATransform3DRotate(matrixOrigin, angle, x, y, z);
-  systemLayer.transform = matrixSystem;
-  [self logTransform:matrixSystem];</p>
-
-<p>  //自定义方法计算3D旋转矩阵
-  CATransform3D matrixCalculate = [self rotateWithMatrix:matrixOrigin angle:angle x:x y:y z:z];
-  customLayer.transform = matrixCalculate;
-  [self logTransform:matrixCalculate];
-}
-```</p></li>
-</ul>
-
-
-<p>demo使用随意生成的参数<code>matrixOrigin</code>模拟一个CALayer的初始<code>transform</code>属性值，然后使用同一组变换参数，分别通过系统函数和自定义方法对原始<code>transform</code>做变换，然后对比变换结果。最终的计算得到的变换矩阵可以通过log的方式打印出来，也可以在界面上做直观的展示。</p>
-
-<p>平移和缩放变换矩阵的验证方式和旋转类似。</p>
-
-<p>经过对比发现两种计算方式得到的最终变换矩阵是完全相同的，这进一步验证了CoreAnimation中变换矩阵的计算方式。</p>
-
-<p>完整的<a href="https://github.com/wangzz/Demo/tree/master/CoreAnimationDemo">demo</a>放到了github上，欢迎大家下载。</p>
-
-<h2>四、说明</h2>
-
-<ul>
-<li>变换矩阵可以组合</li>
-</ul>
-
-
-<p>可以同时对CALayer进行多种变换，比如同时缩放和旋转，直接通过矩阵相乘得到组合变换的变换矩阵。CoreAnimation提供了变换矩阵组合的方法：</p>
-
-<p><code>objective-c
-CATransform3D CATransform3DConcat (CATransform3D a, CATransform3D b)
-</code>
-需要注意的是，通常情况下矩阵乘法不支持交换律，因此两个矩阵a、b的顺序不能交换。</p>
-
-<ul>
-<li>最好不要手动修改变换矩阵的值</li>
-</ul>
-
-
-<p>CoreAnimation的3D变换对应的4维变换矩阵，单独修改其中的任何一个值都可能带来不可控的变换结果，因此不建议单独手动修改变换矩阵，而是通过基础变换或者基础变换组合的方式修改。</p>
-
-<ul>
-<li>理解有误的地方还望大家指出。</li>
-</ul>
-
-
-<h2>五、参考文档</h2>
-
-<ul>
-<li><a href="http://www.thinkandbuild.it/introduction-to-3d-drawing-in-core-animation-part-2/">INTRODUCTION TO 3D DRAWING IN CORE ANIMATION</a></li>
-<li><a href="http://en.wikipedia.org/wiki/Rotation_matrix">Rotation matrix</a></li>
-<li><a href="http://baike.baidu.com/view/2939423.htm">右手坐标系</a></li>
 </ul>
 
 ]]></content>
