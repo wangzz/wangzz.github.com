@@ -36,19 +36,19 @@ $ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain
 
 `DWARF`（DebuggingWith Arbitrary Record Formats），是ELF和Mach-O等文件格式中用来存储和处理调试信息的标准格式，`.dSYM`中真正保存符号表数据的是`DWARF`文件。`DWARF`中不同的数据都保存在相应的`section`（节）中，ELF文件里所有的section名称都以`".debug_"`开头，如下表所示：
 
-Section Name         | Contents
--------------------- | -------------
-.debug_abbrev        | Abbreviations used in the .debug_info section
-.debug_aranges       | A mapping between memory address and compilation
-.debug_frame         | Call Frame Information
-.debug_info          | The core DWARF data containing DIEs
-.debug_line          | Line Number Program
-.debug_loc           | Macro descriptions
-.debug_macinfo       | A lookup table for global objects and functions
-.debug_pubnames      | A lookup table for global objects and functions 
-.debug_pubtypes      | A lookup table for global types
-.debug_ranges        | Address ranges referenced by DIEs
-.debug_str           | String table used by .debug_info
+| Section Name         | Contents                                         |
+| -------------------- | ------------------------------------------------ |
+| .debug_abbrev        | Abbreviations used in the .debug_info section    |
+| .debug_aranges       | A mapping between memory address and compilation |
+| .debug_frame         | Call Frame Information                           |
+| .debug_info          | The core DWARF data containing DIEs              |
+| .debug_line          | Line Number Program                              |
+| .debug_loc           | Macro descriptions                               |
+| .debug_macinfo       | A lookup table for global objects and functions  |
+| .debug_pubnames      | A lookup table for global objects and functions  | 
+| .debug_pubtypes      | A lookup table for global types                  |
+| .debug_ranges        | Address ranges referenced by DIEs                |
+| .debug_str           | String table used by .debug_info                 |
 
 [注] 该表出自官方文档[《Introduction to the
 DWARF Debugging Format》](http://www.dwarfstd.org/doc/Debugging%20using%20DWARF.pdf)
