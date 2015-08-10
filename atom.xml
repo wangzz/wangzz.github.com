@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2015-08-10T15:58:17+08:00</updated>
+  <updated>2015-08-10T16:01:06+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -45,73 +45,35 @@
 
 <p><code>DWARF</code>（DebuggingWith Arbitrary Record Formats），是ELF和Mach-O等文件格式中用来存储和处理调试信息的标准格式，<code>.dSYM</code>中真正保存符号表数据的是<code>DWARF</code>文件。<code>DWARF</code>中不同的数据都保存在相应的<code>section</code>（节）中，ELF文件里所有的section名称都以<code>".debug_"</code>开头，如下表所示：</p>
 
-<table>
-<thead>
-<tr>
-<th></th>
-<th> Section Name         </th>
-<th> Contents                                          </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td> .debug_abbrev        </td>
-<td> Abbreviations used in the .debug_info section     |</td>
-</tr>
-<tr>
-<td></td>
-<td> .debug_aranges       </td>
-<td> A mapping between memory address and compilation  |</td>
-</tr>
-<tr>
-<td></td>
-<td> .debug_frame         </td>
-<td> Call Frame Information                            |</td>
-</tr>
-<tr>
-<td></td>
-<td> .debug_info          </td>
-<td> The core DWARF data containing DIEs               |</td>
-</tr>
-<tr>
-<td></td>
-<td> .debug_line          </td>
-<td> Line Number Program                               |</td>
-</tr>
-<tr>
-<td></td>
-<td> .debug_loc           </td>
-<td> Macro descriptions                                |</td>
-</tr>
-<tr>
-<td></td>
-<td> .debug_macinfo       </td>
-<td> A lookup table for global objects and functions   |</td>
-</tr>
-<tr>
-<td></td>
-<td> .debug_pubnames      </td>
-<td> A lookup table for global objects and functions   | </td>
-</tr>
-<tr>
-<td></td>
-<td> .debug_pubtypes      </td>
-<td> A lookup table for global types                   |</td>
-</tr>
-<tr>
-<td></td>
-<td> .debug_ranges        </td>
-<td> Address ranges referenced by DIEs                 |</td>
-</tr>
-<tr>
-<td></td>
-<td> .debug_str           </td>
-<td> String table used by .debug_info                  |</td>
-</tr>
-</tbody>
-</table>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>| Section Name         | Contents                                          |
+</span><span class='line'>| -------------------- | ------------------------------------------------  |
+</span><span class='line'>| .debug_abbrev        | Abbreviations used in the .debug_info section     |
+</span><span class='line'>| .debug_aranges       | A mapping between memory address and compilation  |
+</span><span class='line'>| .debug_frame         | Call Frame Information                            |
+</span><span class='line'>| .debug_info          | The core DWARF data containing DIEs               |
+</span><span class='line'>| .debug_line          | Line Number Program                               |
+</span><span class='line'>| .debug_loc           | Macro descriptions                                |
+</span><span class='line'>| .debug_macinfo       | A lookup table for global objects and functions   |
+</span><span class='line'>| .debug_pubnames      | A lookup table for global objects and functions   | 
+</span><span class='line'>| .debug_pubtypes      | A lookup table for global types                   |
+</span><span class='line'>| .debug_ranges        | Address ranges referenced by DIEs                 |
+</span><span class='line'>| .debug_str           | String table used by .debug_info                  |</span></code></pre></td></tr></table></div></figure>
 
+
+<p>Mach-O中关于section的命名和ELF稍有区别，把名称前的<code>.</code>换成了<code>_</code>，例如<code>.debug_info</code>变成了<code>_debug_info</code>。</p>
 
 <h2>三、section信息提取</h2>
 
