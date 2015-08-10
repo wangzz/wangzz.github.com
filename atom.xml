@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2015-08-10T15:36:28+08:00</updated>
+  <updated>2015-08-10T15:40:10+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -54,27 +54,27 @@
 </thead>
 <tbody>
 <tr>
-<td>.debug_abbrev        </td>
+<td>.debug_abbrev    </td>
 <td> Abbreviations used in the .debug_info section</td>
 </tr>
 <tr>
-<td>.debug_aranges      </td>
+<td>.debug_aranges   </td>
 <td> A mapping between memory address and compilation</td>
 </tr>
 <tr>
-<td>.debug_frame    </td>
+<td>.debug_frame     </td>
 <td> Call Frame Information</td>
 </tr>
 <tr>
-<td>.debug_info         </td>
+<td>.debug_info      </td>
 <td> The core DWARF data containing DIEs</td>
 </tr>
 <tr>
-<td>.debug_line         </td>
+<td>.debug_line      </td>
 <td> Line Number Program</td>
 </tr>
 <tr>
-<td>.debug_loc          </td>
+<td>.debug_loc       </td>
 <td> Macro descriptions</td>
 </tr>
 <tr>
@@ -90,11 +90,11 @@
 <td> A lookup table for global types</td>
 </tr>
 <tr>
-<td>.debug_ranges   </td>
+<td>.debug_ranges    </td>
 <td> Address ranges referenced by DIEs</td>
 </tr>
 <tr>
-<td>.debug_str          </td>
+<td>.debug_str       </td>
 <td> String table used by .debug_info</td>
 </tr>
 </tbody>
@@ -103,26 +103,6 @@
 
 <p>*注 该表出自官方文档<a href="http://www.dwarfstd.org/doc/Debugging%20using%20DWARF.pdf">《Introduction to the
 DWARF Debugging Format》</a></p>
-
-<table>
-<thead>
-<tr>
-<th>Section Name  </th>
-<th> Contents</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>.debug_abbrev  </td>
-<td> Abbreviations used in the .debug_info section</td>
-</tr>
-<tr>
-<td>Content Cell  </td>
-<td> Content Cell</td>
-</tr>
-</tbody>
-</table>
-
 
 <p>而Mach-O中关于section的命名和ELF稍有区别，把名称前的<code>.</code>换成了<code>_</code>，例如<code>.debug_info</code>变成了<code>_debug_info</code>。</p>
 
