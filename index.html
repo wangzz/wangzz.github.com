@@ -94,7 +94,7 @@ $(document).bind('DOMNodeInserted', function(event) {
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/08/10/ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/">如何手动解析CrashLog之&#8212;-原理篇</a></h1>
+      <h1 class="entry-title"><a href="/blog/2015/08/10/ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/">手动解析CrashLog之&#8212;-原理篇</a></h1>
     
     
       <p class="meta">
@@ -117,11 +117,11 @@ $(document).bind('DOMNodeInserted', function(event) {
   </header>
 
 
-  <div class="entry-content"><p>在上篇文章<a href="http://foggry.com/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">《如何手动解析CrashLog》</a>里介绍了手动解析CrashLog的方法，接下来再说说<code>dwarfdump</code>、<code>atos</code>等解析工具是如何从符号表文件中获取到崩溃位置信息的。一切还得从<code>.dSYM</code>符号表文件开始说起。</p>
+  <div class="entry-content"><p>在上篇文章<a href="http://foggry.com/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">《手动解析CrashLog之&mdash;&mdash;方法篇》</a>里介绍了手动解析CrashLog的方法，接下来再说说<code>dwarfdump</code>、<code>atos</code>等解析工具是如何从符号表文件中获取到崩溃位置信息的。一切还得从<code>.dSYM</code>符号表文件开始说起。</p>
 
 <h2>一、<code>.dSYM</code>文件的生成</h2>
 
-<p>符号表文件<code>.dSYM</code>实际上是从Mach-O文件中抽取调试信息而得到的文件，其保存调试信息的格式是<code>DWARF</code>，其出身可以从苹果员工的文章<a href="http://wiki.dwarfstd.org/index.php?title=Apple%27s_%22Lazy%22_DWARF_Scheme">《Apple&rsquo;s &ldquo;Lazy&rdquo; DWARF Scheme》</a>了解一二。</p>
+<p>符号表文件<code>.dSYM</code>实际上是从Mach-O文件中抽取调试信息而得到的文件目录，实际用于保存调试信息的问价是<code>DWARF</code>，其出身可以从苹果员工的文章<a href="http://wiki.dwarfstd.org/index.php?title=Apple%27s_%22Lazy%22_DWARF_Scheme">《Apple&rsquo;s &ldquo;Lazy&rdquo; DWARF Scheme》</a>了解一二。</p>
 
 <h3>1、Xcode自动生成</h3>
 
@@ -135,7 +135,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 </pre></td><td class='code'><pre><code class=''><span class='line'>$ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil /Users/wangzz/Library/Developer/Xcode/DerivedData/YourApp-cqvijavqbptjyhbwewgpdmzbmwzk/Build/Products/Debug-iphonesimulator/YourApp.app/YourApp -o YourApp.dSYM</span></code></pre></td></tr></table></div></figure>
 
 
-<p>该方式通过Xcode提供的工具<code>dsymutil</code>，从项目编译结果<code>.app</code>目录下的Mach-O文件中提取出调试符号表文件。Xcode实际上也是通过这种方式来得到符号表文件的。</p>
+<p>该方式通过Xcode提供的工具<code>dsymutil</code>，从项目编译结果<code>.app</code>目录下的Mach-O文件中提取出调试符号表文件。实际上Xcode也是通过这种方式来生成符号表文件。</p>
 
 </div>
   
@@ -153,7 +153,7 @@ $(document).bind('DOMNodeInserted', function(event) {
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">如何手动解析CrashLog之&#8212;-方法篇</a></h1>
+      <h1 class="entry-title"><a href="/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">手动解析CrashLog之&#8212;-方法篇</a></h1>
     
     
       <p class="meta">
@@ -657,11 +657,11 @@ $(document).bind('DOMNodeInserted', function(event) {
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2015/08/10/ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/">如何手动解析CrashLog之&#8212;-原理篇</a>
+        <a href="/blog/2015/08/10/ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/">手动解析CrashLog之&#8212;-原理篇</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">如何手动解析CrashLog之&#8212;-方法篇</a>
+        <a href="/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">手动解析CrashLog之&#8212;-方法篇</a>
       </li>
     
       <li class="post">
