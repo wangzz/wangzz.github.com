@@ -4,7 +4,7 @@
   <title><![CDATA[王中周的技术博客]]></title>
   <link href="http://wangzz.github.io/atom.xml" rel="self"/>
   <link href="http://wangzz.github.io/"/>
-  <updated>2015-08-10T15:55:57+08:00</updated>
+  <updated>2015-08-10T15:58:17+08:00</updated>
   <id>http://wangzz.github.io/</id>
   <author>
     <name><![CDATA[王中周]]></name>
@@ -112,28 +112,6 @@
 </tbody>
 </table>
 
-
-<table>
-<thead>
-<tr>
-<th>表头  </th>
-<th> 表头</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>   单元格内容  </td>
-<td> 单元格内容</td>
-</tr>
-<tr>
-<td>   单元格内容l  </td>
-<td> 单元格内容</td>
-</tr>
-</tbody>
-</table>
-
-
-<p>而Mach-O中关于section的命名和ELF稍有区别，把名称前的<code>.</code>换成了<code>_</code>，例如<code>.debug_info</code>变成了<code>_debug_info</code>。</p>
 
 <h2>三、section信息提取</h2>
 

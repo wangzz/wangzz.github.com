@@ -209,28 +209,6 @@ $(document).bind('DOMNodeInserted', function(event) {
 </table>
 
 
-<table>
-<thead>
-<tr>
-<th>表头  </th>
-<th> 表头</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>   单元格内容  </td>
-<td> 单元格内容</td>
-</tr>
-<tr>
-<td>   单元格内容l  </td>
-<td> 单元格内容</td>
-</tr>
-</tbody>
-</table>
-
-
-<p>而Mach-O中关于section的命名和ELF稍有区别，把名称前的<code>.</code>换成了<code>_</code>，例如<code>.debug_info</code>变成了<code>_debug_info</code>。</p>
-
 <h2>三、section信息提取</h2>
 
 <p>保存在<code>DAWARF</code>中的信息是高度压缩的，可以通过<code>dwarfdump</code>命令从中提取出可读信息。前文所述的那些section中，定位CrashLog只需要用到<code>.debug_info</code>和<code>.debug_line</code>。由于解析出来的数据量较大，为了方便查看，就将其保存在文本中。两个section的数据提取方式如下：</p>
