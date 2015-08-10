@@ -94,6 +94,84 @@ $(document).bind('DOMNodeInserted', function(event) {
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/">iOS进程间通信之CFMessagePort</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-04T18:31:51+08:00" pubdate data-updated="true">Jun 4<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>iOS系统是出了名的封闭，每个应用的活动范围被严格地限制在各自的沙盒中。尽管如此，iOS还是提供了若干进程间通信机制，CFMessagePort就是其中之一。</p>
+
+<p>从类名可以看出，CFMessagePort属于<code>Core Foundation</code>层的东西，其实现部分是开源的，代码在可以在苹果的<a href="http://opensource.apple.com/source/CF/CF-855.14/CFMessagePort.c">开源代码库</a>中找到。</p>
+
+<h2>使用方式</h2>
+
+<h4>1、消息接收者</h4>
+
+<p>CFMessagePort端口消息的接收者需要实现以下功能：</p>
+
+<h6>1.1 注册监听</h6>
+
+<p>消息接收者需要通过以下方式注册消息监听：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">startListenning</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">!=</span> <span class="n">mMsgPortListenner</span> <span class="o">&amp;&amp;</span> <span class="n">CFMessagePortIsValid</span><span class="p">(</span><span class="n">mMsgPortListenner</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">CFMessagePortInvalidate</span><span class="p">(</span><span class="n">mMsgPortListenner</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>    <span class="n">mMsgPortListenner</span> <span class="o">=</span> <span class="n">CFMessagePortCreateLocal</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span><span class="n">CFSTR</span><span class="p">(</span><span class="n">LOCAL_MACH_PORT_NAME</span><span class="p">),</span><span class="n">onRecvMessageCallBack</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRunLoopSourceRef</span> <span class="n">source</span> <span class="o">=</span> <span class="n">CFMessagePortCreateRunLoopSource</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">mMsgPortListenner</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRunLoopAddSource</span><span class="p">(</span><span class="n">CFRunLoopGetCurrent</span><span class="p">(),</span> <span class="n">source</span><span class="p">,</span> <span class="n">kCFRunLoopCommonModes</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;start listenning&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an/">iOS模拟器Custom Location被重置解决方案</a></h1>
     
     
@@ -489,7 +567,11 @@ $(document).bind('DOMNodeInserted', function(event) {
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">如何手动解析CrashLog</a>
+        <a href="/blog/2015/08/10/ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/">如何手动解析CrashLog之&#8212;-原理篇</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">如何手动解析CrashLog之&#8212;-方法篇</a>
       </li>
     
       <li class="post">
@@ -504,10 +586,6 @@ $(document).bind('DOMNodeInserted', function(event) {
         <a href="/blog/2014/10/13/shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/">手动内存管理转ARC项目实战</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/09/28/iphoneping-mu-zhi-shi-dian-jie-xi/">iPhone屏幕知识点解析</a>
-      </li>
-    
   </ul>
 </section>
 <section>
@@ -518,7 +596,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 <li class='category'><a href='/blog/categories/wwdc2014/'>WWDC2014 (2)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>Xcode (1)</a></li>
 <li class='category'><a href='/blog/categories/xcodesettings/'>XcodeSettings (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (8)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (9)</a></li>
 <li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
 
   </ul>
