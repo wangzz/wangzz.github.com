@@ -50,14 +50,6 @@ $ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain
 | .debug_ranges        | Address ranges referenced by DIEs                 |
 | .debug_str           | String table used by .debug_info                  |
 
-
-表头  | 表头
-    ------------- | -------------
-   单元格内容  | 单元格内容
-   单元格内容l  | 单元格内容
-
-而Mach-O中关于section的命名和ELF稍有区别，把名称前的`.`换成了`_`，例如`.debug_info`变成了`_debug_info`。
-
 ## 三、section信息提取
 
 保存在`DAWARF`中的信息是高度压缩的，可以通过`dwarfdump`命令从中提取出可读信息。前文所述的那些section中，定位CrashLog只需要用到`.debug_info`和`.debug_line`。由于解析出来的数据量较大，为了方便查看，就将其保存在文本中。两个section的数据提取方式如下：
