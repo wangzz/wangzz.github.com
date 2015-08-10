@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "如何手动解析CrashLog之----方法篇"
+title: "手动解析CrashLog之----方法篇"
 date: 2015-07-27 18:59:27 +0800
 comments: true
 categories: iOS

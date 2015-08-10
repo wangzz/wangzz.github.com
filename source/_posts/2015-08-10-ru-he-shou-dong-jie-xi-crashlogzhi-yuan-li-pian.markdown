@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "如何手动解析CrashLog之----原理篇"
+title: "手动解析CrashLog之----原理篇"
 date: 2015-08-10 15:12:49 +0800
 comments: true
 categories: iOS
@@ -10,10 +10,10 @@ description: 如何手动解析CrashLog之原理篇
 ---
 
 
-在上篇文章[《如何手动解析CrashLog》](http://foggry.com/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/)里介绍了手动解析CrashLog的方法，接下来再说说`dwarfdump`、`atos`等解析工具是如何从符号表文件中获取到崩溃位置信息的。一切还得从`.dSYM`符号表文件开始说起。
+在上篇文章[《手动解析CrashLog之----方法篇》](http://foggry.com/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/)里介绍了手动解析CrashLog的方法，接下来再说说`dwarfdump`、`atos`等解析工具是如何从符号表文件中获取到崩溃位置信息的。一切还得从`.dSYM`符号表文件开始说起。
 
 ## 一、`.dSYM`文件的生成
-符号表文件`.dSYM`实际上是从Mach-O文件中抽取调试信息而得到的文件，其保存调试信息的格式是`DWARF`，其出身可以从苹果员工的文章[《Apple's "Lazy" DWARF Scheme》](http://wiki.dwarfstd.org/index.php?title=Apple%27s_%22Lazy%22_DWARF_Scheme)了解一二。
+符号表文件`.dSYM`实际上是从Mach-O文件中抽取调试信息而得到的文件目录，实际用于保存调试信息的问价是`DWARF`，其出身可以从苹果员工的文章[《Apple's "Lazy" DWARF Scheme》](http://wiki.dwarfstd.org/index.php?title=Apple%27s_%22Lazy%22_DWARF_Scheme)了解一二。
 
 ### 1、Xcode自动生成
 
@@ -27,7 +27,7 @@ Xcode会在编译工程或者归档时自动为我们生成`.dSYM`文件，当�
 $ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil /Users/wangzz/Library/Developer/Xcode/DerivedData/YourApp-cqvijavqbptjyhbwewgpdmzbmwzk/Build/Products/Debug-iphonesimulator/YourApp.app/YourApp -o YourApp.dSYM
 ```
 
-该方式通过Xcode提供的工具`dsymutil`，从项目编译结果`.app`目录下的Mach-O文件中提取出调试符号表文件。Xcode实际上也是通过这种方式来得到符号表文件的。
+该方式通过Xcode提供的工具`dsymutil`，从项目编译结果`.app`目录下的Mach-O文件中提取出调试符号表文件。实际上Xcode也是通过这种方式来生成符号表文件。
 
 
 <!-- more -->
@@ -50,6 +50,14 @@ Section Name  | Contents
 .debug_ranges  | Address ranges referenced by DIEs
 .debug_str  | String table used by .debug_info
 
+
+
+Section Name  | Contents
+------------- | --------------------------
+.debug_abbrev  | Abbreviations used in the .debug_info section
+Content Cell  | Content Cell
+
+
 *注 该表出自官方文档[《Introduction to the
 DWARF Debugging Format》](http://www.dwarfstd.org/doc/Debugging%20using%20DWARF.pdf)
 
@@ -57,7 +65,7 @@ DWARF Debugging Format》](http://www.dwarfstd.org/doc/Debugging%20using%20DWARF
 
 ## 三、section信息提取
 
-保存在`DAWARF`中的信息是高度压缩的，可以通过`dwarfdump`命令从中提取出可读信息。前文所述的section中，定位CrashLog只需要用到`.debug_info`和`.debug_line`。由于解析出来的数据量较大，为了方便查看，就将其保存在文本中，两个section的数据提取方式如下：
+保存在`DAWARF`中的信息是高度压缩的，可以通过`dwarfdump`命令从中提取出可读信息。前文所述的那些section中，定位CrashLog只需要用到`.debug_info`和`.debug_line`。由于解析出来的数据量较大，为了方便查看，就将其保存在文本中。两个section的数据提取方式如下：
 
 * `.debug_info`
 
@@ -102,7 +110,7 @@ $ dwarfdump -e --debug-line YourPath/YourApp.dSYM/Contents/Resources/DWARF > lin
 
 需要指出的是，上面这段DIE是我为了介绍方便直接贴出来的，实际应用的时候需要通过搜索算法找出包含目标符号表崩溃地址（这里是`0x52846`）的DIE。
 
-总结一下，通过`.debug_info`我们可以获取到这些信息：
+从上述DIE中我们可以获取到这些信息：
 
 ```
 崩溃所在源码文件：/YourSourcePath/OBDFirstConnectViewController.m
@@ -134,7 +142,16 @@ $ dwarfdump -e --debug-line YourPath/YourApp.dSYM/Contents/Resources/DWARF > lin
 
 `. debug_line`段的第一行内容标识了该方法的起始符号表地址，行号及方法所在文件路径，通过之前得到的崩溃地址`0x52846`即可得知崩溃发生在882行。
 
-至此我们已经根据崩溃地址完全解析出了崩溃位置的详细信息！
+至此我们已经根据崩溃地址解析出了崩溃发生位置的详细信息：
+
+```
+崩溃所在源码文件：/YourSourcePath/OBDFirstConnectViewController.m
+发生崩溃的方法：-[OBDFirstConnectViewController showOilPricePickerView]
+发生崩溃的方法在源文件中的行号：870
+崩溃发生在源文件中得行号：882
+```
+
+以上内容为本人工作学习中所得，如有理解错误之处，还请指出！
 
 ## 五、参考文档
 
