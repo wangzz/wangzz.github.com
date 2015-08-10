@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "如何手动解析CrashLog"
+title: "如何手动解析CrashLog之----方法篇"
 date: 2015-07-27 18:59:27 +0800
 comments: true
 categories: iOS
 tags: [CrashLog, iOS]
 keywords: CrashLog, iOS
-description: 如何手动解析CrashLog
+description: 如何手动解析CrashLog之方法篇
 ---
 
 解决崩溃问题是移动应用开发者最日常的工作之一。如果是开发过程中遇到的崩溃，可以根据重现步骤调试，但线上版本就无能为力了。好在目前已经有很多不错的第三方CrashLog搜集平台（如友盟、Crashlytics等）为我们做好了解析工作，甚至在Xcode7里苹果也跟进了解析线上版本崩溃日志的功能，为开发者减轻了不少负担。尽管通常已经不需要我们手工处理CrashLog，了解CrashLog的还原原理和方法还是有必要的。
