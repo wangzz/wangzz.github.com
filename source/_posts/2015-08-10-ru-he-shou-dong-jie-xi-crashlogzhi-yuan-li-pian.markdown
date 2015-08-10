@@ -29,13 +29,13 @@ $ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain
 
 该方式通过Xcode提供的工具`dsymutil`，从项目编译结果`.app`目录下的Mach-O文件中提取出调试符号表文件。实际上Xcode也是通过这种方式来生成符号表文件。
 
-
 <!-- more -->
 
 ## 二、`DWARF`简介
 
 `DWARF`（DebuggingWith Arbitrary Record Formats），是ELF和Mach-O等文件格式中用来存储和处理调试信息的标准格式，`.dSYM`中真正保存符号表数据的是`DWARF`文件。`DWARF`中不同的数据都保存在相应的`section`（节）中，ELF文件里所有的section名称都以`".debug_"`开头，如下表所示：
 
+```
 | Section Name         | Contents                                          |
 | -------------------- | ------------------------------------------------  |
 | .debug_abbrev        | Abbreviations used in the .debug_info section     |
@@ -49,6 +49,9 @@ $ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain
 | .debug_pubtypes      | A lookup table for global types                   |
 | .debug_ranges        | Address ranges referenced by DIEs                 |
 | .debug_str           | String table used by .debug_info                  |
+```
+
+Mach-O中关于section的命名和ELF稍有区别，把名称前的`.`换成了`_`，例如`.debug_info`变成了`_debug_info`。
 
 ## 三、section信息提取
 
