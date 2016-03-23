@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>加密你的SQLite - 王中周的技术博客</title>
+  <meta name="author" content="王中周">
+
+  
+  <meta name="description" content="加密你的SQLite">
+  <meta name="keywords" content="SQLite, sqlcipher">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wangzz.github.io/blog/2014/05/19/jia-mi-ni-de-sqlite">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="王中周的技术博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  
+  <!-- googleapis is fucked by gfw -->
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <!--<script src="//libs.baidu.com/jquery/1.7.2/jquery.min.js"></script>-->
+  <script src="http://cdn.staticfile.org/jquery/1.9.1/jquery.min.js"></script>
+  
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+<script type="text/javascript">
+
+function addBlankTargetForLinks () {
+
+  $('a[href^="http"]').each(function(){
+
+      $(this).attr('target', '_blank');
+
+  });
+
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+
+  addBlankTargetForLinks();
+
+});
+
+</script>
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">王中周的技术博客</a></h1>
+  
+    <h2>Stay hungry,stay foolish.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:wangzz.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">加密你的SQLite</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-19T10:19:42+08:00" pubdate data-updated="true">May 19<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>关于SQLite</h2>
+
+<p>SQLite是一个<code>轻量的</code>、<code>跨平台的</code>、<code>开源的</code>数据库引擎，它的在<code>读写效率</code>、<code>消耗总量</code>、<code>延迟时间</code>和<code>整体简单性上</code>具有的优越性，使其成为移动平台数据库的最佳解决方案（如iOS、Android）。</p>
+
+<p>然而免费版的SQLite有一个致命缺点：不支持加密。这就导致存储在SQLite中的数据可以被任何人用任何文本编辑器查看到。比如国内某团购iOS客户端的DB缓存数据就一览无余：</p>
+
+<p><img src="/images/article2/meituan_db_info.png" width="700" height="300"></p>
+
+<!-- more -->
+
+
+<h2>SQLite加密方式</h2>
+
+<p>对数据库加密的思路有两种：</p>
+
+<ul>
+<li>将内容加密后再写入数据库</li>
+</ul>
+
+
+<p>这种方式使用简单，在入库/出库只需要将字段做对应的加解密操作即可，一定程度上解决了将数据赤裸裸暴露的问题。</p>
+
+<p>不过这种方式并不是彻底的加密，因为数据库的表结构等信息还是能被查看到。另外写入数据库的内容加密后，搜索也是个问题。</p>
+
+<ul>
+<li>对数据库文件加密</li>
+</ul>
+
+
+<p>将整个数据库整个文件加密，这种方式基本上能解决数据库的信息安全问题。目前已有的SQLite加密基本都是通过这种方式实现的。</p>
+
+<h2>SQLite加密工具</h2>
+
+<p>目前网上查询到iOS平台可用的SQLite加密工具有以下几种：</p>
+
+<ul>
+<li><a href="http://www.sqlite.org/index.html">SQLite Encryption Extension (SEE)</a></li>
+</ul>
+
+
+<p>事实上SQLite有加解密接口，只是免费版本没有实现而已。而<code>SQLite Encryption Extension (SEE)</code>是SQLite的加密版本，提供以下加密方式：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>RC4
+</span><span class='line'>AES-128 in OFB mode
+</span><span class='line'>AES-128 in CCM mode
+</span><span class='line'>AES-256 in OFB mode</span></code></pre></td></tr></table></div></figure>
+
+
+<p>SQLite Encryption Extension (SEE)版本是收费的。</p>
+
+<ul>
+<li><a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a></li>
+</ul>
+
+
+<p>使用AES加密，其原理是实现了开源免费版SQLite没有实现的加密相关接口。</p>
+
+<p><code>SQLiteEncrypt</code>是收费的。</p>
+
+<ul>
+<li><a href="http://sqlite-crypt.com/index.htm">SQLiteCrypt</a></li>
+</ul>
+
+
+<p>使用256-bit AES加密，其原理和<a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a>一样，都是实现了SQLite的加密相关接口。</p>
+
+<p><code>SQLiteCrypt</code>也是收费的。</p>
+
+<ul>
+<li><a href="http://sqlcipher.net/">SQLCipher</a></li>
+</ul>
+
+
+<p>首先需要说明的是，<code>SQLCipher</code>是完全开源的，代码托管在<a href="https://github.com/sqlcipher/sqlcipher">github</a>上。</p>
+
+<p><code>SQLCipher</code>使用256-bit AES加密，由于其基于免费版的SQLite，主要的加密接口和SQLite是相同的，但也增加了一些自己的接口，详情见<a href="http://sqlcipher.net/sqlcipher-api/">这里</a>。</p>
+
+<p><code>SQLCipher</code>分为收费版本和免费版本，官网介绍的区别为：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>easier to setup, saving many steps in project configuration
+</span><span class='line'>pre-built with a modern version of OpenSSL, avoiding another external dependency
+</span><span class='line'>much faster for each build cycle because the library doesn't need to be built from scratch on each compile (build time can be up to 95% faster with the static libraries)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>只是集成起来更简单，不用再添加<code>OpenSSL</code>依赖库，而且编译速度更快，从功能上来说没有任何区别。仅仅为了上述一点便利去花费几百美刀，对于我等苦逼RD来说太不值了，还好有一个免费版本。</p>
+
+<p>鉴于上述SQLite加密工具中，只有<code>SQLCiper</code>有免费版本，下面将将着重介绍下<code>SQLCiper</code>。</p>
+
+<h2>在项目中使用SQLCipher</h2>
+
+<p>在项目中集成免费版的<code>SQLCipher</code>略显复杂，还好官网以图文的方式介绍的非常详细，集成过程请参考<a href="http://sqlcipher.net/ios-tutorial">官网教程</a>。</p>
+
+<ul>
+<li>使用SQLCipher初始化数据库</li>
+</ul>
+
+
+<p>下面这段代码来自官网，其作用是使用SQLCipher创建一个新的加密数据库，或者打开一个使用SQLCipher创建的数据库。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSString *databasePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
+</span><span class='line'>                              stringByAppendingPathComponent: @"cipher.db"];
+</span><span class='line'>    sqlite3 *db;
+</span><span class='line'>    if (sqlite3_open([databasePath UTF8String], &db) == SQLITE_OK) {
+</span><span class='line'>        const char* key = [@"BIGSecret" UTF8String];
+</span><span class='line'>        sqlite3_key(db, key, strlen(key));
+</span><span class='line'>        int result = sqlite3_exec(db, (const char*) "SELECT count(*) FROM sqlite_master;", NULL, NULL, NULL);
+</span><span class='line'>        if (result == SQLITE_OK) {
+</span><span class='line'>            NSLog(@"password is correct, or, database has been initialized");
+</span><span class='line'>        } else {
+</span><span class='line'>            NSLog(@"incorrect password! errCode:%d",result);
+</span><span class='line'>        }
+</span><span class='line'>        
+</span><span class='line'>        sqlite3_close(db);
+</span><span class='line'>    }
+</span><span class='line'>    </span></code></pre></td></tr></table></div></figure>
+
+
+<p>需要注意的是，在使用<code>sqlite3_open</code>打开或创建一个数据库，在对数据库做任何其它操作之前，都必须先使用<code>sqlite3_key</code>输入密码，否则会导致数据库操作失败，报出sqlite错误码<code>SQLITE_NOTADB</code>。</p>
+
+<p>在<code>sqlite3_open</code>打开数据库成功，而且用<code>sqlite3_key</code>输入密码以后，就可以正常的对数据库进行增、删、改、查等操作了。</p>
+
+<ul>
+<li>使用SQLCipher加密已存在的数据库</li>
+</ul>
+
+
+<p>SQLCipher提供了<code>sqlcipher_export()</code>函数，该函数可以方便的对一个普通数据库导入到SQLCipher加密加密的数据库中，操作方式如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ./sqlcipher plaintext.db 
+</span><span class='line'>sqlite&gt; ATTACH DATABASE 'encrypted.db' AS encrypted KEY 'testkey'; 
+</span><span class='line'>sqlite&gt; SELECT sqlcipher_export('encrypted'); 
+</span><span class='line'>sqlite&gt; DETACH DATABASE encrypted; </span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>解除使用SQLCipher加密的数据库密码</li>
+</ul>
+
+
+<p><code>sqlcipher_export()</code>函数同样可以将SQLCipher加密后的数据库内容导入到未加密的数据库中，从而实现解密，操作方式如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ./sqlcipher encrypted.db 
+</span><span class='line'>sqlite&gt; PRAGMA key = 'testkey'; 
+</span><span class='line'>sqlite&gt; ATTACH DATABASE 'plaintext.db' AS plaintext KEY '';  -- empty key will disable encryption
+</span><span class='line'>sqlite&gt; SELECT sqlcipher_export('plaintext'); 
+</span><span class='line'>sqlite&gt; DETACH DATABASE plaintext; </span></code></pre></td></tr></table></div></figure>
+
+
+<p>总体来说，SQLCipher是一个使用方便，灵活性高的数据库加密工具。</p>
+
+<p>另外，我写了个<a href="http://download.csdn.net/detail/wzzvictory_tjsd/7379055">SQLCipherDemo</a>工程放到了<a href="http://download.csdn.net/detail/wzzvictory_tjsd/7379055">CSDN</a>上，有需要的同学请自行下载。</p>
+
+<h2>参考文档</h2>
+
+<ul>
+<li><p><a href="http://www.hwaci.com/sw/sqlite/see.html">The SQLite Encryption Extension (SEE)</a></p></li>
+<li><p><a href="http://www.sqlite-encrypt.com/index.htm">SQLiteEncrypt</a></p></li>
+<li><p><a href="http://sqlite-crypt.com/index.htm">SQLiteCrypt</a></p></li>
+<li><p><a href="http://stackoverflow.com/questions/5669905/sqlite-with-encryption-password-protection">SQLite with encryption/password protection</a></p></li>
+<li><p><a href="http://sqlcipher.net/documentation/">SQLCipher</a></p></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">王中周</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-19T10:19:42+08:00" pubdate data-updated="true">May 19<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/database/'>Database</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394012284741689" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<!-- UJian Button BEGIN -->
+	<div class="ujian-hook"></div>
+	<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js"></script>
+<!-- UJian Button END -->
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js"></script>
+<!-- UY END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/05/09/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/" title="Previous Post: Xcode设置项之Architectures和Valid Architectures">&laquo; Xcode设置项之Architectures和Valid Architectures</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an/" title="Next Post: iOS模拟器Custom Location被重置解决方案">iOS模拟器Custom Location被重置解决方案 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>博主简介</h1>
+<li>
+<p>
+	<span style="color:#222222;font-family:inherit;font-size:18px;font-style:inherit;font-weight:inherit;line-height:1.5;">曾就职于高阳科技、北京拉手网；</span>
+</p>
+<p>
+	<span style="font-family:inherit;font-style:inherit;font-weight:inherit;color:#222222;font-size:18px;line-height:1.5;">早期在<a href="http://blog.csdn.net/wzzvictory" target="_blank"><span style="color:#E53333;">CSND上写博客</span></a></span>
+</p>
+</li>
+</section>
+<section>
+    <h1>新浪微博</h1>
+    <ul id="weibo">
+    <li>
+    	
+<iframe width="100%" height="130" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1734555471&verifier=6c6f0bb3&dpc=1"></iframe>
+
+</li>
+    </ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/08/10/ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/">手动解析CrashLog之----原理篇</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">手动解析CrashLog之----方法篇</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/05/06/chi-ping-xuan-ran-xue-xi-bi-ji/">离屏渲染学习笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/16/ios-code-signing-xue-xi-bi-ji/">iOS Code Signing 学习笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/13/shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/">手动内存管理转ARC项目实战</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/wwdc2014/'>WWDC2014 (2)</a></li>
+<li class='category'><a href='/blog/categories/xcode/'>Xcode (1)</a></li>
+<li class='category'><a href='/blog/categories/xcodesettings/'>XcodeSettings (1)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (9)</a></li>
+<li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
+
+  </ul>
+</section>
+<section>
+    <h1>广告时间</h1>
+    <ul id="ad">
+    <li>
+    	
+
+<!-- 广告位：Google -->
+<!-- 
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+-->
+<!-- 王中周的技术博客 -->
+<!-- 
+<ins class="adsbygoogle"
+     style="display:inline-block;width:250px;height:250px"
+     data-ad-client="ca-pub-4428888818448200"
+     data-ad-slot="1259477576"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+-->
+
+
+
+<!-- 广告位：Baidu -->
+<!-- 广告位：技术博客 -->
+<!-- 
+<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "985176";</script>
+<script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+-->
+   
+    </li>
+    </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div style="text-align:center;">
+	<span style="line-height:1.5;">This work is licensed under a </span><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a><span style="line-height:1.5;">.</span>
+</div>
+<p style="text-align:center;">
+	<span style="line-height:1;">Copyright &copy; 2016 - 王中周 - </span><span class="credit"><span style="line-height:1;">Powered by </span><a href="http://octopress.org"><span style="line-height:1;">Octopress</span></a></span> 
+</p>
+
+<p>
+<script type="text/javascript">
+    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F9975063b89c363c67eac651132751ee6' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</p></footer>
+  
+
+
+
+
+
+  <!--返回顶部开始-->
+<div id="full" style="width:0px; height:0px; position:fixed; right:190px; bottom:150px; z-index:100; text-align:center; background-color:transparent; cursor:pointer;">
+	<a href="#" onclick="goTop();return false;"><img src="/images/top.png" border=0 alt="返回顶部"></a>
+</div>
+<script src="/javascripts/top.js" type="text/javascript"></script>
+<!--返回顶部结束-->
+</body>
+</html>

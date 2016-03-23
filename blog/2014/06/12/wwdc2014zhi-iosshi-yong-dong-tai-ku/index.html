@@ -1,0 +1,800 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>WWDC2014之iOS使用动态库 - 王中周的技术博客</title>
+  <meta name="author" content="王中周">
+
+  
+  <meta name="description" content="WWDC2014之iOS使用动态库">
+  <meta name="keywords" content="WWDC2014, iOS, framework, 动态库">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wangzz.github.io/blog/2014/06/12/wwdc2014zhi-iosshi-yong-dong-tai-ku">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="王中周的技术博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  
+  <!-- googleapis is fucked by gfw -->
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <!--<script src="//libs.baidu.com/jquery/1.7.2/jquery.min.js"></script>-->
+  <script src="http://cdn.staticfile.org/jquery/1.9.1/jquery.min.js"></script>
+  
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+<script type="text/javascript">
+
+function addBlankTargetForLinks () {
+
+  $('a[href^="http"]').each(function(){
+
+      $(this).attr('target', '_blank');
+
+  });
+
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+
+  addBlankTargetForLinks();
+
+});
+
+</script>
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">王中周的技术博客</a></h1>
+  
+    <h2>Stay hungry,stay foolish.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:wangzz.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">WWDC2014之iOS使用动态库</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-12T19:27:57+08:00" pubdate data-updated="true">Jun 12<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>苹果的开放态度</h2>
+
+<p>WWDC2014上发布的<code>Xcode6 beta</code>版有了不少更新，其中令我惊讶的一个是苹果在iOS上开放了动态库，在<code>Xcode6 Beta</code>版的更新文档中是这样描述的：</p>
+
+<blockquote><p>Frameworks for iOS. iOS developers can now create dynamic frameworks. Frameworks are a collection of code and resources to encapsulate functionality that is valuable across multiple projects. Frameworks work perfectly with extensions, sharing logic that can be used by both the main application, and the bundled extensions.</p></blockquote>
+
+<p>详情见官方文档<a href="https://developer.apple.com/library/prerelease/ios/documentation/DeveloperTools/Conceptual/WhatsNewXcode/Articles/xcode_6_0.html">New Features in Xcode 6 Beta</a>。</p>
+
+<p>framework是Cocoa/Cocoa Touch程序中使用的一种资源打包方式，可以将将代码文件、头文件、资源文件、说明文档等集中在一起，方便开发者使用，作为一名Cocoa/Cocoa Touch程序员每天都要跟各种各样的Framework打交道。Cocoa/Cocoa Touch开发框架本身提供了大量的Framework，比如Foundation.framework/UIKit.framework/AppKit.framework等。需要注意的是，这些framework无一例外都是动态库。</p>
+
+<!-- more -->
+
+
+<p>但残忍的是，Cocoa Touch上并不允许我们使用自己创建的framework。不过由于framework是一种优秀的资源打包方式，拥有无穷智慧的程序员们便想出了以framework的形式打包静态库的招数，因此我们平时看到的第三方发布的framework无一例外都是静态库，真正的动态库是上不了AppStore的。</p>
+
+<p>WWDC2014给我的一个很大感触是苹果对iOS的开放态度：允许使用动态库、允许第三方键盘、<code>App Extension</code>等等，这些在之前是想都不敢想的事。</p>
+
+<h2>iOS上动态库可以做什么</h2>
+
+<p>和静态库在编译时和app代码链接并打进同一个二进制包中不同，动态库可以在运行时手动加载，这样就可以做很多事情，比如：</p>
+
+<ul>
+<li>共享可执行文件</li>
+</ul>
+
+
+<p>在其它大部分平台上，动态库都可以用于不同应用间共享，这就大大节省了内存。从目前来看，iOS仍然不允许进程间共享动态库，即iOS上的动态库只能是私有的，因为我们仍然不能将动态库文件放置在除了自身沙盒以外的其它任何地方。</p>
+
+<p>不过iOS8上开放了<code>App Extension</code>功能，可以为一个应用创建插件，这样主app和插件之间共享动态库还是可行的。</p>
+
+<p>2014-6-23修正：</p>
+
+<p>经<a href="http://weibo.com/tangqiaoboy?topnav=1&amp;wvr=5&amp;topsug=1">@唐巧_boy</a>提醒，sandbox会验证动态库的签名，所以如果是动态从服务器更新的动态库，是签名不了的，因此应用插件化、软件版本实时模块升级等功能在iOS上无法实现。</p>
+
+<h2>创建动态库</h2>
+
+<h4>1、创建动态库</h4>
+
+<ul>
+<li>创建工程文件</li>
+</ul>
+
+
+<p>在下图所示界面能够找到Cocoa Touch动态库的创建入口：</p>
+
+<p><img src="/images/article4/cocoa_touch_framework.png" alt="framework" /></p>
+
+<p>跟随指引一步步操作即可创建一个新的动态库工程，我的工程名字叫Dylib，Xcode会同时创建一个和工程target同名的.h文件，比如我的就是Dylib.h。</p>
+
+<ul>
+<li>向工程中添加文件</li>
+</ul>
+
+
+<p>接下来就可以在工程中随意添加文件了。我在其中新建了一个名为Person的测试类，提供的接口如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">@interface</span> <span class="nc">Person</span> : <span class="nc">NSObject</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">run</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>对应的实现部分：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">@implementation</span> <span class="nc">Person</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">run</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;let&#39;s run.&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">@&quot;The Second Alert&quot;</span> <span class="nl">message:</span><span class="nb">nil</span> <span class="nl">delegate:</span><span class="nb">nil</span> <span class="nl">cancelButtonTitle:</span><span class="nb">nil</span> <span class="nl">otherButtonTitles:</span><span class="s">@&quot;done&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>设置开放的头文件</li>
+</ul>
+
+
+<p>一个库里面可以后很多的代码，但是我们需要设置能够提供给外界使用的接口，可以通过Target&mdash;>Build Phases&mdash;>Headers来设置，如下图所示：</p>
+
+<p><img src="/images/article4/header.png" alt="header" /></p>
+
+<p>我们只需将希望开放的头文件放到Public列表中即可，比如我开放了<code>Dylib.h</code>和<code>Person.h</code>两个头文件，在生成的framework的Header目录下就可以看到这两个头文件，如下图所示：</p>
+
+<p><img src="/images/article4/public_header.png" alt="public_header" /></p>
+
+<p>一切完成，Run以后就能成功生成framework文件了。</p>
+
+<h4>2、通用动态库</h4>
+
+<p>经过第一步我们只是创建了一个动态库文件，但是和静态库类似，该动态库并同时不支持真机和模拟器，可以通过以下步骤创建通用动态库：</p>
+
+<ul>
+<li>创建Aggregate Target</li>
+</ul>
+
+
+<p>按下图所示，在动态库工程中添加一个类型为Aggregate的target:</p>
+
+<p><img src="/images/article4/aggregate.png" alt="aggregate" /></p>
+
+<p>按提示一步步操作即可，我给<code>Aggregate</code>的Target的命名是<code>CommonDylib</code>。</p>
+
+<ul>
+<li>设置Target Dependencies</li>
+</ul>
+
+
+<p>按以下路径设置<code>CommonDylib</code>对应的<code>Target Dependencies</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">TARGETS</span><span class="o">--&gt;</span><span class="n">CommonDylib</span><span class="o">--&gt;</span><span class="n">Build</span> <span class="n">Phases</span><span class="o">--&gt;</span><span class="n">Target</span> <span class="n">Dependencies</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将真正的动态库Dylib Target添加到其中。</p>
+
+<ul>
+<li>添加Run Script</li>
+</ul>
+
+
+<p>按以下路径为<code>CommonDylib</code>添加<code>Run Script</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">TARGETS</span><span class="o">--&gt;</span><span class="n">CommonDylib</span><span class="o">--&gt;</span><span class="n">Build</span> <span class="n">Phases</span><span class="o">--&gt;</span><span class="n">Run</span> <span class="n">Script</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>添加的脚本为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="cp"># Sets the target folders and the final framework product.</span>
+</span><span class='line'><span class="n">FMK_NAME</span><span class="o">=</span><span class="n">$</span><span class="p">{</span><span class="n">PROJECT_NAME</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp"># Install dir will be the final output to the framework.</span>
+</span><span class='line'><span class="cp"># The following line create it in the root folder of the current project.</span>
+</span><span class='line'><span class="n">INSTALL_DIR</span><span class="o">=</span><span class="n">$</span><span class="p">{</span><span class="n">SRCROOT</span><span class="p">}</span><span class="o">/</span><span class="n">Products</span><span class="o">/</span><span class="n">$</span><span class="p">{</span><span class="n">FMK_NAME</span><span class="p">}.</span><span class="n">framework</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp"># Working dir will be deleted after the framework creation.</span>
+</span><span class='line'><span class="n">WRK_DIR</span><span class="o">=</span><span class="n">build</span>
+</span><span class='line'><span class="n">DEVICE_DIR</span><span class="o">=</span><span class="n">$</span><span class="p">{</span><span class="n">WRK_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">Release</span><span class="o">-</span><span class="n">iphoneos</span><span class="o">/</span><span class="n">$</span><span class="p">{</span><span class="n">FMK_NAME</span><span class="p">}.</span><span class="n">framework</span>
+</span><span class='line'><span class="n">SIMULATOR_DIR</span><span class="o">=</span><span class="n">$</span><span class="p">{</span><span class="n">WRK_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">Release</span><span class="o">-</span><span class="n">iphonesimulator</span><span class="o">/</span><span class="n">$</span><span class="p">{</span><span class="n">FMK_NAME</span><span class="p">}.</span><span class="n">framework</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp"># -configuration ${CONFIGURATION} </span>
+</span><span class='line'><span class="cp"># Clean and Building both architectures.</span>
+</span><span class='line'><span class="n">xcodebuild</span> <span class="o">-</span><span class="n">configuration</span> <span class="s">&quot;Release&quot;</span> <span class="o">-</span><span class="n">target</span> <span class="s">&quot;${FMK_NAME}&quot;</span> <span class="o">-</span><span class="n">sdk</span> <span class="n">iphoneos</span> <span class="n">clean</span> <span class="n">build</span>
+</span><span class='line'><span class="n">xcodebuild</span> <span class="o">-</span><span class="n">configuration</span> <span class="s">&quot;Release&quot;</span> <span class="o">-</span><span class="n">target</span> <span class="s">&quot;${FMK_NAME}&quot;</span> <span class="o">-</span><span class="n">sdk</span> <span class="n">iphonesimulator</span> <span class="n">clean</span> <span class="n">build</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp"># Cleaning the oldest.</span>
+</span><span class='line'><span class="k">if</span> <span class="p">[</span> <span class="o">-</span><span class="n">d</span> <span class="s">&quot;${INSTALL_DIR}&quot;</span> <span class="p">]</span>
+</span><span class='line'><span class="n">then</span>
+</span><span class='line'><span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="s">&quot;${INSTALL_DIR}&quot;</span>
+</span><span class='line'><span class="n">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="s">&quot;${INSTALL_DIR}&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">cp</span> <span class="o">-</span><span class="n">R</span> <span class="s">&quot;${DEVICE_DIR}/&quot;</span> <span class="s">&quot;${INSTALL_DIR}/&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp"># Uses the Lipo Tool to merge both binary files (i386 + armv6/armv7) into one Universal final product.</span>
+</span><span class='line'><span class="n">lipo</span> <span class="o">-</span><span class="n">create</span> <span class="s">&quot;${DEVICE_DIR}/${FMK_NAME}&quot;</span> <span class="s">&quot;${SIMULATOR_DIR}/${FMK_NAME}&quot;</span> <span class="o">-</span><span class="n">output</span> <span class="s">&quot;${INSTALL_DIR}/${FMK_NAME}&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">rm</span> <span class="o">-</span><span class="n">r</span> <span class="s">&quot;${WRK_DIR}&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>添加以后的效果如图所示：</p>
+
+<p><img src="/images/article4/commonlib_setting.png" alt="commonlib_setting" /></p>
+
+<p>该脚本是我根据一篇文章中介绍的脚本改写的，感谢<a href="http://blog.sina.com.cn/s/blog_407fb5bc01013v6s.html">原文作者</a>。</p>
+
+<p>脚本的主要功能是：</p>
+
+<p>1.分别编译生成真机和模拟器使用的framework；
+2.使用lipo命令将其合并成一个通用framework；
+3.最后将生成的通用framework放置在工程根目录下新建的Products目录下。</p>
+
+<p>如果一切顺利，对<code>CommonDylib</code> target执行run操作以后就能生成一个如图所示的通用framework文件了：</p>
+
+<p><img src="/images/article4/products.png" alt="products" /></p>
+
+<h2>使用动态库</h2>
+
+<h4>添加动态库到工程文件</h4>
+
+<p>经过以上步骤的努力，生成了最终需要的framework文件，为了演示动态库的使用，新建了一个名为<code>FrameworkDemo</code>的工程。通过以下方式将刚生成的framework添加到工程中：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">Targets</span><span class="o">--&gt;</span><span class="n">Build</span> <span class="n">Phases</span><span class="o">--&gt;</span><span class="n">Link</span> <span class="n">Binary</span> <span class="n">With</span> <span class="n">Libraries</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>同时设置将framework作为资源文件拷贝到Bundle中：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">Targets</span><span class="o">--&gt;</span><span class="n">Build</span> <span class="n">Phases</span><span class="o">--&gt;</span><span class="n">Copy</span> <span class="n">Bundle</span> <span class="n">Resources</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如图所示：</p>
+
+<p><img src="/images/article4/framework_demo_setting.png" alt="framework_demo_setting" /></p>
+
+<p>仅仅这样做是不够的，还需要为动态库添加链接依赖。</p>
+
+<h4>自动链接动态库</h4>
+
+<p>添加完动态库后，如果希望动态库在软件启动时自动链接，可以通过以下方式设置动态库依赖路径：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">Targets</span><span class="o">--&gt;</span><span class="n">Build</span> <span class="n">Setting</span><span class="o">--&gt;</span><span class="n">Linking</span><span class="o">--&gt;</span><span class="n">Runpath</span> <span class="n">Search</span> <span class="n">Paths</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>由于向工程中添加动态库时，将动态库设置了Copy Bundle Resources，因此就可以将<code>Runpath Search Paths</code>路径依赖设置为main bundle，即沙盒中的FrameworkDemo.app目录，向<code>Runpath Search Paths</code>中添加下述内容：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="err">@</span><span class="n">executable_path</span><span class="o">/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如图所示：</p>
+
+<p><img src="/images/article4/run_search_path.png" alt="run_search_path" /></p>
+
+<p>其中的<code>@executable_path/</code>表示可执行文件所在路径，即沙盒中的.app目录，注意不要漏掉最后的<code>/</code>。</p>
+
+<p>如果你将动态库放到了沙盒中的其他目录，只需要添加对应路径的依赖就可以了。</p>
+
+<h4>需要的时候链接动态库</h4>
+
+<p>动态库的另一个重要特性就是<code>即插即用</code>性，我们可以选择在需要的时候再加载动态库。</p>
+
+<ul>
+<li>更改设置</li>
+</ul>
+
+
+<p>如果不希望在软件一启动就加载动态库，需要将</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">Targets</span><span class="o">--&gt;</span><span class="n">Build</span> <span class="n">Phases</span><span class="o">--&gt;</span><span class="n">Link</span> <span class="n">Binary</span> <span class="n">With</span> <span class="n">Libraries</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>中<code>Dylib.framework</code>对应的Status由默认的<code>Required</code>改成<code>Optional</code>；或者更干脆的，将<code>Dylib.framework</code>从<code>Link Binary With Libraries</code>列表中删除即可。</p>
+
+<ul>
+<li>使用dlopen加载动态库</li>
+</ul>
+
+
+<p>以<code>Dylib.framework</code>为例，动态库中真正的可执行代码为<code>Dylib.framework/Dylib</code>文件，因此使用dlopen时如果仅仅指定加载动态库的路径为<code>Dylib.framework</code>是没法成功加载的。</p>
+
+<p>示例代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nf">onDlopenLoadAtPathAction1:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span><span class="n">documentsPath</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;%@/Documents/Dylib.framework/Dylib&quot;</span><span class="p">,</span><span class="n">NSHomeDirectory</span><span class="p">()];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">dlopenLoadDylibWithPath:</span><span class="n">documentsPath</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">dlopenLoadDylibWithPath:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">path</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">libHandle</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">libHandle</span> <span class="o">=</span> <span class="n">dlopen</span><span class="p">([</span><span class="n">path</span> <span class="nl">cStringUsingEncoding:</span><span class="n">NSUTF8StringEncoding</span><span class="p">],</span> <span class="n">RTLD_NOW</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">libHandle</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">char</span> <span class="o">*</span><span class="n">error</span> <span class="o">=</span> <span class="n">dlerror</span><span class="p">();</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;dlopen error: %s&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;dlopen load framework success.&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以dlopen方式使用动态库不知道是否能通过苹果审核。</p>
+
+<ul>
+<li>使用NSBundle加载动态库</li>
+</ul>
+
+
+<p>也可以使用NSBundle来加载动态库，实现代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nf">onBundleLoadAtPathAction1:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span><span class="n">documentsPath</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;%@/Documents/Dylib.framework&quot;</span><span class="p">,</span><span class="n">NSHomeDirectory</span><span class="p">()];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">bundleLoadDylibWithPath:</span><span class="n">documentsPath</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">bundleLoadDylibWithPath:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">path</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">_libPath</span> <span class="o">=</span> <span class="n">path</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">NSError</span> <span class="o">*</span><span class="n">err</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">NSBundle</span> <span class="o">*</span><span class="n">bundle</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSBundle</span> <span class="nl">bundleWithPath:</span><span class="n">path</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">([</span><span class="n">bundle</span> <span class="nl">loadAndReturnError:</span><span class="o">&amp;</span><span class="n">err</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;bundle load framework success.&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;bundle load framework err:%@&quot;</span><span class="p">,</span><span class="n">err</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>使用动态库中代码</h4>
+
+<p>通过上述任一一种方式加载的动态库后，就可以使用动态库中的代码文件了，以<code>Dylib.framework</code>中的<code>Person</code>类的使用为例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nf">onTriggerButtonAction:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Class</span> <span class="n">rootClass</span> <span class="o">=</span> <span class="n">NSClassFromString</span><span class="p">(</span><span class="s">@&quot;Person&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">rootClass</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">id</span> <span class="n">object</span> <span class="o">=</span> <span class="p">[[</span><span class="n">rootClass</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[(</span><span class="n">Person</span> <span class="o">*</span><span class="p">)</span><span class="n">object</span> <span class="n">run</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意，如果直接通过下属方式初始化<code>Person</code>类是不成功的：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nf">onTriggerButtonAction:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Person</span> <span class="o">*</span><span class="n">object</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Person</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">object</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>       <span class="p">[</span><span class="n">object</span> <span class="n">run</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>监测动态库的加载和移除</h2>
+
+<p>我们可以通过下述方式，为动态库的加载和移除添加监听回调：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">load</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">_dyld_register_func_for_add_image</span><span class="p">(</span><span class="o">&amp;</span><span class="n">image_added</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">_dyld_register_func_for_remove_image</span><span class="p">(</span><span class="o">&amp;</span><span class="n">image_removed</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>github上有一个完整的<a href="https://github.com/ddeville/ImageLogger">示例代码</a>，</p>
+
+<p>从这里看出，原来就算空白工程软件启动的时候也会加载多达一百二十多个动态库，如果这些都是静态库，那该有多可怕！！</p>
+
+<h2>Demo</h2>
+
+<p>本文使用的例子已经上传到<a href="https://github.com/wangzz/Demo/tree/master/FrameworkDemo">github</a>上，需要的朋友请自取。</p>
+
+<p>另外，本文对某些东西可能有理解错误的地方，还请指出。</p>
+
+<h2>参考文档：</h2>
+
+<ul>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/documentation/MacOSX/Conceptual/BPFrameworks/Frameworks.html#//apple_ref/doc/uid/10000183-SW1">Framework Programming Guide</a></p></li>
+<li><p><a href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/dyld.1.html">OS X Man Pages</a></p></li>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/documentation/DeveloperTools/Conceptual/WhatsNewXcode/Articles/xcode_6_0.html">New Features in Xcode 6 Beta</a></p></li>
+<li><p><a href="https://github.com/ddeville/ImageLogger">ImageLogger</a></p></li>
+<li><p><a href="http://realmacsoftware.com/blog/dynamic-linking?utm_campaign=iOS_Dev_Weekly_Issue_140&amp;utm_medium=email&amp;utm_source=iOS%2BDev%2BWeekly">Dynamic Linking</a></p></li>
+<li><p><a href="http://en.wikipedia.org/wiki/Dynamic_loading#Mac_OS_X">Dynamic loading</a></p></li>
+<li><p><a href="http://support.revealapp.com/kb/getting-started/integrating-reveal-with-your-ios-app#dynamic-library-integration">Integrating Reveal with your iOS app</a></p></li>
+<li><p><a href="http://blog.sina.com.cn/s/blog_407fb5bc01013v6s.html">IOS Framework制作全攻略</a></p></li>
+<li><p><a href="http://www.tanhao.me/pieces/1361.html">Build Settings中的变量@rpath,@loader_path,@executable_path</a></p></li>
+<li><p><a href="http://www.cocoachina.com/newbie/basic/2012/0516/4255.html">深入浅出Cocoa之Framework</a></p></li>
+<li><p><a href="http://blog.sina.com.cn/s/blog_a843a8850101rv9k.html">linux中静态库和动态库的区别和汇总</a></p></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">王中周</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-12T19:27:57+08:00" pubdate data-updated="true">Jun 12<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/wwdc2014/'>WWDC2014</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394012284741689" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<!-- UJian Button BEGIN -->
+	<div class="ujian-hook"></div>
+	<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js"></script>
+<!-- UJian Button END -->
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js"></script>
+<!-- UY END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/" title="Previous Post: iOS进程间通信之CFMessagePort">&laquo; iOS进程间通信之CFMessagePort</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/06/23/wwdc2014zhi-app-extensionsxue-xi-bi-ji/" title="Next Post: WWDC2014之App Extensions学习笔记">WWDC2014之App Extensions学习笔记 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>博主简介</h1>
+<li>
+<p>
+	<span style="color:#222222;font-family:inherit;font-size:18px;font-style:inherit;font-weight:inherit;line-height:1.5;">曾就职于高阳科技、北京拉手网；</span>
+</p>
+<p>
+	<span style="font-family:inherit;font-style:inherit;font-weight:inherit;color:#222222;font-size:18px;line-height:1.5;">早期在<a href="http://blog.csdn.net/wzzvictory" target="_blank"><span style="color:#E53333;">CSND上写博客</span></a></span>
+</p>
+</li>
+</section>
+<section>
+    <h1>新浪微博</h1>
+    <ul id="weibo">
+    <li>
+    	
+<iframe width="100%" height="130" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1734555471&verifier=6c6f0bb3&dpc=1"></iframe>
+
+</li>
+    </ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/08/10/ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/">手动解析CrashLog之----原理篇</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">手动解析CrashLog之----方法篇</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/05/06/chi-ping-xuan-ran-xue-xi-bi-ji/">离屏渲染学习笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/16/ios-code-signing-xue-xi-bi-ji/">iOS Code Signing 学习笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/13/shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/">手动内存管理转ARC项目实战</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/wwdc2014/'>WWDC2014 (2)</a></li>
+<li class='category'><a href='/blog/categories/xcode/'>Xcode (1)</a></li>
+<li class='category'><a href='/blog/categories/xcodesettings/'>XcodeSettings (1)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (9)</a></li>
+<li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
+
+  </ul>
+</section>
+<section>
+    <h1>广告时间</h1>
+    <ul id="ad">
+    <li>
+    	
+
+<!-- 广告位：Google -->
+<!-- 
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+-->
+<!-- 王中周的技术博客 -->
+<!-- 
+<ins class="adsbygoogle"
+     style="display:inline-block;width:250px;height:250px"
+     data-ad-client="ca-pub-4428888818448200"
+     data-ad-slot="1259477576"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+-->
+
+
+
+<!-- 广告位：Baidu -->
+<!-- 广告位：技术博客 -->
+<!-- 
+<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "985176";</script>
+<script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+-->
+   
+    </li>
+    </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div style="text-align:center;">
+	<span style="line-height:1.5;">This work is licensed under a </span><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a><span style="line-height:1.5;">.</span>
+</div>
+<p style="text-align:center;">
+	<span style="line-height:1;">Copyright &copy; 2016 - 王中周 - </span><span class="credit"><span style="line-height:1;">Powered by </span><a href="http://octopress.org"><span style="line-height:1;">Octopress</span></a></span> 
+</p>
+
+<p>
+<script type="text/javascript">
+    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F9975063b89c363c67eac651132751ee6' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</p></footer>
+  
+
+
+
+
+
+  <!--返回顶部开始-->
+<div id="full" style="width:0px; height:0px; position:fixed; right:190px; bottom:150px; z-index:100; text-align:center; background-color:transparent; cursor:pointer;">
+	<a href="#" onclick="goTop();return false;"><img src="/images/top.png" border=0 alt="返回顶部"></a>
+</div>
+<script src="/javascripts/top.js" type="text/javascript"></script>
+<!--返回顶部结束-->
+</body>
+</html>

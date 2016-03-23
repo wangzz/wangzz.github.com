@@ -1,0 +1,1365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: iOS | 王中周的技术博客]]></title>
+  <link href="http://wangzz.github.io/blog/categories/ios/atom.xml" rel="self"/>
+  <link href="http://wangzz.github.io/"/>
+  <updated>2016-03-04T14:59:18+08:00</updated>
+  <id>http://wangzz.github.io/</id>
+  <author>
+    <name><![CDATA[王中周]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[手动解析CrashLog之----原理篇]]></title>
+    <link href="http://wangzz.github.io/blog/2015/08/10/ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/"/>
+    <updated>2015-08-10T15:12:49+08:00</updated>
+    <id>http://wangzz.github.io/blog/2015/08/10/ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian</id>
+    <content type="html"><![CDATA[<p>在上篇文章<a href="http://foggry.com/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">《手动解析CrashLog之&mdash;&mdash;方法篇》</a>里介绍了手动解析CrashLog的方法，接下来再说说<code>dwarfdump</code>、<code>atos</code>等解析工具是如何从符号表文件中获取到崩溃位置信息的。一切还得从<code>.dSYM</code>符号表文件开始说起。</p>
+
+<h2>一、<code>.dSYM</code>文件的生成</h2>
+
+<p>符号表文件<code>.dSYM</code>实际上是从Mach-O文件中抽取调试信息而得到的文件目录，实际用于保存调试信息的问价是<code>DWARF</code>，其出身可以从苹果员工的文章<a href="http://wiki.dwarfstd.org/index.php?title=Apple%27s_%22Lazy%22_DWARF_Scheme">《Apple&rsquo;s &ldquo;Lazy&rdquo; DWARF Scheme》</a>了解一二。</p>
+
+<h3>1、Xcode自动生成</h3>
+
+<p>Xcode会在编译工程或者归档时自动为我们生成<code>.dSYM</code>文件，当然我们也可以通过更改Xcode的若干项<code>Build Settings</code>来阻止它那么干。</p>
+
+<h3>2、手动生成</h3>
+
+<p>另一种方式是通过命令行从Mach-O文件中手工提取，比如：</p>
+
+<p><code>
+$ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil /Users/wangzz/Library/Developer/Xcode/DerivedData/YourApp-cqvijavqbptjyhbwewgpdmzbmwzk/Build/Products/Debug-iphonesimulator/YourApp.app/YourApp -o YourApp.dSYM
+</code></p>
+
+<p>该方式通过Xcode提供的工具<code>dsymutil</code>，从项目编译结果<code>.app</code>目录下的Mach-O文件中提取出调试符号表文件。实际上Xcode也是通过这种方式来生成符号表文件。</p>
+
+<!-- more -->
+
+
+<h2>二、<code>DWARF</code>简介</h2>
+
+<p><code>DWARF</code>（DebuggingWith Arbitrary Record Formats），是ELF和Mach-O等文件格式中用来存储和处理调试信息的标准格式，<code>.dSYM</code>中真正保存符号表数据的是<code>DWARF</code>文件。<code>DWARF</code>中不同的数据都保存在相应的<code>section</code>（节）中，ELF文件里所有的section名称都以<code>".debug_"</code>开头，如下表所示：</p>
+
+<p><code>
+| Section Name         | Contents                                          |
+| -------------------- | ------------------------------------------------  |
+| .debug_abbrev        | Abbreviations used in the .debug_info section     |
+| .debug_aranges       | A mapping between memory address and compilation  |
+| .debug_frame         | Call Frame Information                            |
+| .debug_info          | The core DWARF data containing DIEs               |
+| .debug_line          | Line Number Program                               |
+| .debug_loc           | Macro descriptions                                |
+| .debug_macinfo       | A lookup table for global objects and functions   |
+| .debug_pubnames      | A lookup table for global objects and functions   | 
+| .debug_pubtypes      | A lookup table for global types                   |
+| .debug_ranges        | Address ranges referenced by DIEs                 |
+| .debug_str           | String table used by .debug_info                  |
+</code></p>
+
+<p>Mach-O中关于section的命名和ELF稍有区别，把名称前的<code>.</code>换成了<code>_</code>，例如<code>.debug_info</code>变成了<code>_debug_info</code>。</p>
+
+<h2>三、section信息提取</h2>
+
+<p>保存在<code>DAWARF</code>中的信息是高度压缩的，可以通过<code>dwarfdump</code>命令从中提取出可读信息。前文所述的那些section中，定位CrashLog只需要用到<code>.debug_info</code>和<code>.debug_line</code>。由于解析出来的数据量较大，为了方便查看，就将其保存在文本中。两个section的数据提取方式如下：</p>
+
+<ul>
+<li><code>.debug_info</code></li>
+</ul>
+
+
+<p><code>
+$ dwarfdump -e --debug-info YourPath/YourApp.dSYM/Contents/Resources/DWARF &gt; info-e.txt
+</code></p>
+
+<ul>
+<li><code>.debug_line</code></li>
+</ul>
+
+
+<p><code>
+$ dwarfdump -e --debug-line YourPath/YourApp.dSYM/Contents/Resources/DWARF &gt; line-e.txt
+</code></p>
+
+<p>命令中的<code>-e</code>可以增加解析结果的可读性；其它section的提取方式类似，详情请参考<code>dwarfdump</code>命令帮助信息。</p>
+
+<h2>四、解析崩溃地址</h2>
+
+<h3>1、计算崩溃地址对应符号表中的地址</h3>
+
+<p>在<a href="http://foggry.com/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">上篇文章</a>中，介绍了如何根据崩溃地址计算得到对应符号表中的地址，并得到了最终数值：<code>0x52846</code>，接下来我们就通过这个值来介绍<code>dwarfdump</code>、<code>atos</code>等工具是如何解析崩溃日志的。</p>
+
+<h3>2、解析过程</h3>
+
+<ul>
+<li><code>.debug_info</code></li>
+</ul>
+
+
+<p><code>.debug_info</code>中最基本的描述单元为DIE（Debug Information Entry），详情请参考<a href="http://www.dwarfstd.org/">DWARF官方网站</a>，首先我们要根据符号表崩溃地址<code>0x52846</code>从<code>.debug_info</code>中取出包含这个地址的DIE单元。为了简单起见，直接贴出了从<code>info-e.txt</code>中取出的对应DIE，其部分内容如下：</p>
+
+<p>```
+0x00062112:     function [99] *</p>
+
+<pre><code>            low pc( 0x000502e0 )
+            high pc( 0x00053730 )
+            frame base( r7 )
+            object pointer( {0x0006212a} )
+            name( "-[OBDFirstConnectViewController showOilPricePickerView]" )
+            decl file( "/YourSourcePath/OBDFirstConnectViewController.m" )
+            decl line( 870 )
+            prototyped( 0x01 )
+            APPLE instruction set architecture( 0x01 )
+</code></pre>
+
+<p>```</p>
+
+<p>可以看出，该DIE包含是方法<code>-[OBDFirstConnectViewController showOilPricePickerView]</code>的内容，其地址范围是<code>0x000502e0</code>&ndash;<code>0x00053730</code>，我们的目标地址<code>0x52846</code>正是在这个范围内，所以可以判定崩溃发生在该方法的某一行中。</p>
+
+<p>需要指出的是，上面这段DIE是我为了介绍方便直接贴出来的，实际应用的时候需要通过搜索算法找出包含目标符号表崩溃地址（这里是<code>0x52846</code>）的DIE。</p>
+
+<p>从上述DIE中我们可以获取到这些信息：</p>
+
+<p><code>
+崩溃所在源码文件：/YourSourcePath/OBDFirstConnectViewController.m
+发生崩溃的方法：-[OBDFirstConnectViewController showOilPricePickerView]
+发生崩溃的方法在源文件中的行号：870
+</code></p>
+
+<ul>
+<li><code>. debug_line</code></li>
+</ul>
+
+
+<p>截止目前，我们可以获取到发生了崩溃的方法的相关信息，但要想确定崩溃发生的具体行号，还需要<code>.debug_line</code>的帮助。</p>
+
+<p><code>.debug_line</code>以一个方法为基本块，急了该方法中每一行对应的符号表地址。通过<code>.debug_info</code>得知崩溃发生的方法地址范围是<code>0x000502e0</code>&ndash;<code>0x00053730</code>，通过起始地址<code>0x000502e0</code>在解析<code>. debug_line</code>得到的line-e.txt中直接搜索即可得到崩溃所在方法的<code>. debug_line</code>数据，其中<code>部分内容</code>如下：</p>
+
+<p><code>
+0x00000000000502e0    870 /YourSourcePath/OBDFirstConnectViewController.m
+0x00000000000502e0      0
+0x00000000000502f0    872
+0x000000000005033c    873
+0x0000000000050374    874
+0x000000000005039e    875
+0x00000000000503c8    876
+...
+0x0000000000052812    880
+0x000000000005283e    881
+0x0000000000052846    882
+0x00000000000528c8    883
+...
+</code></p>
+
+<p><code>. debug_line</code>段的第一行内容标识了该方法的起始符号表地址，行号及方法所在文件路径，通过之前得到的崩溃地址<code>0x52846</code>即可得知崩溃发生在882行。</p>
+
+<p>至此我们已经根据崩溃地址解析出了崩溃发生位置的详细信息：</p>
+
+<p><code>
+崩溃所在源码文件：/YourSourcePath/OBDFirstConnectViewController.m
+发生崩溃的方法：-[OBDFirstConnectViewController showOilPricePickerView]
+发生崩溃的方法在源文件中的行号：870
+崩溃发生在源文件中得行号：882
+</code></p>
+
+<p>以上内容为本人工作学习中所得，如有理解错误之处，还请指出！</p>
+
+<h2>五、参考文档</h2>
+
+<ul>
+<li><a href="http://wiki.dwarfstd.org/index.php?title=Apple%27s_%22Lazy%22_DWARF_Scheme">Apple&rsquo;s &ldquo;Lazy&rdquo; DWARF Scheme</a></li>
+<li><a href="http://www.dwarfstd.org/doc/Debugging%20using%20DWARF.pdf">《Introduction to the DWARF Debugging Format》</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[手动解析CrashLog之----方法篇]]></title>
+    <link href="http://wangzz.github.io/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/"/>
+    <updated>2015-07-27T18:59:27+08:00</updated>
+    <id>http://wangzz.github.io/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog</id>
+    <content type="html"><![CDATA[<p>解决崩溃问题是移动应用开发者最日常的工作之一。如果是开发过程中遇到的崩溃，可以根据重现步骤调试，但线上版本就无能为力了。好在目前已经有很多不错的第三方CrashLog搜集平台（如友盟、Crashlytics等）为我们做好了解析工作，甚至在Xcode7里苹果也跟进了解析线上版本崩溃日志的功能，为开发者减轻了不少负担。尽管通常已经不需要我们手工处理CrashLog，了解CrashLog的还原原理和方法还是有必要的。</p>
+
+<h2>一、.dSYM</h2>
+
+<p><code>.dSYM</code>(debugging SYMbols)又称为调试符号表，是苹果为了方便调试和定位问题而使用的一种调试方案，本质上使用的是起源于贝尔实验室的<code>DWARF</code>（Debugging With Attributed Record Formats），其在.xcarchive目录中的层次结构为：</p>
+
+<p>```
+.xcarchive
+&mdash;dSYMs
+  |&mdash;Your.app.dSYM</p>
+
+<pre><code>|--Contents
+  |--Resources
+    |--DWARF
+</code></pre>
+
+<p>```
+关于DWARF的具体内容以后有机会再说。我们能解析CrashLog全靠.dSYM文件，解析方式见后文。</p>
+
+<h2>二、确定符号表和崩溃日志的一致性</h2>
+
+<p>有了符号表文件，有了崩溃日志文件，在解析之前一定要确保二者的对应关系，否则就算按照下述步骤解析出内容也肯定是不准确的。二者的对应关系可以通过UUID来确定。</p>
+
+<p> <!-- more --></p>
+
+<h4>1、从崩溃日志中获取UUID</h4>
+
+<p>崩溃日志比较靠下的位置有个<code>Binary Images</code>模块，其第一行内容如下：</p>
+
+<p><code>
+Binary Images:
+0xa2000 - 0x541fff Your armv7  &lt;a5c8d3cfda65396689e4370bf3a0ac64&gt; /var/mobile/Containers/Bundle/Application/645D3184-4C20-4161-924B-BDE170FA64CC/Your.app/Your
+</code>
+从中可以看到关于你应用的若干信息：</p>
+
+<ul>
+<li>代码段的起终地址为：0xa2000 &ndash; 0x541fff</li>
+<li>运行你应用的CPU指令集为：armv7</li>
+<li>应用的UUID为：a5c8d3cfda65396689e4370bf3a0ac64（不区分大小写）</li>
+</ul>
+
+
+<h4>2、从符号表中获取UUID</h4>
+
+<p>执行以下命令从符号表中提取UUID：</p>
+
+<p><code>
+dwarfdump --uuid Your.app.dSYM
+</code>
+或者：</p>
+
+<p><code>
+dwarfdump --uuid Your.app.dSYM/Contents/Resources/DWARF/Your
+</code></p>
+
+<p>执行结果为：</p>
+
+<p><code>
+UUID: A5C8D3CF-DA65-3966-89E4-370BF3A0AC64 (armv7) Your.app.dSYM/Contents/Resources/DWARF/Your
+</code>
+由此得到armv7指令集的UUID为：A5C8D3CF-DA65-3966-89E4-370BF3A0AC64（如果你的二进制文件支持多个指令集，这里会列出每个指令集对应符号表的UUID），通过和崩溃日志中的对比发现二者一致，才可进行进一步的解析操作。</p>
+
+<h2>三、计算崩溃符号表地址</h2>
+
+<p>以下面的崩溃堆栈为例：
+<code>
+Thread 0:
+0   libobjc.A.dylib                 0x33f10f60 0x33efe000 + 77664
+1   Foundation                      0x273526ac 0x2734a000 + 34476
+2   Foundation                      0x27355c3e 0x2734a000 + 48190
+3   UIKit                           0x29ef9d1c 0x29bbc000 + 3398940
+4   UIKit                           0x29ef9c9a 0x29bbc000 + 3398810
+5   UIKit                           0x29ef954c 0x29bbc000 + 3396940
+6   UIKit                           0x29c3a16a 0x29bbc000 + 516458
+7   UIKit                           0x29e4b8e6 0x29bbc000 + 2685158
+8   UIKit                           0x29c3a128 0x29bbc000 + 516392
+9   Your                            0x000f0846 0xa2000 + 321606
+10  UIKit                           0x29e90fb2 0x29bbc000 + 2969522
+11  UIKit                           0x29e91076 0x29bbc000 + 2969718
+12  UIKit                           0x29e867cc 0x29bbc000 + 2926540
+13  UIKit                           0x29c9e8ea 0x29bbc000 + 927978
+14  UIKit                           0x29bc8a6a 0x29bbc000 + 51818
+15  QuartzCore                      0x295f0a08 0x295e4000 + 51720
+16  QuartzCore                      0x295ec3e0 0x295e4000 + 33760
+17  QuartzCore                      0x295ec268 0x295e4000 + 33384
+18  QuartzCore                      0x295ebc4c 0x295e4000 + 31820
+19  QuartzCore                      0x295eba50 0x295e4000 + 31312
+20  QuartzCore                      0x295e5928 0x295e4000 + 6440
+21  CoreFoundation                  0x266d0d92 0x26604000 + 839058
+22  CoreFoundation                  0x266ce44e 0x26604000 + 828494
+23  CoreFoundation                  0x266ce856 0x26604000 + 829526
+24  CoreFoundation                  0x2661c3bc 0x26604000 + 99260
+25  CoreFoundation                  0x2661c1ce 0x26604000 + 98766
+26  GraphicsServices                0x2da1a0a4 0x2da11000 + 37028
+27  UIKit                           0x29c2a7ac 0x29bbc000 + 452524
+28  Your                            0x0024643a 0xa2000 + 1721402
+29  libdyld.dylib                   0x34484aac 0x34483000 + 6828
+</code></p>
+
+<h4>1、 符号表堆栈地址计算方式</h4>
+
+<p>要想利用符号表解析出崩溃对应位置，需要计算出符号表中对应的崩溃堆栈地址。而从上述堆栈中第9行可以看到，应用崩溃发生在运行时地址<code>0x000f0846</code>，该进程的运行时起始地址是<code>0xa2000</code>，崩溃处距离进程起始地址的偏移量为十进制的<code>321606</code>(对应十六进制为0x4E846)。三者对应关系：</p>
+
+<p><code>
+0x000f0846 = 0xa2000 + 0x4E846
+</code>
+对应的公式为：</p>
+
+<p><code>
+运行时堆栈地址 = 运行时起始地址 + 偏移量
+</code></p>
+
+<p>崩溃堆栈中的起始地址和崩溃地址均为运行时地址，根据虚拟内存偏移量不变原理，只要提供了符号表TEXT段的起始地址，再加上偏移量（这里为0x4E846）就能得到符号表中的堆栈地址，即：</p>
+
+<p><code>
+符号表堆栈地址 = 符号表起始地址 + 偏移量
+</code></p>
+
+<h4>2、获取符号表中的TEXT段起始地址</h4>
+
+<p>符号表中TEXT段的起始地址可以通过以下命令获得：</p>
+
+<p><code>
+$otool -l Your.app.dSYM/Contents/Resources/DWARF/Your
+</code></p>
+
+<p>运行结果中的片段如下：</p>
+
+<p>```
+Load command 3</p>
+
+<pre><code>  cmd LC_SEGMENT
+</code></pre>
+
+<p>  cmdsize 736
+  segname __TEXT
+   vmaddr 0x00004000
+   vmsize 0x00700000
+  fileoff 0
+ filesize 0
+  maxprot 0x00000005
+ initprot 0x00000005
+   nsects 10</p>
+
+<pre><code>flags 0x0
+</code></pre>
+
+<p>```</p>
+
+<p>其中的<code>vmaddr 0x00004000</code>字段即为TEXT段的起始地址。</p>
+
+<h4>3、计算符号表地址</h4>
+
+<p>由公式：</p>
+
+<p><code>
+符号表堆栈地址 = 符号表起始地址 + 偏移量
+</code>
+可得：</p>
+
+<p><code>
+0x52846 = 0x4E846 + 0x4000
+</code>
+即符号表中的崩溃地址为<code>0x52846</code>，接下来就可以根据这个地址解析出崩溃位置了。</p>
+
+<h2>四、崩溃信息还原</h2>
+
+<p>有了符号表的崩溃地址，有以下几种方式解析崩溃信息：</p>
+
+<h4>1、dwarfdump</h4>
+
+<p>命令如下：</p>
+
+<p><code>
+$dwarfdump --arch armv7 Your.app.dSYM --lookup 0x52846 | grep 'Line table'
+</code>
+需要注意的是：</p>
+
+<ul>
+<li>这里的armv7是运行设备的CPU指令集，而不是二进制文件的指令集</li>
+</ul>
+
+
+<p>比如armv7指令集的二进制文件运行在arm64指令集的设备上，这个地方应该写arm64。</p>
+
+<ul>
+<li>&mdash;lookup后面跟的一定是经过准确计算的符号表中的崩溃地址</li>
+<li>使用dwarfdump解析的结果较杂乱，因此使用<code>grep</code>命令抓取其中关键点展示出来</li>
+</ul>
+
+
+<p>运行结果如下：</p>
+
+<p><code>
+Line table dir : '/data/.../Src/OBDConnectSetting/Controller'
+Line table file: 'OBDFirstConnectViewController.m' line 882, column 5 with start address 0x000000000052768
+</code>
+其中第一行是编译时文件目录，第二行包含了崩溃发生的文件名称以及文件中具体行号等信息，有了这些信息就能准确定位崩溃原因啦。</p>
+
+<h4>2、atos</h4>
+
+<p>atos是另一种更加简洁的崩溃日志解析方法，使用方式如下：</p>
+
+<p><code>
+ $atos -o LuBao -arch armv7 0x52846
+</code></p>
+
+<p>其执行结果如下：</p>
+
+<p><code>
+-[OBDFirstConnectViewController showOilPricePickerView] (in Your) (OBDFirstConnectViewController.m:882)
+</code>
+相对<code>dwarfdump</code>命令的解析结果，更加简洁直观的指出了崩溃发生的位置。</p>
+
+<h4>3、无需符号表崩溃地址的解析方式</h4>
+
+<p>实际上，<code>atos</code>还提供了另外一种无需计算崩溃地址对应的符号表地址的方式，命令格式如下：</p>
+
+<p><code>
+$atos -o Your.app.dSYM/Contents/Resources/DWARF/Your -arch armv7 -l 0xa2000 0x000f0846
+</code></p>
+
+<p>其中<code>-l</code>选项指定了二进制文件在运行时的起始地址<code>0xa2000</code>（获取方式见<code>Binary Images</code>相关内容）,后面跟的是崩溃发生的运行时地址<code>0x000f0846</code>，解析结果和使用计算得到的符号表中崩溃地址一致：</p>
+
+<p><code>
+-[OBDFirstConnectViewController showOilPricePickerView] (in Your) (OBDFirstConnectViewController.m:882)
+</code></p>
+
+<h2>五、参考文档</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/mac/qa/qa1765/_index.html">How to Match a Crash Report to a Build</a></li>
+<li><a href="https://developer.apple.com/library/mac/technotes/tn2004/tn2123.html">CrashReporter</a></li>
+<li><a href="https://developer.apple.com/library/ios/technotes/tn2151/_index.html">Understanding and Analyzing iOS Application Crash Reports</a></li>
+<li><a href="http://stackoverflow.com/a/12464678/2293677">atos and dwarfdump won&rsquo;t symbolicate my address</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[离屏渲染学习笔记]]></title>
+    <link href="http://wangzz.github.io/blog/2015/05/06/chi-ping-xuan-ran-xue-xi-bi-ji/"/>
+    <updated>2015-05-06T17:17:55+08:00</updated>
+    <id>http://wangzz.github.io/blog/2015/05/06/chi-ping-xuan-ran-xue-xi-bi-ji</id>
+    <content type="html"><![CDATA[<h2>一、概念理解</h2>
+
+<p>OpenGL中，GPU屏幕渲染有以下两种方式：</p>
+
+<ul>
+<li>On-Screen Rendering</li>
+</ul>
+
+
+<p>意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。</p>
+
+<ul>
+<li>Off-Screen Rendering</li>
+</ul>
+
+
+<p>意为离屏渲染，指的是GPU在当前屏幕缓冲区以外新开辟一个缓冲区进行渲染操作。</p>
+
+<!-- more -->
+
+
+<h2>二、离屏渲染的是是非非</h2>
+
+<p>相比于当前屏幕渲染，离屏渲染的代价是很高的，主要体现在两个方面：</p>
+
+<ul>
+<li>创建新缓冲区</li>
+</ul>
+
+
+<p>要想进行离屏渲染，首先要创建一个新的缓冲区。</p>
+
+<ul>
+<li>上下文切换</li>
+</ul>
+
+
+<p>离屏渲染的整个过程，需要多次切换上下文环境：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上有需要将上下文环境从离屏切换到当前屏幕。而上下文环境的切换是要付出很大代价的。</p>
+
+<h2>三、离屏渲染触发方式</h2>
+
+<p>设置了以下属性时，都会触发离屏绘制：</p>
+
+<ul>
+<li>shouldRasterize（光栅化）</li>
+<li>masks（遮罩）</li>
+<li>shadows（阴影）</li>
+<li>edge antialiasing（抗锯齿）</li>
+<li>group opacity（不透明）</li>
+</ul>
+
+
+<p>需要注意的是，如果shouldRasterize被设置成YES，在触发离屏绘制的同时，会将光栅化后的内容缓存起来，如果对应的layer及其sublayers没有发生改变，在下一帧的时候可以直接复用。这将在很大程度上提升渲染性能。</p>
+
+<p>而其它属性如果是开启的，就不会有缓存，离屏绘制会在每一帧都发生。</p>
+
+<h2>四、另一种特殊的“离屏渲染”</h2>
+
+<p>按照之前的说法，如果将不在GPU的当前屏幕缓冲区中进行的渲染都称为离屏渲染，那么就还有另一种特殊的“离屏渲染”方式：<code>CPU渲染</code>。</p>
+
+<p>如果我们重写了drawRect方法，并且使用任何Core Graphics的技术进行了绘制操作，就涉及到了CPU渲染。整个渲染过程由CPU在App内<code>同步地</code>完成，渲染得到的bitmap最后再交由GPU用于显示。</p>
+
+<h2>五、Instruments</h2>
+
+<p>Instruments的Core Animation工具中有几个和离屏渲染相关的检查选项：</p>
+
+<ul>
+<li>Color Offscreen-Rendered Yellow</li>
+</ul>
+
+
+<p>开启后会把那些需要离屏渲染的图层高亮成黄色，这就意味着黄色图层可能存在性能问题。</p>
+
+<ul>
+<li>Color Hits Green and Misses Red</li>
+</ul>
+
+
+<p>如果shouldRasterize被设置成YES，对应的渲染结果会被缓存，如果图层是绿色，就表示这些缓存被复用；如果是红色就表示缓存会被重复创建，这就表示该处存在性能问题了。</p>
+
+<h2>六、如何抉择</h2>
+
+<p>现在摆在我们面前得有三个选择：当前屏幕渲染、离屏渲染、CPU渲染，该用哪个呢？这需要根据具体的使用场景来决定。</p>
+
+<ul>
+<li>尽量使用当前屏幕渲染</li>
+</ul>
+
+
+<p>鉴于离屏渲染、CPU渲染可能带来的性能问题，一般情况下，我们要尽量使用当前屏幕渲染。</p>
+
+<ul>
+<li>离屏渲染 VS CPU渲染</li>
+</ul>
+
+
+<p>由于GPU的浮点运算能力比CPU强，CPU渲染的效率可能不如离屏渲染；但如果仅仅是实现一个简单的效果，直接使用CPU渲染的效率又可能比离屏渲染好，毕竟离屏渲染要涉及到缓冲区创建和上下文切换等耗时操作。</p>
+
+<p>总之，具体的选择应该由性能测试结果来决定。</p>
+
+<h2>七、写在最后</h2>
+
+<p>在赵岩同学的点拨下才理解了离屏渲染的概念，在此表示感谢！</p>
+
+<p>如理解有误还请大家指出。</p>
+
+<h2>参考文档</h2>
+
+<ul>
+<li><p><a href="http://www.objc.io/issue-3/moving-pixels-onto-the-screen.html">Getting Pixels onto the Screen</a> (中文翻译版：<a href="http://objccn.io/issue-3-1/">绘制像素到屏幕上</a>)</p></li>
+<li><p><a href="https://robots.thoughtbot.com/designing-for-ios-graphics-performance">Designing for iOS: Graphics &amp; Performance</a>  (中文翻译版：<a href="http://www.taofengping.com/2013/05/18/designing-for-ios-graphics-performance/#.VUinciGqpBc">iOS图形处理和性能</a>)</p></li>
+<li><p><a href="https://lobste.rs/s/ckm4uw/a_performance-minded_take_on_ios_design">a performance minded take on ios design</a>  (中文翻译版：<a href="http://www.taofengping.com/2013/05/18/ios_offscreen_analysis/#.VUinPyGqpBd">iOS离屏绘制的性能和机制分析</a>)</p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS Code Signing 学习笔记]]></title>
+    <link href="http://wangzz.github.io/blog/2014/10/16/ios-code-signing-xue-xi-bi-ji/"/>
+    <updated>2014-10-16T19:09:38+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/10/16/ios-code-signing-xue-xi-bi-ji</id>
+    <content type="html"><![CDATA[<p>最近看了objc.io上第17期中的文章<a href="http://www.objc.io/issue-17/inside-code-signing.html">《Inside Code Signing》</a>对应的中文翻译版<a href="http://objccn.io/issue-17-2/">《代码签名探析》</a>，收益颇深，对iOS代码签名机制有了进一步的认识。想了解详细内容建议大家还是去看原文好了。</p>
+
+<p>下面是对此文章的理解再结合自己之前对该部分的认识写出的学习笔记。本文的前提是已经对非对称加密有了一定的了解。</p>
+
+<h2>一、数字签名（digital signature）</h2>
+
+<p>对指定信息使用哈希算法，得到一个固定长度的信息摘要，然后再使用<code>私钥</code>（注意必须是私钥）对该摘要加密，就得到了数字签名。所谓的代码签名就是这个意思。</p>
+
+<!-- more -->
+
+
+<h2>二、数字证书（digital certificate）</h2>
+
+<h4>证书生成</h4>
+
+<p>开发者在申请iOS开发证书时，需要通过keychain生成一个CSR文件（Certificate Signing Request），提交给苹果的<code>Apple Worldwide Developer Relations Certification Authority</code>(WWDR)证书认证中心进行签名，最后从苹果官网下载并安装使用。这个过程中还会产生一个私钥，证书和私钥在keychain中得位置如图：</p>
+
+<p><img src="http://img.objccn.io/issue-17/iphone-developer-keychain.png" alt="cer_private_key" /></p>
+
+<h4>证书组成</h4>
+
+<p>经过<code>WWDR</code>数字签名后的数字证书长这个样子：</p>
+
+<p><img src="http://img.blog.csdn.net/20130603170838968" alt="digital certificate" /></p>
+
+<p>其中包含两大部分：</p>
+
+<ul>
+<li>证书本身</li>
+</ul>
+
+
+<p>包含用户的公钥、用户个人信息、证书颁发机构信息、证书有效期等信息。</p>
+
+<ul>
+<li>证书签名</li>
+</ul>
+
+
+<p><code>WWDR</code>将上述证书本身内容的使用哈希算法得到一个固定长度的信息摘要，然后使用自己的<code>私钥</code>对该信息摘要加密生成数字签名，整个过程如图所示：</p>
+
+<p><img src="http://img.blog.csdn.net/20130603170752859" alt="digital signature" /></p>
+
+<h4>证书使用</h4>
+
+<p>iOS系统原本就持有<code>WWDR</code>的公钥，系统首先会对证书内容通过指定的哈希算法计算得到一个信息摘要；然后使用<code>WWDR</code>的公钥对证书中包含的数字签名解密，从而得到经过<code>WWDR</code>的私钥加密过的信息摘要；最后对比两个信息摘要，如果内容相同就说明该证书可信。整个过程如图所示：</p>
+
+<p><img src="http://img.blog.csdn.net/20130603170924312" alt="verify" /></p>
+
+<p>在验证了证书是可信的以后，iOS系统就可以获取到证书中包含的开发者的公钥，并使用该公钥来判断代码签名的可用性了。</p>
+
+<h4>证书存在的意义</h4>
+
+<p>通过证书使用过程可以看出，证书本身只是一个中间媒介，iOS系统对证书并不关心，它其实只想要证书中包含的开发者的公钥！！</p>
+
+<p>但是开发者怎么才能证明公钥是自己的呢？iOS安全系统怎么才能相信这个公钥就是这个开发者的呢？</p>
+
+<p>不管是哪一个开发者对iOS的安全系统说，这个公钥就是我的，系统是都不相信的，即系统对开发者有着百分之百的不信任感。但是iOS安全系统对自家的<code>WWDR</code>是可信任的，苹果将<code>WWDR</code>的公钥内置在了iOS系统中。有了证书，iOS安全系统只需要通过<code>WWDR</code>的公钥就可以获取到任何一个开发者的可信任的公钥了，这就是证书存在的意义！！</p>
+
+<h2>三、公钥（public key）</h2>
+
+<p>公钥被包含在数字证书里，数字证书又被包含在<code>描述文件</code>(Provisioning File)中，<code>描述文件</code>在应用被安装的时候会被拷贝到iOS设备中。</p>
+
+<p>iOS安全系统通过证书就能够确定开发者身份，就能够通过从证书中获取到的公钥来验证开发者用该公钥对应的私钥签名后的代码、资源文件等有没有被更改破坏，最终确定应用能否合法的在iOS设备上合法运行。</p>
+
+<h2>四、私钥（private key）</h2>
+
+<p>每个证书（其实是公钥）都对应有一个私钥，</p>
+
+<p>私钥会被用来对代码、资源文件等签名。只有开发证书和描述文件是没办法正常调试的，因为没有私钥根本无法签名。</p>
+
+<p>此后的内容基本都是从<a href="http://objccn.io/issue-17-2/">《代码签名探析》</a>摘抄过来的笔记，建议大家看原文好了。</p>
+
+<h2>五、签名相关命令</h2>
+
+<h4>快捷查看系统中能用来对代码进行签名的证书</h4>
+
+<p>可以使用如下命令：</p>
+
+<p>```
+$security find-identity -v -p codesigning<br/>
+  1) F10B42FFDE18DF28BA21190121439F2E04BEE4B8 &ldquo;iPhone Developer: weizheng li (P7QJ74LFSA)&rdquo;</p>
+
+<pre><code> 1 valid identities found
+</code></pre>
+
+<p>```</p>
+
+<p>这就说明当前有一个同时有公钥和私钥的可用证书。</p>
+
+<h4>对未签名app手动签名</h4>
+
+<p>使用如下命令：</p>
+
+<p><code>
+$ codesign -s 'iPhone Developer: Thomas Kollbach (7TPNXN7G6K)' Example.app
+</code></p>
+
+<h4>对已签名app重新签名</h4>
+
+<p>为了重新设置签名，你必须带上 -f 参数，有了这个参数，codesign 会用你选择的签名替换掉已经存在的那一个：：</p>
+
+<p><code>
+$ codesign -f -s 'iPhone Developer: Thomas Kollbach (7TPNXN7G6K)' Example.app
+</code></p>
+
+<h4>查看指定app的签名信息</h4>
+
+<p>codesign 还可以为你提供有关一个可执行文件签名状态的信息，这些信息在出现不明错误时会提供巨大的帮助：</p>
+
+<p><code>
+$ codesign -vv -d Example.app
+</code>
+会列出以下有关 Example.app 的签名信息：</p>
+
+<p><code>
+Executable=/Users/toto/Library/Developer/Xcode/DerivedData/Example-cfsbhbvmswdivqhekxfykvkpngkg/Build/Products/Debug-iphoneos/Example.app/Example  
+Identifier=ch.kollba.example  
+Format=bundle with Mach-O thin (arm64)  
+CodeDirectory v=20200 size=26663 flags=0x0(none) hashes=1324+5 location=embedded  
+Signature size=4336  
+Authority=iPhone Developer: Thomas Kollbach (7TPNXN7G6K)  
+Authority=Apple Worldwide Developer Relations Certification Authority  
+Authority=Apple Root CA  
+Signed Time=29.09.2014 22:29:07  
+Info.plist entries=33  
+TeamIdentifier=DZM8538E3E  
+Sealed Resources version=2 rules=4 files=120  
+Internal requirements count=1 size=184  
+</code></p>
+
+<h4>验证签名文件的完整性</h4>
+
+<p>检查已签名的文件是否完整可以使用如下命令：</p>
+
+<p><code>
+$ codesign --verify Example.app
+</code></p>
+
+<p>就像大多数 UNIX 工具一样，没有任何输出代表签名是完好的。如果修改一下这个二进制文件：</p>
+
+<p><code>
+$ echo 'lol' &gt;&gt; Example.app/Example
+$ codesign --verify Example.app
+Example.app: main executable failed strict validation  
+</code></p>
+
+<p>和预料中的一样，修改已经签名的应用会导致数字签名验证不通过。</p>
+
+<h2>六、资源文件签名</h2>
+
+<p>iOS 和 OS X 的应用和框架则是包含了它们所需要的资源在其中的。这些资源包括图片和不同的语言文件，资源中也包括很重要的应用组成部分例如 XIB/NIB 文件，存档文件(archives)，甚至是证书文件。所以为一个程序包设置签名时，这个包中的所有资源文件也都会被设置签名。</p>
+
+<p>为了达到为所有文件设置签名的目的，签名的过程中会在程序包（即Example.app）中新建一个叫做 <code>_CodeSignatue/CodeResources</code> 的文件，这个文件中存储了被签名的程序包中所有文件的签名。你可以自己去查看这个签名列表文件，它仅仅是一个 plist 格式文件。</p>
+
+<p>这个列表文件中不光包含了文件和它们的签名的列表，还包含了一系列规则，这些规则决定了哪些资源文件应当被设置签名。伴随 OS X 10.10 DP 5 和 10.9.5 版本的发布，苹果改变了代码签名的格式，也改变了有关资源的规则。如果你使用10.9.5或者更高版本的 codesign 工具，在 CodeResources 文件中会有4个不同区域，其中的 <code>rules</code> 和 <code>files</code> 是为老版本准备的，而 <code>files2</code> 和 <code>rules2</code> 是为新的第二版的代码签名准备的。最主要的区别是在新版本中你无法再将某些资源文件排除在代码签名之外，在过去你是可以的，只要在被设置签名的程序包中添加一个名为 <code>ResourceRules.plist</code> 的文件，这个文件会规定哪些资源文件在检查代码签名是否完好时应该被忽略。但是在新版本的代码签名中，这种做法不再有效。所有的代码文件和资源文件都必须设置签名，不再可以有例外。在新版本的代码签名规定中，一个程序包中的可执行程序包，例如扩展 (extension)，是一个独立的需要设置签名的个体，在检查签名是否完整时应当被单独对待。</p>
+
+<h2>七、授权文件（entitlements）</h2>
+
+<p>在 iOS 上你的应用能做什么依然是沙盒限制的，这些限制大多情况下都由授权文件（entitlements）来决定。授权机制决定了哪些系统资源在什么情况下允许被一个应用使用，简单的说它就是一个沙盒的配置列表。</p>
+
+<p>运行如下命令：</p>
+
+<p><code>
+$ codesign -d --entitlements - Example.app
+</code></p>
+
+<p>会得到类似的结果：</p>
+
+<p>```
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;UTF-8&rdquo;?><br/>
+&lt;!DOCTYPE plist PUBLIC &ldquo;&ndash;//Apple//DTD PLIST 1.0//EN&rdquo; &ldquo;<a href="http://www.apple.com/DTDs/PropertyList-1.0.dtd">http://www.apple.com/DTDs/PropertyList-1.0.dtd</a>&rdquo;><br/>
+<plist version="1.0"><br/>
+<dict></p>
+
+<pre><code>    &lt;key&gt;application-identifier&lt;/key&gt;
+    &lt;string&gt;7TPNXN7G6K.ch.kollba.example&lt;/string&gt;
+    &lt;key&gt;aps-environment&lt;/key&gt;
+    &lt;string&gt;development&lt;/string&gt;
+    &lt;key&gt;com.apple.developer.team-identifier&lt;/key&gt;
+    &lt;string&gt;7TPNXN7G6K&lt;/string&gt;
+    &lt;key&gt;com.apple.developer.ubiquity-container-identifiers&lt;/key&gt;
+    &lt;array&gt;
+            &lt;string&gt;7TPNXN7G6K.ch.kollba.example&lt;/string&gt;
+    &lt;/array&gt;
+    &lt;key&gt;com.apple.developer.ubiquity-kvstore-identifier&lt;/key&gt;
+    &lt;string&gt;7TPNXN7G6K.ch.kollba.example&lt;/string&gt;
+    &lt;key&gt;com.apple.security.application-groups&lt;/key&gt;
+    &lt;array&gt;
+            &lt;string&gt;group.ch.kollba.example&lt;/string&gt;
+    &lt;/array&gt;
+    &lt;key&gt;get-task-allow&lt;/key&gt;
+    &lt;true/&gt;
+</code></pre>
+
+<p></dict><br/>
+</plist><br/>
+<code>``
+在 Xcode 的</code>Capabilities<code>选项卡下选择一些选项之后，Xcode 就会生成这样一段 XML。 Xcode 会自动生成一个</code>.entitlements<code>文件，然后在需要的时候往里面添加条目。当构建整个应用时，这个文件也会提交给 codesign 作为应用所需要拥有哪些授权的参考。这些授权信息必须都在开发者中心的 App ID 中启用，并且包含在后文介绍的描述文件中。在构建应用时需要使用的授权文件可以在 Xcode build setting 中的</code>code signing entitlements`中设置。</p>
+
+<p>在新版本的 Xcode 6 之后，授权信息列表会以 Example.app.xcent 这样的名字的文件形式包含在应用包中。这么做或许是为了在出现配置错误时提供更加有用的错误信息。</p>
+
+<h2>八、描述文件（provisioning file）</h2>
+
+<p>在整个代码签名和沙盒机制中有一个组成部分将签名，授权和沙盒联系了起来，那就是描述文件 (provisioning profiles)。</p>
+
+<h4>OS X中保存目录</h4>
+
+<p>Xcode 将从开发者中心下载的全部配置文件都放在了这里：</p>
+
+<p><code>
+~/Library/MobileDevice/Provisioning Profiles
+</code></p>
+
+<h4>文件格式</h4>
+
+<p>描述文件并不是一个普通的plist文件，它是一个根据密码讯息语法 (Cryptographic Message Syntax) 加密的文件。</p>
+
+<p>以XML格式查看该文件的命令：</p>
+
+<p><code>
+$ security cms -D -i example.mobileprovision
+</code></p>
+
+<h4>文件内容</h4>
+
+<p>描述文件主要包含以下内容：</p>
+
+<ul>
+<li>UUID</li>
+</ul>
+
+
+<p>每一个配置文件都有它自己的 UUID 。Xcode 会用这个 UUID 来作为标识，记录你在 build settings 中选择了哪一个配置文件。</p>
+
+<ul>
+<li>ProvisionedDevices</li>
+</ul>
+
+
+<p>记录所有可用于调试的设备ID。</p>
+
+<ul>
+<li>DeveloperCertificates</li>
+</ul>
+
+
+<p>包含了可以为使用这个配置文件的应用签名的所有证书。所有的证书都是基于 Base64 编码符合 PEM (Privacy Enhanced Mail, RFC 1848) 格式的。</p>
+
+<ul>
+<li>Entitlements</li>
+</ul>
+
+
+<p>有关前面讲到的配置文件的所有内容都会被保存在这里。</p>
+
+<h2>参考文档</h2>
+
+<ul>
+<li><p><a href="http://www.objc.io/issue-17/inside-code-signing.html">Inside Code Signing</a></p></li>
+<li><p><a href="https://developer.apple.com/legacy/library/technotes/tn2250/_index.html#//apple_ref/doc/uid/DTS40009933-CH1-CODE_SIGNING_IN_A_NUTSHELL">iOS Code Signing Troubleshooting</a></p></li>
+<li><p><a href="http://objccn.io/issue-17-2/">代码签名探析</a></p></li>
+<li><p><a href="http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html">数字签名是什么？</a></p></li>
+<li><p><a href="http://blog.csdn.net/wzzvictory/article/details/9015155">非对称加密原理解析</a></p></li>
+<li><p><a href="http://www.2cto.com/Article/201203/122095.html">数字证书原理</a></p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[手动内存管理转ARC项目实战]]></title>
+    <link href="http://wangzz.github.io/blog/2014/10/13/shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/"/>
+    <updated>2014-10-13T16:10:05+08:00</updated>
+    <id>http://wangzz.github.io/blog/2014/10/13/shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan</id>
+    <content type="html"><![CDATA[<p>在ARC之前，iOS内存管理无论对资深级还是菜鸟级开发者来说都是一件很头疼的事。我参加过几个使用手动内存管理的项目，印象最深刻的是一个地图类应用，由于应用本身就非常耗内存，当时为了解决内存泄露问题，每周都安排有人值班用Instruments挨个跑功能，关键是每次都总能检查出来不少。其实不管是菜鸟级还是资深级开发者都避免不了写出内存泄露的代码，规则大家都懂，可是天知道什么时候手一抖就少写了个release？</p>
+
+<p>好在项目决定转成ARC了，下面将自己转换的过程和中间遇到的问题写出来和大家共享，希望能减少大家解决同类问题的时间。</p>
+
+<!-- more -->
+
+
+<h2>一、前言</h2>
+
+<h4>项目简介</h4>
+
+<p>需要转换的Objective-C文件数量：1000个左右。</p>
+
+<p>开发工具：Xcode 6.0.1</p>
+
+<h4>转换方式</h4>
+
+<p>我使用的是Xcode本身提供的ARC转换功能。当然你也可以手动手动转换，那不属于本文范畴，而且其工作量绝对能让你崩溃。</p>
+
+<h2>二、转换过程</h2>
+
+<h4>代码备份</h4>
+
+<p>在进行如此大规模的更改之前，一定要先进行代码备份：直接在本地将代码复制一份，或者记住更改前代码在VCS上的版本号。</p>
+
+<h4>过滤无需转换的文件</h4>
+
+<p>找出项目中引用的仍使用手动内存管理的第三方库，或者某些你不希望转换的文件，对其添加<code>-fno-objc-arc</code>标记。</p>
+
+<p>Xcode自动转换工具只针对Objective-C对象，只会处理<code>Objective-C/Objective-C++</code>即后缀名为<code>.m/.mm</code>的两种文件，因此其他的<code>C/C++</code>对应的<code>.c/.cpp</code>都无需理会。</p>
+
+<h4>执行检查操作</h4>
+
+<p>使用Xcode转换工具入口如图所示：</p>
+
+<p><img src="/images/article8/refactor.png" alt="refactor" /></p>
+
+<p>点击<code>Convert to Objective-C ARC</code>后会进入检查操作入口，如图：</p>
+
+<p><img src="/images/article8/check.png" alt="check" /></p>
+
+<p>该步骤要选择哪些文件需要转换，如果前面将无需转换的文件都添加了<code>-fno-objc-arc</code>标记后，这里可以全选。</p>
+
+<p>点击check按钮后Xcode会帮助我们检查代码中存在的不符合ARC使用规则的错误或警告，只有所有的错误都解决以后才能执行真正的转换操作。</p>
+
+<h4>解决错误/告警</h4>
+
+<p>执行完check操作后，会给出提示：</p>
+
+<p><img src="/images/article8/error.png" alt="error" /></p>
+
+<p>三百多个错误，同时还有一千两百多个警告信息，都要哭了。。。</p>
+
+<p>错误和警告的解决内容较多，后面会单独介绍。</p>
+
+<h4>执行转换操作</h4>
+
+<p>解决完所有的error后，会弹出下述提示界面：</p>
+
+<p><img src="/images/article8/notice.png" alt="notice" /></p>
+
+<p>大意是Xcode将要将你的工程转换成使用ARC管理内存，所有更改的代码在真正更改之前会在一个review界面展示。同时所有的更改完成以后，Xcode会讲项目Target对应的工程设置的使用ARC设置（<code>Objective-C Automatic Reference Counting</code>）会被置成YES（上图右上角的警告标识就是在告诉我们项目已经支持ARC了，但工程中有文件还不支持）：</p>
+
+<p><img src="/images/article8/use_arc.png" alt="use_arc" /></p>
+
+<p>这时离成功就不远了，胜利在望！</p>
+
+<p>点击next按钮后跳转到review界面，样式类似于使用Xcode提交SVN的确认提交界面，如下图所示：</p>
+
+<p><img src="/images/article8/review.png" alt="review" /></p>
+
+<p>该界面列出了所有需要有代码更改的文件，同时能够直接对比转换前和转换后的代码变化。为了稳妥起见，我选择了每个文件都点进去扫了一眼，这也给我们一次机会检查是否漏掉了不能转换的文件。确定一切无误以后，点击右下角的save按钮，一切就大功告成了！</p>
+
+<h2>错误/警告解决</h2>
+
+<h4>错误</h4>
+
+<ul>
+<li>ARC forbids synthesizing a property of an Objective-C object with unspecified ownership or storage attribute</li>
+</ul>
+
+
+<p><img src="/images/article8/readonly_error.png" alt="readonly_error" /></p>
+
+<p>property属性必须指定一个内存管理关键字，在属性定义处增加strong关键字即可。</p>
+
+<ul>
+<li>ARC forbids explicit message send of &lsquo;release&rsquo;</li>
+</ul>
+
+
+<p><img src="/images/article8/release_error.png" alt="release_error" /></p>
+
+<p>这种情况通常是使用包含release的宏定义，将该宏和使用该宏的地方删除即可。</p>
+
+<ul>
+<li>Init methods must return a type related to the receiver type</li>
+</ul>
+
+
+<p><img src="/images/article8/init_return_type.png" alt="init_return_type" /></p>
+
+<p>错误原因是A类里的一个方法以init开头，而且返回的是B类型，好吧，乖乖改方法名。</p>
+
+<ul>
+<li>Cast of C pointer type &lsquo;ivPointer&rsquo; (aka &lsquo;void <em>&rsquo;) to Objective-C pointer type &lsquo;iFlyTTSManager_old </em>&rsquo; requires a bridged cast</li>
+</ul>
+
+
+<p><img src="/images/article8/cast_pointer_objective-c.png" alt="cast_pointer_objective-c" /></p>
+
+<p>这是<code>Toll-Free Bridging</code>转换问题，在ARC下根据情况使用对应的转换关键字就行了，后文会专门介绍。</p>
+
+<h4>警告</h4>
+
+<p>解决警告的目的是消除警告处代码存在的隐患，既然Xcode给了提示，那么每一个警告信息都值得我们认真对待。</p>
+
+<ul>
+<li>Capturing <code>self</code> in this block is likely to lead to a retain cycle</li>
+</ul>
+
+
+<p><img src="/images/article8/block_capturing_self.png" alt="block_capturing_self" /></p>
+
+<p>这是典型的block循环引用问题，将block中的self改成使用指向self的weak指针即可。</p>
+
+<ul>
+<li>Using &lsquo;initWithArray:&rsquo; with a literal is redundant</li>
+</ul>
+
+
+<p><img src="/images/article8/literal_is_redundant.png" alt="literal_is_redundant" /></p>
+
+<p>好吧，原来是没必要的alloc操作，直接按Xcode提示将alloc删除即可：</p>
+
+<p><img src="/images/article8/literal_is_redundant_fix.png" alt="literal_is_redundant_fix.png" /></p>
+
+<ul>
+<li>Init methods must return a type related to the receiver type</li>
+</ul>
+
+
+<p><img src="/images/article8/init_methods.png" alt="init_methods.png" /></p>
+
+<p>原来是A类里的一个方法以init开头，而且返回的是B类型，好吧，乖乖改方法名。</p>
+
+<ul>
+<li>Property follows Cocoa naming convention for returning ‘owned’ objects</li>
+</ul>
+
+
+<p><img src="/images/article8/property_follows.png" alt="property_follows.png" /></p>
+
+<p>这是因为@property属性的命名以new开头了，可恶。。。修改方法是将对应的getter方法改成非new开头命名的：</p>
+
+<p><img src="/images/article8/property_follows_fix.png" alt="property_follows_fix.png" /></p>
+
+<p>ARC下方法名如果是以new/alloc/init等开头的，而且还不是类的初始化方法，就该小心了，要么报错，要么警告，原因你懂的。</p>
+
+<ul>
+<li>Block implicitly retains &lsquo;self&rsquo;; explicitly mention &lsquo;self&rsquo; to indicate this is intended behavior</li>
+</ul>
+
+
+<p><img src="/images/article8/block_implicitly_retains.png" alt="block_implicitly_retains.png" /></p>
+
+<p>意思是block中使用了self的实例变量_selectedModeMarkerView，因此block会隐式的retain住self。Xcode认为这可能会给开发者造成困惑，或者因此而因袭循环引用，所以警告我们要显示的在block中使用self，以达到block显示retain住self的目的。</p>
+
+<p>该警告有两种改法：
+①按照Xcode提示，改成self->_selectedModeMarkerView：</p>
+
+<p><img src="/images/article8/block_implicitly_retains_fix1.png" alt="block_implicitly_retains_fix1.png" /></p>
+
+<p>②直接将该警告关闭
+警告名称为：<code>Implicit retain of ‘self’ within blocks</code>
+对应的Clang关键字是：<code>-Wimplicit-retain-self</code></p>
+
+<p><img src="/images/article8/block_implicitly_retains_fix2.png" alt="block_implicitly_retains_fix2.png" /></p>
+
+<ul>
+<li>Weak property may be unpredictably set to nil 和 Weak property &lsquo;delegate&rsquo; is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive</li>
+</ul>
+
+
+<p><img src="/images/article8/weak_property_unpredictably.png" alt="weak_property_unpredictably.png" /></p>
+
+<p>这是工程中数目最多的警告，这是因为所有的delegate属性都是weak的，Xcode默认开启了下图中的两个警告设置，将其关闭即可：</p>
+
+<p><img src="/images/article8/weak_property_unpredictably_fix.png" alt="weak_property_unpredictably_fix.png" /></p>
+
+<ul>
+<li>Capturing &lsquo;self&rsquo; strongly in this block is likely to lead to a retain cycle</li>
+</ul>
+
+
+<p><img src="/images/article8/retain_cycle.png" alt="retain_cycle.png" /></p>
+
+<p>这是明显的block导致循环引用内存泄露的情况，之前代码中坑啊！修改方案：</p>
+
+<p><img src="/images/article8/retain_cycle_fix.png" alt="retain_cycle_fix.png" /></p>
+
+<ul>
+<li>Method parameter of type &lsquo;NSError <em>__autoreleasing </em>&rsquo; with no explicit ownership</li>
+</ul>
+
+
+<p><img src="/images/article8/autorelease_error.png" alt="autorelease_error.png" /></p>
+
+<p>这种就不用说了，按警告中的提示添加<code>__autoreleasing</code>关键字即可。</p>
+
+<p>以上列出的错误和警告只是数量较多的，还有很多其他就不在这里一一列举了。</p>
+
+<p>另外，推荐  <a href="https://twitter.com/mattt">Mattt Thompson</a> 大神关于Clang中几乎所有warning的名称和对应报错提示语的网站：<a href="http://fuckingclangwarnings.com/">http://fuckingclangwarnings.com/</a>，以后解决warning类问题就简单多了！</p>
+
+<h2>Xcode自动转换</h2>
+
+<h4>关键字转换</h4>
+
+<p>Xcode会自动将某些关键字自动转换成ARC的对应版本。</p>
+
+<ul>
+<li>retain自动转成strong，如图：</li>
+</ul>
+
+
+<p><img src="/images/article8/retain_strong.png" alt="retain_strong.png" /></p>
+
+<ul>
+<li>assign关键字转成weak</li>
+</ul>
+
+
+<p>修饰Objective-C对象或者id类型对象的assign关键字会被转成weak，如图：</p>
+
+<p><img src="/images/article8/assign_weak.png" alt="assign_weak.png" /></p>
+
+<p>但是修饰Int/bool等数值型变量的assign不会自动转换成weak，如图：</p>
+
+<p><img src="/images/article8/assign_not_weak.png" alt="assign_not_weak.png" /></p>
+
+<h4>关键字删除</h4>
+
+<p>和手动内存管理相关的几个关键字，比如：<code>release/retain/autorelease/super dealloc</code>等会被删除；</p>
+
+<p>dealloc方法中如果除了release/super dealloc语句外，如果别的代码，dealloc方法会保留,如图：</p>
+
+<p><img src="/images/article8/retain_dealloc.png" alt="retain_dealloc.png" /></p>
+
+<p>如果没有整个方法都会被删除：</p>
+
+<p><img src="/images/article8/delete_dealloc.png" alt="delete_dealloc.png" /></p>
+
+<h4>关键字替换</h4>
+
+<ul>
+<li>在转换时<strong>block关键字会被自动替换成</strong>weak：</li>
+</ul>
+
+
+<p><img src="/images/article8/block_weak.png" alt="block_weak.png" /></p>
+
+<ul>
+<li>@autoreleasepool</li>
+</ul>
+
+
+<p>NSAutoreleasePool不支持ARC，会被替换成@autoreleasepool：</p>
+
+<p><img src="/images/article8/autoreleasepool.png" alt="autoreleasepool.png" /></p>
+
+<h4>关于被宏注释代码</h4>
+
+<ul>
+<li>使用宏定义的对象释放代码</li>
+</ul>
+
+
+<p>宏定义如下所示：</p>
+
+<p>```objective-c</p>
+
+<h1>define RELEASE_SAFELY(__POINTER) { \</h1>
+
+<p>[(<strong>POINTER) release]; (</strong>POINTER) = nil; }
+```
+在执行ARC转换检查操作时，Xcode会在使用该宏的地方报错：</p>
+
+<p><img src="/images/article8/release_error.png" alt="release_error.png" /></p>
+
+<p>将该宏和使用该宏的地方删除即可。</p>
+
+<ul>
+<li>被宏注释掉的代码，Xcode在转换时是不会处理的，如图：</li>
+</ul>
+
+
+<p><img src="/images/article8/marco_arc.png" alt="marco_arc.png" /></p>
+
+<p>PS：这是相当坑的一点，因为你根本预料不到工程中使用了多少宏，注释掉了多少代码。当你执行完转换操作，以为就大功告成的时候，却在某天因为一个宏的开启遇到了一堆新的转ARC不彻底的问题。这种问题也没招，只能遇到一个改一个了。</p>
+
+<h2>ARC和block</h2>
+
+<p>不管是手动内存管理还是ARC，block循环引用导致的内存泄露都是一个令人头疼的问题。在MRC中，解决block循环引用只需要使用__block关键字，在ARC下解决与block的使用就略显复杂了：</p>
+
+<h4>__block关键字</h4>
+
+<ul>
+<li>block内修改外部定义变量</li>
+</ul>
+
+
+<p>和手动内存管理一样，ARC如果在block中需要修改block之外定义的变量需要使用<code>__block</code>关键字修饰，比如：</p>
+
+<p>```objective-c
+__block NSString *name = @&ldquo;foggry&rdquo;;
+self.expireCostLabel.completionBlock = ^(){</p>
+
+<pre><code>name = @"wangzz";
+</code></pre>
+
+<p>};
+```</p>
+
+<p>上例中name变量需要在block中修改，因此必须使用__block关键字。</p>
+
+<ul>
+<li>__block在MRC和ARC中的区别</li>
+</ul>
+
+
+<p>在ARC下的block中使用__block关键字修饰的对象时，block会retain该对象；而在MRC下却不会retain。关于这点在官方文档<a href="https://developer.apple.com/library/ios/releasenotes/objectivec/rn-transitioningtoarc/introduction/introduction.html">Transitioning to ARC Release Notes</a>中有详细的描述：</p>
+
+<blockquote><p>In manual reference counting mode, <strong>block id x; has the effect of not retaining x.
+In ARC mode, </strong>block id x; defaults to retaining x (just like all other values).</p></blockquote>
+
+<p>下面的代码不管在MRC还是ARC中<code>myController</code>对象都是有内存泄露的：</p>
+
+<p><code>objective-c
+MyViewController *myController = [[MyViewController alloc] init…];
+// ...
+myController.completionHandler =  ^(NSInteger result) {
+   [myController dismissViewControllerAnimated:YES completion:nil];
+};
+</code></p>
+
+<p>内存泄露问题在MRC中可以按如下方式更改：</p>
+
+<p>```objective-c
+MyViewController * __block myController = [[MyViewController alloc] init…];<br/>
+// &hellip;<br/>
+myController.completionHandler =  ^(NSInteger result) {</p>
+
+<pre><code>[myController dismissViewControllerAnimated:YES completion:nil];  
+</code></pre>
+
+<p>};
+```</p>
+
+<p>然而在ARC中这么改就不行了。正如开始所说的那样，在ARC中<code>myController.completionHandler</code>的block会retain<code>myController</code>对象，使得内存泄露问题仍然存在！！</p>
+
+<p>在ARC中该问题有两种解决方案，第一种：</p>
+
+<p>```objective-c
+MyViewController * __block myController = [[MyViewController alloc] init…];<br/>
+// &hellip;<br/>
+myController.completionHandler =  ^(NSInteger result) {</p>
+
+<pre><code>[myController dismissViewControllerAnimated:YES completion:nil];  
+myController = nil;  
+</code></pre>
+
+<p>};
+```
+该方法在block中使用完myController时，是它指向nil。没有strong类型的指针指向myController指向的对象时，对象会被释放掉。</p>
+
+<p>第二种种解决方案，直接使用<strong>weak代替</strong>block关键字：</p>
+
+<p>```objective-c
+MyViewController *myController = [[MyViewController alloc] init…];<br/>
+// &hellip;<br/>
+MyViewController * __weak weakMyViewController = myController;<br/>
+myController.completionHandler =  ^(NSInteger result) {</p>
+
+<pre><code>[weakMyViewController dismissViewControllerAnimated:YES completion:nil];  
+</code></pre>
+
+<p>};
+```
+该方法直接避免了对block对myController对象的retain。</p>
+
+<h4>存在循环引用关系</h4>
+
+<p>如果self直接或者间接的对block存在强引用，在block中又需要使用self关键字，此时self和block就存在循环引用的关系。此时必须使用__weak关键字定义一个指针指向self，在block中使用该指针来引用self：</p>
+
+<p>```objective-c
+MessageListController * __weak weakSelf = self;
+self.messageLogic.loadMoreBlock = ^(IcarMessage * theMessage) {</p>
+
+<pre><code>[weakSelf.tableView setPullTableIsLoadingMore:YES];
+</code></pre>
+
+<p>};
+```</p>
+
+<p>需要说明的是，尽管上例中weakSelf指针对self只是弱引用，但是self对block却是强引用，self的生命周期一定是长于block的，因此不用担心在block中使用weakSelf指针时，其指向的self会被释放掉。</p>
+
+<h4>不存在循环引用关系</h4>
+
+<p>下面的例子：</p>
+
+<p>```objective-c
+MyViewController *myController = [[MyViewController alloc] init…];
+// &hellip;
+MyViewController * __weak weakMyController = myController;
+myController.completionHandler =  ^(NSInteger result) {</p>
+
+<pre><code>MyViewController *strongMyController = weakMyController;
+if (strongMyController) {
+    // ...
+    [strongMyController dismissViewControllerAnimated:YES completion:nil];
+    // ...
+}
+else {
+    // Probably nothing...
+}
+</code></pre>
+
+<p>};
+```</p>
+
+<p>如前面所说，<code>myController.completionHandler</code>的block中不能直接使用<code>myController</code>对象，会造成内存泄露，因此需要先用一个weak的指针指向<code>myController</code>对象，然后在block中使用该weak指针。但是为了确保在block执行的时候<code>myController</code>对象没有被释放掉，就在block一开始的地方定义了一个临时的strong类型的指针<code>strongMyController</code>指向weak指针<code>weakMyController</code>，其实最终的结果就是block中对<code>myController</code>对象强引用了。在block执行完被销毁的时候，<code>strongMyController</code>指针变量会被销毁，其最终指向的<code>myController</code>对象因此也会被销毁。这样在使用一个对象的时候做就保证了该对象是存在的，使用完了再放弃该对象的所有权。</p>
+
+<h2>ARC和Toll-Free Bridging</h2>
+
+<p>MRC下的<code>Toll-FreeBridging</code>不涉及内存管理的转移，Objective-C（后文简称OC）和Core Foundation（后文简称CF）各自管理各自的内存,相互之间可以直接交换使用，比如：</p>
+
+<p><code>objective-c
+NSLocale *gbNSLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+CFLocaleRef gbCFLocale = (CFLocaleRef)gbNSLocale;
+</code></p>
+
+<p>而在ARC下,事情就会变得复杂一些。因为ARC能够管理OC对象的内存,却不能管理CF对象,CF对象依然需要我们手动管理内存。在CF和OC之间bridge对象的时候,问题就出现了,编译器不知道该如何处理这个同时有OC指针和CF指针指向的对象。这时候,需要使用<code>__bridge</code>, <code>__bridge_retained</code>, <code>__bridge_transfer</code>等修饰符来告诉编译器该如何去做。</p>
+
+<ul>
+<li>__bridge</li>
+</ul>
+
+
+<p>该关键字在桥接过程中不会增加被桥接对象的引用计数，比如：</p>
+
+<p><code>objective-c
+CFStringRef cfString = CFStringCreateWithCString(kCFAllocatorDefault, "CFString", kCFStringEncodingUTF8);
+NSString *ocString = (__bridge NSString *)cfString;
+CFRelease(cfString);
+NSLog(@"%@",ocString);
+</code></p>
+
+<p>由于ARC下<code>NSString *ocString</code>定义的对象指针默认是strong的，所以在执行<code>CFRelease(cfString);</code>后<code>ocString</code>指针还持有桥接过来的对象，<code>ocString</code>指针仍能正常使用。但如果做出如下改动：</p>
+
+<p><code>objective-c
+CFStringRef cfString = CFStringCreateWithCString(kCFAllocatorDefault, "CFString", kCFStringEncodingUTF8);
+__weak NSString *ocString = (__bridge NSString *)cfString;
+CFRelease(cfString);
+NSLog(@"###%@",ocString);
+</code></p>
+
+<p>即将定义方式改成<code>__weak NSString *ocString</code>，在执行<code>CFRelease(cfString);</code>后<code>ocString</code>将因不再持有被桥接对象所有权而无法正常使用。</p>
+
+<p>反之从OC对象桥接到CF对象也是一个道理，该关键字有点像<code>__weak</code>关键字的作用。</p>
+
+<ul>
+<li>__bridge_retained 或 CFBridgingRetain</li>
+</ul>
+
+
+<p>二者作用是一样的，只是用法不同。</p>
+
+<p>该关键字在桥接的过程中会retain被桥接对象，相当于桥接方也持有了被桥接对象。需要注意的是，如果是CF对象桥接到OC对象，编译器会做好OC对象的内存管理工作；但如果是OC对象桥接到CF对象，那么CF需要执行内存释放操作，如下例所示：</p>
+
+<p><code>objective-c
+NSArray *ocArray = [[NSArray alloc] initWithObjects:@"foggry", nil];
+CFArrayRef cfArray = (__bridge_retained CFArrayRef)ocArray;
+/**
+ 使用cfArray
+ **/
+CFRelease(cfArray);
+</code></p>
+
+<ul>
+<li>__bridge_transfer 或 CFBridgingRelease</li>
+</ul>
+
+
+<p>二者作用也是一样的，只是用法不同。</p>
+
+<p>该关键字将对象所有权由被桥接对象转移给了桥接对象，比如：</p>
+
+<p><code>objective-c
+CFStringRef cfString = CFStringCreateWithCString(kCFAllocatorDefault, "CFString", kCFStringEncodingUTF8);
+NSString *ocString = (__bridge_transfer NSString *)cfString;
+//CFRelease(cfString); //不再需要释放操作
+NSLog(@"%@",ocString);
+</code></p>
+
+<p>此例中被桥接对象cfString的所有权就转移给了桥接对象ocString。</p>
+
+<p>总之，理解了桥接关键字的作用，桥接转换过程中大家只需要根据具体需求选用适当的关键字即可。</p>
+
+<p>另外，在ARC中<code>id</code>和<code>void *</code>也不能直接相互转换了，必须通过<code>Toll-FreeBridging</code>使用适当的关键字修饰。</p>
+
+<h2>ARC和IBOutLet</h2>
+
+<p>对于IBOutLet属性应该用strong还是weak一直都有疑惑。关于这一点<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/LoadingResources/CocoaNibs/CocoaNibs.html#//apple_ref/doc/uid/10000051i-CH4-SW6">官方文档</a>是这么介绍的：</p>
+
+<blockquote><p>From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib >>>file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak.</p></blockquote>
+
+<p>那么长的一段英文想说的是：</p>
+
+<p>如果nib文件构建的view是直接被Controller引用的顶层view，对应的IBOutLet属性应该是strong；</p>
+
+<p>如果view是顶层view上的一个子view，那么该view的属性应该是weak，因为顶层view被Controller使用strong属性引用了，而顶层view本身又持有该view；</p>
+
+<p>如果Controller对某个view需要单独引用，或者Controller没有引用某个view的父view，那么其属性也应该是strong。</p>
+
+<p>好吧，其实我能说如果你实在懒得区分什么时候用strong，什么时候用weak，那就将所以后的IBOutLet属性都设成strong吧！在Controller销毁的时候，对应的IBOutLet实例变量也会被销毁，strong指针会被置成nil，因此也不会有内存问题。</p>
+
+<h2>参考文档</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/releasenotes/objectivec/rn-transitioningtoarc/introduction/introduction.html">Transitioning to ARC Release Notes</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/LoadingResources/CocoaNibs/CocoaNibs.html#//apple_ref/doc/uid/10000051i-CH4-SW6">Managing the Lifetimes of Objects from Nib Files</a></li>
+<li><a href="https://mikeash.com/pyblog/friday-qa-2012-04-13-nib-memory-management.html">Nib Memory Management</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

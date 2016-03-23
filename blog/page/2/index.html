@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>王中周的技术博客</title>
+  <meta name="author" content="王中周">
+
+  
+  <meta name="description" content="iOS开发">
+  <meta name="keywords" content="iOS, octopress, analytics, wangzz,王中周">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wangzz.github.io/blog/page/2">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="王中周的技术博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  
+  <!-- googleapis is fucked by gfw -->
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <!--<script src="//libs.baidu.com/jquery/1.7.2/jquery.min.js"></script>-->
+  <script src="http://cdn.staticfile.org/jquery/1.9.1/jquery.min.js"></script>
+  
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+<script type="text/javascript">
+
+function addBlankTargetForLinks () {
+
+  $('a[href^="http"]').each(function(){
+
+      $(this).attr('target', '_blank');
+
+  });
+
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+
+  addBlankTargetForLinks();
+
+});
+
+</script>
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">王中周的技术博客</a></h1>
+  
+    <h2>Stay hungry,stay foolish.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:wangzz.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/">iOS进程间通信之CFMessagePort</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-04T18:31:51+08:00" pubdate data-updated="true">Jun 4<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>iOS系统是出了名的封闭，每个应用的活动范围被严格地限制在各自的沙盒中。尽管如此，iOS还是提供了若干进程间通信机制，CFMessagePort就是其中之一。</p>
+
+<p>从类名可以看出，CFMessagePort属于<code>Core Foundation</code>层的东西，其实现部分是开源的，代码在可以在苹果的<a href="http://opensource.apple.com/source/CF/CF-855.14/CFMessagePort.c">开源代码库</a>中找到。</p>
+
+<h2>使用方式</h2>
+
+<h4>1、消息接收者</h4>
+
+<p>CFMessagePort端口消息的接收者需要实现以下功能：</p>
+
+<h6>1.1 注册监听</h6>
+
+<p>消息接收者需要通过以下方式注册消息监听：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">startListenning</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">!=</span> <span class="n">mMsgPortListenner</span> <span class="o">&amp;&amp;</span> <span class="n">CFMessagePortIsValid</span><span class="p">(</span><span class="n">mMsgPortListenner</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">CFMessagePortInvalidate</span><span class="p">(</span><span class="n">mMsgPortListenner</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>    <span class="n">mMsgPortListenner</span> <span class="o">=</span> <span class="n">CFMessagePortCreateLocal</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span><span class="n">CFSTR</span><span class="p">(</span><span class="n">LOCAL_MACH_PORT_NAME</span><span class="p">),</span><span class="n">onRecvMessageCallBack</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRunLoopSourceRef</span> <span class="n">source</span> <span class="o">=</span> <span class="n">CFMessagePortCreateRunLoopSource</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">mMsgPortListenner</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRunLoopAddSource</span><span class="p">(</span><span class="n">CFRunLoopGetCurrent</span><span class="p">(),</span> <span class="n">source</span><span class="p">,</span> <span class="n">kCFRunLoopCommonModes</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;start listenning&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/06/04/iosjin-cheng-jian-tong-xin-zhi-cfmessageport/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an/">iOS模拟器Custom Location被重置解决方案</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-25T17:29:18+08:00" pubdate data-updated="true">May 25<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>问题说明</h2>
+
+<p>在做地图类应用时，经常需要用到位置模拟功能。iOS模拟器提供了该功能，我们可以设置指定的经纬度，选中模拟器后，按照以下菜单层次进入即可设置：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Debug --&gt; Location --&gt; Custom Location</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是该功能存在的问题是设置完经纬度每次重新run程序，或者重启模拟器的时候都有可能使之前设置的Location状态从<code>Custom Location</code>变成<code>None</code>，导致设置的经纬度信息无效。</p>
+
+<p>因此经常需要重新选择<code>Custom Location</code>，对于每天需要run程序n次的我们来说苦不堪言&hellip;</p>
+
+<h2>解决方案</h2>
+
+<p>好在Xcode的target设置项中提供了设置位置信息的方法，允许我们使用GPX文件来设置自定义位置信息，步骤如下：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/05/25/iosmo-ni-qi-custom-locationbei-zhong-zhi-jie-jue-fang-an/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/19/jia-mi-ni-de-sqlite/">加密你的SQLite</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-19T10:19:42+08:00" pubdate data-updated="true">May 19<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>关于SQLite</h2>
+
+<p>SQLite是一个<code>轻量的</code>、<code>跨平台的</code>、<code>开源的</code>数据库引擎，它的在<code>读写效率</code>、<code>消耗总量</code>、<code>延迟时间</code>和<code>整体简单性上</code>具有的优越性，使其成为移动平台数据库的最佳解决方案（如iOS、Android）。</p>
+
+<p>然而免费版的SQLite有一个致命缺点：不支持加密。这就导致存储在SQLite中的数据可以被任何人用任何文本编辑器查看到。比如国内某团购iOS客户端的DB缓存数据就一览无余：</p>
+
+<p><img src="/images/article2/meituan_db_info.png" width="700" height="300"></p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/05/19/jia-mi-ni-de-sqlite/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/09/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/">Xcode设置项之Architectures和Valid Architectures</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-09T17:45:33+08:00" pubdate data-updated="true">May 9<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>iPhone指令集</h2>
+
+<p>本文所讲的内容都是围绕iPhone的CPU指令集(想了解ARM指令集的同学请点击<a href="http://en.wikipedia.org/wiki/ARM_architecture">这里</a>)，现在先说说不同型号的iPhone都使用的是什么指令集：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ARMv8/ARM64 = iPhone 5s, iPad Air, Retina iPad Mini
+</span><span class='line'>ARMv7s = iPhone 5, iPhone 5c, iPad 4
+</span><span class='line'>ARMv7  = iPhone 3GS, iPhone 4, iPhone 4S, iPod 3G/4G/5G, iPad, iPad 2, iPad 3, iPad Mini  
+</span><span class='line'>ARMv6  = iPhone, iPhone 3G, iPod 1G/2G</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>设置你想支持的指令集</h2>
+
+<p>Xcode中关于生成二进制包指令集相关的设置项有以下三个：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/05/09/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/28/custom-your-octopress-blog/">自定义你的Octopress博客</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-28T11:17:31+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>SEO</h2>
+
+<ul>
+<li>增加统计工具</li>
+</ul>
+
+
+<p>博客搭建好了以后，大家一定很想知道每天都有多少的访问量。现在有很多工具都可以帮助我们做这件事，比如<code>Google Analytics</code>、<code>百度统计</code>、<code>CNZZ</code> 等。</p>
+
+<p>其中<code>Google Analytics</code>是Octopress自带的统计工具，使用方式也非常简单，只需要到<code>Google Analytics</code>申请一个<code>app id</code>，填写到<code>_config.yml</code>文件中的<code>google_analytics_tracking_id</code>后面即可。但<code>Google Analytics</code>存在翻墙的麻烦，而且<code>百度统计</code>功能也挺齐全，完全能满足我的需求，就选择了<code>百度统计</code>。</p>
+
+<p>集成百度统计方式非常简单：</p>
+
+<p>只需到<code>百度统计</code>官方网站申请一个账号，将获取的代码添加到<code>source/_includes/custom/footer.html</code>中，重新部署即可。</p>
+
+<p> </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/28/custom-your-octopress-blog/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/25/githubyou-xiu-xiang-mu-ios/">github优秀开源项目大全-iOS</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-25T17:45:33+08:00" pubdate data-updated="true">Apr 25<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<ol>
+<li><p>本文旨在搜集github上优秀的开源项目</p></li>
+<li><p>本文搜集的项目都是用于iOS开发</p></li>
+<li><p>本文会持续更新&hellip;</p></li>
+</ol>
+
+
+<h2>完整客户端</h2>
+
+<ul>
+<li><a href="https://github.com/dennisreimann/">ioctocat</a></li>
+</ul>
+
+
+<p>github的iOS客户端，目前开源代码是V1版本，V2版本在appstore上可以下载</p>
+
+<ul>
+<li><a href="https://github.com/chrisballinger/ChatSecure-iOS">ChatSecure-iOS</a></li>
+</ul>
+
+
+<p>使用XMPP协议的IM开源软件，很强大，在appstore上可以下载</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/25/githubyou-xiu-xiang-mu-ios/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/02/ru-he-pei-zhi-rang-ni-de-octopressbo-ke-zai-duo-tai-macshang-tong-shi-shi-yong/">让Octopress博客在多台Mac上同时使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-02T14:28:35+08:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前阵子在公司电脑上配置好了Octopress博客，但是想在家里的Mac上使用，开始以为简单的将仓库clone就可以了，不幸的是我想的太简单。后来在网上看到了前面列出的第一篇文章，终于解决问题。</p>
+
+<h2>一、Octopress目录结构</h2>
+
+<p>Octopress的仓库目录下有两个branch，<code>source</code>和<code>master</code>。</p>
+
+<ol>
+<li><p><code>source</code>分支下保存Octopress的源代码，我们需要用他们生成博客，该分支保存在Octopress本地仓库的根目录下；</p></li>
+<li><p><code>master</code>分支下保存生成的博客内容，该分支在Octopress本地仓库的根目录下一个叫<code>_deploy</code>得文件夹中。该文件夹是以下划线开头的，会在执行<code>git push origin source</code>命令时被忽略，这也是为什么一个目录中能同时存在两个不同分支的文件夹的原因。</p></li>
+</ol>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/02/ru-he-pei-zhi-rang-ni-de-octopressbo-ke-zai-duo-tai-macshang-tong-shi-shi-yong/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/31/kai-shi-xie-blogla/">开始写blog啦</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-31T20:19:44+08:00" pubdate data-updated="true">Mar 31<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这是我的第一篇日志，以后多多关注！</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>博主简介</h1>
+<li>
+<p>
+	<span style="color:#222222;font-family:inherit;font-size:18px;font-style:inherit;font-weight:inherit;line-height:1.5;">曾就职于高阳科技、北京拉手网；</span>
+</p>
+<p>
+	<span style="font-family:inherit;font-style:inherit;font-weight:inherit;color:#222222;font-size:18px;line-height:1.5;">早期在<a href="http://blog.csdn.net/wzzvictory" target="_blank"><span style="color:#E53333;">CSND上写博客</span></a></span>
+</p>
+</li>
+</section>
+<section>
+    <h1>新浪微博</h1>
+    <ul id="weibo">
+    <li>
+    	
+<iframe width="100%" height="130" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1734555471&verifier=6c6f0bb3&dpc=1"></iframe>
+
+</li>
+    </ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/08/10/ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/">手动解析CrashLog之&#8212;-原理篇</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/">手动解析CrashLog之&#8212;-方法篇</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/05/06/chi-ping-xuan-ran-xue-xi-bi-ji/">离屏渲染学习笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/16/ios-code-signing-xue-xi-bi-ji/">iOS Code Signing 学习笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/13/shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/">手动内存管理转ARC项目实战</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/wwdc2014/'>WWDC2014 (2)</a></li>
+<li class='category'><a href='/blog/categories/xcode/'>Xcode (1)</a></li>
+<li class='category'><a href='/blog/categories/xcodesettings/'>XcodeSettings (1)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (9)</a></li>
+<li class='category'><a href='/blog/categories/opensource/'>opensource (1)</a></li>
+
+  </ul>
+</section>
+<section>
+    <h1>广告时间</h1>
+    <ul id="ad">
+    <li>
+    	
+
+<!-- 广告位：Google -->
+<!-- 
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+&#8211;>
+<!-- 王中周的技术博客 -->
+<!-- 
+<ins class="adsbygoogle"
+     style="display:inline-block;width:250px;height:250px"
+     data-ad-client="ca-pub-4428888818448200"
+     data-ad-slot="1259477576"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+&#8211;>
+
+
+
+<!-- 广告位：Baidu -->
+<!-- 广告位：技术博客 -->
+<!-- 
+<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "985176";</script>
+<script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+&#8211;>
+   
+    </li>
+    </ul>
+</section>
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div style="text-align:center;">
+	<span style="line-height:1.5;">This work is licensed under a </span><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a><span style="line-height:1.5;">.</span>
+</div>
+<p style="text-align:center;">
+	<span style="line-height:1;">Copyright &copy; 2016 - 王中周 - </span><span class="credit"><span style="line-height:1;">Powered by </span><a href="http://octopress.org"><span style="line-height:1;">Octopress</span></a></span> 
+</p>
+
+<p>
+<script type="text/javascript">
+    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F9975063b89c363c67eac651132751ee6' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</p></footer>
+  
+
+
+
+
+
+  <!--返回顶部开始-->
+<div id="full" style="width:0px; height:0px; position:fixed; right:190px; bottom:150px; z-index:100; text-align:center; background-color:transparent; cursor:pointer;">
+	<a href="#" onclick="goTop();return false;"><img src="/images/top.png" border=0 alt="返回顶部"></a>
+</div>
+<script src="/javascripts/top.js" type="text/javascript"></script>
+<!--返回顶部结束-->
+</body>
+</html>
