@@ -1,0 +1,41 @@
+cd ~/octopress
+
+git pull origin source
+
+bundle exec rake generate
+
+if [ $? != 0 ]
+then
+echo "**************RAKE GENERATE FAILED**************"
+exit 1
+fi
+
+git add --all .
+
+git commit -m $1
+
+git push origin source
+
+bundle exec rake deploy
+
+if [ $? != 0 ]
+then
+echo "**************RAKE DEPLOY FAILED**************"
+exit 1
+fi
+
+echo "**************BLOG DEPLOY SUCCESS**************"
+
+#添加 gitcafe 源
+cd /Users/wangzz/octopress/_deploy
+
+git pull origin master
+
+git remote add gitcafe git@gitcafe.com:wangzz/wangzz.git >> /dev/null 2>&1
+
+#提交博客内容
+echo "### Pushing to GitCafe..."
+git push -u gitcafe master:gitcafe-pages
+echo "### Done"
+
+cd -
