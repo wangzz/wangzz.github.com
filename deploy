@@ -35,7 +35,7 @@ git pull origin master
 
 # git remote add gitcafe git@git.coding.net:foogry/wangzz.git >> /dev/null 2>&1
 
-get remote gitcafe set-url git@git.coding.net:foogry/wangzz.git
+get remote set-url gitcafe git@git.coding.net:foogry/wangzz.git
 
 #提交博客内容
 echo "### Pushing to Coding.net..."
