@@ -33,7 +33,7 @@ cd ~/octopress/_deploy
 
 git pull origin master
 
-git remote add gitcafe git@gitcafe.com:wangzz/wangzz.git >> /dev/null 2>&1
+git remote add gitcafe git@git.coding.net:foogry/wangzz.git >> /dev/null 2>&1
 
 #提交博客内容
 echo "### Pushing to GitCafe..."
