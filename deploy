@@ -29,7 +29,7 @@ fi
 echo "**************BLOG DEPLOY SUCCESS**************"
 
 #添加 gitcafe 源
-cd /Users/wangzz/octopress/_deploy
+cd ~/octopress/_deploy
 
 git pull origin master
 
