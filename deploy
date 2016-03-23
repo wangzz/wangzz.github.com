@@ -16,6 +16,8 @@ git commit -m $1
 
 git push origin source
 
+echo "**************GIT PUSH SUCCESS**************"
+
 bundle exec rake deploy
 
 if [ $? != 0 ]
