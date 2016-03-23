@@ -9,9 +9,11 @@ keywords: CocoaPods, iOS, Cocoa, Trunk, 私有仓库
 description: CocoaPods 详解之----更新篇
 ---
 
-CocoaPods 大概是 2011 年出现的 Cocoa 依赖管理工具（目前已支持 Objective-C 和 Swift），近年来普及率越来越高，几乎是所有 Cocoa 开源项目的标配。另外，很多大点的团队会用 CocoaPods 拆分工程，实现项目插件化。
+CocoaPods 大概是 2011 年出现的开源组件管理工具（目前已支持 Objective-C 和 Swift），近年来普及率越来越高，几乎已是所有 Cocoa 开源项目的标配。另外，很多大点的团队会用 CocoaPods 拆分工程，实现项目插件化。
 
-博主曾在 2014 年写过 `CocoaPods 详解` 系列文章：[CocoaPods详解之----使用篇](http://blog.csdn.net/wzzvictory/article/details/18737437)、[CocoaPods详解之----进阶篇](http://blog.csdn.net/wzzvictory/article/details/19178709)、[CocoaPods详解之----制作篇](http://blog.csdn.net/wzzvictory/article/details/20067595)，简单介绍了从使用到亲手制作 CocoaPods 开源组件的过程。然而，随着 CocoaPods 的发展，制作 CocoaPods 开源组件的方式已经从最初的 Pull requests 方式变成 Trunk 方式。
+博主曾在 2014 年写过 `CocoaPods 详解` 系列文章：[CocoaPods详解之----使用篇](http://blog.csdn.net/wzzvictory/article/details/18737437)、[CocoaPods详解之----进阶篇](http://blog.csdn.net/wzzvictory/article/details/19178709)、[CocoaPods详解之----制作篇](http://blog.csdn.net/wzzvictory/article/details/20067595)，简单介绍了从使用到亲手制作 CocoaPods 开源组件的过程。
+
+然而随着时间的推移，CocoaPods 有些使用方式也发生了变化，比如组件提交方式等。本文将从 Trunk 和私有仓库两个方面介绍自己对 CocoaPods 的新认识。
 
 ## 一、Trunk 方式提交开源组件
 
@@ -105,7 +107,7 @@ pod 'WZMarqueeView', '~> 2.0.0'
 - Versions: 2.0.0, 1.0.0 [master repo]
 ```
 
-说明组件 `WZMarqueeView ` 已经成功从 `1.0.0' 升级成了 `2.0.0` 版本。
+说明组件 `WZMarqueeView ` 已经成功从 `1.0.0` 升级成了 `2.0.0` 版本。
 
 ### 3、其它说明
 
