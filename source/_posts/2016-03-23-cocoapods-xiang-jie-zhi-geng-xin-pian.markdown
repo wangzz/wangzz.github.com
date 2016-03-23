@@ -13,11 +13,11 @@ CocoaPods 大概是 2011 年出现的 Cocoa 依赖管理工具（目前已支持
 
 博主曾在 2014 年写过 `CocoaPods 详解` 系列文章：[CocoaPods详解之----使用篇](http://blog.csdn.net/wzzvictory/article/details/18737437)、[CocoaPods详解之----进阶篇](http://blog.csdn.net/wzzvictory/article/details/19178709)、[CocoaPods详解之----制作篇](http://blog.csdn.net/wzzvictory/article/details/20067595)，简单介绍了从使用到亲手制作 CocoaPods 开源组件的过程。然而，随着 CocoaPods 的发展，制作 CocoaPods 开源组件的方式已经从最初的 Pull requests 方式变成 Trunk 方式。
 
-一、Trunk 方式提交开源组件
+## 一、Trunk 方式提交开源组件
 
 从 CocoaPods 0.33 版本开始，CocoaPods 将组件的提交从 Pull requests 变成了自动化的 Trunk 方式。Trunk 提交方式有以下步骤：
 
-1、向 Trunk 注册自己的电脑
+### 1、向 Trunk 注册自己的电脑
 
 首次使用 Trunk 时，需要注册自己的电脑：
 
@@ -47,7 +47,7 @@ $ pod trunk me
 
 则说明注册成功。
 
-2、提交组件
+### 2、提交组件
 
 准备好 podspec 文件后，首先要检查其合法性：
 
@@ -107,7 +107,7 @@ pod 'WZMarqueeView', '~> 2.0.0'
 
 说明组件 `WZMarqueeView ` 已经成功从 `1.0.0' 升级成了 `2.0.0` 版本。
 
-3、其它说明
+### 3、其它说明
 
 * 权限声明
 
@@ -170,7 +170,7 @@ $ pod trunk add-owner WZMarqueeView kyle@cocoapods.org
 
 另外，Trunk 增加了组件所有者的概念，非所有者无法提交组件的更新，这在一定程度上提高了 CocoaPods 的安全性。
 
-二、创建私有 CocoaPods 仓库
+## 二、创建私有 CocoaPods 仓库
 
 目前所有支持 CocoaPods 的开源组件，都存储在 Github 上公共的 [CocoaPods Specs](https://github.com/CocoaPods/Specs.git) 仓库中，这种方式有以下缺点：
 
@@ -180,11 +180,11 @@ $ pod trunk add-owner WZMarqueeView kyle@cocoapods.org
 
 这时就需要创建一个和 [CocoaPods Specs](https://github.com/CocoaPods/Specs.git) 类似的私有组件存储仓库。私有仓库可以存放在自家公司的 Git 服务器上，也可以放在各大支持私有仓库的 Git 平台上，下面以支持免费私有仓库的 [coding.net](https://coding.net)为例说明 CocoaPods 私有仓库的创建过程。
 
-1、创建[coding.net](https://coding.net)私有仓库
+### 1、创建[coding.net](https://coding.net)私有仓库
 
 按照 [coding.net](https://coding.net) 官网提示创建一个私有仓库即可。
 
-2、本地初始化组件仓库
+### 2、本地初始化组件仓库
 
 执行以下命令：
 
@@ -193,7 +193,7 @@ $ pod trunk add-owner WZMarqueeView kyle@cocoapods.org
 $ pod repo add FGSpecs https://git.coding.net/foogry/FGSpecs.git
 ```
 
-3、向仓库中添加组件
+### 3、向仓库中添加组件
 
 将事先准备好的组件添加到仓库中，组件可以存放在本地，也可以放在自家或网上的代码托管平台。执行以下命令：
 
@@ -225,7 +225,7 @@ e2ad499..31a1a8e  master -> master
 
 至此，本地和代码托管平台上的私有仓库 FGSpecs 中就都已经添加了私有组件 FGMarqueeView。
 
-4、使用私有仓库中的组件
+### 4、使用私有仓库中的组件
 
 Podfile 文件中默认情况下已经隐式使用 `source` 声明了 CocoaPods 的官方仓库。但使用私有组件，需要使用 `source` 关键字鲜显式声明组件所在仓库：
 
@@ -252,7 +252,7 @@ pod 'SBJson', '~> 4.0.0'
 
 先声明的仓库具有优先权。当先后引用的两个仓库中都包含同一个组件时，会使用先引用仓库中的，哪怕后引用的仓库中版本号更高。
 
-5、直接使用私有组件
+### 5、直接使用私有组件
 
 如果不想创建私有仓库，也可以在 Podfile 里直接引用私有组件（组件可以是本地的，也可以是托管在自家公司服务器或网上的代码托管平台上的），引用的同时还可以制定具体的 commit、branch 或者 tag，比如：
 
@@ -262,7 +262,7 @@ $ pod 'FGMarqueeView', :git => 'https://git.coding.net/foogry/FGMarqueeView.git'
 
 这种方式引用的组件在执行完 `pod install` 以后，会被添加在 Development Pods 目录下，而通过私有仓库或共有仓库方式引用的组件则会被添加在 Pods 目录下。
 
-三、参考文档
+## 三、参考文档
 
 * [CocoaPods Trunk](https://blog.cocoapods.org/CocoaPods-Trunk/#transition)
 
