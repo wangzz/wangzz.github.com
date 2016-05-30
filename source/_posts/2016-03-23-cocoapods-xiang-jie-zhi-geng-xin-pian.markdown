@@ -15,6 +15,8 @@ CocoaPods 大概是 2011 年出现的开源组件管理工具（目前已支持 
 
 然而随着时间的推移，CocoaPods 有些使用方式也发生了变化，比如组件提交方式等。本文将从 Trunk 和私有仓库两个方面介绍自己对 CocoaPods 的新认识。
 
+<!-- more -->
+
 ## 一、Trunk 方式提交开源组件
 
 从 CocoaPods 0.33 版本开始，CocoaPods 将组件的提交从 Pull requests 变成了自动化的 Trunk 方式。Trunk 提交方式有以下步骤：
