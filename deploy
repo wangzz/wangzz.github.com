@@ -28,19 +28,18 @@ fi
 
 echo "**************BLOG DEPLOY SUCCESS**************"
 
-#添加 gitcafe 源
+# 添加 coding.net 源
 cd ~/octopress/_deploy
 
 git pull origin master
 
-# git remote add gitcafe git@git.coding.net:foogry/wangzz.git >> /dev/null 2>&1
+# 改变 coding.net remote url
 
-# 改变 gitcafe remote url
-git remote set-url gitcafe git@git.coding.net:foogry/wangzz.git
+git remote add coding git@git.coding.net:foogry/foogry.git >> /dev/null 2>&1
 
-#提交博客内容
-echo "### Pushing to Coding.net..."
-git push -u gitcafe master:gitcafe-pages
+# 提交博客内容
+echo "### Pushing to Coding.net ..."
+git push -u coding master:coding-pages
 echo "### Done"
 
 cd -
