@@ -98,7 +98,7 @@ delicious_count: 3
 # disqus_show_comment_count: false
 
 # duoshuo comments
-duoshuo_comments: true
+duoshuo_comments: false
 duoshuo_short_name: foggry
 
 # Google Analytics
