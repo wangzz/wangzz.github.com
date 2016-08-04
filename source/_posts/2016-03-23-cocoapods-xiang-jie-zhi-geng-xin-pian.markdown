@@ -266,7 +266,29 @@ $ pod 'FGMarqueeView', :git => 'https://git.coding.net/foogry/FGMarqueeView.git'
 
 这种方式引用的组件在执行完 `pod install` 以后，会被添加在 Development Pods 目录下，而通过私有仓库或共有仓库方式引用的组件则会被添加在 Pods 目录下。
 
-## 三、参考文档
+## 三、cocoapods 版本管理
+
+cocoapods 升级新版本后可能会遇到坑，因此就有了降级的需求。
+
+* 查看当前版本
+
+```
+sudo gem list cocoapods
+```
+
+* 卸载当前版本
+
+```
+sudo gem uninstall cocoapods
+```
+
+* 安装指定版本
+
+```
+sudo gem install cocoapods -v 0.39.0
+```
+
+## 四、参考文档
 
 * [CocoaPods Trunk](https://blog.cocoapods.org/CocoaPods-Trunk/#transition)
 
@@ -276,3 +298,4 @@ $ pod 'FGMarqueeView', :git => 'https://git.coding.net/foogry/FGMarqueeView.git'
 
 * [Podfile Syntax Reference](https://guides.cocoapods.org/syntax/podfile.html#source)
 
+* [Downgrading or installing older version of Cocoapods](http://stackoverflow.com/a/20489489)
