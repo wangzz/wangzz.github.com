@@ -1,45 +1,100 @@
 cd ~/octopress
 
+# git pull source
+echo "**************BEGIN GIT PULL SOURCE**************"
 git pull origin source
 
+if [ $? != 0 ]
+then
+echo "**************GIT PULL SOURCE FAILED**************"
+exit 1
+else
+echo "**************GIT PULL SOURCE SUCCESS**************"
+fi
+
+# git pull master
+cd _deploy
+echo "**************BEGIN GIT PULL MASTER**************"
+git pull origin master
+if [ $? != 0 ]
+then
+echo "**************GIT PULL MASTER FAILED**************"
+exit 1
+else
+echo "**************GIT PULL MASTER SUCCESS**************"
+fi
+
+cd -
+echo $PWD
+
+
+# rake generate
+echo "**************BEGIN RAKE GENERATE**************"
 bundle exec rake generate
 
 if [ $? != 0 ]
 then
 echo "**************RAKE GENERATE FAILED**************"
 exit 1
+else
+echo "**************RAKE GENERATE SUCCESS**************"
 fi
 
+
+# git push source
+echo "**************GIT PUSH BEGIN**************"
 git add --all .
-
 git commit -m $1
-
 git push origin source
-
+if [ $? != 0 ]
+then
+echo "**************GIT PUSH FAILED**************"
+exit 1
+else
 echo "**************GIT PUSH SUCCESS**************"
+fi
 
+
+# rake deploy
+echo "**************RAKE DEPLOY BEGIN**************"
 bundle exec rake deploy
 
 if [ $? != 0 ]
 then
 echo "**************RAKE DEPLOY FAILED**************"
 exit 1
+else
+echo "**************BLOG DEPLOY SUCCESS**************"
 fi
 
-echo "**************BLOG DEPLOY SUCCESS**************"
 
 # 添加 coding.net 源
 cd ~/octopress/_deploy
 
+echo "**************PULL FROM CODING.NET BEGIN**************"
 git pull origin master
+if [ $? != 0 ]
+then
+echo "**************PULL FROM CODING.NET FAILED**************"
+exit 1
+else
+echo "**************PULL FROM CODING.NET SUCCESS**************"
+fi
 
+echo "**************PUSH TO CODING.NET BEGIN**************"
 # 改变 coding.net remote url
-
 git remote add coding git@git.coding.net:foogry/foogry.git >> /dev/null 2>&1
-
 # 提交博客内容
-echo "### Pushing to Coding.net ..."
 git push -u coding master:coding-pages
-echo "### Done"
+
+if [ $? != 0 ]
+then
+echo "**************PUSH TO CODING.NET FAILED**************"
+exit 1
+else
+echo "**************PUSH TO CODING.NET SUCCESS**************"
+fi
 
 cd -
+
+echo "**************DONE**************"
