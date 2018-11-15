@@ -3,7 +3,7 @@ layout: post
 title: "try catch 原理剖析"
 date: 2018-11-15 08:27:01 +0800
 comments: true
-categories:iOS
+categories: iOS
 tags: [Objective-C, iOS,setjmp,longjmp,异常处理,try,catch]
 keywords:Objective-C, iOS,setjmp,longjmp,异常处理,try,catch
 ---
