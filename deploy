@@ -12,6 +12,7 @@ else
 echo "**************GIT PULL SOURCE SUCCESS**************"
 fi
 
+
 # git pull master
 cd _deploy
 echo "**************BEGIN GIT PULL MASTER**************"
@@ -25,7 +26,6 @@ echo "**************GIT PULL MASTER SUCCESS**************"
 fi
 
 cd -
-echo $PWD
 
 
 # rake generate
@@ -81,6 +81,7 @@ else
 echo "**************PULL FROM CODING.NET SUCCESS**************"
 fi
 
+
 echo "**************PUSH TO CODING.NET BEGIN**************"
 # 改变 coding.net remote url
 git remote add coding git@git.coding.net:foogry/foogry.git >> /dev/null 2>&1
@@ -96,5 +97,6 @@ echo "**************PUSH TO CODING.NET SUCCESS**************"
 fi
 
 cd -
+
 
 echo "**************DONE**************"
