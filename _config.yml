@@ -101,6 +101,11 @@ delicious_count: 3
 duoshuo_comments: false
 duoshuo_short_name: foggry
 
+# Support for LiveRe comments system.
+# You can get your uid from https://livere.com/insight/myCode (General web site)
+# livere_comments: true
+# livere_short_name: foogrywang
+
 # Google Analytics
 # google_analytics_tracking_id:
 
