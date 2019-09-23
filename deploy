@@ -14,19 +14,18 @@ echo "**************GIT PULL SOURCE SUCCESS**************"
 fi
 
 
-# git pull master
-cd public
-echo "**************BEGIN GIT PULL MASTER**************"
-git pull origin master
+# git push source
+echo "**************GIT PUSH BEGIN**************"
+git add --all .
+git commit -m "update at `date` "
+git push origin source
 if [ $? != 0 ]
 then
-echo "**************GIT PULL MASTER FAILED**************"
+echo "**************GIT PUSH FAILED**************"
 exit 1
 else
-echo "**************GIT PULL MASTER SUCCESS**************"
+echo "**************GIT PUSH SUCCESS**************"
 fi
-
-cd -
 
 
 # hexo generate
@@ -43,52 +42,18 @@ echo "**************HEXO GENERATE SUCCESS**************"
 fi
 
 
-# git push source
-echo "**************GIT PUSH BEGIN**************"
-git add --all .
-git commit -m $1
-git push origin source
-if [ $? != 0 ]
-then
-echo "**************GIT PUSH FAILED**************"
-exit 1
-else
-echo "**************GIT PUSH SUCCESS**************"
-fi
-
-
-# rake deploy
-echo "**************RAKE DEPLOY BEGIN**************"
-bundle exec rake deploy
-
-if [ $? != 0 ]
-then
-echo "**************RAKE DEPLOY FAILED**************"
-exit 1
-else
-echo "**************BLOG DEPLOY SUCCESS**************"
-fi
-
+# 创建发布用 git 仓库
+cd public
+git init
+git add .
+git commit -m "update at `date` "
 
 # 添加 coding.net 源
-cd ~/octopress/_deploy
-
-echo "**************PULL FROM CODING.NET BEGIN**************"
-git pull origin master
-if [ $? != 0 ]
-then
-echo "**************PULL FROM CODING.NET FAILED**************"
-exit 1
-else
-echo "**************PULL FROM CODING.NET SUCCESS**************"
-fi
-
-
 echo "**************PUSH TO CODING.NET BEGIN**************"
 # 改变 coding.net remote url
 git remote add coding git@git.coding.net:foogry/foogry.git >> /dev/null 2>&1
 # 提交博客内容
-git push -u coding master:coding-pages
+git push -u coding master:coding-pages -f
 
 if [ $? != 0 ]
 then
@@ -98,7 +63,21 @@ else
 echo "**************PUSH TO CODING.NET SUCCESS**************"
 fi
 
-cd -
+# 添加 github 源
+echo "**************PUSH TO GITHUB BEGIN**************"
+# 改变 github remote url
+git remote add origin git@git.coding.net:foogry/foogry.git >> /dev/null 2>&1
+# 提交博客内容
+git push origin master -f
 
+if [ $? != 0 ]
+then
+echo "**************PUSH TO GITHUB FAILED**************"
+exit 1
+else
+echo "**************PUSH TO GITHUB SUCCESS**************"
+fi
+
+cd -
 
 echo "**************DONE**************"
