@@ -6,8 +6,6 @@ comments: true
 categories: opensource
 tags: [octopress, 博客, github, 开源, iOS]
 keywords: octopress, 博客, github, 开源, iOS, ChatSecure-iOS
-description: github优秀开源项目大全-iOS
- 
 ---
 
 ##前言

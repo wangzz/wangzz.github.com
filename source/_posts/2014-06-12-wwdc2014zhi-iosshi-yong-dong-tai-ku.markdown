@@ -6,8 +6,6 @@ comments: true
 categories: WWDC2014
 tags: [WWDC2014, iOS, framework, 动态库]
 keywords: WWDC2014, iOS, framework, 动态库
-description: WWDC2014之iOS使用动态库
-
 ---
 
 ## 苹果的开放态度

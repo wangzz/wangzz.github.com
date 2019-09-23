@@ -6,8 +6,6 @@ comments: true
 categories: iOS
 tags: [iPhone, iOS, 代码签名, Code Signing]
 keywords: iPhone, iOS, 代码签名, Code Signing
-description: iOS Code Signing 学习笔记
-
 ---
 
 最近看了objc.io上第17期中的文章[《Inside Code Signing》](http://www.objc.io/issue-17/inside-code-signing.html)对应的中文翻译版[《代码签名探析》](http://objccn.io/issue-17-2/)，收益颇深，对iOS代码签名机制有了进一步的认识。想了解详细内容建议大家还是去看原文好了。

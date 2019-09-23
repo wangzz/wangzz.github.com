@@ -7,8 +7,6 @@ comments: true
 categories: Octopress
 tags: [octopress, 博客]
 keywords: octopress, 博客 ,octopress多电脑使用 ,Mac
-description: 让你的Octopress博客在多台Mac上同时使用
- 
 ---
 
 

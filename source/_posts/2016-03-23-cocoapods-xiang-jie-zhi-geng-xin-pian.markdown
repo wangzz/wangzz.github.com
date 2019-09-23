@@ -6,7 +6,6 @@ comments: true
 categories: iOS
 tags: [CocoaPods, iOS, Cocoa, Trunk, 私有仓库]
 keywords: CocoaPods, iOS, Cocoa, Trunk, 私有仓库
-description: CocoaPods 详解之----更新篇
 ---
 
 CocoaPods 大概是 2011 年出现的开源组件管理工具（目前已支持 Objective-C 和 Swift），近年来普及率越来越高，几乎已是所有 Cocoa 开源项目的标配。另外，很多大点的团队会用 CocoaPods 拆分工程，实现项目插件化。

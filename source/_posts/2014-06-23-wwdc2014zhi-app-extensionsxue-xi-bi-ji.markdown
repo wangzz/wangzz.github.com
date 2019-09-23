@@ -6,8 +6,6 @@ comments: true
 categories: WWDC2014
 tags: [WWDC2014, iOS, framework, App Extensions]
 keywords: WWDC2014, iOS, framework, App Extensions
-description: WWDC2014之App Extensions学习笔记
-
 ---
 
 ![wwdc_banner_promo](/images/article5/wwdc_banner_promo.jpg)

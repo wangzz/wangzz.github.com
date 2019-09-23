@@ -6,8 +6,6 @@ comments: true
 categories: iOS
 tags: [iOS, 进程通信, CFMessagePort]
 keywords: iOS, 进程通信, CFMessagePort
-description: iOS进程间通信之CFMessagePort
-
 ---
 
 

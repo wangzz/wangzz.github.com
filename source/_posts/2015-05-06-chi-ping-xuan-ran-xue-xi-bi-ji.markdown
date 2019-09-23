@@ -6,7 +6,6 @@ comments: true
 categories: iOS
 tags: [iPhone, iOS, 离屏渲染]
 keywords: iPhone, iOS, 离屏渲染
-description: 离屏渲染学习笔记
 ---
 
 ## 一、概念理解

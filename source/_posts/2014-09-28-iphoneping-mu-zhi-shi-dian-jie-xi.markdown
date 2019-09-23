@@ -6,8 +6,6 @@ comments: true
 categories: iOS
 tags: [iPhone, iOS, iPhone6, iPhone6+, 屏幕]
 keywords: iPhone, iOS, iPhone6, iPhone6+, 屏幕
-description: iPhone屏幕知识点解析
-
 ---
 
 ![iphone5-6](/images/article7/iphone5-6.jpg)

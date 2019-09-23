@@ -7,8 +7,6 @@ comments: true
 categories: Octopress
 tags: [octopress, 博客自定义, seo]
 keywords: seo, octopress, analytics, 博客自定义
-description: 如何自定义Octopress博客
-
 ---
 
 

@@ -6,8 +6,6 @@ comments: true
 categories: iOS
 tags: [device orientation, iOS, interface orientation, 屏幕旋转]
 keywords: device orientation, iOS, interface orientation, 屏幕旋转
-description: iOS屏幕旋转学习笔记
-
 ---
 
 

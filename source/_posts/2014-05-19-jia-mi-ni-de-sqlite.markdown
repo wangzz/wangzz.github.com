@@ -6,8 +6,6 @@ comments: true
 categories: Database
 tags: [SQLite, sqlcipher]
 keywords: SQLite, sqlcipher
-description: 加密你的SQLite
-
 ---
 
 
