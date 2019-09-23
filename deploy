@@ -66,7 +66,7 @@ fi
 # 添加 github 源
 echo "**************PUSH TO GITHUB BEGIN**************"
 # 改变 github remote url
-git remote add origin git@git.coding.net:foogry/foogry.git >> /dev/null 2>&1
+git remote add origin git@github.com:wangzz/wangzz.github.com.git >> /dev/null 2>&1
 # 提交博客内容
 git push origin master -f
 
