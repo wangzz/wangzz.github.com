@@ -1,4 +1,5 @@
-cd ~/octopress
+
+#! /bin/zsh
 
 # git pull source
 echo "**************BEGIN GIT PULL SOURCE**************"
@@ -14,7 +15,7 @@ fi
 
 
 # git pull master
-cd _deploy
+cd public
 echo "**************BEGIN GIT PULL MASTER**************"
 git pull origin master
 if [ $? != 0 ]
@@ -28,16 +29,17 @@ fi
 cd -
 
 
-# rake generate
-echo "**************BEGIN RAKE GENERATE**************"
-bundle exec rake generate
+# hexo generate
+echo "**************BEGIN HEXO GENERATE**************"
+hexo clean
+hexo generate
 
 if [ $? != 0 ]
 then
-echo "**************RAKE GENERATE FAILED**************"
+echo "**************HEXO GENERATE FAILED**************"
 exit 1
 else
-echo "**************RAKE GENERATE SUCCESS**************"
+echo "**************HEXO GENERATE SUCCESS**************"
 fi
 
 

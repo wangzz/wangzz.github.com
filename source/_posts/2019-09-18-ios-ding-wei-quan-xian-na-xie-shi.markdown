@@ -44,15 +44,15 @@ iOS 8 之前的系统没有该权限，iOS 8 和之后的系统要想申请 `Whe
 
 * 定位权限状态是 `NotDetermined` 时通过 `requestWhenInUseAuthorization` 申请定位权限，弹框样式如图：
 
-  <img src="images/location/1.jpeg" style="zoom:80%;" />
+  <img src="/images/location/1.jpeg" style="zoom:50%;" />
 
 * 定位权限状态是 `NotDetermined` 时通过 `requestAlwaysAuthorization` 申请定位权限，弹框样式如图：
 
-  <img src="images/location/3.jpeg" style="zoom:80%;" />
+  <img src="/images/location/3.jpeg" style="zoom:50%;" />
 
 * 通过 `requestWhenInUseAuthorization` 申请并获得了 `WhenInUse` 定位权限后，`第一次` ( 注意是第一次) 通过 `requestAlwaysAuthorization` 申请定位权限，弹框样式如图：
 
-  <img src="images/location/2.jpeg" style="zoom:80%;" />
+  <img src="/images/location/2.jpeg" style="zoom:50%;" />
 
 ## 三、系统定位服务设置项中的定位权限列表
 
@@ -60,7 +60,7 @@ iOS 8 之前的系统没有该权限，iOS 8 和之后的系统要想申请 `Whe
 
 当 plist 中只设置了 `NSLocationWhenInUseUsageDescription` (iOS 8+ 才支持) 时，系统定位服务设置中的定位权限列表中就只会显示 `永不` 、`使用应用期间` 两项，如下图所示：
 
-<img src="images/location/5.jpeg" style="zoom:80%;" />
+<img src="/images/location/5.jpeg" style="zoom:50%;" />
 
 #### 2、`Always` 
 
@@ -78,7 +78,7 @@ iOS 8 之前的系统没有该权限，iOS 8 和之后的系统要想申请 `Whe
 
 `NSLocationAlwaysAndWhenInUseUsageDescription` ，配置后系统里就会显示 `永不` 、`使用应用期间` 、`始终`  三项，而无论配没配过 `NSLocationWhenInUseUsageDescription`，如下图所示：
 
-<img src="images/location/6.jpeg" style="zoom:80%;" />
+<img src="/images/location/6.jpeg" style="zoom:50%;" />
 
 用户可以随时在系统设置中更改每个 App 获得的定位权限。
 
@@ -123,7 +123,7 @@ iOS 8 之前的系统没有该权限，iOS 8 和之后的系统要想申请 `Whe
 
 定位提示蓝条如下图所示：
 
-<img src="images/location/4.jpeg" style="zoom:80%;" />
+<img src="/images/location/4.jpeg" style="zoom:50%;" />
 
 ## 3、showsBackgroundLocationIndicator
 
@@ -143,7 +143,7 @@ iOS 13 的 `CoreLocation` 做了比较大的改变，所以单独拿出来说下
 
 在 iOS 13 系统，申请 `WhenInUse` 或 `Always` 权限时，系统都会先弹出来下面的弹框让用户选择：
 
-<img src="images/location/7.jpeg" style="zoom:80%;" />
+<img src="/images/location/7.jpeg" style="zoom:50%;" />
 
 * 用户选择 `Allow While In Use`
 
@@ -153,7 +153,7 @@ iOS 13 的 `CoreLocation` 做了比较大的改变，所以单独拿出来说下
 
 如果之前申请的是 ` Always` 权限，当我们的 App 在后台使用位置信息时，系统就会在未来的某个时间（目前我重现过的时机是切后台锁屏后，再解锁屏幕时）再弹出一个弹框询问用户是继续给我们的 App  `WhenInUse` 权限，还是切换成 `Always` 权限，如下图所示：
 
-<img src="images/location/8.jpeg" style="zoom:80%;" />
+<img src="/images/location/8.jpeg" style="zoom:50%;" />
 
 也就是说，iOS 13 中，我们没法直接向用户要 `Always` 权限了，必须要经过一个二次确认。
 
@@ -171,10 +171,10 @@ App 重启后，定位权限会重新变成 `NotDetermined`，下次开启定位
 
 如果是用 Xcode 11 编译出来的应用，在 iOS 13 的系统定位权限设置列表里会多出一个下次询问的选项：
 
-<img src="images/location/10.png" style="zoom:80%;" />
+<img src="/images/location/10.png" style="zoom:50%;" />
 
 #### 3、定位蓝条
 
 iOS 13 系统如果当前是 `WhenInUse` 权限、 `allowsBackgroundLocationUpdates` 为 YES，且应用在后台时，屏幕顶部的定位蓝条视觉调整成了下图的样式：
 
-<img src="images/location/9.png" style="zoom:80%;" />
+<img src="/images/location/9.png" style="zoom:50%;" />
