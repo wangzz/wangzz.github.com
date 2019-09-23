@@ -8,7 +8,7 @@ tags: [XcodeSettings, iOS simulato, custom location]
 keywords: XcodeSettings, iOS simulato, custom location
 ---
 
-##问题说明
+## 问题说明
 
 在做地图类应用时，经常需要用到位置模拟功能。iOS模拟器提供了该功能，我们可以设置指定的经纬度，选中模拟器后，按照以下菜单层次进入即可设置：
 
@@ -19,7 +19,7 @@ Debug --> Location --> Custom Location
 
 因此经常需要重新选择`Custom Location`，对于每天需要run程序n次的我们来说苦不堪言...
 
-##解决方案
+## 解决方案
 
 好在Xcode的target设置项中提供了设置位置信息的方法，允许我们使用GPX文件来设置自定义位置信息，步骤如下：
 
@@ -68,12 +68,12 @@ Edite Scheme -->  Options -->  Default Location -->  Add GPX File to Project
 
 不过这种做法有个缺点，我在实际使用的时候发现设置完`Default Location`以后，真机的位置信息也会被更改成设置的位置！！！还请记得在软件发布时删除该设置项。
 
-##2014年10月1日更新
+## 2014年10月1日更新
 
 好消息，在最新版的`Xcode6.0.1`中，已经修复这个问题了，每次重新调试时`Custom Location`再也不会被更改了！
 
 
-##参考文档
+## 参考文档
 
 * [iOS Simulator Reverts Location Setting](http://stackoverflow.com/questions/19719276/ios-simulator-reverts-location-setting)
 

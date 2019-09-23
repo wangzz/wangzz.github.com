@@ -15,14 +15,14 @@ iOS系统是出了名的封闭，每个应用的活动范围被严格地限制�
 从类名可以看出，CFMessagePort属于`Core Foundation`层的东西，其实现部分是开源的，代码在可以在苹果的[开源代码库](http://opensource.apple.com/source/CF/CF-855.14/CFMessagePort.c)中找到。
 
 
-##使用方式
+## 使用方式
 
 
-####1、消息接收者
+#### 1、消息接收者
 
 CFMessagePort端口消息的接收者需要实现以下功能：
 
-######1.1 注册监听
+###### 1.1 注册监听
 
 消息接收者需要通过以下方式注册消息监听：
 
@@ -64,7 +64,7 @@ CFMessagePort端口消息的接收者需要实现以下功能：
 * 将创建的对象作为输入源添加到Runloop中，从而实现对端口源事件的监听，当Runloop收到对应的端口源事件时，会调用上一步中指定的回调芳芳；
 
 
-######1.2 实现回调方法
+###### 1.2 实现回调方法
 
 
 回调函数为CFMessagePortCallBack类型，其定义部分为：
@@ -129,7 +129,7 @@ CFDataRef onRecvMessageCallBack(CFMessagePortRef local,SInt32 msgid,CFDataRef cf
 该方法实现的较为简单，解析约定的数据（测试代码中约定传送的是string）,为了测试，同时生成一个CFDataRef数据返回给port消息的发送者。
 
 
-######1.3 取消端口监听
+###### 1.3 取消端口监听
 
 可以通过如下方式取消对port端口的监听：
 
@@ -142,7 +142,7 @@ CFDataRef onRecvMessageCallBack(CFMessagePortRef local,SInt32 msgid,CFDataRef cf
 ```
 CFMessagePortInvalidate会停止port消息的发送和接收操作，而只有调用了CFRelease，CFMessagePortRef对象才真正的被释放掉。
 
-####2、消息发送者
+#### 2、消息发送者
 
 发送部分代码如下：
 
@@ -208,7 +208,7 @@ CFMessagePortInvalidate会停止port消息的发送和接收操作，而只有�
 
 如果消息接收者还没有创建或者通过CFMessagePortCreateLocal创建local端口失败时，想要通过CFMessagePortCreateRemote去创建remote端口肯定是失败的。
 
-##说明
+## 说明
 
 * 很遗憾的是，在iOS7及以后系统中，CFMessagePort的通信机制不再可用。
 
@@ -226,7 +226,7 @@ This method is not available on iOS 7 and later—it will return NULL and log a 
 
 iOS系统多任务机制，使得进程间通信基本都只能用于越狱开发。常用的场景是前端有一个UI程序用于界面展示，后端有一个daemo精灵程序用于任务处理。
 
-##demo工程
+## demo工程
 
 特地做了了个demo工程，以便更好地演示CFMessagePort的使用，可以到[CSDN下载](http://download.csdn.net/detail/wzzvictory_tjsd/7446745)。
 
@@ -251,7 +251,7 @@ demo使用方式：
 	选择：模拟器->调试->打开系统日志，或者直接使用快捷键`⌘/`直接打开系统控制台查看日志。
 
 
-##参考文档
+## 参考文档
 
 * [CF-855.14](http://opensource.apple.com/source/CF/CF-855.14/)
 

@@ -9,11 +9,11 @@ keywords: device orientation, iOS, interface orientation, 屏幕旋转
 ---
 
 
-##一、两种orientation
+## 一、两种orientation
 
 了解屏幕旋转首先需要区分两种orientation
 
-####1、device orientation
+#### 1、device orientation
 
 设备的物理方向，由类型`UIDeviceOrientation`表示，当前设备方向获取方式：
 
@@ -45,7 +45,7 @@ NSLog(@"%d",[UIDevice currentDevice].orientation);
 
 如果关闭了系统的横竖屏切换开关，即系统层级只允许竖屏时，再通过上述方式获取到的设备方向将永远是`UIDeviceOrientationUnknown`。可以通过`Core Motion`中的`CMMotionManager`来获取当前设备方向。
 
-####2、interface orientation
+#### 2、interface orientation
 
 界面显示的方向，由类型`UIInterfaceOrientation`表示。当前界面显示方向有以下两种方式获取：
 
@@ -56,7 +56,7 @@ NSLog(@"%d",viewController.interfaceOrientation);
 
 即可以通过系统statusBar的方向或者viewController的方向来获取当前界面方向。
 
-####3、二者区别
+#### 3、二者区别
 
 通过`UIDevice`获取到的设备方向在手机旋转时是实时的，通过`UIApplication`的statusBar或者viewController获取到的界面方向在下述方法：
 
@@ -66,9 +66,9 @@ NSLog(@"%d",viewController.interfaceOrientation);
 调用以后才会被更改成最新的值。
 
 
-##二、相关枚举定义
+## 二、相关枚举定义
  
-####1、UIDeviceOrientation：
+#### 1、UIDeviceOrientation：
 
 ```objective-c
 typedef NS_ENUM(NSInteger, UIDeviceOrientation) {
@@ -82,7 +82,7 @@ typedef NS_ENUM(NSInteger, UIDeviceOrientation) {
 };
 ```
 
-####2、UIInterfaceOrientation：
+#### 2、UIInterfaceOrientation：
 
 ```objective-c
 typedef NS_ENUM(NSInteger, UIInterfaceOrientation) {
@@ -97,9 +97,9 @@ typedef NS_ENUM(NSInteger, UIInterfaceOrientation) {
 
 从宏定义可知，device方向比interface多了两个定义：`UIDeviceOrientationFaceUp`和`UIDeviceOrientationFaceDown`，分别表示手机水平放置，屏幕向上和屏幕向下。
 
-##三、相关方法
+## 三、相关方法
 
-####1、iOS5中控制屏幕旋转的方法：
+#### 1、iOS5中控制屏幕旋转的方法：
 
 ```objective-c
 // Applications should use supportedInterfaceOrientations and/or shouldAutorotate..
@@ -108,7 +108,7 @@ typedef NS_ENUM(NSInteger, UIInterfaceOrientation) {
 如果打算支持toInterfaceOrientation对应的方向就返回YES，否则返回NO。
 
 
-####2、iOS6中控制屏幕旋转相关方法：
+#### 2、iOS6中控制屏幕旋转相关方法：
 
 ```objective-c
 // New Autorotation support.
@@ -126,7 +126,7 @@ typedef NS_ENUM(NSInteger, UIInterfaceOrientation) {
 第三个方法返回最优先显示的屏幕方向，比如同时支持Portrait和Landscape方向，但想优先显示Landscape方向，那软件启动的时候就会先显示Landscape，在手机切换旋转方向的时候仍然可以在Portrait和Landscape之间切换；
 
 
-####3、attemptRotationToDeviceOrientation方法
+#### 3、attemptRotationToDeviceOrientation方法
 
 从iOS5开始有了这个新方法：
 
@@ -145,14 +145,14 @@ typedef NS_ENUM(NSInteger, UIInterfaceOrientation) {
 如果这时我们希望interface orientation也变成和device orientation一致的Landscape，以iOS6为例，需要先将supportedInterfaceOrientations的返回值改成Landscape，然后调用attemptRotationToDeviceOrientation方法，系统会重新询问支持的interface orientation，已达到立即更改当前interface orientation的目的。
 
 
-##四、如何决定interface orientation
+## 四、如何决定interface orientation
 
-####1、全局控制
+#### 1、全局控制
 
 Info.plist文件中，有一个`Supported interface orientations`，可以配置整个应用的屏幕方向，此处为全局控制。
 
 
-####2、UIWindow
+#### 2、UIWindow
 
 iOS6的UIApplicationDelegate提供了下述方法，能够指定 UIWindow 中的界面的屏幕方向：
 
@@ -163,7 +163,7 @@ iOS6的UIApplicationDelegate提供了下述方法，能够指定 UIWindow 中的
 
 iOS中通常只有一个window，所以此处的控制也可以视为全局控制。
 
-####3、controller
+#### 3、controller
 
 只有以下两种情况：
 
@@ -172,20 +172,20 @@ iOS中通常只有一个window，所以此处的控制也可以视为全局控�
 
 时，orientations相关方法才会起作用（才会被调用），当前controller及其所有的childViewController都在此作用范围内。
 
-####4、最终支持的屏幕方向
+#### 4、最终支持的屏幕方向
 
 前面所述的3种控制规则的交集就是一个controller的最终支持的方向；
 
 如果最终的交集为空，在iOS6以后会抛出`UIApplicationInvalidInterfaceOrientationException`崩溃异常。
 
 
-##四、强制屏幕旋转
+## 四、强制屏幕旋转
 
 如果interface和device方向不一样，想强制将interface旋转成device的方向，可以通过attemptRotationToDeviceOrientation实现，但是如果想将interface强制旋转成任一指定方向，该方式就无能为力了。
 
 不过聪明的开发者们总能想到解决方式：
 
-####1、私有方法
+#### 1、私有方法
 
 ```objective-c
 [[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];
@@ -193,12 +193,12 @@ iOS中通常只有一个window，所以此处的控制也可以视为全局控�
 但是现在苹果已经将该方法私有化了，越狱开发的同学可以试试，或者自己想法子骗过苹果审核吧。
 
 
-####2、旋转view的transform
+#### 2、旋转view的transform
 
 也可以通过旋转view的transform属性达到强制旋转屏幕方向的目的，但个人感觉这不是靠谱的思路，可能会带来某些诡异的问题。
 
 
-####3、主动触发orientation机制
+#### 3、主动触发orientation机制
 
 
 要是能主动触发系统的orientation机制，调用orientation相关方法，使新设置的orientation值起作用就好了。这样只要提前设置好想要支持的orientation，然后主动触发orientation机制，便能实现将interface orientation旋转至任意方向的目的。
@@ -232,7 +232,7 @@ PS：
 话说iOS8中的屏幕旋转相关方法又变化了，表示适配起来很蛋疼。。。
 
 
-##五、参考文档
+## 五、参考文档
 
 * [Why won't my UIViewController rotate with the device?](https://developer.apple.com/library/ios/qa/qa1688/_index.html)；
 * [How to force a UIViewController to Portait orientation in iOS 6](http://stackoverflow.com/a/14445888/2293677)

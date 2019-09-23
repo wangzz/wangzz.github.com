@@ -10,7 +10,7 @@ keywords: CrashLog, iOS
 
 解决崩溃问题是移动应用开发者最日常的工作之一。如果是开发过程中遇到的崩溃，可以根据重现步骤调试，但线上版本就无能为力了。好在目前已经有很多不错的第三方CrashLog搜集平台（如友盟、Crashlytics等）为我们做好了解析工作，甚至在Xcode7里苹果也跟进了解析线上版本崩溃日志的功能，为开发者减轻了不少负担。尽管通常已经不需要我们手工处理CrashLog，了解CrashLog的还原原理和方法还是有必要的。
 
-##一、.dSYM
+## 一、.dSYM
 
 `.dSYM`(debugging SYMbols)又称为调试符号表，是苹果为了方便调试和定位问题而使用的一种调试方案，本质上使用的是起源于贝尔实验室的`DWARF`（Debugging With Attributed Record Formats），其在.xcarchive目录中的层次结构为：
 
@@ -24,13 +24,13 @@ keywords: CrashLog, iOS
 ```
 关于DWARF的具体内容以后有机会再说。我们能解析CrashLog全靠.dSYM文件，解析方式见后文。
 
-##二、确定符号表和崩溃日志的一致性
+## 二、确定符号表和崩溃日志的一致性
 
 有了符号表文件，有了崩溃日志文件，在解析之前一定要确保二者的对应关系，否则就算按照下述步骤解析出内容也肯定是不准确的。二者的对应关系可以通过UUID来确定。
 
  <!-- more -->
 
-####1、从崩溃日志中获取UUID
+#### 1、从崩溃日志中获取UUID
 
 崩溃日志比较靠下的位置有个`Binary Images`模块，其第一行内容如下：
 
@@ -44,7 +44,7 @@ Binary Images:
 * 运行你应用的CPU指令集为：armv7
 * 应用的UUID为：a5c8d3cfda65396689e4370bf3a0ac64（不区分大小写）
 
-####2、从符号表中获取UUID
+#### 2、从符号表中获取UUID
 
 执行以下命令从符号表中提取UUID：
 
@@ -64,7 +64,7 @@ UUID: A5C8D3CF-DA65-3966-89E4-370BF3A0AC64 (armv7) Your.app.dSYM/Contents/Resour
 ```
 由此得到armv7指令集的UUID为：A5C8D3CF-DA65-3966-89E4-370BF3A0AC64（如果你的二进制文件支持多个指令集，这里会列出每个指令集对应符号表的UUID），通过和崩溃日志中的对比发现二者一致，才可进行进一步的解析操作。
 
-##三、计算崩溃符号表地址
+## 三、计算崩溃符号表地址
 
 以下面的崩溃堆栈为例：
 ```
@@ -101,7 +101,7 @@ Thread 0:
 29  libdyld.dylib                 	0x34484aac 0x34483000 + 6828
 ```
 
-####1、 符号表堆栈地址计算方式
+#### 1、 符号表堆栈地址计算方式
 
 要想利用符号表解析出崩溃对应位置，需要计算出符号表中对应的崩溃堆栈地址。而从上述堆栈中第9行可以看到，应用崩溃发生在运行时地址`0x000f0846`，该进程的运行时起始地址是`0xa2000`，崩溃处距离进程起始地址的偏移量为十进制的`321606`(对应十六进制为0x4E846)。三者对应关系：
 
@@ -120,7 +120,7 @@ Thread 0:
 符号表堆栈地址 = 符号表起始地址 + 偏移量
 ```
 
-####2、获取符号表中的TEXT段起始地址
+#### 2、获取符号表中的TEXT段起始地址
 
 符号表中TEXT段的起始地址可以通过以下命令获得：
 
@@ -147,7 +147,7 @@ Load command 3
 
 其中的`vmaddr 0x00004000`字段即为TEXT段的起始地址。
 
-####3、计算符号表地址
+#### 3、计算符号表地址
 
 由公式：
 
@@ -161,11 +161,11 @@ Load command 3
 ```
 即符号表中的崩溃地址为`0x52846 `，接下来就可以根据这个地址解析出崩溃位置了。
 
-##四、崩溃信息还原
+## 四、崩溃信息还原
 
 有了符号表的崩溃地址，有以下几种方式解析崩溃信息：
 
-####1、dwarfdump
+#### 1、dwarfdump
 
 命令如下：
 
@@ -189,7 +189,7 @@ Line table file: 'OBDFirstConnectViewController.m' line 882, column 5 with start
 ```
 其中第一行是编译时文件目录，第二行包含了崩溃发生的文件名称以及文件中具体行号等信息，有了这些信息就能准确定位崩溃原因啦。
 
-####2、atos
+#### 2、atos
 
 atos是另一种更加简洁的崩溃日志解析方法，使用方式如下：
 
@@ -204,7 +204,7 @@ atos是另一种更加简洁的崩溃日志解析方法，使用方式如下：
 ```
 相对`dwarfdump`命令的解析结果，更加简洁直观的指出了崩溃发生的位置。
 
-####3、无需符号表崩溃地址的解析方式
+#### 3、无需符号表崩溃地址的解析方式
 
 实际上，`atos`还提供了另外一种无需计算崩溃地址对应的符号表地址的方式，命令格式如下：
 
@@ -218,7 +218,7 @@ $atos -o Your.app.dSYM/Contents/Resources/DWARF/Your -arch armv7 -l 0xa2000 0x00
 -[OBDFirstConnectViewController showOilPricePickerView] (in Your) (OBDFirstConnectViewController.m:882)
 ```
 
-##五、参考文档
+## 五、参考文档
 
 * [How to Match a Crash Report to a Build](https://developer.apple.com/library/mac/qa/qa1765/_index.html)
 * [CrashReporter](https://developer.apple.com/library/mac/technotes/tn2004/tn2123.html)

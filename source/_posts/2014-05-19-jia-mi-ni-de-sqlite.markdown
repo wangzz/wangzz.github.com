@@ -9,7 +9,7 @@ keywords: SQLite, sqlcipher
 ---
 
 
-##关于SQLite
+## 关于SQLite
 
 SQLite是一个`轻量的`、`跨平台的`、`开源的`数据库引擎，它的在`读写效率`、`消耗总量`、`延迟时间`和`整体简单性上`具有的优越性，使其成为移动平台数据库的最佳解决方案（如iOS、Android）。
 
@@ -19,7 +19,7 @@ SQLite是一个`轻量的`、`跨平台的`、`开源的`数据库引擎，它�
 
 <!-- more -->
 
-##SQLite加密方式
+## SQLite加密方式
 
 对数据库加密的思路有两种：
 
@@ -33,7 +33,7 @@ SQLite是一个`轻量的`、`跨平台的`、`开源的`数据库引擎，它�
 
 将整个数据库整个文件加密，这种方式基本上能解决数据库的信息安全问题。目前已有的SQLite加密基本都是通过这种方式实现的。
 
-##SQLite加密工具
+## SQLite加密工具
 
 目前网上查询到iOS平台可用的SQLite加密工具有以下几种：
 
@@ -81,7 +81,7 @@ much faster for each build cycle because the library doesn't need to be built fr
 
 鉴于上述SQLite加密工具中，只有`SQLCiper`有免费版本，下面将将着重介绍下`SQLCiper`。
 	
-##在项目中使用SQLCipher
+## 在项目中使用SQLCipher
 
 在项目中集成免费版的`SQLCipher`略显复杂，还好官网以图文的方式介绍的非常详细，集成过程请参考[官网教程](http://sqlcipher.net/ios-tutorial)。
 
@@ -143,7 +143,7 @@ sqlite> DETACH DATABASE plaintext;
 另外，我写了个[SQLCipherDemo](http://download.csdn.net/detail/wzzvictory_tjsd/7379055)工程放到了[CSDN](http://download.csdn.net/detail/wzzvictory_tjsd/7379055)上，有需要的同学请自行下载。
 
 
-##参考文档
+## 参考文档
 
 * [The SQLite Encryption Extension (SEE)](http://www.hwaci.com/sw/sqlite/see.html)
 

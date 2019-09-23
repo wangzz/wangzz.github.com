@@ -11,7 +11,7 @@ keywords: WWDC2014, iOS, framework, App Extensions
 ![wwdc_banner_promo](/images/article5/wwdc_banner_promo.jpg)
 
 
-##一、关于App Extensions
+## 一、关于App Extensions
 
 extension是iOS8新开放的一种对几个固定系统区域的扩展机制，它可以在一定程度上弥补iOS的沙盒机制对应用间通信的限制。
 
@@ -20,7 +20,7 @@ extension的出现，为用户提供了在其它应用中使用我们应用提�
 
 <!-- more -->
 
-####几个关键词
+#### 几个关键词
 
 * extension point
 
@@ -47,9 +47,9 @@ extension会随着containing app的安装而安装，同时随着containing app�
 
 能够调起extension的app被称为host app，比如`widget`的host app就是`Today`。
 
-##二、extension和containing app、host app
+## 二、extension和containing app、host app
 
-####2.1 extension和host app
+#### 2.1 extension和host app
 
 extension和host app之间可以通过extensionContext属性直接通信，该属性是新增加的UIViewController类别：
 
@@ -64,11 +64,11 @@ extension和host app之间可以通过extensionContext属性直接通信，该�
 
 实际上extension和host app之间是通过IPC（interprocess communication）实现的，只是苹果把调用接口高度抽象了，我们并不需要关注那么底层的东西。
 
-####2.2 containing app和host app
+#### 2.2 containing app和host app
 
 他们之间没有任何直接关系，也从来不需要通信。
 
-####2.3 extension和containing app 
+#### 2.3 extension和containing app 
 
 这二者之间的关系最复杂，纠纠缠缠扯不清关系。
 
@@ -119,13 +119,13 @@ extension和containing app可以共同读写一个被称为`Shared resources`的
 }
 ```
 
-##三、App Groups
+## 三、App Groups
 
 这是iOS8新开放的功能，在OS X上早就可用了。它主要用于同一group下的app共享同一份读写空间，以实现数据共享。
 
 extension和containing app共同读写一份数据是很合理的需求，比如系统的股市应用，widget和app中都需要展示几个公司的股票数据，这就可以通过App Groups实现。
 
-####3.1 功能开启
+#### 3.1 功能开启
 
 为了便于后续操作，请先确保你的开发者账号在Xcode上处于登录状态。
 
@@ -152,11 +152,11 @@ TARGETS-->TodayExtension-->Capabilities-->App Groups
 ```
 开启方式和app中一样，需要注意的是必须保证这里地App Groups名称和app中的相同，即为group.wangzz。
 
-##四、extension和containing app数据共享
+## 四、extension和containing app数据共享
 
 App Groups给我们提供了同一group内app可以共同读写的区域，可以通过以下方式实现数据共享：
 
-####4.1 通过NSUserDefaults共享数据
+#### 4.1 通过NSUserDefaults共享数据
 
 * 存数据
 
@@ -194,7 +194,7 @@ App Groups给我们提供了同一group内app可以共同读写的区域，可�
 }
 ```
 
-####4.2 通过NSFileManager共享数据
+#### 4.2 通过NSFileManager共享数据
 
 NSFileManager在iOS7提供了containerURLForSecurityApplicationGroupIdentifier方法，可以用来实现app group共享数据。
 
@@ -242,7 +242,7 @@ NSFileManager在iOS7提供了containerURLForSecurityApplicationGroupIdentifier�
 两个应用共同读取同一份数据，就会引发数据同步问题。WWDC2014的视频中建议使用NSFileCoordination实现普通文件的读写同步，而数据库可以使用CoreData,Sqlite也支持同步。
 
 
-##五、extension和containing app代码共享
+## 五、extension和containing app代码共享
 
 和数据共享类似，extension和containing app很自然地会有一些业务逻辑上可以共用的代码，这时可以通过iOS8中刚开放使用的framework实现。苹果在[App Extension Programming Guide](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW1)中是这样描述的：
 
@@ -254,7 +254,7 @@ In iOS 8.0 and later, you can use an embedded framework to share code between yo
 
 参考extension和containing app数据共享，我试想能不能将framework只保存一份放在App Groups区域？
 
-####5.1 copy framework到App Groups
+#### 5.1 copy framework到App Groups
 
 在app首次启动的时候将framework放到App Groups区域：
 
@@ -286,7 +286,7 @@ In iOS 8.0 and later, you can use an embedded framework to share code between yo
 }
 ```
 
-####5.2 使用framework：
+#### 5.2 使用framework：
 
 ```objective-c
 - (BOOL)loadFrameworkInAppGroup
@@ -319,7 +319,7 @@ In iOS 8.0 and later, you can use an embedded framework to share code between yo
 
 在一切确定下来之前还是乖乖按文档中的方式使用吧。
 
-##六、生命周期
+## 六、生命周期
 
 extension和普通app的最大区别之一是生命周期。
 
@@ -343,7 +343,7 @@ extension和普通app的最大区别之一是生命周期。
 
 通过打印日志发现，`Today`中的`widget`在将`Today`切换到`全部`或者`未读通知时`都会被杀掉。
 
-##七、 调试
+## 七、 调试
 
 extension和普通app的调试方式差不多，开始调试前先选中extension对应的target，点击run，就会弹出下图所示选择框：
 
@@ -353,7 +353,7 @@ extension和普通app的调试方式差不多，开始调试前先选中extensio
 
 然后即可和普通app一样调试了，不过我在实际使用过程中，发现有各种奇怪的事情，比如NSLog无法在控制台输出，应该是bug吧。
 
-##八、 iOS8应用文件系统
+## 八、 iOS8应用文件系统
 
 发现iOS8的文件系统发生了变化，新的文件系统将可执行文件（即原来的.app文件）从沙盒中移到了另外一个地方，这样感觉更合理。
 
@@ -403,13 +403,13 @@ Jun 23 19:37:49 autonavis-iPad com.foogry.AppExtensionDemo.TodayExtension[7638] 
 
 由此可见，不管是extension还是containing app，他们的可执行文件和保存数据的目录都是分开存放的，即所有app的可执行文件都放在一个大目录下，保存数据的目录保存在另一个大目录下，同样，AppGroup放在另一个大目录下。
 
-##说明
+## 说明
 
 * 本文用到的demo已经上传到[github](https://github.com/wangzz/Demo/tree/master/AppExtensionsDemo)上。
 
 * 文中可能有理解有误的地方，还请指出。
 
-##参考文档
+## 参考文档
 
 * [App Extension Programming Guide](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/index.html#//apple_ref/doc/uid/TP40014214-CH20-SW1)
 

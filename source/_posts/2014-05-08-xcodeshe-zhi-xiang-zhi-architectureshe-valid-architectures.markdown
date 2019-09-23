@@ -9,7 +9,7 @@ keywords: Architectures, Valid Architectures, Xcode
 ---
 
 
-##iPhone指令集
+## iPhone指令集
 
 本文所讲的内容都是围绕iPhone的CPU指令集(想了解ARM指令集的同学请点击[这里](http://en.wikipedia.org/wiki/ARM_architecture))，现在先说说不同型号的iPhone都使用的是什么指令集：
 
@@ -20,13 +20,13 @@ ARMv7  = iPhone 3GS, iPhone 4, iPhone 4S, iPod 3G/4G/5G, iPad, iPad 2, iPad 3, i
 ARMv6  = iPhone, iPhone 3G, iPod 1G/2G
 ```
 
-##设置你想支持的指令集
+## 设置你想支持的指令集
 
 Xcode中关于生成二进制包指令集相关的设置项有以下三个：
 
 <!-- more -->
 
-####Architectures
+#### Architectures
 
 官方文档说明：
 
@@ -37,7 +37,7 @@ Space-separated list of identifiers. Specifies the architectures (ABIs, processo
 该编译选项指定了工程将被编译成支持哪些指令集，支持指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，造成最终编译的包很大。
 
 
-####Valid Architectures
+#### Valid Architectures
 
 官方文档说明：
 
@@ -50,7 +50,7 @@ Space-separated list of identifiers. Specifies the architectures for which the b
 比如，你的`Valid Architectures`设置的支持arm指令集版本有：`armv7/armv7s/arm64`，对应的`Architectures`设置的支持arm指令集版本有：`armv7s`，这时Xcode只会生成一个`armv7s`指令集的二进制包。
 
 
-####Build Active Architecture Only
+#### Build Active Architecture Only
 
 官方文档说明：
 
@@ -66,7 +66,7 @@ Boolean value. Specifies whether the product includes only object code for the n
 通常情况下，该编译选项在Debug模式都设成YES，Release模式都设成NO。
 
 
-##说明
+## 说明
 
 * 指令集都是可以向下兼容的
 
@@ -85,7 +85,7 @@ The minimum deployment target is iOS 4.3. 12282166
 ```
 
 
-##如何选择支持的指令集
+## 如何选择支持的指令集
 
 如果你的软件对安装包大小非常敏感，你可以减少安装包中的指令集数据包，而且这能达到立竿见影的效果。
 
@@ -98,7 +98,7 @@ The minimum deployment target is iOS 4.3. 12282166
 
 
 
-##参考文档
+## 参考文档
 
 * [ARM architecture](http://en.wikipedia.org/wiki/ARM_architecture)
 

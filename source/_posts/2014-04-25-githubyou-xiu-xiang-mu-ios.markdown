@@ -8,7 +8,7 @@ tags: [octopress, 博客, github, 开源, iOS]
 keywords: octopress, 博客, github, 开源, iOS, ChatSecure-iOS
 ---
 
-##前言
+## 前言
 
  1. 本文旨在搜集github上优秀的开源项目
 
@@ -17,7 +17,7 @@ keywords: octopress, 博客, github, 开源, iOS, ChatSecure-iOS
  3. 本文会持续更新...
 
 
-##完整客户端
+## 完整客户端
 
  * [ioctocat](https://github.com/dennisreimann/)
 
@@ -126,7 +126,7 @@ AppStore[上线产品](https://itunes.apple.com/cn/app/yi-yue-rss-li-xian-xin-we
 <img src="/images/article1/app_rssread.jpeg" width="320" height="480">
 
 
-##Xcode插件
+## Xcode插件
 
  * [cocoapods-xcode-plugin](https://github.com/kattrali/cocoapods-xcode-plugin)
 
@@ -181,7 +181,7 @@ AppStore[上线产品](https://itunes.apple.com/cn/app/yi-yue-rss-li-xian-xin-we
 <img src="/images/article1/plugin_vvdocumenter.gif" width="516" height="300">
 
 
-##工具
+## 工具
 
  * [Xtrace](https://github.com/johnno1962/Xtrace)
 
@@ -225,7 +225,7 @@ facebook出的自动编译工具，不像xcodebuild，它能够整洁的打印�
 
 
 
-##开发框架
+## 开发框架
 
 * [pop](https://github.com/facebook/pop)
 
@@ -290,7 +290,7 @@ IMQuickSearch是一个快速搜索工具，可以过滤包含多种自定义NSOb
 <img src="/images/article1/framework_iOSPlot.png" width="480" height="320">
 
 
-##自定义view
+## 自定义view
 
  * [DZTableView](https://github.com/yishuiliunian/DZTableView)
 

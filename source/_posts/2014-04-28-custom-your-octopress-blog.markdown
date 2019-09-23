@@ -10,7 +10,7 @@ keywords: seo, octopress, analytics, 博客自定义
 ---
 
 
-##SEO
+## SEO
 
 * 增加统计工具
 
@@ -75,7 +75,7 @@ Octopress实现该功能的代码在`source/_includes/head.html`文件中：
 
 
 
-##界面相关
+## 界面相关
 
 * 博客首页显示文章摘要
 
@@ -359,7 +359,7 @@ github.map.fastly.net.	29	IN	A	103.235.222.168
 经过以上步骤，访问`wangzz.github.io`的地址就会自动跳转到自己的域名了。不过更改需要等一段时间才能生效。
 
 
-##参考文章
+## 参考文章
 
 * [SEO统计](http://blog.csdn.net/lcliliil/article/details/13727927)
 
