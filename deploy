@@ -1,4 +1,3 @@
-
 #! /bin/zsh
 
 # git pull source
@@ -11,6 +10,20 @@ echo "**************GIT PULL SOURCE FAILED**************"
 exit 1
 else
 echo "**************GIT PULL SOURCE SUCCESS**************"
+fi
+
+
+# hexo generate
+echo "**************BEGIN HEXO GENERATE**************"
+hexo clean
+hexo generate
+
+if [ $? != 0 ]
+then
+echo "**************HEXO GENERATE FAILED**************"
+exit 1
+else
+echo "**************HEXO GENERATE SUCCESS**************"
 fi
 
 
@@ -27,34 +40,12 @@ else
 echo "**************GIT PUSH SUCCESS**************"
 fi
 
-pwd
-git st
-
-
-# hexo generate
-echo "**************BEGIN HEXO GENERATE**************"
-hexo clean
-hexo generate
-
-if [ $? != 0 ]
-then
-echo "**************HEXO GENERATE FAILED**************"
-exit 1
-else
-echo "**************HEXO GENERATE SUCCESS**************"
-fi
-
-pwd
-git st
 
 # 创建发布用 git 仓库
 cd public
 git init
 git add .
 git commit -m "update at `date` "
-
-pwd
-git st
 
 # 添加 coding.net 源
 echo "**************PUSH TO CODING.NET BEGIN**************"
