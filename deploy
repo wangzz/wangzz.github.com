@@ -27,6 +27,9 @@ else
 echo "**************GIT PUSH SUCCESS**************"
 fi
 
+pwd
+git st
+
 
 # hexo generate
 echo "**************BEGIN HEXO GENERATE**************"
@@ -41,12 +44,17 @@ else
 echo "**************HEXO GENERATE SUCCESS**************"
 fi
 
+pwd
+git st
 
 # 创建发布用 git 仓库
 cd public
 git init
 git add .
 git commit -m "update at `date` "
+
+pwd
+git st
 
 # 添加 coding.net 源
 echo "**************PUSH TO CODING.NET BEGIN**************"
