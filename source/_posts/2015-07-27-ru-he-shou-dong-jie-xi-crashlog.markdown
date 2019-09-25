@@ -49,12 +49,12 @@ Binary Images:
 执行以下命令从符号表中提取UUID：
 
 ```
-dwarfdump --uuid Your.app.dSYM
+$ dwarfdump --uuid Your.app.dSYM
 ```
 或者：
 
 ```
-dwarfdump --uuid Your.app.dSYM/Contents/Resources/DWARF/Your
+$ dwarfdump --uuid Your.app.dSYM/Contents/Resources/DWARF/Your
 ```
 
 执行结果为：
@@ -125,7 +125,7 @@ Thread 0:
 符号表中TEXT段的起始地址可以通过以下命令获得：
 
 ```
-$otool -l Your.app.dSYM/Contents/Resources/DWARF/Your
+$ otool -l Your.app.dSYM/Contents/Resources/DWARF/Your
 ```
 
 运行结果中的片段如下：
@@ -170,7 +170,7 @@ Load command 3
 命令如下：
 
 ```
-$dwarfdump --arch armv7 Your.app.dSYM --lookup 0x52846 | grep 'Line table'
+$ dwarfdump --arch armv7 Your.app.dSYM --lookup 0x52846 | grep 'Line table'
 ```
 需要注意的是：
 
@@ -194,7 +194,7 @@ Line table file: 'OBDFirstConnectViewController.m' line 882, column 5 with start
 atos是另一种更加简洁的崩溃日志解析方法，使用方式如下：
 
 ```
- $atos -o LuBao -arch armv7 0x52846
+ $ atos -o LuBao -arch armv7 0x52846
 ```
 
 其执行结果如下：
@@ -209,7 +209,7 @@ atos是另一种更加简洁的崩溃日志解析方法，使用方式如下：
 实际上，`atos`还提供了另外一种无需计算崩溃地址对应的符号表地址的方式，命令格式如下：
 
 ```
-$atos -o Your.app.dSYM/Contents/Resources/DWARF/Your -arch armv7 -l 0xa2000 0x000f0846
+$ atos -o Your.app.dSYM/Contents/Resources/DWARF/Your -arch armv7 -l 0xa2000 0x000f0846
 ```
 
 其中`-l`选项指定了二进制文件在运行时的起始地址`0xa2000`（获取方式见`Binary Images`相关内容）,后面跟的是崩溃发生的运行时地址`0x000f0846 `，解析结果和使用计算得到的符号表中崩溃地址一致：
