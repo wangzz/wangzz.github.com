@@ -5,7 +5,7 @@ tags: [Octopress, hexo]
 ---
 
 
-## 迁移过程
+## 一、迁移过程
 
 迁移过程网上有很多现成的文章，这里主要参考巧叔的 [从 Octopress 迁移到 Hexo](https://blog.devtang.com/2016/02/16/from-octopress-to-hexo/)
 
@@ -59,7 +59,7 @@ $ git clone -b source git@github.com:username/username.github.com.git hexo
 
 到这里 Hexo 博客的 source 部分迁移完成，接下来就可以生成博客了。
 
-## 生成博客
+## 二、生成博客
 
 生成博客很简单，执行以下命令即可：
 
@@ -159,7 +159,7 @@ echo "**************DONE**************"
 
 我把这个脚本放在了博客 souce 的根目录下每次修改完 source 后，执行一次，博客就能更新了。
 
-## 写新博客
+## 三、写新博客
 
 使用下述命令可以生成一个新的 markdown 文件：
 
@@ -169,7 +169,55 @@ $ hexo new "文章标题"
 
 写完文章后执行前面的 deploy 脚本就行了。
 
-## 在新电脑上配置已经存在的 Hexo 博客
+## 四、next 主题
+
+看了不少 Hexo 的主题，发现还是比较喜欢简洁的 [next](https://theme-next.org/)，目前在用其中的 `Pisces`。关于 next 主题的一些配置方式如下：
+
+#### 安装
+
+其实就是将 next clone 到主题目录：
+
+```zsh
+$ git clone git@github.com:iissnan/hexo-theme-next.git themes/next
+```
+
+然后修改 Hexo 根目录下的 `_config.yml` 文件，将其中的主题设置成 next 即可：
+
+```zsh
+# Extensions
+## Plugins: https://hexo.io/plugins/
+## Themes: https://hexo.io/themes/
+theme: next
+```
+
+#### 自定义 next
+
+next 主题本身提供了比较高的自定义能力，具体配置文件为 themes/next/_config.yml ，可以根据个人喜好修改。
+
+#### 增加 About 界面
+
+* 创建新的 About 界面：
+
+```zsh
+$ hexo new page "about"
+```
+
+* 自定义新生成的 ablout.md 文件
+* 修改 themes/next/_config.yml 文件，打开其中的 about 配置
+
+```zsh
+menu:
+  home: / || home
+  #tags: /tags/ || tags
+  #categories: /categories/ || th
+  archives: /archives/ || archive
+  #schedule: /schedule/ || calendar
+  #sitemap: /sitemap.xml || sitemap
+  #commonweal: /404/ || heartbeat
+  about: /about/ || user
+```
+
+## 五、在新电脑上配置已经存在的 Hexo 博客
 
 #### 安装 Hexo
 
