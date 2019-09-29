@@ -203,7 +203,7 @@ $ hexo new page "about"
 ```
 
 * 自定义新生成的 ablout.md 文件
-* 修改 themes/next/_config.yml 文件，打开其中的 about 配置
+* 修改 `themes/next/_config.yml` 文件，打开其中的 about 配置
 
 ```zsh
 menu:
@@ -216,6 +216,10 @@ menu:
   #commonweal: /404/ || heartbeat
   about: /about/ || user
 ```
+
+#### 添加谷歌广告
+
+将谷歌的广告脚本放到 `themes/next/layout/partials/head.swig` 中的任意一个位置即可
 
 ## 五、在新电脑上配置已经存在的 Hexo 博客
 
