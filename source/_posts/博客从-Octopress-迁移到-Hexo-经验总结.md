@@ -219,7 +219,7 @@ menu:
 
 #### 添加谷歌广告
 
-将谷歌的广告脚本放到 `themes/next/layout/partials/head.swig` 中的任意一个位置即可
+将谷歌的广告脚本放到 `themes/next/layout/partials/head/head.swig` 中的任意一个位置即可
 
 ## 五、在新电脑上配置已经存在的 Hexo 博客
 
