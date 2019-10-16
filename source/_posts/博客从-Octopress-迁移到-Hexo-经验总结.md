@@ -221,6 +221,15 @@ menu:
 
 将谷歌的广告脚本放到 `themes/next/layout/partials/head/head.swig` 中的任意一个位置即可
 
+#### 添加百度统计
+
+将百度统计的 AppKey 放到 `themes/next/_confing.xml` 对应的配置中即可：
+
+```zsh
+# Baidu Analytics
+baidu_analytics: your appkey
+```
+
 ## 五、在新电脑上配置已经存在的 Hexo 博客
 
 #### 安装 Hexo
