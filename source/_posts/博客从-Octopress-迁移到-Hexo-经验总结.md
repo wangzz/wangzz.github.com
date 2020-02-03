@@ -202,7 +202,8 @@ next 主题本身提供了比较高的自定义能力，具体配置文件为 th
 $ hexo new page "about"
 ```
 
-* 自定义新生成的 ablout.md 文件
+* 自定义新生成的 about.md 文件
+
 * 修改 `themes/next/_config.yml` 文件，打开其中的 about 配置
 
 ```zsh
