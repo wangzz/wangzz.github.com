@@ -14,10 +14,15 @@ keywords: Architectures, Valid Architectures, Xcode
 本文所讲的内容都是围绕iPhone的CPU指令集(想了解ARM指令集的同学请点击[这里](http://en.wikipedia.org/wiki/ARM_architecture))，现在先说说不同型号的iPhone都使用的是什么指令集：
 
 ```
-ARMv8/ARM64 = iPhone 5s, iPad Air, Retina iPad Mini
-ARMv7s = iPhone 5, iPhone 5c, iPad 4
-ARMv7  = iPhone 3GS, iPhone 4, iPhone 4S, iPod 3G/4G/5G, iPad, iPad 2, iPad 3, iPad Mini  
-ARMv6  = iPhone, iPhone 3G, iPod 1G/2G
+模拟器：
+iPhone 4s-5: i386
+iPhone 5s+ Plus: x86_64
+
+真机：
+armv6: iPhone、iPhone 2、iPhone 3G、iPod Touch(第一代)、iPod Touch(第二代)
+armv7: iPhone 3Gs、iPhone 4、iPhone 4s、iPad、iPad 2
+armv7s: iPhone 5、iPhone 5c
+arm64: iPhone 5s、iPhone 6、iPhone 6 Plus、iPhone 6s、iPhone 6s Plus、iPad Air、iPad Air2、iPad mini2、iPad mini3
 ```
 
 ## 设置你想支持的指令集
