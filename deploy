@@ -50,7 +50,7 @@ git commit -m "update at `date` "
 # 添加 gitee 源
 echo "**************PUSH TO GITEE BEGIN**************"
 # 改变 gitee remote url
-git remote add gitee git@gitee.com:wangzz/wangzz.git >> /dev/null 2>&1
+git remote add gitee git@gitee.com:wangzz/wangzz.git
 # 提交博客内容
 git push -u gitee master -f
 
