@@ -47,12 +47,12 @@ git init
 git add .
 git commit -m "update at `date` "
 
-# 添加 gitee 源
+# 添加云服务器源
 echo "**************PUSH TO GITEE BEGIN**************"
-# 改变 gitee remote url
-git remote add gitee git@gitee.com:wangzz/wangzz.git
+# 改变云服务器 remote url
+git remote add cloud git@81.70.132.212:/home/git/hexo.git
 # 提交博客内容
-git push -u gitee master -f
+git push -u cloud master -f
 
 if [ $? != 0 ]
 then
