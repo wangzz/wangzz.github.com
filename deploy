@@ -28,16 +28,16 @@ fi
 
 
 # git push source
-echo "**************GIT PUSH BEGIN**************"
+echo "**************GIT PUSH SOURCE BEGIN**************"
 git add --all .
 git commit -m "update at `date` "
 git push origin source
 if [ $? != 0 ]
 then
-echo "**************GIT PUSH FAILED**************"
+echo "**************GIT PUSH SOURCE FAILED**************"
 exit 1
 else
-echo "**************GIT PUSH SUCCESS**************"
+echo "**************GIT PUSH SOURCE SUCCESS**************"
 fi
 
 
