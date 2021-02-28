@@ -48,7 +48,7 @@ git add .
 git commit -m "update at `date` "
 
 # 添加云服务器源
-echo "**************PUSH TO GITEE BEGIN**************"
+echo "**************PUSH TO CLOUD BEGIN**************"
 # 改变云服务器 remote url
 git remote add cloud git@81.70.132.212:/home/git/hexo.git
 # 提交博客内容
@@ -56,10 +56,10 @@ git push -u cloud master -f
 
 if [ $? != 0 ]
 then
-echo "**************PUSH TO GITEE FAILED**************"
+echo "**************PUSH TO CLOUD FAILED**************"
 exit 1
 else
-echo "**************PUSH TO GITEE SUCCESS**************"
+echo "**************PUSH TO CLOUD SUCCESS**************"
 fi
 
 # 添加 github 源
