@@ -47,7 +47,6 @@ page:
 
 footer:
   powered: "Powered by %s"
-  gitcafe: "Hosted by %s"
   theme: Theme
   total_views: Total Views
   total_visitors: Total Visitors
