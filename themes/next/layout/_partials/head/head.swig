@@ -105,4 +105,4 @@
   };
 </script>
 
-<script data-ad-client="ca-pub-4625946986997917" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
