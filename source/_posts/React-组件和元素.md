@@ -16,6 +16,8 @@ React 元素其实就是一个简单的 JS 对象。一个元素和界面上的�
 
 语法：
 
+<!-- more -->
+
 ```
 React.createElement(
     type,
@@ -23,8 +25,6 @@ React.createElement(
     [...children]
 )
 ```
-
-<!-- more -->
 
 参数：
 

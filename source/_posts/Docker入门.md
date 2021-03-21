@@ -19,6 +19,8 @@ tags: [Docker]
 
   设置成功以后，后续就可以通过这个仓库安装或更新 docker 了。
 
+<!-- more -->
+
 * 安装 docker 引擎
 
   ```
@@ -36,8 +38,6 @@ tags: [Docker]
   ```
   $ sudo service docker start
   ```
-
-<!-- more -->
 
 ## 常用命令
 

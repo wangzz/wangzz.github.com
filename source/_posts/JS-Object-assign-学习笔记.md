@@ -14,6 +14,8 @@ Object.assign(target, ...sources);
 
 返回值就是 target 对象。
 
+<!-- more -->
+
 ## 内部实现
 
 ```
@@ -56,8 +58,6 @@ if (!Object.assign) {
   });
 }
 ```
-
-<!-- more -->
 
 ## 示例
 
