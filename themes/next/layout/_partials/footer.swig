@@ -59,6 +59,17 @@
 #}</div>
 {%- endif %}
 
+{%- if theme.footer.record.enable %}
+  <span class="post-meta-divider">|</span>
+{%- endif %}
+
+{%- if theme.footer.record.enable %}
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+{%- endif %}
+
 {%- if theme.add_this_id %}
   <div class="addthis_inline_share_toolbox">
     <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid={{ theme.add_this_id }}" async="async"></script>
