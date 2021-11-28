@@ -1,10 +1,1 @@
-# hexo clear && hexo g && hexo s
-
-echo 'start'
-if [ -n "$1" ];
-then
-echo "$1"
-else
-echo "update at `date`"
-fi
-echo 'end'
+hexo clear && hexo g && hexo s
