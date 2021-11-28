@@ -45,7 +45,13 @@ fi
 cd public
 git init
 git add .
-git commit -m "update at `date` "
+
+if [ -n "$1" ];
+then
+git commit -m "$1"
+else
+git commit -m "update at `date`"
+fi
 
 # 添加云服务器源
 echo "**************PUSH TO CLOUD BEGIN**************"

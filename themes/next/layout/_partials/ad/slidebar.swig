@@ -1,5 +1,4 @@
 <div class="sidebar-ad-inner">
-  这是个广告位
   <!--
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
         crossorigin="anonymous"></script>
