@@ -12,6 +12,28 @@
   }
 }
 
+.sidebar-affix-container {
+  &.affix {
+    position: fixed;
+    top: $sidebar-offset;
+  }
+
+  &.affix-bottom {
+    position: absolute;
+  }
+}
+
+.sidebar-ad-inner {
+  background: white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  margin-top: 10px;
+  box-sizing: border-box;
+  color: $text-color;
+  width: $sidebar-desktop;
+  height: 100px !important;
+}
+
 .sidebar-inner {
   background: white;
   border-radius: $border-radius;

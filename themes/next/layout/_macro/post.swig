@@ -168,6 +168,11 @@
           {%- endif %}
 
         </div>
+
+        {# 文章详情页才展示广告位 #}
+        {%- if not is_index %}
+          {% include '../_partials/ad/post-top.swig' %}    
+        {%- endif %}
       </header>
     {%- endif %}
 
