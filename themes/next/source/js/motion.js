@@ -151,7 +151,7 @@ NexT.motion.middleWares = {
 
   sidebar: function(integrator) {
     NexT.utils.updateSidebarPosition();
-    var sidebarAffix = document.querySelector('.sidebar-inner');
+    var sidebarAffix = document.querySelector('.sidebar-affix-container');
     var sidebarAffixTransition = CONFIG.motion.transition.sidebar;
     // Only for Pisces | Gemini.
     if (CONFIG.motion.transition.sidebar && (NexT.utils.isPisces() || NexT.utils.isGemini())) {
