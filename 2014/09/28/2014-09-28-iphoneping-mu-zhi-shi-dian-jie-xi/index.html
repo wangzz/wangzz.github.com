@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="一、屏幕相关知识点1、屏幕尺寸在显示器世界里，屏幕尺寸都是由屏幕对角线长度表示的，单位是英寸。比如iPhone4的3.5寸屏就意味着屏幕对角线的长度是3.5英寸。 2、分辨率分辨率是任何一款手机产品最重要的参数之一。显示屏是由一个个像素组成的，分辨率可以简单理解成屏幕像素的数目。比如iPhone4的屏幕分辨率为640×960，就表示屏幕的横向有640个像素点，纵向有960个像素点。">
+<meta name="keywords" content="iPhone, iOS, iPhone6, iPhone6+, 屏幕">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iPhone屏幕知识点解析">
+<meta property="og:url" content="http://foogry.wang/2014/09/28/2014-09-28-iphoneping-mu-zhi-shi-dian-jie-xi/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="一、屏幕相关知识点1、屏幕尺寸在显示器世界里，屏幕尺寸都是由屏幕对角线长度表示的，单位是英寸。比如iPhone4的3.5寸屏就意味着屏幕对角线的长度是3.5英寸。 2、分辨率分辨率是任何一款手机产品最重要的参数之一。显示屏是由一个个像素组成的，分辨率可以简单理解成屏幕像素的数目。比如iPhone4的屏幕分辨率为640×960，就表示屏幕的横向有640个像素点，纵向有960个像素点。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://foogry.wang/images/article7/iphone5-6.jpg">
+<meta property="og:image" content="http://foogry.wang/images/article7/PPI.jpg">
+<meta property="og:image" content="http://foogry.wang/images/article7/iPhone_display.png">
+<meta property="og:image" content="http://foogry.wang/images/article7/LaunchFile.png">
+<meta property="og:updated_time" content="2019-09-25T13:04:33.650Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iPhone屏幕知识点解析">
+<meta name="twitter:description" content="一、屏幕相关知识点1、屏幕尺寸在显示器世界里，屏幕尺寸都是由屏幕对角线长度表示的，单位是英寸。比如iPhone4的3.5寸屏就意味着屏幕对角线的长度是3.5英寸。 2、分辨率分辨率是任何一款手机产品最重要的参数之一。显示屏是由一个个像素组成的，分辨率可以简单理解成屏幕像素的数目。比如iPhone4的屏幕分辨率为640×960，就表示屏幕的横向有640个像素点，纵向有960个像素点。">
+<meta name="twitter:image" content="http://foogry.wang/images/article7/iphone5-6.jpg">
+  <link rel="canonical" href="http://foogry.wang/2014/09/28/2014-09-28-iphoneping-mu-zhi-shi-dian-jie-xi/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>iPhone屏幕知识点解析 | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2014/09/28/2014-09-28-iphoneping-mu-zhi-shi-dian-jie-xi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">iPhone屏幕知识点解析
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2014-09-28 14:34:37" itemprop="dateCreated datePublished" datetime="2014-09-28T14:34:37+08:00">2014-09-28</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-25 21:04:33" itemprop="dateModified" datetime="2019-09-25T21:04:33+08:00">2019-09-25</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2014/09/28/2014-09-28-iphoneping-mu-zhi-shi-dian-jie-xi/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2014/09/28/2014-09-28-iphoneping-mu-zhi-shi-dian-jie-xi/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/images/article7/iphone5-6.jpg" alt="iphone5-6"></p>
+<h2 id="一、屏幕相关知识点"><a href="#一、屏幕相关知识点" class="headerlink" title="一、屏幕相关知识点"></a>一、屏幕相关知识点</h2><h4 id="1、屏幕尺寸"><a href="#1、屏幕尺寸" class="headerlink" title="1、屏幕尺寸"></a>1、屏幕尺寸</h4><p>在显示器世界里，屏幕尺寸都是由屏幕对角线长度表示的，单位是英寸。比如iPhone4的3.5寸屏就意味着屏幕对角线的长度是3.5英寸。</p>
+<h4 id="2、分辨率"><a href="#2、分辨率" class="headerlink" title="2、分辨率"></a>2、分辨率</h4><p>分辨率是任何一款手机产品最重要的参数之一。显示屏是由一个个像素组成的，分辨率可以简单理解成屏幕像素的数目。比如iPhone4的屏幕分辨率为640×960，就表示屏幕的横向有640个像素点，纵向有960个像素点。</p>
+<a id="more"></a>
+
+<h4 id="3、PPI"><a href="#3、PPI" class="headerlink" title="3、PPI"></a>3、PPI</h4><p>PPI（Pixels Per Inch）表示单位面积上的像素点数目。分辨率可以表示屏幕包含的像素数目，但要想描述屏幕的显示质量，还需要知道屏幕尺寸，最后算出单位面积上的像素点数目。显然PPI越高，屏幕显示效果越细腻。</p>
+<p>PPI计算公式：</p>
+<p><img src="/images/article7/PPI.jpg" alt="PPI"></p>
+<p>其中，X：长度像素数；Y：宽度像素数；Z：屏幕尺寸即对角线长度</p>
+<h4 id="4、Points"><a href="#4、Points" class="headerlink" title="4、Points"></a>4、Points</h4><p>可以简单理解成我们使用<code>UIKit</code>或 <code>Core Animation</code>处理界面元素时所用到的逻辑坐标系统。Points是在iOS4以后引入的，出现的目的是提供一种与设备无关的一致的输出效果。</p>
+<p>苹果考虑到以后有可能推出不同分辨率屏幕的手机，如果开发者在界面布局的时候操纵像素，就会导致每种不同分辨率的设备都要有一份适配代码。比如在分辨率为320×480的iPhone3GS上，要画一条长度1英寸的线条，假设需要50个像素，即线条的长度设成50像素；但是在分辨率为640×960的iPhone4上，50像素所能表示的实际长度只有iPhone3GS的一半，即0.5英寸。因此开发者必须使用两套适配代码：在iPhone3GS上将线条长度设成50像素，在iPhone4上设成100像素。这还仅仅是两款设备，如果算上后来的iPhone5/5C/5S和iPhone6/6+，每种分辨率都来一套适配代码，开发者岂不是得疯掉？？</p>
+<p>现在苹果使用了一套逻辑坐标系统来解决多分辨率屏幕适配问题，将屏幕上的每一个点都用以屏幕左上角为原点，横向为X轴，纵向为Y轴的坐标来表示（PS：并不是所有的框架默认坐标系统都是这样，比如<code>APPKit</code>中的<code>NSView</code>；当然开发者也可以将<code>UIKit</code>和 <code>Core Animation</code>的坐标系统改成以屏幕左下角为原点，但原理都是一样的。）。以iPhone3GS/4为例，他们的坐标系统中X和Y的最大值都分别是320和480。</p>
+<p>有了逻辑坐标系统，想在分辨率不同的iPhone3GS/4画一条长度均为1英寸的线条就变成了这样：将线的长度设成50Points（假设1英寸对应那么多个Points），<code>UIKit</code>在屏幕上绘图的时候会判断屏幕分辨率，如果是iPhone3GS的320×480分辨率屏幕，会自动使用50像素绘制；如果是iPhone4的640×960分辨率，会自动使用100像素绘制。</p>
+<p>这种机制使得在4寸屏幕的iPhone5出来之前，iOS开发者在设备屏幕适配上的工作量几乎为零（当然，需要准备两套图片），对此Android同行们早就口水直下三千尺了。后来随着iPhone屏幕尺寸的变化，逻辑坐标系统的取值范围也发生了变化，这才让iOS开发者有点事情可做。</p>
+<h4 id="5、渲染比例（Scale）"><a href="#5、渲染比例（Scale）" class="headerlink" title="5、渲染比例（Scale）"></a>5、渲染比例（Scale）</h4><p>像素点数目和逻辑坐标点数目的比值，就是渲染比例（Scale）。更直观的说法是一个逻辑坐标点，需要用几个像素点来渲染。</p>
+<p>iPhone3GS的逻辑坐标系统是320×480，分辨率是320×480，即每个坐标点对应一个像素，即Scale为1；iPhone4的逻辑坐标系统是320×480，分辨率是640×960，每个坐标点对应两个像素点，即Scale为2。</p>
+<p>因此，为了适配iPhone6+的屏幕，以后又得曾加一份@3x分辨率的图片了。</p>
+<h4 id="6、宽高比"><a href="#6、宽高比" class="headerlink" title="6、宽高比"></a>6、宽高比</h4><p>屏幕宽度和高度的比例，也可以是分辨率的横向像素点数目和纵向像素点数目的比例，他们通常是一致的，一般用整数表示。</p>
+<p>iPhone3GS/4/4S的宽高比2:3，iPhone5/5C/5S/6/6+的宽高比都是9:16。</p>
+<p>当年iPhone5出来的时候，适配3.5寸屏幕的应用上下黑边的场景仍记忆犹新，用户体验很不好，虽然大部分应用都迅速的做了适配。还好苹果这次学聪明了，从4寸屏升级到iPhone6的4.7寸屏和iPhone6+的5.5寸屏，宽高比并没有变化。也就是说原来在iPhone5上运行的应用能够通过拉伸平滑过渡到iPhone6/6+上，可能会稍微有点模糊。不过比起3.5寸到4寸屏的升级来说已经好很多了。</p>
+<h2 id="二、说明"><a href="#二、说明" class="headerlink" title="二、说明"></a>二、说明</h2><h4 id="1、历代iPhone屏幕参数"><a href="#1、历代iPhone屏幕参数" class="headerlink" title="1、历代iPhone屏幕参数"></a>1、历代iPhone屏幕参数</h4><p>下面的一张图介绍了从iPhone4到iPhone6+的几代iPhone跟屏幕相关的几个关键参数：</p>
+<p><img src="/images/article7/iPhone_display.png" alt="iPhone_display"></p>
+<p>需要说明的是，iPhone6+的逻辑坐标是414×736，渲染比例是3倍，因此对应的屏幕分辨率是1242×2208。但iPhone6+的实际屏幕分辨率是1080×1920，这时系统会把整体的显示内容做一个从新采样缩放，downsampling比例为1/1.15。</p>
+<h4 id="2、老工程中的坐标系统"><a href="#2、老工程中的坐标系统" class="headerlink" title="2、老工程中的坐标系统"></a>2、老工程中的坐标系统</h4><p>使用Xcode6之前版本的Xcode创建的工程，在iPhone6/6+上运行，得到的逻辑坐标都是和iPhone5/5C/5S屏幕相同的320*568。这样就做到从4寸到4.7寸和5.5寸屏幕的无缝升级，即使我们什么都不做，我们的老工程也能在iPhone6/6+上几乎完美的运行。当然因为等比例放大了，图片可能会有模糊或锯齿感。</p>
+<p>要想让老工程的坐标系统恢复正常，可以通过为Target添加<code>LaunchImage</code>或者<code>Launch Screen File</code>来实现，如下图所示：</p>
+<p><img src="/images/article7/LaunchFile.png" alt="LaunchFile"></p>
+<p><code>LaunchImage</code>的方式需要在<code>Images.xcassets</code>里，删除旧的<code>LaunchImage</code>组，然后新建<code>LaunchImage</code>组，添加对应高分辨率的图片。对此，这里有一篇更详细的图文介绍：<a href="http://matthewpalmer.net/blog/2014/09/10/iphone-6-plus-launch-image-adaptive-mode/" target="_blank" rel="noopener">How to Add a Launch Image for the iPhone 6</a>。</p>
+<p>其中<code>Launch Screen File</code>是Xcode6和iOS8新加的功能，它用一个xib文件来作为启动画面。App在旧版iOS启动时，该属性会被自动忽略，不会造成异常。</p>
+<p>上面两种设置，只要启用任意一个即可让App进入高分辨率模式。鉴于现在不少App还需要兼容iOS5，而第一种方法在iOS5上可能有<a href="http://stackoverflow.com/questions/19220082/support-of-ios-5-0-icons-with-xcode-5" target="_blank" rel="noopener">bug</a>，所以这里推荐用第二种方法。</p>
+<h2 id="三、参考文档"><a href="#三、参考文档" class="headerlink" title="三、参考文档"></a>三、参考文档</h2><ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/2DDrawing/Conceptual/DrawingPrintingios/GraphicsDrawingOverview/GraphicsDrawingOverview.html" target="_blank" rel="noopener">Drawing and Printing Guide for iOS</a></li>
+<li><a href="http://baike.baidu.com/view/7687.htm" target="_blank" rel="noopener">分辨率</a></li>
+<li><a href="http://blog.ibireme.com/2014/09/16/adapted_to_iphone6/#rd?sukey=f3735aed1ca7f2658e86e2e18cb36d80fed889a7bdfd2d651a1aaef8f9941b691c71e4e8353e61cd57237e4cd0b3edc6#jtss-tsina" target="_blank" rel="noopener">大屏iPhone的适配</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2014/09/28/2014-09-28-iphoneping-mu-zhi-shi-dian-jie-xi/" title="iPhone屏幕知识点解析">http://foogry.wang/2014/09/28/2014-09-28-iphoneping-mu-zhi-shi-dian-jie-xi/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+            
+              <a href="/tags/iPhone/" rel="tag"># iPhone</a>
+            
+              <a href="/tags/iPhone6/" rel="tag"># iPhone6</a>
+            
+              <a href="/tags/iPhone6/" rel="tag"># iPhone6+</a>
+            
+              <a href="/tags/屏幕/" rel="tag"># 屏幕</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2014/08/08/2014-08-08-ping-mu-xuan-zhuan-xue-xi-bi-ji/" rel="next" title="iOS屏幕旋转学习笔记">
+                  <i class="fa fa-chevron-left"></i> iOS屏幕旋转学习笔记
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2014/10/13/2014-10-13-shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/" rel="prev" title="手动内存管理转ARC项目实战">
+                  手动内存管理转ARC项目实战 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、屏幕相关知识点"><span class="nav-number">1.</span> <span class="nav-text">一、屏幕相关知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、屏幕尺寸"><span class="nav-number">1.0.1.</span> <span class="nav-text">1、屏幕尺寸</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、分辨率"><span class="nav-number">1.0.2.</span> <span class="nav-text">2、分辨率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、PPI"><span class="nav-number">1.0.3.</span> <span class="nav-text">3、PPI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、Points"><span class="nav-number">1.0.4.</span> <span class="nav-text">4、Points</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5、渲染比例（Scale）"><span class="nav-number">1.0.5.</span> <span class="nav-text">5、渲染比例（Scale）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6、宽高比"><span class="nav-number">1.0.6.</span> <span class="nav-text">6、宽高比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、说明"><span class="nav-number">2.</span> <span class="nav-text">二、说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、历代iPhone屏幕参数"><span class="nav-number">2.0.1.</span> <span class="nav-text">1、历代iPhone屏幕参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、老工程中的坐标系统"><span class="nav-number">2.0.2.</span> <span class="nav-text">2、老工程中的坐标系统</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、参考文档"><span class="nav-number">3.</span> <span class="nav-text">三、参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

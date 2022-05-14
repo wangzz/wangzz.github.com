@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="一、两种orientation了解屏幕旋转首先需要区分两种orientation 1、device orientation设备的物理方向，由类型UIDeviceOrientation表示，当前设备方向获取方式： 1[UIDevice currentDevice].orientation  该属性的值一般是与当前设备方向保持一致的，但须注意以下几点： ①文档中对该属性的注释： 1@property(">
+<meta name="keywords" content="device orientation, iOS, interface orientation, 屏幕旋转">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS屏幕旋转学习笔记">
+<meta property="og:url" content="http://foogry.wang/2014/08/08/2014-08-08-ping-mu-xuan-zhuan-xue-xi-bi-ji/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="一、两种orientation了解屏幕旋转首先需要区分两种orientation 1、device orientation设备的物理方向，由类型UIDeviceOrientation表示，当前设备方向获取方式： 1[UIDevice currentDevice].orientation  该属性的值一般是与当前设备方向保持一致的，但须注意以下几点： ①文档中对该属性的注释： 1@property(">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-25T13:04:33.649Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS屏幕旋转学习笔记">
+<meta name="twitter:description" content="一、两种orientation了解屏幕旋转首先需要区分两种orientation 1、device orientation设备的物理方向，由类型UIDeviceOrientation表示，当前设备方向获取方式： 1[UIDevice currentDevice].orientation  该属性的值一般是与当前设备方向保持一致的，但须注意以下几点： ①文档中对该属性的注释： 1@property(">
+  <link rel="canonical" href="http://foogry.wang/2014/08/08/2014-08-08-ping-mu-xuan-zhuan-xue-xi-bi-ji/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>iOS屏幕旋转学习笔记 | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2014/08/08/2014-08-08-ping-mu-xuan-zhuan-xue-xi-bi-ji/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">iOS屏幕旋转学习笔记
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2014-08-08 09:39:04" itemprop="dateCreated datePublished" datetime="2014-08-08T09:39:04+08:00">2014-08-08</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-25 21:04:33" itemprop="dateModified" datetime="2019-09-25T21:04:33+08:00">2019-09-25</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2014/08/08/2014-08-08-ping-mu-xuan-zhuan-xue-xi-bi-ji/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2014/08/08/2014-08-08-ping-mu-xuan-zhuan-xue-xi-bi-ji/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一、两种orientation"><a href="#一、两种orientation" class="headerlink" title="一、两种orientation"></a>一、两种orientation</h2><p>了解屏幕旋转首先需要区分两种orientation</p>
+<h4 id="1、device-orientation"><a href="#1、device-orientation" class="headerlink" title="1、device orientation"></a>1、device orientation</h4><p>设备的物理方向，由类型<code>UIDeviceOrientation</code>表示，当前设备方向获取方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[UIDevice currentDevice].orientation</span><br></pre></td></tr></table></figure>
+
+<p>该属性的值一般是与当前设备方向保持一致的，但须注意以下几点：</p>
+<p>①文档中对该属性的注释：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@property(nonatomic,readonly) UIDeviceOrientation orientation;       // return current device orientation.  this will return UIDeviceOrientationUnknown unless device orientation notifications are being generated.</span><br></pre></td></tr></table></figure>
+
+<p>所以更推荐下面这种用法：</p>
+<a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if (![UIDevice currentDevice].generatesDeviceOrientationNotifications) &#123;</span><br><span class="line">        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];</span><br><span class="line"> &#125;</span><br><span class="line">NSLog(@&quot;%d&quot;,[UIDevice currentDevice].orientation);</span><br><span class="line">    </span><br><span class="line">[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];</span><br></pre></td></tr></table></figure>
+
+<p>②系统横竖屏开关关闭时</p>
+<p>如果关闭了系统的横竖屏切换开关，即系统层级只允许竖屏时，再通过上述方式获取到的设备方向将永远是<code>UIDeviceOrientationUnknown</code>。可以通过<code>Core Motion</code>中的<code>CMMotionManager</code>来获取当前设备方向。</p>
+<h4 id="2、interface-orientation"><a href="#2、interface-orientation" class="headerlink" title="2、interface orientation"></a>2、interface orientation</h4><p>界面显示的方向，由类型<code>UIInterfaceOrientation</code>表示。当前界面显示方向有以下两种方式获取：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;%d&quot;,[UIApplication sharedApplication].statusBarOrientation);</span><br><span class="line">NSLog(@&quot;%d&quot;,viewController.interfaceOrientation);</span><br></pre></td></tr></table></figure>
+
+<p>即可以通过系统statusBar的方向或者viewController的方向来获取当前界面方向。</p>
+<h4 id="3、二者区别"><a href="#3、二者区别" class="headerlink" title="3、二者区别"></a>3、二者区别</h4><p>通过<code>UIDevice</code>获取到的设备方向在手机旋转时是实时的，通过<code>UIApplication</code>的statusBar或者viewController获取到的界面方向在下述方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:</span><br></pre></td></tr></table></figure>
+
+<p>调用以后才会被更改成最新的值。</p>
+<h2 id="二、相关枚举定义"><a href="#二、相关枚举定义" class="headerlink" title="二、相关枚举定义"></a>二、相关枚举定义</h2><h4 id="1、UIDeviceOrientation："><a href="#1、UIDeviceOrientation：" class="headerlink" title="1、UIDeviceOrientation："></a>1、UIDeviceOrientation：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">typedef NS_ENUM(NSInteger, UIDeviceOrientation) &#123;</span><br><span class="line">    UIDeviceOrientationUnknown,</span><br><span class="line">    UIDeviceOrientationPortrait,            // Device oriented vertically, home button on the bottom</span><br><span class="line">    UIDeviceOrientationPortraitUpsideDown,  // Device oriented vertically, home button on the top</span><br><span class="line">    UIDeviceOrientationLandscapeLeft,       // Device oriented horizontally, home button on the right</span><br><span class="line">    UIDeviceOrientationLandscapeRight,      // Device oriented horizontally, home button on the left</span><br><span class="line">    UIDeviceOrientationFaceUp,              // Device oriented flat, face up</span><br><span class="line">    UIDeviceOrientationFaceDown             // Device oriented flat, face down</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、UIInterfaceOrientation："><a href="#2、UIInterfaceOrientation：" class="headerlink" title="2、UIInterfaceOrientation："></a>2、UIInterfaceOrientation：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef NS_ENUM(NSInteger, UIInterfaceOrientation) &#123;</span><br><span class="line">    UIInterfaceOrientationUnknown            = UIDeviceOrientationUnknown,</span><br><span class="line">    UIInterfaceOrientationPortrait           = UIDeviceOrientationPortrait,</span><br><span class="line">    UIInterfaceOrientationPortraitUpsideDown = UIDeviceOrientationPortraitUpsideDown,</span><br><span class="line">    UIInterfaceOrientationLandscapeLeft      = UIDeviceOrientationLandscapeRight,</span><br><span class="line">    UIInterfaceOrientationLandscapeRight     = UIDeviceOrientationLandscapeLeft</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>从宏定义可知，device方向比interface多了两个定义：<code>UIDeviceOrientationFaceUp</code>和<code>UIDeviceOrientationFaceDown</code>，分别表示手机水平放置，屏幕向上和屏幕向下。</p>
+<h2 id="三、相关方法"><a href="#三、相关方法" class="headerlink" title="三、相关方法"></a>三、相关方法</h2><h4 id="1、iOS5中控制屏幕旋转的方法："><a href="#1、iOS5中控制屏幕旋转的方法：" class="headerlink" title="1、iOS5中控制屏幕旋转的方法："></a>1、iOS5中控制屏幕旋转的方法：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// Applications should use supportedInterfaceOrientations and/or shouldAutorotate..</span><br><span class="line">- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation NS_DEPRECATED_IOS(2_0, 6_0);</span><br></pre></td></tr></table></figure>
+
+<p>如果打算支持toInterfaceOrientation对应的方向就返回YES，否则返回NO。</p>
+<h4 id="2、iOS6中控制屏幕旋转相关方法："><a href="#2、iOS6中控制屏幕旋转相关方法：" class="headerlink" title="2、iOS6中控制屏幕旋转相关方法："></a>2、iOS6中控制屏幕旋转相关方法：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// New Autorotation support.</span><br><span class="line">- (BOOL)shouldAutorotate NS_AVAILABLE_IOS(6_0);</span><br><span class="line">- (NSUInteger)supportedInterfaceOrientations NS_AVAILABLE_IOS(6_0);</span><br><span class="line">// Returns interface orientation masks.</span><br><span class="line">- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation NS_AVAILABLE_IOS(6_0);</span><br></pre></td></tr></table></figure>
+
+<p>第一个方法决定是否支持多方向旋转屏，如果返回NO则后面的两个方法都不会再被调用，而且只会支持默认的UIInterfaceOrientationMaskPortrait方向；</p>
+<p>第二个方法直接返回支持的旋转方向，该方法在iPad上的默认返回值是<code>UIInterfaceOrientationMaskAll</code>，iPhone上的默认返回值是<code>UIInterfaceOrientationMaskAllButUpsideDown</code>，详情见<a href="https://developer.apple.com/library/ios/qa/qa1688/_index.html" target="_blank" rel="noopener">官方Q&amp;A文档</a>；</p>
+<p>第三个方法返回最优先显示的屏幕方向，比如同时支持Portrait和Landscape方向，但想优先显示Landscape方向，那软件启动的时候就会先显示Landscape，在手机切换旋转方向的时候仍然可以在Portrait和Landscape之间切换；</p>
+<h4 id="3、attemptRotationToDeviceOrientation方法"><a href="#3、attemptRotationToDeviceOrientation方法" class="headerlink" title="3、attemptRotationToDeviceOrientation方法"></a>3、attemptRotationToDeviceOrientation方法</h4><p>从iOS5开始有了这个新方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// call this method when your return value from shouldAutorotateToInterfaceOrientation: changes</span><br><span class="line">// if the current interface orientation does not match the current device orientation, a rotation may occur provided all relevant view controllers now return YES from shouldAutorotateToInterfaceOrientation:</span><br><span class="line">+ (void)attemptRotationToDeviceOrientation NS_AVAILABLE_IOS(5_0);</span><br></pre></td></tr></table></figure>
+
+<p>该方法的使用场景是interface orientation和device orientation不一致，但希望通过重新指定interface orientation的值，立即实现二者一致；如果这时只是更改了支持的interface orientation的值，没有调用attemptRotationToDeviceOrientation，那么下次device orientation变化的时候才会实现二者一致，关键点在于能不能立即实现。</p>
+<p>举个例子：</p>
+<p>假设当前的interface orientation只支持Portrait，如果device orientation变成Landscape，那么interface orientation仍然显示Portrait；</p>
+<p>如果这时我们希望interface orientation也变成和device orientation一致的Landscape，以iOS6为例，需要先将supportedInterfaceOrientations的返回值改成Landscape，然后调用attemptRotationToDeviceOrientation方法，系统会重新询问支持的interface orientation，已达到立即更改当前interface orientation的目的。</p>
+<h2 id="四、如何决定interface-orientation"><a href="#四、如何决定interface-orientation" class="headerlink" title="四、如何决定interface orientation"></a>四、如何决定interface orientation</h2><h4 id="1、全局控制"><a href="#1、全局控制" class="headerlink" title="1、全局控制"></a>1、全局控制</h4><p>Info.plist文件中，有一个<code>Supported interface orientations</code>，可以配置整个应用的屏幕方向，此处为全局控制。</p>
+<h4 id="2、UIWindow"><a href="#2、UIWindow" class="headerlink" title="2、UIWindow"></a>2、UIWindow</h4><p>iOS6的UIApplicationDelegate提供了下述方法，能够指定 UIWindow 中的界面的屏幕方向：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window  NS_AVAILABLE_IOS(6_0);</span><br></pre></td></tr></table></figure>
+
+<p>该方法默认值为Info.plist中配置的<code>Supported interface orientations</code>项的值。</p>
+<p>iOS中通常只有一个window，所以此处的控制也可以视为全局控制。</p>
+<h4 id="3、controller"><a href="#3、controller" class="headerlink" title="3、controller"></a>3、controller</h4><p>只有以下两种情况：</p>
+<ul>
+<li>当前controller是window的rootViewController</li>
+<li>当前controller是modal模式的</li>
+</ul>
+<p>时，orientations相关方法才会起作用（才会被调用），当前controller及其所有的childViewController都在此作用范围内。</p>
+<h4 id="4、最终支持的屏幕方向"><a href="#4、最终支持的屏幕方向" class="headerlink" title="4、最终支持的屏幕方向"></a>4、最终支持的屏幕方向</h4><p>前面所述的3种控制规则的交集就是一个controller的最终支持的方向；</p>
+<p>如果最终的交集为空，在iOS6以后会抛出<code>UIApplicationInvalidInterfaceOrientationException</code>崩溃异常。</p>
+<h2 id="四、强制屏幕旋转"><a href="#四、强制屏幕旋转" class="headerlink" title="四、强制屏幕旋转"></a>四、强制屏幕旋转</h2><p>如果interface和device方向不一样，想强制将interface旋转成device的方向，可以通过attemptRotationToDeviceOrientation实现，但是如果想将interface强制旋转成任一指定方向，该方式就无能为力了。</p>
+<p>不过聪明的开发者们总能想到解决方式：</p>
+<h4 id="1、私有方法"><a href="#1、私有方法" class="headerlink" title="1、私有方法"></a>1、私有方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];</span><br></pre></td></tr></table></figure>
+
+<p>但是现在苹果已经将该方法私有化了，越狱开发的同学可以试试，或者自己想法子骗过苹果审核吧。</p>
+<h4 id="2、旋转view的transform"><a href="#2、旋转view的transform" class="headerlink" title="2、旋转view的transform"></a>2、旋转view的transform</h4><p>也可以通过旋转view的transform属性达到强制旋转屏幕方向的目的，但个人感觉这不是靠谱的思路，可能会带来某些诡异的问题。</p>
+<h4 id="3、主动触发orientation机制"><a href="#3、主动触发orientation机制" class="headerlink" title="3、主动触发orientation机制"></a>3、主动触发orientation机制</h4><p>要是能主动触发系统的orientation机制，调用orientation相关方法，使新设置的orientation值起作用就好了。这样只要提前设置好想要支持的orientation，然后主动触发orientation机制，便能实现将interface orientation旋转至任意方向的目的。</p>
+<p>万能的<a href="http://stackoverflow.com/a/14445888/2293677" target="_blank" rel="noopener">stackoverflow</a>上提供了一种主动触发的方式：</p>
+<p>在iOS4和iOS6以后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">UIViewController *vc = [[UIViewController alloc]init];</span><br><span class="line">[self presentModalViewController:vc animated:NO];</span><br><span class="line">[self dismissModalViewControllerAnimated:NO];</span><br><span class="line">[vc release];</span><br></pre></td></tr></table></figure>
+
+<p>iOS5中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">UIWindow *window = [[UIApplication sharedApplication] keyWindow];</span><br><span class="line">UIView *view = [window.subviews objectAtIndex:0];</span><br><span class="line">[view removeFromSuperview];</span><br><span class="line">[window addSubview:view];</span><br></pre></td></tr></table></figure>
+
+<p>这种方式会触发UIKit重新调用controller的orientation相关方法，以达到在device方向不变的情况下改变interface方向的目的。</p>
+<p>虽然不优雅，但却能解决问题，凑合吧。。</p>
+<p>PS：</p>
+<p>话说iOS8中的屏幕旋转相关方法又变化了，表示适配起来很蛋疼。。。</p>
+<h2 id="五、参考文档"><a href="#五、参考文档" class="headerlink" title="五、参考文档"></a>五、参考文档</h2><ul>
+<li><a href="https://developer.apple.com/library/ios/qa/qa1688/_index.html" target="_blank" rel="noopener">Why won’t my UIViewController rotate with the device?</a>；</li>
+<li><a href="http://stackoverflow.com/a/14445888/2293677" target="_blank" rel="noopener">How to force a UIViewController to Portait orientation in iOS 6</a></li>
+<li><a href="http://www.cnblogs.com/jhzhu/p/3480885.html" target="_blank" rel="noopener">IOS Orientation, 想怎么转就怎么转</a></li>
+<li><a href="http://zhenby.com/blog/2013/08/20/talk-ios-orientation/" target="_blank" rel="noopener">iOS 屏幕方向那点事儿</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2014/08/08/2014-08-08-ping-mu-xuan-zhuan-xue-xi-bi-ji/" title="iOS屏幕旋转学习笔记">http://foogry.wang/2014/08/08/2014-08-08-ping-mu-xuan-zhuan-xue-xi-bi-ji/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+            
+              <a href="/tags/device-orientation/" rel="tag"># device orientation</a>
+            
+              <a href="/tags/interface-orientation/" rel="tag"># interface orientation</a>
+            
+              <a href="/tags/屏幕旋转/" rel="tag"># 屏幕旋转</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2014/06/23/2014-06-23-wwdc2014zhi-app-extensionsxue-xi-bi-ji/" rel="next" title="WWDC2014之App Extensions学习笔记">
+                  <i class="fa fa-chevron-left"></i> WWDC2014之App Extensions学习笔记
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2014/09/28/2014-09-28-iphoneping-mu-zhi-shi-dian-jie-xi/" rel="prev" title="iPhone屏幕知识点解析">
+                  iPhone屏幕知识点解析 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、两种orientation"><span class="nav-number">1.</span> <span class="nav-text">一、两种orientation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、device-orientation"><span class="nav-number">1.0.1.</span> <span class="nav-text">1、device orientation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、interface-orientation"><span class="nav-number">1.0.2.</span> <span class="nav-text">2、interface orientation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、二者区别"><span class="nav-number">1.0.3.</span> <span class="nav-text">3、二者区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、相关枚举定义"><span class="nav-number">2.</span> <span class="nav-text">二、相关枚举定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、UIDeviceOrientation："><span class="nav-number">2.0.1.</span> <span class="nav-text">1、UIDeviceOrientation：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、UIInterfaceOrientation："><span class="nav-number">2.0.2.</span> <span class="nav-text">2、UIInterfaceOrientation：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、相关方法"><span class="nav-number">3.</span> <span class="nav-text">三、相关方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、iOS5中控制屏幕旋转的方法："><span class="nav-number">3.0.1.</span> <span class="nav-text">1、iOS5中控制屏幕旋转的方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、iOS6中控制屏幕旋转相关方法："><span class="nav-number">3.0.2.</span> <span class="nav-text">2、iOS6中控制屏幕旋转相关方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、attemptRotationToDeviceOrientation方法"><span class="nav-number">3.0.3.</span> <span class="nav-text">3、attemptRotationToDeviceOrientation方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、如何决定interface-orientation"><span class="nav-number">4.</span> <span class="nav-text">四、如何决定interface orientation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、全局控制"><span class="nav-number">4.0.1.</span> <span class="nav-text">1、全局控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、UIWindow"><span class="nav-number">4.0.2.</span> <span class="nav-text">2、UIWindow</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、controller"><span class="nav-number">4.0.3.</span> <span class="nav-text">3、controller</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、最终支持的屏幕方向"><span class="nav-number">4.0.4.</span> <span class="nav-text">4、最终支持的屏幕方向</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、强制屏幕旋转"><span class="nav-number">5.</span> <span class="nav-text">四、强制屏幕旋转</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、私有方法"><span class="nav-number">5.0.1.</span> <span class="nav-text">1、私有方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、旋转view的transform"><span class="nav-number">5.0.2.</span> <span class="nav-text">2、旋转view的transform</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、主动触发orientation机制"><span class="nav-number">5.0.3.</span> <span class="nav-text">3、主动触发orientation机制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、参考文档"><span class="nav-number">6.</span> <span class="nav-text">五、参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

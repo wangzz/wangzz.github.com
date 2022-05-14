@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="基础概念 pixel (Picture Element)   用于显示领域。 pix 是 picture 的常用简写，加上单词 element 的前缀 el 就得到 piexl，中文翻译成像素，是图像显示的基本单位。 需要注意的是，像素并不是个物理长度单位，但是它和物理长度之间有换算关系，后面会讲到。  ppi (Pixels Per Inch)  用于显示领域。 表示每英寸像素数目。显然 ppi">
+<meta name="keywords" content="CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS 长度单位">
+<meta property="og:url" content="http://foogry.wang/2021/01/04/CSS-长度单位/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="基础概念 pixel (Picture Element)   用于显示领域。 pix 是 picture 的常用简写，加上单词 element 的前缀 el 就得到 piexl，中文翻译成像素，是图像显示的基本单位。 需要注意的是，像素并不是个物理长度单位，但是它和物理长度之间有换算关系，后面会讲到。  ppi (Pixels Per Inch)  用于显示领域。 表示每英寸像素数目。显然 ppi">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-03-21T16:06:15.568Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS 长度单位">
+<meta name="twitter:description" content="基础概念 pixel (Picture Element)   用于显示领域。 pix 是 picture 的常用简写，加上单词 element 的前缀 el 就得到 piexl，中文翻译成像素，是图像显示的基本单位。 需要注意的是，像素并不是个物理长度单位，但是它和物理长度之间有换算关系，后面会讲到。  ppi (Pixels Per Inch)  用于显示领域。 表示每英寸像素数目。显然 ppi">
+  <link rel="canonical" href="http://foogry.wang/2021/01/04/CSS-长度单位/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>CSS 长度单位 | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2021/01/04/CSS-长度单位/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">CSS 长度单位
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2021-01-04 20:34:09" itemprop="dateCreated datePublished" datetime="2021-01-04T20:34:09+08:00">2021-01-04</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-22 00:06:15" itemprop="dateModified" datetime="2021-03-22T00:06:15+08:00">2021-03-22</time>
+              </span>
+            
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/01/04/CSS-长度单位/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/01/04/CSS-长度单位/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h2><ul>
+<li>pixel (Picture Element) </li>
+</ul>
+<p><code>用于显示领域</code>。</p>
+<p><code>pix</code> 是 picture 的常用简写，加上单词 element 的前缀 <code>el</code> 就得到 <code>piexl</code>，中文翻译成像素，是图像显示的基本单位。</p>
+<p>需要注意的是，<code>像素并不是个物理长度单位</code>，但是它和物理长度之间有换算关系，后面会讲到。</p>
+<ul>
+<li>ppi (Pixels Per Inch)</li>
+</ul>
+<p><code>用于显示领域</code>。</p>
+<p>表示每英寸像素数目。显然 ppi 数值越高图像就能显示的越清晰。ppi 的计算公式为：</p>
+<blockquote>
+<p>ppi = 屏幕分辨率 / 屏幕宽度（单位 inch）</p>
+</blockquote>
+<p>比如 iPhone 8 的屏幕分辨率是 750 * 1334，对应的屏幕宽度是 2.3 inch，则 iPhone8 的 ppi 为：</p>
+<a id="more"></a>
+
+<blockquote>
+<p>750 / 2.3 = 326 ppi</p>
+</blockquote>
+<ul>
+<li>pt</li>
+</ul>
+<p><code>用于打印领域</code>。</p>
+<p>pt 又称 ‘点’，是目前最常用的排版单位，在中文排版中也称该单位为‘磅’，它与英寸及毫米的折算关系是 1pt = 1 / 72 inch = 0.3528mm。该单位经常被误认为等同于象素（pixel）单位，其实‘点’并不是‘象素’，它们之间的换算关系与屏幕或打印分辨率有关。仅在分辨率是72 dpi（dot per inch）时，1 pt才与1 pixel相同， 如果分辨率是 96 dpi，1 pt 等同与 1.333 (96 / 72) 象素单位。</p>
+<ul>
+<li>dpi (Dots Per Inch)</li>
+</ul>
+<p><code>用于打印领域</code>。</p>
+<p>用于表示每英寸打印的墨点数目。</p>
+<h2 id="iOS-中的-points-和物理像素的关系"><a href="#iOS-中的-points-和物理像素的关系" class="headerlink" title="iOS 中的 points 和物理像素的关系"></a>iOS 中的 points 和物理像素的关系</h2><p>iOS 开发中布局的单位是 points (pt)，这是个逻辑单位，<code>屏幕分辨率 = points * scale</code>，也就是说使用 points 布局的元素占用的实际像素宽度为：</p>
+<blockquote>
+<p>px = points * scale</p>
+</blockquote>
+<p>iPhone 设备屏幕信息：</p>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>屏幕尺寸</th>
+<th>屏幕分辨率</th>
+<th>ppi</th>
+<th>points</th>
+<th>scale</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2G/3G/3GS</td>
+<td>3.5英寸</td>
+<td>320*480px</td>
+<td>163ppi</td>
+<td>320*480pt</td>
+<td>1X</td>
+</tr>
+<tr>
+<td>4/4s</td>
+<td>3.5英寸</td>
+<td>640*960px</td>
+<td>326ppi</td>
+<td>320*480pt</td>
+<td>2X</td>
+</tr>
+<tr>
+<td>5/5S/5C/SE</td>
+<td>4.0英寸</td>
+<td>640*1136px</td>
+<td>326ppi</td>
+<td>320*568pt</td>
+<td>2X</td>
+</tr>
+<tr>
+<td>6/6S/7/8</td>
+<td>4.7英寸</td>
+<td>750*1334px</td>
+<td>326ppi</td>
+<td>375*667pt</td>
+<td>2X</td>
+</tr>
+<tr>
+<td>6+/6S+/7+/8+</td>
+<td>5.5英寸</td>
+<td>1242*2208px</td>
+<td>401ppi</td>
+<td>414*736pt</td>
+<td>3X</td>
+</tr>
+<tr>
+<td>X/Xs/11 Pro</td>
+<td>5.8英寸</td>
+<td>1125*2436px</td>
+<td>458ppi</td>
+<td>375*812pt</td>
+<td>3X</td>
+</tr>
+<tr>
+<td>Xr, 11</td>
+<td>6.1英寸</td>
+<td>828 × 1792px</td>
+<td>326ppi</td>
+<td>414*896pt</td>
+<td>2x</td>
+</tr>
+<tr>
+<td>Xs Max/ 11 Pro Max</td>
+<td>6.5英寸</td>
+<td>1242 × 2688px</td>
+<td>458ppi</td>
+<td>414*896pt</td>
+<td>3X</td>
+</tr>
+</tbody></table>
+<h2 id="安卓中的-dp-和物理像素的关系"><a href="#安卓中的-dp-和物理像素的关系" class="headerlink" title="安卓中的 dp 和物理像素的关系"></a>安卓中的 dp 和物理像素的关系</h2><p>dp 或 dip : device independent pixels（设备独立像素），是安卓开发用的单位，1dp 表示在屏幕点密度为 160ppi 时 1px 长度。因为安卓设备屏幕众多不可能为每个屏幕单独开发，所以用下面的公式计算在不同屏幕上的像素数：</p>
+<blockquote>
+<p>px = dp * ( ppi / 160)</p>
+</blockquote>
+<h2 id="CSS-长度单位"><a href="#CSS-长度单位" class="headerlink" title="CSS 长度单位"></a>CSS 长度单位</h2><p>MDN 里关于 <a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Values_and_units" target="_blank" rel="noopener">CSS 长度单位</a> 的介绍如下：</p>
+<ul>
+<li>绝对长度单位</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>单位</th>
+<th>名称</th>
+<th>等价换算</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cm</td>
+<td>厘米（Centimeters）</td>
+<td>1cm = 96px/2.54</td>
+</tr>
+<tr>
+<td>mm</td>
+<td>毫米（Millimeters）</td>
+<td>1mm = 1/10th of 1cm</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>四分之一毫米（Quarter-millimeters）</td>
+<td>1Q = 1/40th of 1cm</td>
+</tr>
+<tr>
+<td>in</td>
+<td>英寸（Inches）</td>
+<td>1in = 2.54cm = 96px</td>
+</tr>
+<tr>
+<td>pc</td>
+<td>十二点活字（Picas）</td>
+<td>1pc = 1/16th of 1in</td>
+</tr>
+<tr>
+<td>pt</td>
+<td>点（Points）</td>
+<td>1pt = 1/72th of 1in</td>
+</tr>
+<tr>
+<td>px</td>
+<td>像素（Pixels）</td>
+<td>1px = 1/96th of 1in</td>
+</tr>
+</tbody></table>
+<p>我对这里的 pt 和 px 同 inch 的转换关系其实是存疑的，它们和 inch 的转换关系在显示领域是要由 ppi 决定的，不指定 ppi 就计算二者关系的行为都是耍流氓！</p>
+<ul>
+<li>相对长度单位</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>单位</th>
+<th>相对于</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>em</td>
+<td>在 font-size 中使用是相对于父元素的字体大小，在其他属性中使用是相对于自身的字体大小，如 width</td>
+</tr>
+<tr>
+<td>ex</td>
+<td>字符 “x” 的高度</td>
+</tr>
+<tr>
+<td>ch</td>
+<td>数字 “0” 的宽度</td>
+</tr>
+<tr>
+<td>rem</td>
+<td>根元素（root element）的字体大小</td>
+</tr>
+<tr>
+<td>lh</td>
+<td>元素的 line-height</td>
+</tr>
+<tr>
+<td>vw</td>
+<td>视窗（viewport）宽度的 1%</td>
+</tr>
+<tr>
+<td>vh</td>
+<td>视窗（viewport）高度的 1%</td>
+</tr>
+<tr>
+<td>vmin</td>
+<td>vw 和 vh 中较小那个尺寸的 1%</td>
+</tr>
+<tr>
+<td>vmax</td>
+<td>vw 和 vh 中较大那个尺寸的 1%</td>
+</tr>
+</tbody></table>
+<h2 id="H5-可视宽度"><a href="#H5-可视宽度" class="headerlink" title="H5 可视宽度"></a>H5 可视宽度</h2><p>可视宽度意味着在这个宽度内做布局都是可视的，超出可视宽度部分只有滑动或缩放后才可见。</p>
+<p>可视宽度可以通过 <code>document.documentElement.clientWidth</code> 获取，单位是 <code>CSS 像素(px)</code>。</p>
+<p>可视素宽度由 viewport 决定，而 viewport 默认宽度是由浏览器厂商定义好的，默认值如下：</p>
+<table>
+<thead>
+<tr>
+<th>浏览器</th>
+<th>默认宽度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iPhone</td>
+<td>980</td>
+</tr>
+<tr>
+<td>iPad</td>
+<td>980</td>
+</tr>
+<tr>
+<td>Android Sumsung</td>
+<td>980</td>
+</tr>
+<tr>
+<td>Android HTC</td>
+<td>980</td>
+</tr>
+<tr>
+<td>Chrome</td>
+<td>980</td>
+</tr>
+<tr>
+<td>Opera Presto</td>
+<td>980</td>
+</tr>
+<tr>
+<td>BlackBerry</td>
+<td>1024</td>
+</tr>
+<tr>
+<td>IE</td>
+<td>1024</td>
+</tr>
+</tbody></table>
+<p>我们可以通过如下方式修改 viewport 宽度：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no&quot;&gt;</span><br><span class="line">&lt;/head&gt;</span><br></pre></td></tr></table></figure>
+
+<p>当 WebView 容器宽度和设备的屏幕宽度一致时，可以用上述代码将 viewport 宽度设置成屏幕宽度。对应的 <code>viewport 实际高度 = viewport 宽度 / WebView 容器宽度 * WebView 容器高度</code>。</p>
+<h2 id="CSS-像素和设备物理像素的关系"><a href="#CSS-像素和设备物理像素的关系" class="headerlink" title="CSS 像素和设备物理像素的关系"></a>CSS 像素和设备物理像素的关系</h2><p>和 iOS 中的 points 类似，CSS 像素也是个逻辑单位，和设备的物理像素并不是一回事。</p>
+<ul>
+<li>CSS 像素和物理像素关系</li>
+</ul>
+<p>二者换算关系如下：</p>
+<blockquote>
+<p>物理像素 = 屏幕分辨率 / H5 可视宽度 * CSS 像素 </p>
+</blockquote>
+<p>由于 <code>屏幕分辨率 = points * scale</code> 因此上面的公式也可以写成：</p>
+<blockquote>
+<p>物理像素 = points * scale / H5 可视宽度 * CSS 像素 </p>
+</blockquote>
+<p>比如 iPhone 8 屏幕分辨率是 <code>750 * 1334</code> ，即宽度是 750 像素；H5 可视宽度是默认值 980 像素的时候，CSS 像素 100px 在 iPhone 8 上实际对应的物理像素为：</p>
+<blockquote>
+<p>750 / 980 * 100 = 77 px</p>
+</blockquote>
+<ul>
+<li>推荐做法</li>
+</ul>
+<p>从上面的公式可见，当 points 和 H5 可视宽度相同时，CSS 像素和物理像素的关系就变成了：</p>
+<blockquote>
+<p>物理像素 = scale * CSS 像素</p>
+</blockquote>
+<p>其中的 scale 在 H5 里就是 <code>window.devicePixelRatio</code>。</p>
+<p>可见，当 WebView 容器的宽度和 H5 可视宽度一致时，CSS 像素的含义跟 iOS 布局里的 <code>points</code> 是一模一样的。</p>
+<h2 id="物理宽度"><a href="#物理宽度" class="headerlink" title="物理宽度"></a>物理宽度</h2><p>物理像素展现在屏幕上后，用户看到的实际物理宽度计算公式为：</p>
+<blockquote>
+<p>物理宽度 = 物理像素 / 屏幕 ppi = scale * CSS 像素 / 屏幕 ppi</p>
+</blockquote>
+<p>由此可见，当我们在 H5 里设置一个标签的宽度是 100 px 时，在不同设备上，用户看到的实际大小可能不一样，会而根据设备的 scale 和 ppi 不同而不同。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><p><a href="https://www.quirksmode.org/blog/archives/2010/04/a_pixel_is_not.html" target="_blank" rel="noopener">A pixel is not a pixel is not a pixel</a></p>
+</li>
+<li><p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Values_and_units" target="_blank" rel="noopener">CSS的值与单位</a></p>
+</li>
+<li><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/devicePixelRatio" target="_blank" rel="noopener">Window.devicePixelRatio</a></p>
+</li>
+<li><p><a href="https://www.jianshu.com/p/413a25b2c503" target="_blank" rel="noopener">移动前端开发之viewport,devicePixelRatio的深入理解</a></p>
+</li>
+<li><p><a href="http://screensiz.es/" target="_blank" rel="noopener">移动设备屏幕信息查询</a></p>
+</li>
+<li><p><a href="https://www.paintcodeapp.com/news" target="_blank" rel="noopener">iPhone 屏幕信息</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/26481853" target="_blank" rel="noopener">第二话——什么是 dp、pt、sp？</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/xx326664162/article/details/48007855" target="_blank" rel="noopener">dp的定义原理和dpi,ppi,px,pt,sp之间的区别</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2021/01/04/CSS-长度单位/" title="CSS 长度单位">http://foogry.wang/2021/01/04/CSS-长度单位/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2021/01/02/JS-prototype-和-conttructor/" rel="next" title="JS prototype 和 conttructor">
+                  <i class="fa fa-chevron-left"></i> JS prototype 和 conttructor
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2021/01/06/CSS-选择器/" rel="prev" title="CSS 选择器">
+                  CSS 选择器 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础概念"><span class="nav-number">1.</span> <span class="nav-text">基础概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS-中的-points-和物理像素的关系"><span class="nav-number">2.</span> <span class="nav-text">iOS 中的 points 和物理像素的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安卓中的-dp-和物理像素的关系"><span class="nav-number">3.</span> <span class="nav-text">安卓中的 dp 和物理像素的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-长度单位"><span class="nav-number">4.</span> <span class="nav-text">CSS 长度单位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#H5-可视宽度"><span class="nav-number">5.</span> <span class="nav-text">H5 可视宽度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-像素和设备物理像素的关系"><span class="nav-number">6.</span> <span class="nav-text">CSS 像素和设备物理像素的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#物理宽度"><span class="nav-number">7.</span> <span class="nav-text">物理宽度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">8.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

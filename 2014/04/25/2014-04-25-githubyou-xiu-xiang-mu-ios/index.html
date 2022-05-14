@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="前言 本文旨在搜集github上优秀的开源项目  本文搜集的项目都是用于iOS开发  本文会持续更新…   完整客户端 ioctocat  github的iOS客户端，目前开源代码是V1版本，V2版本在appstore上可以下载  ChatSecure-iOS  使用XMPP协议的IM开源软件，很强大，在appstore上可以下载">
+<meta name="keywords" content="octopress, 博客, github, 开源, iOS, ChatSecure-iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="github优秀开源项目大全-iOS">
+<meta property="og:url" content="http://foogry.wang/2014/04/25/2014-04-25-githubyou-xiu-xiang-mu-ios/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="前言 本文旨在搜集github上优秀的开源项目  本文搜集的项目都是用于iOS开发  本文会持续更新…   完整客户端 ioctocat  github的iOS客户端，目前开源代码是V1版本，V2版本在appstore上可以下载  ChatSecure-iOS  使用XMPP协议的IM开源软件，很强大，在appstore上可以下载">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/fggeraissate/FFCalendar/master/FFCalendar/FFCalendars/Util/Images/YearlyCalendar.png">
+<meta property="og:image" content="https://github.com/wangzz/wangzz.github.com/blob/master/images/cheddar-ios-screen-short.jpeg?raw=true">
+<meta property="og:image" content="http://foogry.wang/images/article1/app_hack_news.png">
+<meta property="og:image" content="http://foogry.wang/images/article1/app_american_english.png">
+<meta property="og:image" content="http://foogry.wang/images/article1/app_rssread.jpeg">
+<meta property="og:image" content="http://foogry.wang/images/article1/plugin_cocoapods_menu.png">
+<meta property="og:image" content="http://foogry.wang/images/article1/plugin_align.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/plugin_alcatraz.png">
+<meta property="og:image" content="http://foogry.wang/images/article1/plugin_image_named.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/plugin_xtodo.png">
+<meta property="og:image" content="http://foogry.wang/images/article1/plugin_codepilot.png">
+<meta property="og:image" content="http://foogry.wang/images/article1/plugin_vvdocumenter.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/tool_xtrace.png">
+<meta property="og:image" content="http://foogry.wang/images/article1/tool_rnconnecter.png">
+<meta property="og:image" content="http://foogry.wang/images/article1/tool_xctool.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/tool_framework.png">
+<meta property="og:image" content="https://github.com/facebook/pop/blob/master/Images/pop.gif?raw=true">
+<meta property="og:image" content="https://github.com/wangzz/wangzz.github.com/blob/master/images/TEAChart-screen-short.gif?raw=true">
+<meta property="og:image" content="http://foogry.wang/images/article1/framework_JSQMessagesViewController.png">
+<meta property="og:image" content="http://foogry.wang/images/article1/framework_IMQuickSearch.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/framework_iOSPlot.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/andreamazz/AMWaveTransition/master/screenshot.gif">
+<meta property="og:image" content="https://github.com/facebook/Shimmer/blob/master/shimmer.gif?raw=true">
+<meta property="og:image" content="https://github.com/wangzz/wangzz.github.com/blob/master/images/article1/styles.png?raw=true">
+<meta property="og:image" content="https://github.com/wangzz/wangzz.github.com/blob/master/images/article1/SphereView.png?raw=true">
+<meta property="og:image" content="http://foogry.wang/images/article1/RESideMenu.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/view_clprogresshud.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/view_remenu.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/view_parallax_scrollview.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/framework_Vurig-Calendar.png">
+<meta property="og:image" content="http://foogry.wang/images/article1/view_BCMeshTransformView.jpg">
+<meta property="og:image" content="http://foogry.wang/images/article1/view_TwitterCover.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/view_THContactPicker.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/view_DKCircleButton.gif">
+<meta property="og:image" content="http://foogry.wang/images/article1/view_PaperFold-for-iOS.png">
+<meta property="og:image" content="http://foogry.wang/images/article1/view_RTLabel.png">
+<meta property="og:updated_time" content="2019-09-25T13:04:33.647Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="github优秀开源项目大全-iOS">
+<meta name="twitter:description" content="前言 本文旨在搜集github上优秀的开源项目  本文搜集的项目都是用于iOS开发  本文会持续更新…   完整客户端 ioctocat  github的iOS客户端，目前开源代码是V1版本，V2版本在appstore上可以下载  ChatSecure-iOS  使用XMPP协议的IM开源软件，很强大，在appstore上可以下载">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/fggeraissate/FFCalendar/master/FFCalendar/FFCalendars/Util/Images/YearlyCalendar.png">
+  <link rel="canonical" href="http://foogry.wang/2014/04/25/2014-04-25-githubyou-xiu-xiang-mu-ios/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>github优秀开源项目大全-iOS | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2014/04/25/2014-04-25-githubyou-xiu-xiang-mu-ios/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">github优秀开源项目大全-iOS
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2014-04-25 17:45:33" itemprop="dateCreated datePublished" datetime="2014-04-25T17:45:33+08:00">2014-04-25</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-25 21:04:33" itemprop="dateModified" datetime="2019-09-25T21:04:33+08:00">2019-09-25</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/opensource/" itemprop="url" rel="index"><span itemprop="name">opensource</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2014/04/25/2014-04-25-githubyou-xiu-xiang-mu-ios/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2014/04/25/2014-04-25-githubyou-xiu-xiang-mu-ios/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>本文旨在搜集github上优秀的开源项目</p>
+</li>
+<li><p>本文搜集的项目都是用于iOS开发</p>
+</li>
+<li><p>本文会持续更新…</p>
+</li>
+</ol>
+<h2 id="完整客户端"><a href="#完整客户端" class="headerlink" title="完整客户端"></a>完整客户端</h2><ul>
+<li><a href="https://github.com/dennisreimann/" target="_blank" rel="noopener">ioctocat</a></li>
+</ul>
+<p>github的iOS客户端，目前开源代码是V1版本，V2版本在appstore上可以下载</p>
+<ul>
+<li><a href="https://github.com/chrisballinger/ChatSecure-iOS" target="_blank" rel="noopener">ChatSecure-iOS</a></li>
+</ul>
+<p>使用XMPP协议的IM开源软件，很强大，在appstore上可以下载</p>
+<a id="more"></a>
+
+
+<ul>
+<li><a href="https://github.com/gaosboy/iOSSF" target="_blank" rel="noopener">SegmentFault</a></li>
+</ul>
+<p>SegmentFault的官方iOS客户端</p>
+<ul>
+<li><a href="http://git.oschina.net/oschina/iphone-app" target="_blank" rel="noopener">OSChina-iOS</a></li>
+</ul>
+<p>开源中国社区oschina的官方iPhone客户端，appstore已上线。早期地址在<a href="https://github.com/gaosboy/iOSSF" target="_blank" rel="noopener">github</a>上,后来迁移到OSChina自己的代码托管平台.</p>
+<ul>
+<li><a href="https://github.com/fggeraissate/FFCalendar" target="_blank" rel="noopener">FFCalendar</a></li>
+</ul>
+<p>实现了日历的基本功能，目前只支持iPad版本</p>
+<p><img src="https://raw.githubusercontent.com/fggeraissate/FFCalendar/master/FFCalendar/FFCalendars/Util/Images/YearlyCalendar.png" width="320" height="480"></p>
+
+<ul>
+<li><a href="https://github.com/WhiteHouse/wh-app-ios" target="_blank" rel="noopener">wh-app-ios</a></li>
+</ul>
+<p>美国白宫（WhiteHouse）的官方app，听起来很高大上哈</p>
+<ul>
+<li><a href="https://github.com/ruby-china/ruby-china-for-ios" target="_blank" rel="noopener">ruby-china-for-ios</a></li>
+</ul>
+<p>Ruby China的官方app</p>
+<ul>
+<li><a href="https://github.com/nothingmagical/cheddar-ios" target="_blank" rel="noopener">cheddar-ios</a></li>
+</ul>
+<p>一款不错的日程管理软件，Appstore上能下载</p>
+<p><img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/cheddar-ios-screen-short.jpeg?raw=true" width="320" height="480"></p>
+
+
+<ul>
+<li><a href="https://github.com/jimpick/twitterfon" target="_blank" rel="noopener">twitterfon</a></li>
+</ul>
+<p>第三方twitter客户端，不过作者上传后至今5年了都没更新过。。。</p>
+<ul>
+<li><a href="https://github.com/viewfinderco/viewfinder" target="_blank" rel="noopener">viewfinder</a></li>
+</ul>
+<p>移动支付公司Square在其工程博客上宣布，基于Apache 2.0许可协议，开源了于去年12月初收购的照片管理和共享应用Viewfinder，包括Viewfinder服务器、Android和iOS应用在内的25万行代码已托管到GitHub上。<br>对此，Square工程师Peter Mattis在<a href="http://corner.squareup.com/2014/05/open-sourcing-viewfinder.html" target="_blank" rel="noopener">工程博客</a>上表示，Square之所以考虑到将Viewfinder的完整代码公之于众，是希望能够与人方便，让开发者在应用开发过程中可以加以利用或作为参考。尽管Square团队并没有为Viewfinder提供技术支持，也没有进行Bug修复，但此举还是赢得了满堂喝彩一致点赞。</p>
+<p>Viewfinder包含了许多非常有趣的代码，对于开发者来说，绝对是大大的Surprise，主要如下：</p>
+<pre><code>. Viewfinder服务器提供了一个拥有各种Amazon DynamoDB索引选项的结构化数据库架构。
+. 服务器还提供了数据库和协议层版本控制支持。
+. 在本地元数据存储方面，Viewfinder客户端使用LevelDB，相比CoreData，更易于使用，也相当便捷。
+. 内置可直接运行于移动设备上的全文本搜索引擎，支持联系人和图片搜索。
+. 使用GYP生成Xcode项目文件和Android构建文件。
+. 支持C++模板元编程，可使用C++11可变参数模板根据C++方法自动计算Java方法签名。</code></pre><p>该段介绍出自<a href="http://www.pcbeta.com/viewnews-63336-1.html" target="_blank" rel="noopener">这里</a>。</p>
+<p>viewfinder使用GYP生成Xcode的工程文件，生成方式如下：</p>
+<p>首先要安装GYP，执行以下步骤：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ svn checkout http://gyp.googlecode.com/svn/trunk/ gyp-read-only </span><br><span class="line">$ cd gyp-read-only </span><br><span class="line">$ ./setup.py build </span><br><span class="line">$ sudo ./setup.py install</span><br></pre></td></tr></table></figure>
+
+
+<p>安装成功以后，再进入到clone下来的viewfineder源码目录，执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd viewfinder/clients/ios</span><br><span class="line">$ gyp --depth=. -DOS=ios -Iglobals.gypi ViewfinderGyp.gyp</span><br></pre></td></tr></table></figure>
+
+<p>这样就能成功生成Xcode工程文件了，不过需要通过<code>ViewfinderGyp.xcodeproj</code>文件打开工程。</p>
+<ul>
+<li><a href="https://github.com/Xuzz/newsyc" target="_blank" rel="noopener">HackerNews</a></li>
+</ul>
+<p><code>Hacker News</code>的iPhone客户端</p>
+<img src="/images/article1/app_hack_news.png" width="320" height="480">
+
+<ul>
+<li><a href="https://github.com/kesalin/AmericanEnglish" target="_blank" rel="noopener">AmericanEnglish</a></li>
+</ul>
+<p>iOS资深开发者<a href="http://blog.csdn.net/kesalin" target="_blank" rel="noopener">罗朝辉</a>做的一款应用，《美式英语》的iPhone版本</p>
+<img src="/images/article1/app_american_english.png" width="320" height="480">
+
+
+<ul>
+<li><a href="https://github.com/xincode9/FormosaWeibo" target="_blank" rel="noopener">FormosaWeibo</a></li>
+</ul>
+<p>使用新浪微博开放平台做的微博客户端，做工略显粗糙，作者也有几个月没更新了。</p>
+<ul>
+<li><a href="https://github.com/ming1016/RSSRead" target="_blank" rel="noopener">RSSRead</a></li>
+</ul>
+<p>AppStore<a href="https://itunes.apple.com/cn/app/yi-yue-rss-li-xian-xin-wen-yue-du/id850246364?mt=8" target="_blank" rel="noopener">上线产品</a>，中文名称<code>已阅</code>。一个iOS设备上的RSS/Atom阅读器，刚成立的项目，还有很多有待完善的地方。</p>
+<img src="/images/article1/app_rssread.jpeg" width="320" height="480">
+
+
+<h2 id="Xcode插件"><a href="#Xcode插件" class="headerlink" title="Xcode插件"></a>Xcode插件</h2><ul>
+<li><a href="https://github.com/kattrali/cocoapods-xcode-plugin" target="_blank" rel="noopener">cocoapods-xcode-plugin</a></li>
+</ul>
+<p>用于在Xcode中管理CocoaPods依赖库</p>
+<img src="/images/article1/plugin_cocoapods_menu.png" width="560" height="390">
+
+
+<ul>
+<li><a href="https://github.com/qfish/XAlign" target="_blank" rel="noopener">XAlign</a></li>
+</ul>
+<p>方便实现代码对其功能，使代码风格统一</p>
+<img src="/images/article1/plugin_align.gif" width="560" height="460">
+
+<ul>
+<li><a href="https://github.com/fortinmike/XcodeBoost" target="_blank" rel="noopener">XcodeBoost</a></li>
+</ul>
+<p>一个辅助代码编辑插件。支持高亮选中、批量选中方法和方法名、根据选中的方法批量生成方法声明、高亮正则搜索等功能。</p>
+<ul>
+<li><a href="https://github.com/johnno1962/injectionforxcode" target="_blank" rel="noopener">Injection for Xcode</a></li>
+</ul>
+<p>一个神奇的Xcode 插件，能让应用在运行的时候做出的小的改变立马体现效果，而不需要重新编译。。。</p>
+<ul>
+<li><a href="https://github.com/supermarin/Alcatraz" target="_blank" rel="noopener">Alcatraz</a></li>
+</ul>
+<p>以图形化界面管理Xcode插件的插件。</p>
+<img src="/images/article1/plugin_alcatraz.png" width="560" height="650">
+
+<ul>
+<li><a href="https://github.com/ksuther/KSImageNamed-Xcode" target="_blank" rel="noopener">KSImageNamed-Xcode</a></li>
+</ul>
+<p>当输入<code>[NSImage imageNamed:</code> 或者<code>[UIImage imageNamed:</code>时，会自动补全工程中可用的图片名称，同时能提供选中图片的预览。</p>
+<img src="/images/article1/plugin_image_named.gif" width="516" height="220">
+
+<ul>
+<li><a href="https://github.com/trawor/XToDo" target="_blank" rel="noopener">XToDo</a></li>
+</ul>
+<p>能以图形界面列表的形式列出代码中添加了<code>TODO</code>,<code>FIXME</code>,<code>???</code>,<code>!!!!</code>标识的项目，方便解决软件中备注的未解决问题。另外，能查找的还不只上述四种标识，用户可以自己添加想支持的标识。</p>
+<img src="/images/article1/plugin_xtodo.png" width="516" height="320">
+
+<ul>
+<li><a href="https://github.com/macoscope/CodePilot" target="_blank" rel="noopener">CodePilot</a></li>
+</ul>
+<p>快速查找工程中的文件、代码等资源，和Xcode5自带的<code>Open Quickly</code>功能相似。</p>
+<img src="/images/article1/plugin_codepilot.png" width="516" height="540">
+
+<ul>
+<li><a href="https://github.com/onevcat/VVDocumenter-Xcode" target="_blank" rel="noopener">VVDocumenter-Xcode</a></li>
+</ul>
+<p>提供了为代码增加注视的最快捷方式，是我使用频率最高的插件，<a href="http://onevcat.com/" target="_blank" rel="noopener">猫神</a>出品。</p>
+<img src="/images/article1/plugin_vvdocumenter.gif" width="516" height="300">
+
+
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><ul>
+<li><a href="https://github.com/johnno1962/Xtrace" target="_blank" rel="noopener">Xtrace</a></li>
+</ul>
+<p>能详细打印出一个某个方法被调用的堆栈，方便调试时定位问题</p>
+<img src="/images/article1/tool_xtrace.png" width="560" height="460">
+
+<ul>
+<li><a href="https://github.com/realmacsoftware/RMConnecter" target="_blank" rel="noopener">RMConnecter</a></li>
+</ul>
+<p>在上传AppStore时需要填写app的描述信息，此软件能很方便的填写这些信息。</p>
+<img src="/images/article1/tool_rnconnecter.png" width="580" height="500">
+
+<ul>
+<li><a href="https://github.com/facebook/xctool" target="_blank" rel="noopener">xctool</a></li>
+</ul>
+<p>facebook出的自动编译工具，不像xcodebuild，它能够整洁的打印出日志</p>
+<img src="/images/article1/tool_xctool.gif" width="584" height="414">
+
+<ul>
+<li><a href="https://github.com/kstenerud/iOS-Universal-Framework" target="_blank" rel="noopener">iOS-Universal-Framework</a></li>
+</ul>
+<p>用于生成兼容armv6/armv7/i386 <code>framework</code>的Xcode工程模版：</p>
+<img src="/images/article1/tool_framework.png" width="584" height="414">
+
+
+<ul>
+<li><a href="https://github.com/kharrison/UYLPasswordManager" target="_blank" rel="noopener">UYLPasswordManager</a></li>
+</ul>
+<p>对访问iOS Keychain的封装库。</p>
+<ul>
+<li><a href="https://github.com/sqlcipher/sqlcipher" target="_blank" rel="noopener">sqlcipher</a></li>
+</ul>
+<p>这是目前我已知的唯一一个支持对SQLite加密的免费开源库，对应的有收费版本。本开源库实现了对SQLite开源免费版本中未实现的加密接口，同时做了一定的扩展。使用的是256位AES加密方式。</p>
+<p>强烈推荐！</p>
+<ul>
+<li><a href="https://github.com/mattt/Xcode-Snippets" target="_blank" rel="noopener">Xcode-Snippets</a></li>
+</ul>
+<p><code>AFNetworking</code>作者、mattt大神开源的常用Xcode代码片段。</p>
+<h2 id="开发框架"><a href="#开发框架" class="headerlink" title="开发框架"></a>开发框架</h2><ul>
+<li><a href="https://github.com/facebook/pop" target="_blank" rel="noopener">pop</a></li>
+</ul>
+<p>facebook那神奇的动画引擎，你懂得。。。</p>
+<p><img src="https://github.com/facebook/pop/blob/master/Images/pop.gif?raw=true" alt="pop"></p>
+<ul>
+<li><a href="https://github.com/facebook/KVOController" target="_blank" rel="noopener">KVOController</a></li>
+</ul>
+<p>facebook出品，基于Cocoa的KVO开发，提供简单地使用方式，同时也是线程安全的。</p>
+<ul>
+<li><a href="https://github.com/steipete/Aspects" target="_blank" rel="noopener">Aspects</a></li>
+</ul>
+<p>通过method swizzling技术，能够在一个类的现有方法执行之前或之后附加一个代码片段（以block方式），能极大的方便我们调试。</p>
+<ul>
+<li><a href="https://github.com/PSPDFKit/PSPDFKit-Demo" target="_blank" rel="noopener">PSPDFKit</a></li>
+</ul>
+<p>十分强大的PDF开发框架，有异步加载、预览、编辑、加标注等很多功能</p>
+<ul>
+<li><a href="https://github.com/xhacker/TEAChart" target="_blank" rel="noopener">TEAChart</a></li>
+</ul>
+<p>使用简单，功能强大的图表工具</p>
+<p><img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/TEAChart-screen-short.gif?raw=true" alt="TEAChart"></p>
+<ul>
+<li><a href="https://github.com/kewenya/SearchCoreTest" target="_blank" rel="noopener">SearchCoreTest</a></li>
+</ul>
+<p>一个联系人搜索库，支持的搜索方式包括：用户名汉字、拼音及模糊搜索，号码搜索，最重要的是支持T9搜索，做过通讯录类应用的同学都懂的。我在项目里用过，很赞。</p>
+<ul>
+<li><a href="https://github.com/robbiehanson/XMPPFramework" target="_blank" rel="noopener">XMPPFramework</a></li>
+</ul>
+<p>应该是XMPP协议Objective-C实现的最好版本，小型开发者想做IM应用的好选择，使用起来也很方便。</p>
+<ul>
+<li><a href="https://github.com/jessesquires/JSQMessagesViewController" target="_blank" rel="noopener">JSQMessagesViewController</a></li>
+</ul>
+<p>一个通用聊天界面框架，效果不错，感谢作者的开源。这个框架后来被国内某无耻程序员修改成<a href="https://github.com/xhzengAIB/MessageDisplayKit" target="_blank" rel="noopener">MessageDisplayKit</a>，大有据为己有之势。</p>
+<img src="/images/article1/framework_JSQMessagesViewController.png" width="320" height="480">
+
+<ul>
+<li><a href="https://github.com/hailongz/vTeam" target="_blank" rel="noopener">vTeam</a></li>
+</ul>
+<p>一个开发者积累多年的开发框架，值得看看。</p>
+<ul>
+<li><a href="https://github.com/hfossli/AGGeometryKit" target="_blank" rel="noopener">AGGeometryKit</a></li>
+</ul>
+<p>几何图形框架，把AGGeometryKit和POP结合起来使用，可实现非常棒的动态和动画。</p>
+<ul>
+<li><a href="https://github.com/Intermark/IMQuickSearch" target="_blank" rel="noopener">IMQuickSearch</a></li>
+</ul>
+<p>IMQuickSearch是一个快速搜索工具，可以过滤包含多种自定义NSObject类的NSArray。</p>
+<img src="/images/article1/framework_IMQuickSearch.gif" width="320" height="480">
+
+
+<ul>
+<li><a href="https://github.com/honcheng/iOSPlot" target="_blank" rel="noopener">iOSPlot</a></li>
+</ul>
+<p>新加坡开发者<code>honcheng</code>实现的图标制作框架，支持折线图、饼状图等。</p>
+<img src="/images/article1/framework_iOSPlot.png" width="480" height="320">
+
+
+<h2 id="自定义view"><a href="#自定义view" class="headerlink" title="自定义view"></a>自定义view</h2><ul>
+<li><a href="https://github.com/yishuiliunian/DZTableView" target="_blank" rel="noopener">DZTableView</a></li>
+</ul>
+<p>仿照UITableView机制自己实现的一个自定义tableview，带有详细的说明文档</p>
+<ul>
+<li><a href="https://github.com/andreamazz/AMWaveTransition" target="_blank" rel="noopener">AMWaveTransition</a></li>
+</ul>
+<p>很炫的带有表格的视图控制器切换效果，点击每个栏目会有限带有波浪效果的信息展示，类似于Facebook Paper</p>
+<p><img src="https://raw.githubusercontent.com/andreamazz/AMWaveTransition/master/screenshot.gif" alt="AMWaveTransition"></p>
+<ul>
+<li><a href="https://github.com/facebook/Shimmer" target="_blank" rel="noopener">Shimmer</a></li>
+</ul>
+<p>又是facebook出的，可以让view展示波光粼粼的效果</p>
+<p><img src="https://github.com/facebook/Shimmer/blob/master/shimmer.gif?raw=true" alt="Shimmer"></p>
+<ul>
+<li><a href="https://github.com/steipete/PSTCollectionView" target="_blank" rel="noopener">PSTCollectionView</a></li>
+</ul>
+<p>仿照系统的UICollectionView的API实现的collection view，支持ARC和iOS4.3+系统，可用于替代只能从iOS6开始支持的UICollectionView</p>
+<ul>
+<li><a href="https://github.com/jaydee3/JDStatusBarNotification" target="_blank" rel="noopener">JDStatusBarNotification</a></li>
+</ul>
+<p>各种形式在状态栏展示信息，包括提示、进度等，展示格式和动画方式也有好几种。下图只是以静态方式展示其效果，更多详情请点击链接查看。</p>
+<p><img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/article1/styles.png?raw=true" alt="JDStatusBarNotification"></p>
+<ul>
+<li><a href="https://github.com/heroims/SphereView" target="_blank" rel="noopener">SphereView</a></li>
+</ul>
+<p>一个球形3D标签，能够放大、缩小、拖动、点击、自动旋转。效果挺玄的，就是感觉有点卡，还有一定的优化空间。下图截了一个静态图片:</p>
+<p><img src="https://github.com/wangzz/wangzz.github.com/blob/master/images/article1/SphereView.png?raw=true" alt="SphereView"></p>
+<ul>
+<li><a href="https://github.com/romaonthego/RESideMenu" target="_blank" rel="noopener">RESideMenu</a></li>
+</ul>
+<p>iOS7风格的侧滑菜单，支持左右双向侧滑：</p>
+<p><img src="/images/article1/RESideMenu.gif" alt="RESideMenu"></p>
+<ul>
+<li><a href="https://github.com/gcamp/GCDiscreetNotificationView" target="_blank" rel="noopener">GCDiscreetNotificationView</a></li>
+</ul>
+<p>一种在view的顶部弹出并会自动消失的通知类view，是toast的一种变形。目前<a href="http://git.oschina.net/oschina/iphone-app" target="_blank" rel="noopener">开源中国</a>的项目正在用该view。</p>
+<ul>
+<li><a href="https://github.com/cleexiang/CLProgressHUD" target="_blank" rel="noopener">CLProgressHUD</a></li>
+</ul>
+<p>大麦网iOS客户端工程师开源的一个HUD view，</p>
+<img src="/images/article1/view_clprogresshud.gif" width="320" height="480">
+
+<ul>
+<li><a href="https://github.com/romaonthego/REMenu" target="_blank" rel="noopener">REMenu</a></li>
+</ul>
+<p>自定义的下拉菜单</p>
+<img src="/images/article1/view_remenu.gif" width="320" height="480">
+
+
+<ul>
+<li><a href="https://github.com/5sw/SWParallaxScrollView" target="_blank" rel="noopener">SWParallaxScrollView</a></li>
+</ul>
+<p>能够实现在多个图层上以不同速度滑动的自定义ScrollView，可用于做软件启动时的help界面：</p>
+<img src="/images/article1/view_parallax_scrollview.gif" width="480" height="320">
+
+<ul>
+<li><a href="https://github.com/tjeerdintveen/Vurig-Calendar" target="_blank" rel="noopener">Vurig-Calendar</a></li>
+</ul>
+<p>自定义的日历，界面很简洁，月份切换时动画效果也不错。</p>
+<img src="/images/article1/framework_Vurig-Calendar.png" width="320" height="480">
+
+
+<ul>
+<li><a href="https://github.com/xiangwangfeng/M80AttributedLabel" target="_blank" rel="noopener">M80AttributedLabel</a></li>
+</ul>
+<p>功能较齐全的attributed lable，支持attributed string和图片、链接、控件的混排。</p>
+<ul>
+<li><a href="https://github.com/Ciechan/BCMeshTransformView" target="_blank" rel="noopener">BCMeshTransformView</a></li>
+</ul>
+<p>实现了相当炫的拉幕式的界面切换效果，其灵感来自CALayer的私有属性<code>meshTransform</code>以及和其对应的<code>CAMeshTransform</code>。</p>
+<img src="/images/article1/view_BCMeshTransformView.jpg" width="320" height="480">
+
+
+<ul>
+<li><a href="https://github.com/cyndibaby905/TwitterCover" target="_blank" rel="noopener">TwitterCover</a></li>
+</ul>
+<p>新浪微博开发者仿照Twitter的iOS客户端中的效果实现的向下拉动滚动视图，视图顶端的图片会随着下拉而变大，并且带有模糊的效果。</p>
+<img src="/images/article1/view_TwitterCover.gif" width="320" height="480">
+
+
+<ul>
+<li><a href="https://github.com/tristanhimmelman/THContactPicker" target="_blank" rel="noopener">THContactPicker</a></li>
+</ul>
+<p>模仿系统邮件应用实现的联系人选择界面。</p>
+<img src="/images/article1/view_THContactPicker.gif" width="320" height="480">
+
+
+<ul>
+<li><a href="https://github.com/kronik/DKCircleButton" target="_blank" rel="noopener">DKCircleButton</a></li>
+</ul>
+<p>一个扁平化的，能带声波效果的按钮。</p>
+<img src="/images/article1/view_DKCircleButton.gif" width="320" height="480">
+
+<ul>
+<li><a href="https://github.com/honcheng/PaperFold-for-iOS" target="_blank" rel="noopener">PaperFold-for-iOS</a></li>
+</ul>
+<p>新加坡开发者<code>honcheng</code>实现的折纸效果的界面切换，适合做电子书阅读类应用。</p>
+<img src="/images/article1/view_PaperFold-for-iOS.png" width="320" height="480">
+
+<ul>
+<li><a href="https://github.com/honcheng/RTLabel" target="_blank" rel="noopener">RTLabel</a></li>
+</ul>
+<p>新加坡开发者<code>honcheng</code>多媒体显示view，支持html语法，应用非常广泛。</p>
+<img src="/images/article1/view_RTLabel.png" width="320" height="480">
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2014/04/25/2014-04-25-githubyou-xiu-xiang-mu-ios/" title="github优秀开源项目大全-iOS">http://foogry.wang/2014/04/25/2014-04-25-githubyou-xiu-xiang-mu-ios/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/octopress/" rel="tag"># octopress</a>
+            
+              <a href="/tags/博客/" rel="tag"># 博客</a>
+            
+              <a href="/tags/github/" rel="tag"># github</a>
+            
+              <a href="/tags/开源/" rel="tag"># 开源</a>
+            
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2014/04/02/2014-04-02-ru-he-pei-zhi-rang-ni-de-octopressbo-ke-zai-duo-tai-macshang-tong-shi-shi-yong/" rel="next" title="让Octopress博客在多台Mac上同时使用">
+                  <i class="fa fa-chevron-left"></i> 让Octopress博客在多台Mac上同时使用
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2014/05/09/2014-05-08-xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/" rel="prev" title="Xcode设置项之Architectures和Valid Architectures">
+                  Xcode设置项之Architectures和Valid Architectures <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整客户端"><span class="nav-number">2.</span> <span class="nav-text">完整客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Xcode插件"><span class="nav-number">3.</span> <span class="nav-text">Xcode插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具"><span class="nav-number">4.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发框架"><span class="nav-number">5.</span> <span class="nav-text">开发框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义view"><span class="nav-number">6.</span> <span class="nav-text">自定义view</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

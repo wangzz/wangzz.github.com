@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="在ARC之前，iOS内存管理无论对资深级还是菜鸟级开发者来说都是一件很头疼的事。我参加过几个使用手动内存管理的项目，印象最深刻的是一个地图类应用，由于应用本身就非常耗内存，当时为了解决内存泄露问题，每周都安排有人值班用Instruments挨个跑功能，关键是每次都总能检查出来不少。其实不管是菜鸟级还是资深级开发者都避免不了写出内存泄露的代码，规则大家都懂，可是天知道什么时候手一抖就少写了个rele">
+<meta name="keywords" content="ARC, iOS, MRC, 手动内存管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手动内存管理转ARC项目实战">
+<meta property="og:url" content="http://foogry.wang/2014/10/13/2014-10-13-shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="在ARC之前，iOS内存管理无论对资深级还是菜鸟级开发者来说都是一件很头疼的事。我参加过几个使用手动内存管理的项目，印象最深刻的是一个地图类应用，由于应用本身就非常耗内存，当时为了解决内存泄露问题，每周都安排有人值班用Instruments挨个跑功能，关键是每次都总能检查出来不少。其实不管是菜鸟级还是资深级开发者都避免不了写出内存泄露的代码，规则大家都懂，可是天知道什么时候手一抖就少写了个rele">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://foogry.wang/images/article8/refactor.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/check.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/error.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/notice.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/use_arc.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/review.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/readonly_error.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/release_error.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/init_return_type.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/cast_pointer_objective-c.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/block_capturing_self.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/literal_is_redundant.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/literal_is_redundant_fix.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/init_methods.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/property_follows.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/property_follows_fix.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/block_implicitly_retains.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/block_implicitly_retains_fix1.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/block_implicitly_retains_fix2.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/weak_property_unpredictably.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/weak_property_unpredictably_fix.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/retain_cycle.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/retain_cycle_fix.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/autorelease_error.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/retain_strong.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/assign_weak.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/assign_not_weak.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/retain_dealloc.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/delete_dealloc.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/block_weak.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/autoreleasepool.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/release_error.png">
+<meta property="og:image" content="http://foogry.wang/images/article8/marco_arc.png">
+<meta property="og:updated_time" content="2019-09-25T13:04:33.650Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手动内存管理转ARC项目实战">
+<meta name="twitter:description" content="在ARC之前，iOS内存管理无论对资深级还是菜鸟级开发者来说都是一件很头疼的事。我参加过几个使用手动内存管理的项目，印象最深刻的是一个地图类应用，由于应用本身就非常耗内存，当时为了解决内存泄露问题，每周都安排有人值班用Instruments挨个跑功能，关键是每次都总能检查出来不少。其实不管是菜鸟级还是资深级开发者都避免不了写出内存泄露的代码，规则大家都懂，可是天知道什么时候手一抖就少写了个rele">
+<meta name="twitter:image" content="http://foogry.wang/images/article8/refactor.png">
+  <link rel="canonical" href="http://foogry.wang/2014/10/13/2014-10-13-shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>手动内存管理转ARC项目实战 | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2014/10/13/2014-10-13-shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">手动内存管理转ARC项目实战
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2014-10-13 16:10:05" itemprop="dateCreated datePublished" datetime="2014-10-13T16:10:05+08:00">2014-10-13</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-25 21:04:33" itemprop="dateModified" datetime="2019-09-25T21:04:33+08:00">2019-09-25</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2014/10/13/2014-10-13-shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2014/10/13/2014-10-13-shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在ARC之前，iOS内存管理无论对资深级还是菜鸟级开发者来说都是一件很头疼的事。我参加过几个使用手动内存管理的项目，印象最深刻的是一个地图类应用，由于应用本身就非常耗内存，当时为了解决内存泄露问题，每周都安排有人值班用Instruments挨个跑功能，关键是每次都总能检查出来不少。其实不管是菜鸟级还是资深级开发者都避免不了写出内存泄露的代码，规则大家都懂，可是天知道什么时候手一抖就少写了个release？</p>
+<p>好在项目决定转成ARC了，下面将自己转换的过程和中间遇到的问题写出来和大家共享，希望能减少大家解决同类问题的时间。</p>
+<a id="more"></a>
+
+<h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><h4 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h4><p>需要转换的Objective-C文件数量：1000个左右。</p>
+<p>开发工具：Xcode 6.0.1</p>
+<h4 id="转换方式"><a href="#转换方式" class="headerlink" title="转换方式"></a>转换方式</h4><p>我使用的是Xcode本身提供的ARC转换功能。当然你也可以手动手动转换，那不属于本文范畴，而且其工作量绝对能让你崩溃。</p>
+<h2 id="二、转换过程"><a href="#二、转换过程" class="headerlink" title="二、转换过程"></a>二、转换过程</h2><h4 id="代码备份"><a href="#代码备份" class="headerlink" title="代码备份"></a>代码备份</h4><p>在进行如此大规模的更改之前，一定要先进行代码备份：直接在本地将代码复制一份，或者记住更改前代码在VCS上的版本号。</p>
+<h4 id="过滤无需转换的文件"><a href="#过滤无需转换的文件" class="headerlink" title="过滤无需转换的文件"></a>过滤无需转换的文件</h4><p>找出项目中引用的仍使用手动内存管理的第三方库，或者某些你不希望转换的文件，对其添加<code>-fno-objc-arc</code>标记。</p>
+<p>Xcode自动转换工具只针对Objective-C对象，只会处理<code>Objective-C/Objective-C++</code>即后缀名为<code>.m/.mm</code>的两种文件，因此其他的<code>C/C++</code>对应的<code>.c/.cpp</code>都无需理会。</p>
+<h4 id="执行检查操作"><a href="#执行检查操作" class="headerlink" title="执行检查操作"></a>执行检查操作</h4><p>使用Xcode转换工具入口如图所示：</p>
+<p><img src="/images/article8/refactor.png" alt="refactor"></p>
+<p>点击<code>Convert to Objective-C ARC</code>后会进入检查操作入口，如图：</p>
+<p><img src="/images/article8/check.png" alt="check"></p>
+<p>该步骤要选择哪些文件需要转换，如果前面将无需转换的文件都添加了<code>-fno-objc-arc</code>标记后，这里可以全选。</p>
+<p>点击check按钮后Xcode会帮助我们检查代码中存在的不符合ARC使用规则的错误或警告，只有所有的错误都解决以后才能执行真正的转换操作。</p>
+<h4 id="解决错误-告警"><a href="#解决错误-告警" class="headerlink" title="解决错误/告警"></a>解决错误/告警</h4><p>执行完check操作后，会给出提示：</p>
+<p><img src="/images/article8/error.png" alt="error"></p>
+<p>三百多个错误，同时还有一千两百多个警告信息，都要哭了。。。</p>
+<p>错误和警告的解决内容较多，后面会单独介绍。</p>
+<h4 id="执行转换操作"><a href="#执行转换操作" class="headerlink" title="执行转换操作"></a>执行转换操作</h4><p>解决完所有的error后，会弹出下述提示界面：</p>
+<p><img src="/images/article8/notice.png" alt="notice"></p>
+<p>大意是Xcode将要将你的工程转换成使用ARC管理内存，所有更改的代码在真正更改之前会在一个review界面展示。同时所有的更改完成以后，Xcode会讲项目Target对应的工程设置的使用ARC设置（<code>Objective-C Automatic Reference Counting</code>）会被置成YES（上图右上角的警告标识就是在告诉我们项目已经支持ARC了，但工程中有文件还不支持）：</p>
+<p><img src="/images/article8/use_arc.png" alt="use_arc"></p>
+<p>这时离成功就不远了，胜利在望！</p>
+<p>点击next按钮后跳转到review界面，样式类似于使用Xcode提交SVN的确认提交界面，如下图所示：</p>
+<p><img src="/images/article8/review.png" alt="review"></p>
+<p>该界面列出了所有需要有代码更改的文件，同时能够直接对比转换前和转换后的代码变化。为了稳妥起见，我选择了每个文件都点进去扫了一眼，这也给我们一次机会检查是否漏掉了不能转换的文件。</p>
+<p>确定一切无误以后，点击右下角的save按钮，一切就大功告成了！</p>
+<h2 id="错误-警告解决"><a href="#错误-警告解决" class="headerlink" title="错误/警告解决"></a>错误/警告解决</h2><h4 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h4><ul>
+<li>ARC forbids synthesizing a property of an Objective-C object with unspecified ownership or storage attribute</li>
+</ul>
+<p><img src="/images/article8/readonly_error.png" alt="readonly_error"></p>
+<p>property属性必须指定一个内存管理关键字，在属性定义处增加strong关键字即可。</p>
+<ul>
+<li>ARC forbids explicit message send of ‘release’</li>
+</ul>
+<p><img src="/images/article8/release_error.png" alt="release_error"></p>
+<p>这种情况通常是使用包含release的宏定义，将该宏和使用该宏的地方删除即可。</p>
+<ul>
+<li>Init methods must return a type related to the receiver type</li>
+</ul>
+<p><img src="/images/article8/init_return_type.png" alt="init_return_type"></p>
+<p>错误原因是A类里的一个方法以init开头，而且返回的是B类型，好吧，乖乖改方法名。</p>
+<ul>
+<li>Cast of C pointer type ‘ivPointer’ (aka ‘void *’) to Objective-C pointer type ‘iFlyTTSManager_old *’ requires a bridged cast</li>
+</ul>
+<p><img src="/images/article8/cast_pointer_objective-c.png" alt="cast_pointer_objective-c"></p>
+<p>这是<code>Toll-Free Bridging</code>转换问题，在ARC下根据情况使用对应的转换关键字就行了，后文会专门介绍。</p>
+<h4 id="警告"><a href="#警告" class="headerlink" title="警告"></a>警告</h4><p>解决警告的目的是消除警告处代码存在的隐患，既然Xcode给了提示，那么每一个警告信息都值得我们认真对待。</p>
+<ul>
+<li>Capturing <code>self</code> in this block is likely to lead to a retain cycle</li>
+</ul>
+<p><img src="/images/article8/block_capturing_self.png" alt="block_capturing_self"></p>
+<p>这是典型的block循环引用问题，将block中的self改成使用指向self的weak指针即可。</p>
+<ul>
+<li>Using ‘initWithArray:’ with a literal is redundant</li>
+</ul>
+<p><img src="/images/article8/literal_is_redundant.png" alt="literal_is_redundant"></p>
+<p>好吧，原来是没必要的alloc操作，直接按Xcode提示将alloc删除即可：</p>
+<p><img src="/images/article8/literal_is_redundant_fix.png" alt="literal_is_redundant_fix.png"></p>
+<ul>
+<li>Init methods must return a type related to the receiver type</li>
+</ul>
+<p><img src="/images/article8/init_methods.png" alt="init_methods.png"></p>
+<p>原来是A类里的一个方法以init开头，而且返回的是B类型，好吧，乖乖改方法名。</p>
+<ul>
+<li>Property follows Cocoa naming convention for returning ‘owned’ objects</li>
+</ul>
+<p><img src="/images/article8/property_follows.png" alt="property_follows.png"></p>
+<p>这是因为@property属性的命名以new开头了，可恶。。。修改方法是将对应的getter方法改成非new开头命名的：</p>
+<p><img src="/images/article8/property_follows_fix.png" alt="property_follows_fix.png"></p>
+<p>ARC下方法名如果是以new/alloc/init等开头的，而且还不是类的初始化方法，就该小心了，要么报错，要么警告，原因你懂的。</p>
+<ul>
+<li>Block implicitly retains ‘self’; explicitly mention ‘self’ to indicate this is intended behavior</li>
+</ul>
+<p><img src="/images/article8/block_implicitly_retains.png" alt="block_implicitly_retains.png"></p>
+<p>意思是block中使用了self的实例变量_selectedModeMarkerView，因此block会隐式的retain住self。Xcode认为这可能会给开发者造成困惑，或者因此而因袭循环引用，所以警告我们要显示的在block中使用self，以达到block显示retain住self的目的。</p>
+<p>该警告有两种改法：</p>
+<p>①按照Xcode提示，改成self-&gt;_selectedModeMarkerView：</p>
+<p><img src="/images/article8/block_implicitly_retains_fix1.png" alt="block_implicitly_retains_fix1.png"></p>
+<p>②直接将该警告关闭</p>
+<p>警告名称为：<code>Implicit retain of ‘self’ within blocks</code></p>
+<p>对应的Clang关键字是：<code>-Wimplicit-retain-self</code></p>
+<p><img src="/images/article8/block_implicitly_retains_fix2.png" alt="block_implicitly_retains_fix2.png"></p>
+<ul>
+<li>Weak property may be unpredictably set to nil 和 Weak property ‘delegate’ is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive</li>
+</ul>
+<p><img src="/images/article8/weak_property_unpredictably.png" alt="weak_property_unpredictably.png"></p>
+<p>这是工程中数目最多的警告，这是因为所有的delegate属性都是weak的，Xcode默认开启了下图中的两个警告设置，将其关闭即可：</p>
+<p><img src="/images/article8/weak_property_unpredictably_fix.png" alt="weak_property_unpredictably_fix.png"></p>
+<ul>
+<li>Capturing ‘self’ strongly in this block is likely to lead to a retain cycle</li>
+</ul>
+<p><img src="/images/article8/retain_cycle.png" alt="retain_cycle.png"></p>
+<p>这是明显的block导致循环引用内存泄露的情况，之前代码中坑啊！修改方案：</p>
+<p><img src="/images/article8/retain_cycle_fix.png" alt="retain_cycle_fix.png"></p>
+<ul>
+<li>Method parameter of type ‘NSError *__autoreleasing *’ with no explicit ownership</li>
+</ul>
+<p><img src="/images/article8/autorelease_error.png" alt="autorelease_error.png"></p>
+<p>这种就不用说了，按警告中的提示添加<code>__autoreleasing</code>关键字即可。</p>
+<p>以上列出的错误和警告只是数量较多的，还有很多其他就不在这里一一列举了。</p>
+<p>另外，推荐  <a href="https://twitter.com/mattt" target="_blank" rel="noopener">Mattt Thompson</a> 大神关于Clang中几乎所有warning的名称和对应报错提示语的网站：<a href="http://fuckingclangwarnings.com/" target="_blank" rel="noopener">http://fuckingclangwarnings.com/</a>，以后解决warning类问题就简单多了！</p>
+<h2 id="Xcode自动转换"><a href="#Xcode自动转换" class="headerlink" title="Xcode自动转换"></a>Xcode自动转换</h2><h4 id="关键字转换"><a href="#关键字转换" class="headerlink" title="关键字转换"></a>关键字转换</h4><p>Xcode会自动将某些关键字自动转换成ARC的对应版本。</p>
+<ul>
+<li>retain自动转成strong，如图：</li>
+</ul>
+<p><img src="/images/article8/retain_strong.png" alt="retain_strong.png"></p>
+<ul>
+<li>assign关键字转成weak</li>
+</ul>
+<p>修饰Objective-C对象或者id类型对象的assign关键字会被转成weak，如图：</p>
+<p><img src="/images/article8/assign_weak.png" alt="assign_weak.png"></p>
+<p>但是修饰Int/bool等数值型变量的assign不会自动转换成weak，如图：</p>
+<p><img src="/images/article8/assign_not_weak.png" alt="assign_not_weak.png"></p>
+<h4 id="关键字删除"><a href="#关键字删除" class="headerlink" title="关键字删除"></a>关键字删除</h4><p>和手动内存管理相关的几个关键字，比如：<code>release/retain/autorelease/super dealloc</code>等会被删除；</p>
+<p>dealloc方法中如果除了release/super dealloc语句外，如果别的代码，dealloc方法会保留,如图：</p>
+<p><img src="/images/article8/retain_dealloc.png" alt="retain_dealloc.png"></p>
+<p>如果没有整个方法都会被删除：</p>
+<p><img src="/images/article8/delete_dealloc.png" alt="delete_dealloc.png"></p>
+<h4 id="关键字替换"><a href="#关键字替换" class="headerlink" title="关键字替换"></a>关键字替换</h4><ul>
+<li>在转换时<strong>block关键字会被自动替换成</strong>weak：</li>
+</ul>
+<p><img src="/images/article8/block_weak.png" alt="block_weak.png"></p>
+<ul>
+<li>@autoreleasepool</li>
+</ul>
+<p>NSAutoreleasePool不支持ARC，会被替换成@autoreleasepool：</p>
+<p><img src="/images/article8/autoreleasepool.png" alt="autoreleasepool.png"></p>
+<h4 id="关于被宏注释代码"><a href="#关于被宏注释代码" class="headerlink" title="关于被宏注释代码"></a>关于被宏注释代码</h4><ul>
+<li>使用宏定义的对象释放代码</li>
+</ul>
+<p>宏定义如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#define RELEASE_SAFELY(__POINTER) &#123; \</span><br><span class="line">[(__POINTER) release]; (__POINTER) = nil; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在执行ARC转换检查操作时，Xcode会在使用该宏的地方报错：</p>
+<p><img src="/images/article8/release_error.png" alt="release_error.png"></p>
+<p>将该宏和使用该宏的地方删除即可。</p>
+<ul>
+<li>被宏注释掉的代码，Xcode在转换时是不会处理的，如图：</li>
+</ul>
+<p><img src="/images/article8/marco_arc.png" alt="marco_arc.png"></p>
+<p>PS：这是相当坑的一点，因为你根本预料不到工程中使用了多少宏，注释掉了多少代码。当你执行完转换操作，以为就大功告成的时候，却在某天因为一个宏的开启遇到了一堆新的转ARC不彻底的问题。这种问题也没招，只能遇到一个改一个了。</p>
+<h2 id="ARC和block"><a href="#ARC和block" class="headerlink" title="ARC和block"></a>ARC和block</h2><p>不管是手动内存管理还是ARC，block循环引用导致的内存泄露都是一个令人头疼的问题。在MRC中，解决block循环引用只需要使用__block关键字，在ARC下解决与block的使用就略显复杂了：</p>
+<h4 id="block关键字"><a href="#block关键字" class="headerlink" title="__block关键字"></a>__block关键字</h4><ul>
+<li>block内修改外部定义变量</li>
+</ul>
+<p>和手动内存管理一样，ARC如果在block中需要修改block之外定义的变量需要使用<code>__block</code>关键字修饰，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">__block NSString *name = @&quot;foggry&quot;;</span><br><span class="line">self.expireCostLabel.completionBlock = ^()&#123;</span><br><span class="line">    name = @&quot;wangzz&quot;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>上例中name变量需要在block中修改，因此必须使用__block关键字。</p>
+<ul>
+<li>__block在MRC和ARC中的区别</li>
+</ul>
+<p>在ARC下的block中使用__block关键字修饰的对象时，block会retain该对象；而在MRC下却不会retain。关于这点在官方文档<a href="https://developer.apple.com/library/ios/releasenotes/objectivec/rn-transitioningtoarc/introduction/introduction.html" target="_blank" rel="noopener">Transitioning to ARC Release Notes</a>中有详细的描述：</p>
+<blockquote>
+</blockquote>
+<p>In manual reference counting mode, __block id x; has the effect of not retaining x.<br>In ARC mode, __block id x; defaults to retaining x (just like all other values). </p>
+<blockquote>
+</blockquote>
+<p>下面的代码不管在MRC还是ARC中<code>myController</code>对象都是有内存泄露的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MyViewController *myController = [[MyViewController alloc] init…];</span><br><span class="line">// ...</span><br><span class="line">myController.completionHandler =  ^(NSInteger result) &#123;</span><br><span class="line">   [myController dismissViewControllerAnimated:YES completion:nil];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>内存泄露问题在MRC中可以按如下方式更改：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MyViewController * __block myController = [[MyViewController alloc] init…];  </span><br><span class="line">// ...  </span><br><span class="line">myController.completionHandler =  ^(NSInteger result) &#123;  </span><br><span class="line">    [myController dismissViewControllerAnimated:YES completion:nil];  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>然而在ARC中这么改就不行了。正如开始所说的那样，在ARC中<code>myController.completionHandler</code>的block会retain<code>myController</code>对象，使得内存泄露问题仍然存在！！</p>
+<p>在ARC中该问题有两种解决方案，第一种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MyViewController * __block myController = [[MyViewController alloc] init…];  </span><br><span class="line">// ...  </span><br><span class="line">myController.completionHandler =  ^(NSInteger result) &#123;  </span><br><span class="line">    [myController dismissViewControllerAnimated:YES completion:nil];  </span><br><span class="line">    myController = nil;  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>该方法在block中使用完myController时，是它指向nil。没有strong类型的指针指向myController指向的对象时，对象会被释放掉。</p>
+<p>第二种种解决方案，直接使用<strong>weak代替</strong>block关键字：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MyViewController *myController = [[MyViewController alloc] init…];  </span><br><span class="line">// ...  </span><br><span class="line">MyViewController * __weak weakMyViewController = myController;  </span><br><span class="line">myController.completionHandler =  ^(NSInteger result) &#123;  </span><br><span class="line">    [weakMyViewController dismissViewControllerAnimated:YES completion:nil];  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>该方法直接避免了对block对myController对象的retain。</p>
+<h4 id="存在循环引用关系"><a href="#存在循环引用关系" class="headerlink" title="存在循环引用关系"></a>存在循环引用关系</h4><p>如果self直接或者间接的对block存在强引用，在block中又需要使用self关键字，此时self和block就存在循环引用的关系。此时必须使用__weak关键字定义一个指针指向self，在block中使用该指针来引用self：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MessageListController * __weak weakSelf = self;</span><br><span class="line">self.messageLogic.loadMoreBlock = ^(IcarMessage * theMessage) &#123;</span><br><span class="line">    [weakSelf.tableView setPullTableIsLoadingMore:YES];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>需要说明的是，尽管上例中weakSelf指针对self只是弱引用，但是self对block却是强引用，self的生命周期一定是长于block的，因此不用担心在block中使用weakSelf指针时，其指向的self会被释放掉。</p>
+<h4 id="不存在循环引用关系"><a href="#不存在循环引用关系" class="headerlink" title="不存在循环引用关系"></a>不存在循环引用关系</h4><p>下面的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">MyViewController *myController = [[MyViewController alloc] init…];</span><br><span class="line">// ...</span><br><span class="line">MyViewController * __weak weakMyController = myController;</span><br><span class="line">myController.completionHandler =  ^(NSInteger result) &#123;</span><br><span class="line">    MyViewController *strongMyController = weakMyController;</span><br><span class="line">    if (strongMyController) &#123;</span><br><span class="line">        // ...</span><br><span class="line">        [strongMyController dismissViewControllerAnimated:YES completion:nil];</span><br><span class="line">        // ...</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        // Probably nothing...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>如前面所说，<code>myController.completionHandler</code>的block中不能直接使用<code>myController</code>对象，会造成内存泄露，因此需要先用一个weak的指针指向<code>myController</code>对象，然后在block中使用该weak指针。但是为了确保在block执行的时候<code>myController</code>对象没有被释放掉，就在block一开始的地方定义了一个临时的strong类型的指针<code>strongMyController</code>指向weak指针<code>weakMyController</code>，其实最终的结果就是block中对<code>myController</code>对象强引用了。在block执行完被销毁的时候，<code>strongMyController</code>指针变量会被销毁，其最终指向的<code>myController</code>对象因此也会被销毁。这样在使用一个对象的时候做就保证了该对象是存在的，使用完了再放弃该对象的所有权。</p>
+<h2 id="ARC和Toll-Free-Bridging"><a href="#ARC和Toll-Free-Bridging" class="headerlink" title="ARC和Toll-Free Bridging"></a>ARC和Toll-Free Bridging</h2><p>MRC下的<code>Toll-FreeBridging</code>不涉及内存管理的转移，Objective-C（后文简称OC）和Core Foundation（后文简称CF）各自管理各自的内存,相互之间可以直接交换使用，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSLocale *gbNSLocale = [[NSLocale alloc] initWithLocaleIdentifier:@&quot;en_GB&quot;];</span><br><span class="line">CFLocaleRef gbCFLocale = (CFLocaleRef)gbNSLocale;</span><br></pre></td></tr></table></figure>
+
+<p>而在ARC下,事情就会变得复杂一些。因为ARC能够管理OC对象的内存,却不能管理CF对象,CF对象依然需要我们手动管理内存。在CF和OC之间bridge对象的时候,问题就出现了,编译器不知道该如何处理这个同时有OC指针和CF指针指向的对象。<br>这时候,需要使用<code>__bridge</code>, <code>__bridge_retained</code>, <code>__bridge_transfer</code>等修饰符来告诉编译器该如何去做。</p>
+<ul>
+<li>__bridge</li>
+</ul>
+<p>该关键字在桥接过程中不会增加被桥接对象的引用计数，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CFStringRef cfString = CFStringCreateWithCString(kCFAllocatorDefault, &quot;CFString&quot;, kCFStringEncodingUTF8);</span><br><span class="line">NSString *ocString = (__bridge NSString *)cfString;</span><br><span class="line">CFRelease(cfString);</span><br><span class="line">NSLog(@&quot;%@&quot;,ocString);</span><br></pre></td></tr></table></figure>
+
+<p>由于ARC下<code>NSString *ocString</code>定义的对象指针默认是strong的，所以在执行<code>CFRelease(cfString);</code>后<code>ocString</code>指针还持有桥接过来的对象，<code>ocString</code>指针仍能正常使用。但如果做出如下改动：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CFStringRef cfString = CFStringCreateWithCString(kCFAllocatorDefault, &quot;CFString&quot;, kCFStringEncodingUTF8);</span><br><span class="line">__weak NSString *ocString = (__bridge NSString *)cfString;</span><br><span class="line">CFRelease(cfString);</span><br><span class="line">NSLog(@&quot;###%@&quot;,ocString);</span><br></pre></td></tr></table></figure>
+
+<p>即将定义方式改成<code>__weak NSString *ocString</code>，在执行<code>CFRelease(cfString);</code>后<code>ocString</code>将因不再持有被桥接对象所有权而无法正常使用。</p>
+<p>反之从OC对象桥接到CF对象也是一个道理，该关键字有点像<code>__weak</code>关键字的作用。</p>
+<ul>
+<li>__bridge_retained 或 CFBridgingRetain</li>
+</ul>
+<p>二者作用是一样的，只是用法不同。</p>
+<p>该关键字在桥接的过程中会retain被桥接对象，相当于桥接方也持有了被桥接对象。需要注意的是，如果是CF对象桥接到OC对象，编译器会做好OC对象的内存管理工作；但如果是OC对象桥接到CF对象，那么CF需要执行内存释放操作，如下例所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">NSArray *ocArray = [[NSArray alloc] initWithObjects:@&quot;foggry&quot;, nil];</span><br><span class="line">CFArrayRef cfArray = (__bridge_retained CFArrayRef)ocArray;</span><br><span class="line">/**</span><br><span class="line"> 使用cfArray</span><br><span class="line"> **/</span><br><span class="line">CFRelease(cfArray);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>__bridge_transfer 或 CFBridgingRelease</li>
+</ul>
+<p>二者作用也是一样的，只是用法不同。</p>
+<p>该关键字将对象所有权由被桥接对象转移给了桥接对象，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CFStringRef cfString = CFStringCreateWithCString(kCFAllocatorDefault, &quot;CFString&quot;, kCFStringEncodingUTF8);</span><br><span class="line">NSString *ocString = (__bridge_transfer NSString *)cfString;</span><br><span class="line">//CFRelease(cfString); //不再需要释放操作</span><br><span class="line">NSLog(@&quot;%@&quot;,ocString);</span><br></pre></td></tr></table></figure>
+
+<p>此例中被桥接对象cfString的所有权就转移给了桥接对象ocString。</p>
+<p>总之，理解了桥接关键字的作用，桥接转换过程中大家只需要根据具体需求选用适当的关键字即可。</p>
+<p>另外，在ARC中<code>id</code>和<code>void *</code>也不能直接相互转换了，必须通过<code>Toll-FreeBridging</code>使用适当的关键字修饰。</p>
+<h2 id="ARC和IBOutLet"><a href="#ARC和IBOutLet" class="headerlink" title="ARC和IBOutLet"></a>ARC和IBOutLet</h2><p>对于IBOutLet属性应该用strong还是weak一直都有疑惑。关于这一点<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/LoadingResources/CocoaNibs/CocoaNibs.html#//apple_ref/doc/uid/10000051i-CH4-SW6" target="_blank" rel="noopener">官方文档</a>是这么介绍的：</p>
+<blockquote>
+</blockquote>
+<p>From a practical perspective, in iOS and OS X outlets should be defined as declared properties. Outlets should generally be weak, except for those from File’s Owner to top-level objects in a nib &gt;&gt;&gt;file (or, in iOS, a storyboard scene) which should be strong. Outlets that you create should therefore typically be weak.</p>
+<blockquote>
+</blockquote>
+<p>那么长的一段英文想说的是：</p>
+<p>如果nib文件构建的view是直接被Controller引用的顶层view，对应的IBOutLet属性应该是strong；</p>
+<p>如果view是顶层view上的一个子view，那么该view的属性应该是weak，因为顶层view被Controller使用strong属性引用了，而顶层view本身又持有该view；</p>
+<p>如果Controller对某个view需要单独引用，或者Controller没有引用某个view的父view，那么其属性也应该是strong。</p>
+<p>好吧，其实我能说如果你实在懒得区分什么时候用strong，什么时候用weak，那就将所以后的IBOutLet属性都设成strong吧！在Controller销毁的时候，对应的IBOutLet实例变量也会被销毁，strong指针会被置成nil，因此也不会有内存问题。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://developer.apple.com/library/ios/releasenotes/objectivec/rn-transitioningtoarc/introduction/introduction.html" target="_blank" rel="noopener">Transitioning to ARC Release Notes</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/LoadingResources/CocoaNibs/CocoaNibs.html#//apple_ref/doc/uid/10000051i-CH4-SW6" target="_blank" rel="noopener">Managing the Lifetimes of Objects from Nib Files</a></li>
+<li><a href="https://mikeash.com/pyblog/friday-qa-2012-04-13-nib-memory-management.html" target="_blank" rel="noopener">Nib Memory Management</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2014/10/13/2014-10-13-shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/" title="手动内存管理转ARC项目实战">http://foogry.wang/2014/10/13/2014-10-13-shou-dong-nei-cun-guan-li-zhuan-arcxiang-mu-shi-zhan/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+            
+              <a href="/tags/ARC/" rel="tag"># ARC</a>
+            
+              <a href="/tags/MRC/" rel="tag"># MRC</a>
+            
+              <a href="/tags/手动内存管理/" rel="tag"># 手动内存管理</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2014/09/28/2014-09-28-iphoneping-mu-zhi-shi-dian-jie-xi/" rel="next" title="iPhone屏幕知识点解析">
+                  <i class="fa fa-chevron-left"></i> iPhone屏幕知识点解析
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2015/05/06/2015-05-06-chi-ping-xuan-ran-xue-xi-bi-ji/" rel="prev" title="离屏渲染学习笔记">
+                  离屏渲染学习笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、前言"><span class="nav-number">1.</span> <span class="nav-text">一、前言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#项目简介"><span class="nav-number">1.0.1.</span> <span class="nav-text">项目简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#转换方式"><span class="nav-number">1.0.2.</span> <span class="nav-text">转换方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、转换过程"><span class="nav-number">2.</span> <span class="nav-text">二、转换过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码备份"><span class="nav-number">2.0.1.</span> <span class="nav-text">代码备份</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#过滤无需转换的文件"><span class="nav-number">2.0.2.</span> <span class="nav-text">过滤无需转换的文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行检查操作"><span class="nav-number">2.0.3.</span> <span class="nav-text">执行检查操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决错误-告警"><span class="nav-number">2.0.4.</span> <span class="nav-text">解决错误/告警</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行转换操作"><span class="nav-number">2.0.5.</span> <span class="nav-text">执行转换操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误-警告解决"><span class="nav-number">3.</span> <span class="nav-text">错误/警告解决</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#错误"><span class="nav-number">3.0.1.</span> <span class="nav-text">错误</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#警告"><span class="nav-number">3.0.2.</span> <span class="nav-text">警告</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Xcode自动转换"><span class="nav-number">4.</span> <span class="nav-text">Xcode自动转换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关键字转换"><span class="nav-number">4.0.1.</span> <span class="nav-text">关键字转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关键字删除"><span class="nav-number">4.0.2.</span> <span class="nav-text">关键字删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关键字替换"><span class="nav-number">4.0.3.</span> <span class="nav-text">关键字替换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于被宏注释代码"><span class="nav-number">4.0.4.</span> <span class="nav-text">关于被宏注释代码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARC和block"><span class="nav-number">5.</span> <span class="nav-text">ARC和block</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#block关键字"><span class="nav-number">5.0.1.</span> <span class="nav-text">__block关键字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存在循环引用关系"><span class="nav-number">5.0.2.</span> <span class="nav-text">存在循环引用关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不存在循环引用关系"><span class="nav-number">5.0.3.</span> <span class="nav-text">不存在循环引用关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARC和Toll-Free-Bridging"><span class="nav-number">6.</span> <span class="nav-text">ARC和Toll-Free Bridging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARC和IBOutLet"><span class="nav-number">7.</span> <span class="nav-text">ARC和IBOutLet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">8.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

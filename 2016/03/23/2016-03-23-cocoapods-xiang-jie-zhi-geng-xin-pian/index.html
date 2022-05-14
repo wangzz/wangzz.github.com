@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="CocoaPods 大概是 2011 年出现的开源组件管理工具（目前已支持 Objective-C 和 Swift），近年来普及率越来越高，几乎已是所有 Cocoa 开源项目的标配。另外，很多大点的团队会用 CocoaPods 拆分工程，实现项目插件化。 博主曾在 2014 年写过 CocoaPods 详解 系列文章：CocoaPods详解之—-使用篇、CocoaPods详解之—-进阶篇、Coco">
+<meta name="keywords" content="CocoaPods, iOS, Cocoa, Trunk, 私有仓库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CocoaPods 详解之----更新篇">
+<meta property="og:url" content="http://foogry.wang/2016/03/23/2016-03-23-cocoapods-xiang-jie-zhi-geng-xin-pian/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="CocoaPods 大概是 2011 年出现的开源组件管理工具（目前已支持 Objective-C 和 Swift），近年来普及率越来越高，几乎已是所有 Cocoa 开源项目的标配。另外，很多大点的团队会用 CocoaPods 拆分工程，实现项目插件化。 博主曾在 2014 年写过 CocoaPods 详解 系列文章：CocoaPods详解之—-使用篇、CocoaPods详解之—-进阶篇、Coco">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-25T13:04:33.651Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CocoaPods 详解之----更新篇">
+<meta name="twitter:description" content="CocoaPods 大概是 2011 年出现的开源组件管理工具（目前已支持 Objective-C 和 Swift），近年来普及率越来越高，几乎已是所有 Cocoa 开源项目的标配。另外，很多大点的团队会用 CocoaPods 拆分工程，实现项目插件化。 博主曾在 2014 年写过 CocoaPods 详解 系列文章：CocoaPods详解之—-使用篇、CocoaPods详解之—-进阶篇、Coco">
+  <link rel="canonical" href="http://foogry.wang/2016/03/23/2016-03-23-cocoapods-xiang-jie-zhi-geng-xin-pian/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>CocoaPods 详解之----更新篇 | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2016/03/23/2016-03-23-cocoapods-xiang-jie-zhi-geng-xin-pian/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">CocoaPods 详解之----更新篇
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2016-03-23 10:50:29" itemprop="dateCreated datePublished" datetime="2016-03-23T10:50:29+08:00">2016-03-23</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-25 21:04:33" itemprop="dateModified" datetime="2019-09-25T21:04:33+08:00">2019-09-25</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2016/03/23/2016-03-23-cocoapods-xiang-jie-zhi-geng-xin-pian/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2016/03/23/2016-03-23-cocoapods-xiang-jie-zhi-geng-xin-pian/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>CocoaPods 大概是 2011 年出现的开源组件管理工具（目前已支持 Objective-C 和 Swift），近年来普及率越来越高，几乎已是所有 Cocoa 开源项目的标配。另外，很多大点的团队会用 CocoaPods 拆分工程，实现项目插件化。</p>
+<p>博主曾在 2014 年写过 <code>CocoaPods 详解</code> 系列文章：<a href="http://blog.csdn.net/wzzvictory/article/details/18737437" target="_blank" rel="noopener">CocoaPods详解之—-使用篇</a>、<a href="http://blog.csdn.net/wzzvictory/article/details/19178709" target="_blank" rel="noopener">CocoaPods详解之—-进阶篇</a>、<a href="http://blog.csdn.net/wzzvictory/article/details/20067595" target="_blank" rel="noopener">CocoaPods详解之—-制作篇</a>，简单介绍了从使用到亲手制作 CocoaPods 开源组件的过程。</p>
+<p>然而随着时间的推移，CocoaPods 有些使用方式也发生了变化，比如组件提交方式等。本文将从 Trunk 和私有仓库两个方面介绍自己对 CocoaPods 的新认识。</p>
+<a id="more"></a>
+
+<h2 id="一、Trunk-方式提交开源组件"><a href="#一、Trunk-方式提交开源组件" class="headerlink" title="一、Trunk 方式提交开源组件"></a>一、Trunk 方式提交开源组件</h2><p>从 CocoaPods 0.33 版本开始，CocoaPods 将组件的提交从 Pull requests 变成了自动化的 Trunk 方式。Trunk 提交方式有以下步骤：</p>
+<h3 id="1、向-Trunk-注册自己的电脑"><a href="#1、向-Trunk-注册自己的电脑" class="headerlink" title="1、向 Trunk 注册自己的电脑"></a>1、向 Trunk 注册自己的电脑</h3><p>首次使用 Trunk 时，需要注册自己的电脑：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># pod trunk register [E-mail] [User Name]</span><br><span class="line">$ pod trunk register foggry@foggry.com &quot;foggry&quot;</span><br></pre></td></tr></table></figure>
+
+<p>执行命令以后，上述邮箱会收到一封验证邮件，按照邮件说明打开制定的链接，注册流程就完成了。</p>
+<p>注册流程完成后，可以使用命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pod trunk me</span><br></pre></td></tr></table></figure>
+
+<p>可以检验注册结果，如果输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- Name:     foggry</span><br><span class="line">- Email:    foggry@foggry.com</span><br><span class="line">- Since:    May 19th, 2014 16:03</span><br><span class="line">- Pods:     None</span><br><span class="line">- Sessions:</span><br><span class="line">- March 19th, 22:23 - July 25th, 22:26. IP: 10.1.1.1</span><br></pre></td></tr></table></figure>
+
+<p>则说明注册成功。</p>
+<h3 id="2、提交组件"><a href="#2、提交组件" class="headerlink" title="2、提交组件"></a>2、提交组件</h3><p>准备好 podspec 文件后，首先要检查其合法性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Enter podspec path</span><br><span class="line">$ pod lib lint</span><br></pre></td></tr></table></figure>
+
+<p>解决完错误和警告后，会显示以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-&gt; FGMarqueeView (1.0.0)</span><br><span class="line"></span><br><span class="line">FGMarqueeView passed validation.</span><br></pre></td></tr></table></figure>
+
+<p>这就说明验证可以提交了。</p>
+<p>执行提交命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pod trunk push WZMarqueeView.podspec</span><br></pre></td></tr></table></figure>
+
+<p>如果顺利的话，会输出以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Updating spec repo `master`</span><br><span class="line"></span><br><span class="line">Validating podspec</span><br><span class="line">-&gt; WZMarqueeView (2.0.0)</span><br><span class="line"></span><br><span class="line">Updating spec repo `master`</span><br><span class="line"></span><br><span class="line">- Data URL: https://raw.githubusercontent.com/CocoaPods/Specs/1f2d70d978843a29cbe17b2476ffed8204eea6ef/Specs/WZMarqueeView/2.0.0/WZMarqueeView.podspec.json</span><br><span class="line">- Log messages:</span><br><span class="line">- March 21st, 00:49: Push for `WZMarqueeView 2.0.0&apos; initiated.</span><br><span class="line">- March 21st, 00:49: Push for `WZMarqueeView 2.0.0&apos; has been pushed (2.327208585 s).</span><br></pre></td></tr></table></figure>
+
+<p>仅需要这一条命令，开源组件就被推送到 CocoaPods 主仓库中了。可以执行以下命令验证下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pod search WZMarqueeView</span><br></pre></td></tr></table></figure>
+
+<p>输出为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-&gt; WZMarqueeView (2.0.0)</span><br><span class="line">A marquee view used on iOS.</span><br><span class="line">pod &apos;WZMarqueeView&apos;, &apos;~&gt; 2.0.0&apos;</span><br><span class="line">- Homepage: https://github.com/wangzz/WZMarqueeView</span><br><span class="line">- Source:   https://github.com/wangzz/WZMarqueeView.git</span><br><span class="line">- Versions: 2.0.0, 1.0.0 [master repo]</span><br></pre></td></tr></table></figure>
+
+<p>说明组件 <code>WZMarqueeView</code> 已经成功从 <code>1.0.0</code> 升级成了 <code>2.0.0</code> 版本。</p>
+<h3 id="3、其它说明"><a href="#3、其它说明" class="headerlink" title="3、其它说明"></a>3、其它说明</h3><ul>
+<li>权限声明</li>
+</ul>
+<p>在执行下述命令时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pod trunk push WZMarqueeView.podspec</span><br></pre></td></tr></table></figure>
+
+<p>提示了以下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Updating spec repo `master`</span><br><span class="line"></span><br><span class="line">Validating podspec</span><br><span class="line">-&gt; WZMarqueeView (2.0.0)</span><br><span class="line"></span><br><span class="line">[!] You are not allowed to push new versions for this pod.</span><br></pre></td></tr></table></figure>
+
+<p>原来，Trunk 要求只有组件所有者和开发者才能更新已有组件，而上例的组件 <code>WZMarqueeView</code> 是 2014 年通过 Pull requests 方式上传到 CocoaPods 主仓库的，并没有声明过所有权。</p>
+<p>随后，到 CocoaPods 指定的网页：<a href="https://trunk.cocoapods.org/claims/new" target="_blank" rel="noopener">Claim your Pod</a>上填写对应信息后，按照提示执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pod trunk info WZMarqueeView</span><br></pre></td></tr></table></figure>
+
+<p>看到执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">WZMarqueeView</span><br><span class="line">- Versions:</span><br><span class="line">- 1.0.0 (2014-05-19 22:03:59 UTC)</span><br><span class="line">- Owners:</span><br><span class="line">- foggry &lt;foggry@foggry.com&gt;</span><br></pre></td></tr></table></figure>
+
+<p>组件的所有权已经变成了本人，此时再去执行 <code>trunk push</code> 命令时就正常了。</p>
+<ul>
+<li>为组件添加其它所有者</li>
+</ul>
+<p>一个组件可以通过以下命令，添加多个所有者（以邮箱为标识）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># pod trunk add-owner [Module Name] [Owner E-mail]</span><br><span class="line">$ pod trunk add-owner WZMarqueeView kyle@cocoapods.org</span><br></pre></td></tr></table></figure>
+
+<p>执行成功后，<code>kyle@cocoapods.org</code> 也变成了 <code>WZMarqueeView</code> 的所有者。</p>
+<ul>
+<li>Pull requests 和 Trunk 对比</li>
+</ul>
+<p>对于开发者来说，Pull requests 的操作过程十分繁琐，需要开源组件制作者先 fork 一份主仓库，然后将组件提交到 fork 后的仓库，再 Pull requests 给 CocoaPods 主仓库的维护者；</p>
+<p>对 CocoaPods 主仓库的维护者来说，需要手工一个个处理主仓库的合并操作，通常第二天甚至需要更长时间 requests 才能被处理；</p>
+<p>而 Trunk 方式，开发者只需要一条命令就能将组件上传到主仓库，并且 Trunk 方式是自动化的，几乎不再需要主仓库的维护者做任何工作，实时性更好。</p>
+<p>另外，Trunk 增加了组件所有者的概念，非所有者无法提交组件的更新，这在一定程度上提高了 CocoaPods 的安全性。</p>
+<h2 id="二、创建私有-CocoaPods-仓库"><a href="#二、创建私有-CocoaPods-仓库" class="headerlink" title="二、创建私有 CocoaPods 仓库"></a>二、创建私有 CocoaPods 仓库</h2><p>目前所有支持 CocoaPods 的开源组件，都存储在 Github 上公共的 <a href="https://github.com/CocoaPods/Specs.git" target="_blank" rel="noopener">CocoaPods Specs</a> 仓库中，这种方式有以下缺点：</p>
+<p>官方仓库过大，里面的绝大多数组件都不是我们需要的，你一定忘不了首次执行 <code>pod install</code> 操作时那无尽的等待；</p>
+<p>不能实现私有化，作为一个相当好用的组件管理工具，很多团队都使用 CocoaPods 实现庞大项目的组件化，都放在公共仓库肯定不行。</p>
+<p>这时就需要创建一个和 <a href="https://github.com/CocoaPods/Specs.git" target="_blank" rel="noopener">CocoaPods Specs</a> 类似的私有组件存储仓库。私有仓库可以存放在自家公司的 Git 服务器上，也可以放在各大支持私有仓库的 Git 平台上，下面以支持免费私有仓库的 <a href="https://coding.net" target="_blank" rel="noopener">coding.net</a>为例说明 CocoaPods 私有仓库的创建过程。</p>
+<h3 id="1、创建coding-net私有仓库"><a href="#1、创建coding-net私有仓库" class="headerlink" title="1、创建coding.net私有仓库"></a>1、创建<a href="https://coding.net" target="_blank" rel="noopener">coding.net</a>私有仓库</h3><p>按照 <a href="https://coding.net" target="_blank" rel="noopener">coding.net</a> 官网提示创建一个私有仓库即可。</p>
+<h3 id="2、本地初始化组件仓库"><a href="#2、本地初始化组件仓库" class="headerlink" title="2、本地初始化组件仓库"></a>2、本地初始化组件仓库</h3><p>执行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># pod repo add [Private Repo Name] [GitHub HTTPS clone URL]</span><br><span class="line">$ pod repo add FGSpecs https://git.coding.net/foogry/FGSpecs.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、向仓库中添加组件"><a href="#3、向仓库中添加组件" class="headerlink" title="3、向仓库中添加组件"></a>3、向仓库中添加组件</h3><p>将事先准备好的组件添加到仓库中，组件可以存放在本地，也可以放在自家或网上的代码托管平台。执行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># pod repo push [Private Repo Name] [Private podspec Path]</span><br><span class="line">$ pod repo push FGSpecs ~/Desktop/FGMarqueeView.podspec</span><br></pre></td></tr></table></figure>
+
+<p>执行成功以后，会有以下输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Validating spec</span><br><span class="line"></span><br><span class="line">-&gt; FGMarqueeView (0.1.0)</span><br><span class="line"></span><br><span class="line">Updating the `FGSpecs&apos; repo</span><br><span class="line"></span><br><span class="line">Already up-to-date.</span><br><span class="line"></span><br><span class="line">Adding the spec to the `FGSpecs&apos; repo</span><br><span class="line"></span><br><span class="line">- [Fix] FGMarqueeView (0.1.0)</span><br><span class="line"></span><br><span class="line">Pushing the `FGSpecs&apos; repo</span><br><span class="line"></span><br><span class="line">To git@git.coding.net:foogry/FGSpecs.git</span><br><span class="line">e2ad499..31a1a8e  master -&gt; master</span><br></pre></td></tr></table></figure>
+
+<p>至此，本地和代码托管平台上的私有仓库 FGSpecs 中就都已经添加了私有组件 FGMarqueeView。</p>
+<h3 id="4、使用私有仓库中的组件"><a href="#4、使用私有仓库中的组件" class="headerlink" title="4、使用私有仓库中的组件"></a>4、使用私有仓库中的组件</h3><p>Podfile 文件中默认情况下已经隐式使用 <code>source</code> 声明了 CocoaPods 的官方仓库。但使用私有组件，需要使用 <code>source</code> 关键字鲜显式声明组件所在仓库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Private Specs</span><br><span class="line">source &apos;https://git.coding.net/foogry/FGSpecs.git&apos;</span><br><span class="line"></span><br><span class="line"># Public Specs</span><br><span class="line">source &apos;https://github.com/CocoaPods/Specs.git&apos;</span><br><span class="line"></span><br><span class="line">pod &apos;FGMarqueeView&apos;, &apos;~&gt; 0.1.0&apos;</span><br><span class="line">pod &apos;SBJson&apos;, &apos;~&gt; 4.0.0&apos;</span><br></pre></td></tr></table></figure>
+
+<p>其中，SBJson 组件是官方仓库的，FGMarqueeView 组件属于我们刚创建的私有仓库。</p>
+<p>需要注意的是：</p>
+<ul>
+<li>官方仓库的显式声明</li>
+</ul>
+<p>尽管官方仓库会被隐式声明，如果同时使用了官方仓库和私有仓库，就需要同时声明二者。</p>
+<ul>
+<li>仓库声明顺序性</li>
+</ul>
+<p>先声明的仓库具有优先权。当先后引用的两个仓库中都包含同一个组件时，会使用先引用仓库中的，哪怕后引用的仓库中版本号更高。</p>
+<h3 id="5、直接使用私有组件"><a href="#5、直接使用私有组件" class="headerlink" title="5、直接使用私有组件"></a>5、直接使用私有组件</h3><p>如果不想创建私有仓库，也可以在 Podfile 里直接引用私有组件（组件可以是本地的，也可以是托管在自家公司服务器或网上的代码托管平台上的），引用的同时还可以制定具体的 commit、branch 或者 tag，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pod &apos;FGMarqueeView&apos;, :git =&gt; &apos;https://git.coding.net/foogry/FGMarqueeView.git&apos;, :commit =&gt; &apos;b4dc0ffee&apos;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式引用的组件在执行完 <code>pod install</code> 以后，会被添加在 Development Pods 目录下，而通过私有仓库或共有仓库方式引用的组件则会被添加在 Pods 目录下。</p>
+<h2 id="三、cocoapods-版本管理"><a href="#三、cocoapods-版本管理" class="headerlink" title="三、cocoapods 版本管理"></a>三、cocoapods 版本管理</h2><p>cocoapods 升级新版本后可能会遇到坑，因此就有了降级的需求。</p>
+<ul>
+<li>查看当前版本</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem list cocoapods</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>卸载当前版本</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem uninstall cocoapods</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>安装指定版本</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem install cocoapods -v 0.39.0</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、参考文档"><a href="#四、参考文档" class="headerlink" title="四、参考文档"></a>四、参考文档</h2><ul>
+<li><p><a href="https://blog.cocoapods.org/CocoaPods-Trunk/#transition" target="_blank" rel="noopener">CocoaPods Trunk</a></p>
+</li>
+<li><p><a href="https://guides.cocoapods.org/making/getting-setup-with-trunk.html" target="_blank" rel="noopener">Getting setup with Trunk</a></p>
+</li>
+<li><p><a href="https://guides.cocoapods.org/making/private-cocoapods.html" target="_blank" rel="noopener">Private Pods</a></p>
+</li>
+<li><p><a href="https://guides.cocoapods.org/syntax/podfile.html#source" target="_blank" rel="noopener">Podfile Syntax Reference</a></p>
+</li>
+<li><p><a href="http://stackoverflow.com/a/20489489" target="_blank" rel="noopener">Downgrading or installing older version of Cocoapods</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2016/03/23/2016-03-23-cocoapods-xiang-jie-zhi-geng-xin-pian/" title="CocoaPods 详解之----更新篇">http://foogry.wang/2016/03/23/2016-03-23-cocoapods-xiang-jie-zhi-geng-xin-pian/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+            
+              <a href="/tags/CocoaPods/" rel="tag"># CocoaPods</a>
+            
+              <a href="/tags/Cocoa/" rel="tag"># Cocoa</a>
+            
+              <a href="/tags/Trunk/" rel="tag"># Trunk</a>
+            
+              <a href="/tags/私有仓库/" rel="tag"># 私有仓库</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2015/08/10/2015-08-10-ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/" rel="next" title="手动解析CrashLog之----原理篇">
+                  <i class="fa fa-chevron-left"></i> 手动解析CrashLog之----原理篇
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2017/02/06/2017-02-06-wei-shi-yao-objective-c-dui-xiang-cun-chu-zai-dui-shang-er-bu-shi-zhan-shang/" rel="prev" title="为什么 Objective-C 对象存储在堆上而不是栈上">
+                  为什么 Objective-C 对象存储在堆上而不是栈上 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、Trunk-方式提交开源组件"><span class="nav-number">1.</span> <span class="nav-text">一、Trunk 方式提交开源组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、向-Trunk-注册自己的电脑"><span class="nav-number">1.1.</span> <span class="nav-text">1、向 Trunk 注册自己的电脑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、提交组件"><span class="nav-number">1.2.</span> <span class="nav-text">2、提交组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、其它说明"><span class="nav-number">1.3.</span> <span class="nav-text">3、其它说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、创建私有-CocoaPods-仓库"><span class="nav-number">2.</span> <span class="nav-text">二、创建私有 CocoaPods 仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、创建coding-net私有仓库"><span class="nav-number">2.1.</span> <span class="nav-text">1、创建coding.net私有仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、本地初始化组件仓库"><span class="nav-number">2.2.</span> <span class="nav-text">2、本地初始化组件仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、向仓库中添加组件"><span class="nav-number">2.3.</span> <span class="nav-text">3、向仓库中添加组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、使用私有仓库中的组件"><span class="nav-number">2.4.</span> <span class="nav-text">4、使用私有仓库中的组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、直接使用私有组件"><span class="nav-number">2.5.</span> <span class="nav-text">5、直接使用私有组件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、cocoapods-版本管理"><span class="nav-number">3.</span> <span class="nav-text">三、cocoapods 版本管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、参考文档"><span class="nav-number">4.</span> <span class="nav-text">四、参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

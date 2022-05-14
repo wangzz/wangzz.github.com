@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="选择器分组使用相同布局配置的元素可以在一起声明： 123h1,h2,h3,h4,h5,h6 &amp;#123;  color: green;&amp;#125;  继承选择器针对 body 定义布局： 123body &amp;#123;    font-family: Verdana, sans-serif;&amp;#125;  还可以只对 p 定义：">
+<meta name="keywords" content="CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS 选择器">
+<meta property="og:url" content="http://foogry.wang/2021/01/06/CSS-选择器/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="选择器分组使用相同布局配置的元素可以在一起声明： 123h1,h2,h3,h4,h5,h6 &amp;#123;  color: green;&amp;#125;  继承选择器针对 body 定义布局： 123body &amp;#123;    font-family: Verdana, sans-serif;&amp;#125;  还可以只对 p 定义：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-03-21T15:37:34.413Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS 选择器">
+<meta name="twitter:description" content="选择器分组使用相同布局配置的元素可以在一起声明： 123h1,h2,h3,h4,h5,h6 &amp;#123;  color: green;&amp;#125;  继承选择器针对 body 定义布局： 123body &amp;#123;    font-family: Verdana, sans-serif;&amp;#125;  还可以只对 p 定义：">
+  <link rel="canonical" href="http://foogry.wang/2021/01/06/CSS-选择器/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>CSS 选择器 | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2021/01/06/CSS-选择器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">CSS 选择器
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2021-01-06 13:36:59" itemprop="dateCreated datePublished" datetime="2021-01-06T13:36:59+08:00">2021-01-06</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-21 23:37:34" itemprop="dateModified" datetime="2021-03-21T23:37:34+08:00">2021-03-21</time>
+              </span>
+            
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/01/06/CSS-选择器/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/01/06/CSS-选择器/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="选择器分组"><a href="#选择器分组" class="headerlink" title="选择器分组"></a>选择器分组</h2><p>使用相同布局配置的元素可以在一起声明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">h1,h2,h3,h4,h5,h6 &#123;</span><br><span class="line">  color: green;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="继承选择器"><a href="#继承选择器" class="headerlink" title="继承选择器"></a>继承选择器</h2><p>针对 body 定义布局：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">body &#123;</span><br><span class="line">    font-family: Verdana, sans-serif;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>还可以只对 p 定义：</p>
+<a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p  &#123;</span><br><span class="line">    font-family: Times, &quot;Times New Roman&quot;, serif;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样 body 里除了 p 以外就能使用相同的布局配置了。</p>
+<h2 id="子元素选择器"><a href="#子元素选择器" class="headerlink" title="子元素选择器"></a>子元素选择器</h2><p>下面的例子只会选择直接作为 ol 子元素的 li 子标签生效，第二级 li 标签不会生效：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.father &gt; li &#123;</span><br><span class="line">    font-style: italic;</span><br><span class="line">    font-weight: normal;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;ol class=&quot;father&quot;&gt;</span><br><span class="line">    &lt;li&gt;我是意大利斜体。&lt;/li&gt;</span><br><span class="line">    &lt;ol&gt;</span><br><span class="line">        &lt;li&gt;我不是意大利斜体。&lt;/li&gt;</span><br><span class="line">    &lt;/ol&gt;</span><br><span class="line">&lt;/ol&gt;</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，子元素选择器<code>只针对第一代子元素</code>生效。</p>
+<h2 id="后代选择器"><a href="#后代选择器" class="headerlink" title="后代选择器"></a>后代选择器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.father li &#123;</span><br><span class="line">    font-style: italic;</span><br><span class="line">    font-weight: normal;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;ol class=&quot;father&quot;&gt;</span><br><span class="line">    &lt;li&gt;我是意大利斜体。&lt;/li&gt;</span><br><span class="line">    &lt;ol&gt;</span><br><span class="line">        &lt;li&gt;我是意大利斜体。&lt;/li&gt;</span><br><span class="line">    &lt;/ol&gt;</span><br><span class="line">&lt;/ol&gt;</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子中，所有的 li 元素的样式都为斜体字。也就是说，后代选择器<code>针对所有的后代子元素</code>生效。</p>
+<h2 id="相邻兄弟选择器"><a href="#相邻兄弟选择器" class="headerlink" title="相邻兄弟选择器"></a>相邻兄弟选择器</h2><p>相邻兄弟选择器（Adjacent sibling selector）可选择紧接在另一元素后的元素，且二者有相同父元素。</p>
+<p>例如，如果要增加紧接在 h1 元素后出现的段落的上边距，可以这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">h1 + p &#123;</span><br><span class="line">    margin-top: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，用一个结合符 <code>只能选择两个相邻兄弟中的第二个元素</code> ！</p>
+<h2 id="class-选择器"><a href="#class-选择器" class="headerlink" title="class 选择器"></a>class 选择器</h2><ul>
+<li>通配 class 选择器</li>
+</ul>
+<p>我们可以让所有类相同的元素使用相同的选择器，比如下面的例子针对所有类名为 <code>important</code> 的元素定义了一个筛选器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*.important &#123;</span><br><span class="line">    color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也可以把前面的通配符 <code>*</code> 省略，效果是一样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.important &#123;</span><br><span class="line">    color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结合元素 class 选择器</li>
+</ul>
+<p>下面的写法，只有针对类名为 <code>important</code> 的 p 元素生效：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p.important &#123;</span><br><span class="line">    color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>多 class 选择器</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;p class=&quot;important warning&quot;&gt;</span><br><span class="line">    This paragraph is a very important warning.</span><br><span class="line">&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.important &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.warning &#123;</span><br><span class="line">    font-style: italic;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.important.warning &#123;</span><br><span class="line">    background: silver;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子中，三个筛选器会同时对 p 元素生效。</p>
+<h2 id="ID-选择器"><a href="#ID-选择器" class="headerlink" title="ID 选择器"></a>ID 选择器</h2><p>类似于类选择器，ID 选择器前面有一个 # 号：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*#intro &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>与类选择器一样，ID 选择器中可以忽略通配选择器。前面的例子也可以写成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#intro &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两个选择器的效果将是一样的，都会针对下面的 <code>p</code> 元素生效：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p id=&quot;intro&quot;&gt;This is a paragraph of introduction.&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h2><p>属性选择器可以根据元素的属性及属性值来选择元素。</p>
+<p>有以下几种写法：</p>
+<ul>
+<li>所有有特定属性的元素</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*[title] &#123;</span><br><span class="line">    color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>特定名称且特定属性的元素</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a[href][title] &#123;</span><br><span class="line">    color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>属性值为特定值的元素</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a[href=&quot;http://www.w3school.com.cn/about_us.asp&quot;] &#123;</span><br><span class="line">    color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>属性值为模糊匹配</li>
+</ul>
+<p>如果用特定值匹配，值必须要 <code>完全匹配</code> 才行。</p>
+<p>比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p class=&quot;important warning&quot;&gt;This paragraph is a very important warning.&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<p>下面的写法是匹配不了的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p[class=&quot;important&quot;] &#123;</span><br><span class="line">    color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>必须写成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p[class=&quot;important warning&quot;] &#123;</span><br><span class="line">    color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以通过下面的写法做到部分匹配：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p[class~=&quot;important&quot;] &#123;</span><br><span class="line">    color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>完整的模糊匹配语法参考列表如下：</p>
+<table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>[attribute]</td>
+<td>用于选取带有指定属性的元素。</td>
+</tr>
+<tr>
+<td>[attribute=value]</td>
+<td>用于选取带有指定属性和值的元素。</td>
+</tr>
+<tr>
+<td>[attribute~=value]</td>
+<td>用于选取属性值中包含指定词汇的元素。</td>
+</tr>
+<tr>
+<td>[attribute</td>
+<td>=value]</td>
+</tr>
+<tr>
+<td>[attribute^=value]</td>
+<td>匹配属性值以指定值开头的每个元素。</td>
+</tr>
+<tr>
+<td>[attribute$=value]</td>
+<td>匹配属性值以指定值结尾的每个元素。</td>
+</tr>
+<tr>
+<td>[attribute*=value]</td>
+<td>匹配属性值中包含指定值的每个元素。</td>
+</tr>
+</tbody></table>
+<h2 id="伪类选择器"><a href="#伪类选择器" class="headerlink" title="伪类选择器"></a>伪类选择器</h2><p>伪类用于当已有元素处于的某个状态时，为其添加对应的样式，这个状态是根据用户行为而动态变化的。</p>
+<p>语法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">selector : pseudo-class &#123;</span><br><span class="line">  property: value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>伪类选择器分为静态伪类和动态伪类两种。</p>
+<ul>
+<li>静态伪类</li>
+</ul>
+<p>:link 超链接点击之前</p>
+<p>:visited 链接被访问过之后</p>
+<p>PS：以上两种样式，只能用于超链接。</p>
+<ul>
+<li>动态伪类</li>
+</ul>
+<p>:hover “悬停”：鼠标放到标签上的时候</p>
+<p>:active “激活”： 鼠标点击标签，但是不松手时。</p>
+<p>:focus 是某个标签获得焦点时的样式（比如某个输入框获得焦点）</p>
+<p>PS：以上三种样式，只能用于超链接。</p>
+<p>示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">a:link &#123;</span><br><span class="line">    color: #FF0000</span><br><span class="line">&#125;		/* 未访问的链接 */</span><br><span class="line">a:visited &#123;</span><br><span class="line">    color: #00FF00</span><br><span class="line">&#125;	/* 已访问的链接 */</span><br><span class="line">a:hover &#123;</span><br><span class="line">    color: #FF00FF</span><br><span class="line">&#125;	/* 鼠标移动到链接上 */</span><br><span class="line">a:active &#123;</span><br><span class="line">    color: #0000FF</span><br><span class="line">&#125;	/* 选定的链接 */</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>完整的伪类列表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>CSS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:link</td>
+<td>向未被访问的链接添加样式。</td>
+<td>1</td>
+</tr>
+<tr>
+<td>:visited</td>
+<td>向已被访问的链接添加样式。</td>
+<td>1</td>
+</tr>
+<tr>
+<td>:active</td>
+<td>向被激活的元素添加样式。</td>
+<td>1</td>
+</tr>
+<tr>
+<td>:focus</td>
+<td>向拥有键盘输入焦点的元素添加样式。</td>
+<td>2</td>
+</tr>
+<tr>
+<td>:hover</td>
+<td>当鼠标悬浮在元素上方时，向元素添加样式。</td>
+<td>1</td>
+</tr>
+<tr>
+<td>:first-child</td>
+<td>向元素的第一个子元素添加样式。</td>
+<td>2</td>
+</tr>
+<tr>
+<td>:lang</td>
+<td>向带有指定 lang 属性的元素添加样式。</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<h2 id="伪元素选择器"><a href="#伪元素选择器" class="headerlink" title="伪元素选择器"></a>伪元素选择器</h2><p>伪元素用于创建一些不在文档树中的元素，并为其添加样式。</p>
+<p>基本语法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">selector::pseudo-element &#123;</span><br><span class="line">  property: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：按照规范，应该使用双冒号（::）而不是单个冒号（:），以便区分伪类和伪元素。但是，由于旧版本的 W3C 规范并未对此进行特别区分，因此目前绝大多数的浏览器都同时支持使用这两种方式来表示伪元素。</p>
+</blockquote>
+<p>以 first-line 为例，可以通过它向文本的首行设置特殊样式，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">p:first-line &#123;</span><br><span class="line">  color: #ff0000;</span><br><span class="line">  font-variant: small-caps;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>会根据 “first-line” 伪元素中的样式对 p 元素的第一行文本进行格式化。</p>
+<p>“first-line” 伪元素 <code>只能用于块级元素</code>。</p>
+<p>下面的属性可应用于 “first-line” 伪元素：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">font</span><br><span class="line">color</span><br><span class="line">background</span><br><span class="line">word-spacing</span><br><span class="line">letter-spacing</span><br><span class="line">text-decoration</span><br><span class="line">vertical-align</span><br><span class="line">text-transform</span><br><span class="line">line-height</span><br><span class="line">clear</span><br></pre></td></tr></table></figure>
+
+<p>完整的伪属性列表如下：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>CSS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>::first-letter (:first-letter)</td>
+<td>向文本的第一个字母添加特殊样式。</td>
+<td>1</td>
+</tr>
+<tr>
+<td>::first-line (:first-line)</td>
+<td>向文本的首行添加特殊样式。</td>
+<td>1</td>
+</tr>
+<tr>
+<td>::before (:before)</td>
+<td>在元素之前添加内容。</td>
+<td>2</td>
+</tr>
+<tr>
+<td>::after (:after)</td>
+<td>在元素之后添加内容。</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Pseudo-classes" target="_blank" rel="noopener">伪类</a></p>
+</li>
+<li><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Pseudo-elements" target="_blank" rel="noopener">伪元素</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2021/01/06/CSS-选择器/" title="CSS 选择器">http://foogry.wang/2021/01/06/CSS-选择器/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2021/01/04/CSS-长度单位/" rel="next" title="CSS 长度单位">
+                  <i class="fa fa-chevron-left"></i> CSS 长度单位
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2021/01/07/CSS-媒体查询/" rel="prev" title="CSS 媒体查询">
+                  CSS 媒体查询 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#选择器分组"><span class="nav-number">1.</span> <span class="nav-text">选择器分组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#继承选择器"><span class="nav-number">2.</span> <span class="nav-text">继承选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子元素选择器"><span class="nav-number">3.</span> <span class="nav-text">子元素选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后代选择器"><span class="nav-number">4.</span> <span class="nav-text">后代选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相邻兄弟选择器"><span class="nav-number">5.</span> <span class="nav-text">相邻兄弟选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#class-选择器"><span class="nav-number">6.</span> <span class="nav-text">class 选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ID-选择器"><span class="nav-number">7.</span> <span class="nav-text">ID 选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性选择器"><span class="nav-number">8.</span> <span class="nav-text">属性选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伪类选择器"><span class="nav-number">9.</span> <span class="nav-text">伪类选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伪元素选择器"><span class="nav-number">10.</span> <span class="nav-text">伪元素选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">11.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

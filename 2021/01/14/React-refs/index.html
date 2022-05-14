@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="简介在 React 典型的数据流中，props 是父子组件交互的唯一方式。但在典型数据流之外，React 还提供了 ref 方式，用于在父组件中获取子组件的实例，以从子组件获取数据或对其进行修改（比如 focus 某个 dom 元素）。 ref 表示对组件实例的引用，其实就是 ReactDOM.render() 返回值。 适合使用 ref 的情况 管理焦点，文本选择或媒体播放。 触发强制动画。 集">
+<meta name="keywords" content="React">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React refs">
+<meta property="og:url" content="http://foogry.wang/2021/01/14/React-refs/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="简介在 React 典型的数据流中，props 是父子组件交互的唯一方式。但在典型数据流之外，React 还提供了 ref 方式，用于在父组件中获取子组件的实例，以从子组件获取数据或对其进行修改（比如 focus 某个 dom 元素）。 ref 表示对组件实例的引用，其实就是 ReactDOM.render() 返回值。 适合使用 ref 的情况 管理焦点，文本选择或媒体播放。 触发强制动画。 集">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-03-21T16:08:26.160Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React refs">
+<meta name="twitter:description" content="简介在 React 典型的数据流中，props 是父子组件交互的唯一方式。但在典型数据流之外，React 还提供了 ref 方式，用于在父组件中获取子组件的实例，以从子组件获取数据或对其进行修改（比如 focus 某个 dom 元素）。 ref 表示对组件实例的引用，其实就是 ReactDOM.render() 返回值。 适合使用 ref 的情况 管理焦点，文本选择或媒体播放。 触发强制动画。 集">
+  <link rel="canonical" href="http://foogry.wang/2021/01/14/React-refs/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>React refs | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2021/01/14/React-refs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">React refs
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2021-01-14 13:52:42" itemprop="dateCreated datePublished" datetime="2021-01-14T13:52:42+08:00">2021-01-14</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-22 00:08:26" itemprop="dateModified" datetime="2021-03-22T00:08:26+08:00">2021-03-22</time>
+              </span>
+            
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/01/14/React-refs/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/01/14/React-refs/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在 React 典型的数据流中，<code>props</code> 是父子组件交互的唯一方式。但在典型数据流之外，React 还提供了 <code>ref</code> 方式，用于<code>在父组件中获取子组件的实例</code>，以从子组件获取数据或对其进行修改（比如 focus 某个 dom 元素）。</p>
+<p>ref 表示<code>对组件实例的引用</code>，其实就是 ReactDOM.render() 返回值。</p>
+<h2 id="适合使用-ref-的情况"><a href="#适合使用-ref-的情况" class="headerlink" title="适合使用 ref 的情况"></a>适合使用 ref 的情况</h2><ul>
+<li>管理焦点，文本选择或媒体播放。</li>
+<li>触发强制动画。</li>
+<li>集成第三方 DOM 库。</li>
+</ul>
+<a id="more"></a>
+
+<p>另外，应该避免使用 ref 来做任何可以通过声明式 (declaratively) 实现来完成的事情。</p>
+<p>总之，不要滥用 ref。</p>
+<h2 id="ReactDOM-render-方法返回值"><a href="#ReactDOM-render-方法返回值" class="headerlink" title="ReactDOM.render() 方法返回值"></a>ReactDOM.render() 方法返回值</h2><p>当 ReactDOM.render() 渲染组件时，返回值是对应组件的实例；而渲染 React 元素时，返回的是具体 React 元素节点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const domCom = &lt;button type=&quot;button&quot;&gt;button&lt;/button&gt;;</span><br><span class="line">const refDom = ReactDOM.render(domCom，container);</span><br><span class="line">console.log(refDom);</span><br><span class="line"></span><br><span class="line">// ConfirmPass 的组件内容省略</span><br><span class="line">const refCom = ReactDOM.render(&lt;ConfirmPass/&gt;,container);</span><br><span class="line">console.log(refCom);</span><br></pre></td></tr></table></figure>
+
+<p>ref 可以挂到任何组件上，也可以挂到任何 React 元素上；当挂到组件（有状态组件）时，表示对组件实例的引用，挂到 React 元素上时，表示对元素的引用。</p>
+<h2 id="ref-设置回调函数"><a href="#ref-设置回调函数" class="headerlink" title="ref 设置回调函数"></a>ref 设置回调函数</h2><p>ref 属性可以设置成一个回调函数，这也是官方强烈推荐的做法。该函数的执行时机：</p>
+<ul>
+<li>组件被挂载后</li>
+</ul>
+<p>回调函数被立即执行，函数的参数为该组件的实例。</p>
+<ul>
+<li>组件被卸载或原有的 ref 属性本身发生变化</li>
+</ul>
+<p>回调函数被立即执行，函数参数为 null，以确保内存泄漏。</p>
+<p>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">RegisterStepTwo = React.createClass(&#123;</span><br><span class="line">    getInitialState()&#123;</span><br><span class="line">      return &#123;visible: true&#125;;</span><br><span class="line">    &#125;,</span><br><span class="line">  changeVisible()&#123;</span><br><span class="line">    this.setState(&#123;visible: !this.state.visible&#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  refCb(instance)&#123;</span><br><span class="line">    console.log(instance);</span><br><span class="line">  &#125;,</span><br><span class="line">  render()&#123;</span><br><span class="line">    return(</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;button type=&quot;button&quot; onClick=&#123;this.changeVisible.bind(this)&#125;&gt;&#123;this.state.visible ? &apos;卸载&apos; : &apos;挂载&apos;&#125;ConfirmPass</span><br><span class="line">        &lt;/button&gt;</span><br><span class="line">        &#123;</span><br><span class="line">          this.state.visible ?</span><br><span class="line">            &lt;ConfirmPass ref=&#123;this.refCb&#125; onChange=&#123;this.handleChange.bind(this)&#125;/&gt; : null</span><br><span class="line">         &#125;</span><br><span class="line">       &lt;/div&gt;</span><br><span class="line">     )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>或者通过箭头函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; Component &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">class App extends Component &#123;</span><br><span class="line">    componentDidMount() &#123;</span><br><span class="line">        this.textInput.focus();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    render() &#123;</span><br><span class="line">        return (</span><br><span class="line">            &lt;input type=&quot;text&quot; ref=&#123;el =&gt; this.textInput = el&#125; /&gt;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default App;</span><br></pre></td></tr></table></figure>
+
+<h2 id="React-createRef-方式"><a href="#React-createRef-方式" class="headerlink" title="React.createRef() 方式"></a>React.createRef() 方式</h2><p>举例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class AutoFocusTextInput extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    this.textInput = React.createRef();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    this.textInput.current.focusTextInput();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;CustomTextInput ref=&#123;this.textInput&#125; /&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以通过 <code>textInput</code> 引用到 <code>CustomTextInput</code> 的实例。注意事项：</p>
+<ul>
+<li><p>createRef 初始化动作要在组件挂载之前，如果是挂载之后初始化，则无法得到 DOM 元素的引用。</p>
+</li>
+<li><p>真正的 DOM 元素引用在current属性上。</p>
+</li>
+</ul>
+<h2 id="ref-设置字符串"><a href="#ref-设置字符串" class="headerlink" title="ref 设置字符串"></a>ref 设置字符串</h2><p>ref 属性值也可以设置成字符串，但这种方式在 React17 里将被废弃，因此不推荐使用了。比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">componentDidMount () &#123;</span><br><span class="line">  Toast.$this = this.refs.Toast;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">render () &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;ToastPlace ref=&quot;Toast&quot;&gt;&lt;/ToastPlace&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="获取-ref-指向组件对应的-dom-节点"><a href="#获取-ref-指向组件对应的-dom-节点" class="headerlink" title="获取 ref 指向组件对应的 dom 节点"></a>获取 ref 指向组件对应的 dom 节点</h2><p>不管 ref 设置的值是回调函数还是字符串，通过 ref 拿到组件实例的引用后，都可以通过 <code>ReactDOM.findDOMNode(ref)</code> 来获取组件挂载后真正的 dom 节点。</p>
+<p>对于 html 元素使用 ref 的情况，ref 本身引用的就是该元素的 dom 节点，无需再使用上述方法获取。</p>
+<h2 id="ref-在有状态组件中的应用"><a href="#ref-在有状态组件中的应用" class="headerlink" title="ref 在有状态组件中的应用"></a>ref 在有状态组件中的应用</h2><p>前面说过，有状态组件中 ref 指向的是组件的实例，因此可以通过 ref 获取组件的 <code>props</code>、<code>state</code>、<code>refs</code>、<code>实例方法（非继承方法）</code>等，这样就可以在父组件中改变子组件的行为。</p>
+<h2 id="ref-在无状态组件（函数组件）中的应用"><a href="#ref-在无状态组件（函数组件）中的应用" class="headerlink" title="ref 在无状态组件（函数组件）中的应用"></a>ref 在无状态组件（函数组件）中的应用</h2><p>默认情况下，你不能在 <a href="https://www.cnblogs.com/wonyun/p/5930333.html" target="_blank" rel="noopener">无状态组件</a>(函数组件)上使用 ref 属性，因为它们没有实例，所以父组件中通过 ref 获取子组件时，其值为 null，也就是说<code>无法通过 ref 来获取无状态组件实例</code>。但是可以有以下两种方式在无状态组件上使用 ref：</p>
+<ul>
+<li><p>结合复合组件来包装无状态组件</p>
+</li>
+<li><p>通过变量保存我们想要的组件或 dom 元素的实例引用</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function TestComp(props)&#123;</span><br><span class="line">    let refDom;</span><br><span class="line">    return (&lt;div&gt;</span><br><span class="line">        &lt;div ref=&#123;(node) =&gt; refDom = node&#125;&gt;</span><br><span class="line">            ...</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以通过 refDom 来访问无状态组件中的指定 dom 元素了，访问其它组件实例也类似。</p>
+<h2 id="ref-转发"><a href="#ref-转发" class="headerlink" title="ref 转发"></a>ref 转发</h2><p>如下的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">const FancyButton = React.forwardRef((props, ref) =&gt; (</span><br><span class="line">  &lt;button ref=&#123;ref&#125; className=&quot;FancyButton&quot;&gt;</span><br><span class="line">    &#123;props.children&#125;</span><br><span class="line">  &lt;/button&gt;</span><br><span class="line">));</span><br><span class="line"></span><br><span class="line">// 你可以直接获取 DOM button 的 ref：</span><br><span class="line">const ref = React.createRef();</span><br><span class="line">&lt;FancyButton ref=&#123;ref&#125;&gt;Click me!&lt;/FancyButton&gt;;</span><br></pre></td></tr></table></figure>
+
+<p>当 ref 挂载完成，ref.current 将指向 <button> DOM 节点。</button></p>
+<h2 id="其它说明"><a href="#其它说明" class="headerlink" title="其它说明"></a>其它说明</h2><p>不要在 render 方法中访问 ref 引用，因为 render 方法只是返回一个虚拟 dom，这时组件不一定挂载到了 dom 中，或 render 方法返回的虚拟 dom 不一定更新到了 dom 中。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
+<li><p><a href="https://segmentfault.com/a/1190000008665915" target="_blank" rel="noopener">React之ref详细用法</a></p>
+</li>
+<li><p><a href="https://zh-hans.reactjs.org/docs/refs-and-the-dom.html" target="_blank" rel="noopener">Refs and the DOM</a></p>
+</li>
+<li><p><a href="https://zh-hans.reactjs.org/docs/forwarding-refs.html" target="_blank" rel="noopener">Refs 转发</a></p>
+</li>
+<li><p><a href="https://juejin.im/post/5b907ad65188255c38533bbf" target="_blank" rel="noopener">React专题：操作DOM</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2021/01/14/React-refs/" title="React refs">http://foogry.wang/2021/01/14/React-refs/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/React/" rel="tag"># React</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2021/01/13/HTML-meta-标签/" rel="next" title="HTML meta 标签">
+                  <i class="fa fa-chevron-left"></i> HTML meta 标签
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2021/01/15/React-组件和元素/" rel="prev" title="React 组件和元素">
+                  React 组件和元素 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#适合使用-ref-的情况"><span class="nav-number">2.</span> <span class="nav-text">适合使用 ref 的情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReactDOM-render-方法返回值"><span class="nav-number">3.</span> <span class="nav-text">ReactDOM.render() 方法返回值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ref-设置回调函数"><span class="nav-number">4.</span> <span class="nav-text">ref 设置回调函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-createRef-方式"><span class="nav-number">5.</span> <span class="nav-text">React.createRef() 方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ref-设置字符串"><span class="nav-number">6.</span> <span class="nav-text">ref 设置字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取-ref-指向组件对应的-dom-节点"><span class="nav-number">7.</span> <span class="nav-text">获取 ref 指向组件对应的 dom 节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ref-在有状态组件中的应用"><span class="nav-number">8.</span> <span class="nav-text">ref 在有状态组件中的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ref-在无状态组件（函数组件）中的应用"><span class="nav-number">9.</span> <span class="nav-text">ref 在无状态组件（函数组件）中的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ref-转发"><span class="nav-number">10.</span> <span class="nav-text">ref 转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它说明"><span class="nav-number">11.</span> <span class="nav-text">其它说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">12.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="概述console 的功能主要在于控制台打印，它可以打印任何字符、对象、甚至 DOM 元素和系统信息，下面一一介绍。 console.log( ) | info( ) | debug( ) | warn( ) | error( )直接打印字符，区别在于展示形态的不同：   新版 chrome 控制台可以将打印信息分类：">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于 console 你需要知道的">
+<meta property="og:url" content="http://foogry.wang/2021/03/15/关于-console-你需要知道的/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="概述console 的功能主要在于控制台打印，它可以打印任何字符、对象、甚至 DOM 元素和系统信息，下面一一介绍。 console.log( ) | info( ) | debug( ) | warn( ) | error( )直接打印字符，区别在于展示形态的不同：   新版 chrome 控制台可以将打印信息分类：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1xZ_WveH2gK0jSZFEXXcqMpXa-1492-566.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1fZ2Vvhn1gK0jSZKPXXXvUXXa-420-446.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1GtL3vlr0gK0jSZFnXXbRRXXa-1840-504.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1eK23vlr0gK0jSZFnXXbRRXXa-1832-978.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1KQY1vbj1gK0jSZFuXXcrHpXa-922-302.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1mZ61va61gK0jSZFlXXXDKFXa-920-255.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1WldouKbviK0jSZFNXXaApXXa-928-742.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1UV6UvXY7gK0jSZKzXXaikpXa-919-377.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1ELLVveL2gK0jSZPhXXahvXXa-917-500.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1HEDUvfb2gK0jSZK9XXaEgFXa-1842-548.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1Jh_YvkL0gK0jSZFAXXcA9pXa-1840-1096.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1wAT2vbj1gK0jSZFuXXcrHpXa-1612-524.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1tPHYvkL0gK0jSZFAXXcA9pXa-1842-440.png">
+<meta property="og:updated_time" content="2021-03-21T15:27:30.236Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于 console 你需要知道的">
+<meta name="twitter:description" content="概述console 的功能主要在于控制台打印，它可以打印任何字符、对象、甚至 DOM 元素和系统信息，下面一一介绍。 console.log( ) | info( ) | debug( ) | warn( ) | error( )直接打印字符，区别在于展示形态的不同：   新版 chrome 控制台可以将打印信息分类：">
+<meta name="twitter:image" content="https://img.alicdn.com/tfs/TB1xZ_WveH2gK0jSZFEXXcqMpXa-1492-566.png">
+  <link rel="canonical" href="http://foogry.wang/2021/03/15/关于-console-你需要知道的/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>关于 console 你需要知道的 | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2021/03/15/关于-console-你需要知道的/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">关于 console 你需要知道的
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2021-03-15 20:26:45" itemprop="dateCreated datePublished" datetime="2021-03-15T20:26:45+08:00">2021-03-15</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-21 23:27:30" itemprop="dateModified" datetime="2021-03-21T23:27:30+08:00">2021-03-21</time>
+              </span>
+            
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/03/15/关于-console-你需要知道的/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/03/15/关于-console-你需要知道的/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>console 的功能主要在于控制台打印，它可以打印任何字符、对象、甚至 DOM 元素和系统信息，下面一一介绍。</p>
+<h3 id="console-log-info-debug-warn-error"><a href="#console-log-info-debug-warn-error" class="headerlink" title="console.log( ) | info( ) | debug( ) | warn( ) | error( )"></a>console.log( ) | info( ) | debug( ) | warn( ) | error( )</h3><p>直接打印字符，区别在于展示形态的不同：</p>
+<img width="400" src="https://img.alicdn.com/tfs/TB1xZ_WveH2gK0jSZFEXXcqMpXa-1492-566.png">
+
+<p>新版 chrome 控制台可以将打印信息分类：</p>
+<a id="more"></a>
+
+<img width="200" src="https://img.alicdn.com/tfs/TB1fZ2Vvhn1gK0jSZKPXXXvUXXa-420-446.png">
+
+<p><code>log()</code> 与 <code>info()</code> 都对应 <code>info</code>，<code>warn()</code> 对应 <code>warnings</code>，<code>error()</code> 对应 <code>errors</code>，而 <code>debug()</code> 对应 <code>verbose</code>，因此建议在合适的场景使用合适的打印习惯，这样排查问题时也可以有针对性的筛选。</p>
+<p>比如调试信息可以用 <code>console.debug</code> 仅在调试环境下输出，调试者即便开启了调试参数也不会影响正常 <code>info</code> 的查看，因为调试信息都输出在 <code>verbose</code> 中。</p>
+<h3 id="使用占位符"><a href="#使用占位符" class="headerlink" title="使用占位符"></a>使用占位符</h3><ul>
+<li>%o — 对象</li>
+<li>%s — 字符串</li>
+<li>%d — 数字</li>
+</ul>
+<p>如下所示，可通过占位符在一行中插入不同类型的值：</p>
+<img width="400" src="https://img.alicdn.com/tfs/TB1GtL3vlr0gK0jSZFnXXbRRXXa-1840-504.png">
+
+<h3 id="添加-CSS-样式"><a href="#添加-CSS-样式" class="headerlink" title="添加 CSS 样式"></a>添加 CSS 样式</h3><ul>
+<li>%c - 样式</li>
+</ul>
+<img width="400" src="https://img.alicdn.com/tfs/TB1eK23vlr0gK0jSZFnXXbRRXXa-1832-978.png">
+
+<p>可以总结出，<strong>console 支持输出复杂的内容，其输出能力堪比 HTML，但输入能力太弱，仅为字符串，因此采用了占位符 + 多入参修饰的设计模式解决这个问题。</strong></p>
+<h3 id="console-dir"><a href="#console-dir" class="headerlink" title="console.dir( )"></a>console.dir( )</h3><p>按 JSON 模式输出。笔者在这里也补充一句：<code>console.log()</code> 会自动判断类型，如果内容是 DOM 属性，则输出 DOM 树，但 <code>console.dir</code> 会强制以 JSON 模式输出，用在 DOM 对象时可强制转换为 JSON 输出。</p>
+<img width="400" src="https://img.alicdn.com/tfs/TB1KQY1vbj1gK0jSZFuXXcrHpXa-922-302.png">
+
+<h3 id="输出-HTML-元素"><a href="#输出-HTML-元素" class="headerlink" title="输出 HTML 元素"></a>输出 HTML 元素</h3><p>按照 HTML ELements 结构输出：</p>
+<img width="400" src="https://img.alicdn.com/tfs/TB1mZ61va61gK0jSZFlXXXDKFXa-920-255.png">
+
+<p>这种输出结构和 Elements 打印形式是一致的，如果要看详细属性，可以使用 <code>console.dir()</code>。</p>
+<h3 id="console-table"><a href="#console-table" class="headerlink" title="console.table"></a>console.table</h3><p>在控制台打印一个表格，属于功能增强。虽然仅文本也可以在控制台打印出漂亮的表格，但浏览器调试控制台的功能更强大，<code>console.table</code> 只是其富文本能力的一个体现。</p>
+<img width="400" src="https://img.alicdn.com/tfs/TB1WldouKbviK0jSZFNXXaApXXa-928-742.png">
+
+<h3 id="console-group-amp-console-groupEnd"><a href="#console-group-amp-console-groupEnd" class="headerlink" title="console.group( ) &amp; console.groupEnd( )"></a>console.group( ) &amp; console.groupEnd( )</h3><p>接下来是另一个富文本能力，按分组输出：</p>
+<img width="400" src="https://img.alicdn.com/tfs/TB1UV6UvXY7gK0jSZKzXXaikpXa-919-377.png">
+
+<p>这种带有副作用的 API 显然是为方便阅读而设计的，然而在需要输出大量动态结构化数据的场景下，还需要进行结构转换，是比较麻烦的地方。</p>
+<h3 id="console-count"><a href="#console-count" class="headerlink" title="console.count( )"></a>console.count( )</h3><p><code>count()</code> 用来打印调用次数，一般用在循环或递归函数中。接收一个 <code>label</code> 参数以定制输出，默认直接输出 <code>1 2 3</code> 数字。</p>
+<img width="400" src="https://img.alicdn.com/tfs/TB1ELLVveL2gK0jSZPhXXahvXXa-917-500.png">
+
+<h3 id="console-assert"><a href="#console-assert" class="headerlink" title="console.assert( )"></a>console.assert( )</h3><p><code>console</code> 版断言工具，当且仅当第一个参数值为 <code>false</code> 时才打印第二个参数作为输出。</p>
+<img width="400" src="https://img.alicdn.com/tfs/TB1HEDUvfb2gK0jSZK9XXaEgFXa-1842-548.png">
+
+<p>这种输出结果为 error，所以也可被 <code>console.error</code> + 代码级别断言所取代。</p>
+<h3 id="console-trace"><a href="#console-trace" class="headerlink" title="console.trace( )"></a>console.trace( )</h3><p>打印此时的调用栈，在打印辅助调试信息时非常有用。</p>
+<img width="400" src="https://img.alicdn.com/tfs/TB1Jh_YvkL0gK0jSZFAXXcA9pXa-1840-1096.png">
+
+<h3 id="console-time"><a href="#console-time" class="headerlink" title="console.time( )"></a>console.time( )</h3><p>打印代码执行时间，性能优化和监控场景比较常见。</p>
+<img width="400" src="https://img.alicdn.com/tfs/TB1wAT2vbj1gK0jSZFuXXcrHpXa-1612-524.png">
+
+<h3 id="console-memory"><a href="#console-memory" class="headerlink" title="console.memory"></a>console.memory</h3><p>打印内存使用情况。</p>
+<img width="400" src="https://img.alicdn.com/tfs/TB1tPHYvkL0gK0jSZFAXXcA9pXa-1842-440.png">
+
+<h3 id="console-clear"><a href="#console-clear" class="headerlink" title="console.clear( )"></a>console.clear( )</h3><p>清空控制台输出。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>console</code> 提供了如此多的输出规范，其实也是在变相制定开发规范，毕竟离开发者最近的就是调试控制台，如果你的项目打印规范与标准规范有差异，那么调试时信息看起来就会很别扭。</p>
+<p>可以看到，大部分开源库都良好的遵循了这套规范，比如三方库绝不会输出 <code>log()</code>，而且将错误、警告与调试信息正确分开，并尽量少的用 CSS 样式、分组、<code>table</code> 等功能，因为这些功能干扰性较强，不能保证所有用户都可接受。</p>
+<p>相对的，项目源码就比较适合使用一些醒目的自定义规范，只要这套规则能被很好的执行起来。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://medium.com/javascript-in-plain-english/mastering-js-console-log-like-a-pro-1c634e6393f9" target="_blank" rel="noopener">Mastering JS console.log like a Pro</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2021/03/15/关于-console-你需要知道的/" title="关于 console 你需要知道的">http://foogry.wang/2021/03/15/关于-console-你需要知道的/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2021/03/15/JS-结构赋值/" rel="next" title="JS 结构赋值">
+                  <i class="fa fa-chevron-left"></i> JS 结构赋值
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2021/03/21/Chrome-调试面板之-Network/" rel="prev" title="Chrome 调试面板之--Network">
+                  Chrome 调试面板之--Network <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#console-log-info-debug-warn-error"><span class="nav-number">1.1.</span> <span class="nav-text">console.log( ) | info( ) | debug( ) | warn( ) | error( )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用占位符"><span class="nav-number">1.2.</span> <span class="nav-text">使用占位符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加-CSS-样式"><span class="nav-number">1.3.</span> <span class="nav-text">添加 CSS 样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-dir"><span class="nav-number">1.4.</span> <span class="nav-text">console.dir( )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出-HTML-元素"><span class="nav-number">1.5.</span> <span class="nav-text">输出 HTML 元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-table"><span class="nav-number">1.6.</span> <span class="nav-text">console.table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-group-amp-console-groupEnd"><span class="nav-number">1.7.</span> <span class="nav-text">console.group( ) &amp; console.groupEnd( )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-count"><span class="nav-number">1.8.</span> <span class="nav-text">console.count( )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-assert"><span class="nav-number">1.9.</span> <span class="nav-text">console.assert( )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-trace"><span class="nav-number">1.10.</span> <span class="nav-text">console.trace( )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-time"><span class="nav-number">1.11.</span> <span class="nav-text">console.time( )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-memory"><span class="nav-number">1.12.</span> <span class="nav-text">console.memory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-clear"><span class="nav-number">1.13.</span> <span class="nav-text">console.clear( )</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">3.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

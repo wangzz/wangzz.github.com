@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="一、定位权限分类1、Always在 iOS 8 之前的系统中，我们不需要单独调用任何接口，默认就是，也只有 Always 定位权限。 在 iOS 8 和之后的系统中，要想申请 Always 权限，需要手动调用下面的方法： 1- (void)requestAlwaysAuthorization API_AVAILABLE(ios(8.0)) API_UNAVAILABLE(macos) API_UN">
+<meta name="keywords" content="iOS, CoreLocation, 定位">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 定位权限那些事">
+<meta property="og:url" content="http://foogry.wang/2019/09/18/2019-09-18-ios-ding-wei-quan-xian-na-xie-shi/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="一、定位权限分类1、Always在 iOS 8 之前的系统中，我们不需要单独调用任何接口，默认就是，也只有 Always 定位权限。 在 iOS 8 和之后的系统中，要想申请 Always 权限，需要手动调用下面的方法： 1- (void)requestAlwaysAuthorization API_AVAILABLE(ios(8.0)) API_UNAVAILABLE(macos) API_UN">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://foogry.wang/images/location/1.jpeg">
+<meta property="og:image" content="http://foogry.wang/images/location/3.jpeg">
+<meta property="og:image" content="http://foogry.wang/images/location/2.jpeg">
+<meta property="og:image" content="http://foogry.wang/images/location/5.jpeg">
+<meta property="og:image" content="http://foogry.wang/images/location/6.jpeg">
+<meta property="og:image" content="http://foogry.wang/images/location/4.jpeg">
+<meta property="og:image" content="http://foogry.wang/images/location/7.jpeg">
+<meta property="og:image" content="http://foogry.wang/images/location/8.jpeg">
+<meta property="og:image" content="http://foogry.wang/images/location/10.png">
+<meta property="og:image" content="http://foogry.wang/images/location/9.png">
+<meta property="og:updated_time" content="2019-09-25T13:04:33.652Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 定位权限那些事">
+<meta name="twitter:description" content="一、定位权限分类1、Always在 iOS 8 之前的系统中，我们不需要单独调用任何接口，默认就是，也只有 Always 定位权限。 在 iOS 8 和之后的系统中，要想申请 Always 权限，需要手动调用下面的方法： 1- (void)requestAlwaysAuthorization API_AVAILABLE(ios(8.0)) API_UNAVAILABLE(macos) API_UN">
+<meta name="twitter:image" content="http://foogry.wang/images/location/1.jpeg">
+  <link rel="canonical" href="http://foogry.wang/2019/09/18/2019-09-18-ios-ding-wei-quan-xian-na-xie-shi/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>iOS 定位权限那些事 | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2019/09/18/2019-09-18-ios-ding-wei-quan-xian-na-xie-shi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">iOS 定位权限那些事
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-18 10:02:48" itemprop="dateCreated datePublished" datetime="2019-09-18T10:02:48+08:00">2019-09-18</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-25 21:04:33" itemprop="dateModified" datetime="2019-09-25T21:04:33+08:00">2019-09-25</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/09/18/2019-09-18-ios-ding-wei-quan-xian-na-xie-shi/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2019/09/18/2019-09-18-ios-ding-wei-quan-xian-na-xie-shi/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一、定位权限分类"><a href="#一、定位权限分类" class="headerlink" title="一、定位权限分类"></a>一、定位权限分类</h2><h4 id="1、Always"><a href="#1、Always" class="headerlink" title="1、Always"></a>1、Always</h4><p>在 iOS 8 之前的系统中，我们不需要单独调用任何接口，默认就是，也只有 <code>Always</code> 定位权限。</p>
+<p>在 iOS 8 和之后的系统中，要想申请 <code>Always</code> 权限，需要手动调用下面的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)requestAlwaysAuthorization API_AVAILABLE(ios(8.0)) API_UNAVAILABLE(macos) API_UNAVAILABLE(tvos);</span><br></pre></td></tr></table></figure>
+
+<p>另外 <code>Always</code> 权限要求必须在 plist 里有对应配置（具体配置项在 <code>系统定位权限弹框</code> 一节里有介绍），否则调用该方法也不起作用。</p>
+<p>通过此方法申请的定位权限在前台、后台都能够使用定位数据，但 App 应该视情况在不需要的时候主动关闭定位，以节省电量。</p>
+<a id="more"></a>
+
+<h4 id="2、WhenInUse-iOS-8-才有"><a href="#2、WhenInUse-iOS-8-才有" class="headerlink" title="2、WhenInUse (iOS 8+ 才有)"></a>2、WhenInUse (iOS 8+ 才有)</h4><p>iOS 8 之前的系统没有该权限，iOS 8 和之后的系统要想申请 <code>WhenInUse</code> 权限，需要手动调用下面的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)requestWhenInUseAuthorization API_AVAILABLE(ios(8.0)) API_UNAVAILABLE(macos);</span><br></pre></td></tr></table></figure>
+
+<p><code>WhenInUse</code> 权限要求必须在 plist 里配置 <code>NSLocationWhenInUseUsageDescription</code>，否则调用该方法不起作用。</p>
+<p> 通过此方法申请的定位权限，默认情况下， App 只有在前台时才能使用定位数据，如果在后台想使用定位数据，需要将 <code>allowsBackgroundLocationUpdates</code> 属性设置成 YES，后面会有说明。</p>
+<h2 id="二、系统定位权限弹框"><a href="#二、系统定位权限弹框" class="headerlink" title="二、系统定位权限弹框"></a>二、系统定位权限弹框</h2><h4 id="1、以下情况系统会弹出定位权限弹框"><a href="#1、以下情况系统会弹出定位权限弹框" class="headerlink" title="1、以下情况系统会弹出定位权限弹框"></a>1、以下情况系统会弹出定位权限弹框</h4><ul>
+<li><p>定位权限状态是 <code>NotDetermined</code> 时通过 <code>requestWhenInUseAuthorization</code> 申请定位权限，弹框样式如图：</p>
+<img src="/images/location/1.jpeg" style="zoom:50%;">
+</li>
+<li><p>定位权限状态是 <code>NotDetermined</code> 时通过 <code>requestAlwaysAuthorization</code> 申请定位权限，弹框样式如图：</p>
+<img src="/images/location/3.jpeg" style="zoom:50%;">
+</li>
+<li><p>通过 <code>requestWhenInUseAuthorization</code> 申请并获得了 <code>WhenInUse</code> 定位权限后，<code>第一次</code> ( 注意是第一次) 通过 <code>requestAlwaysAuthorization</code> 申请定位权限，弹框样式如图：</p>
+<img src="/images/location/2.jpeg" style="zoom:50%;">
+
+</li>
+</ul>
+<h2 id="三、系统定位服务设置项中的定位权限列表"><a href="#三、系统定位服务设置项中的定位权限列表" class="headerlink" title="三、系统定位服务设置项中的定位权限列表"></a>三、系统定位服务设置项中的定位权限列表</h2><h4 id="1、WhenInUse-（iOS-8-）"><a href="#1、WhenInUse-（iOS-8-）" class="headerlink" title="1、WhenInUse （iOS 8+）"></a>1、<code>WhenInUse</code> （iOS 8+）</h4><p>当 plist 中只设置了 <code>NSLocationWhenInUseUsageDescription</code> (iOS 8+ 才支持) 时，系统定位服务设置中的定位权限列表中就只会显示 <code>永不</code> 、<code>使用应用期间</code> 两项，如下图所示：</p>
+<img src="/images/location/5.jpeg" style="zoom:50%;">
+
+<h4 id="2、Always"><a href="#2、Always" class="headerlink" title="2、Always"></a>2、<code>Always</code></h4><p>不同版本的系统，在 plist 里配置 <code>Always</code> 权限的 key 不太一样，具体如下：</p>
+<ul>
+<li>iOS 7 及之前</li>
+</ul>
+<p><code>NSLocationUsageDescription</code>，配置后系统设置里会显示 <code>永不</code> 、<code>始终</code> 两个选项</p>
+<ul>
+<li>iOS 8-10 </li>
+</ul>
+<p><code>NSLocationAlwaysUsageDescription</code>， 配置后系统里会显示  <code>永不</code> 、<code>始终</code> 两个选项，如果同时也配了 <code>NSLocationWhenInUseUsageDescription</code>，则会显示  <code>永不</code> 、<code>使用应用期间</code> 、<code>始终</code>   三项</p>
+<ul>
+<li>iOS 11+ </li>
+</ul>
+<p><code>NSLocationAlwaysAndWhenInUseUsageDescription</code> ，配置后系统里就会显示 <code>永不</code> 、<code>使用应用期间</code> 、<code>始终</code>  三项，而无论配没配过 <code>NSLocationWhenInUseUsageDescription</code>，如下图所示：</p>
+<img src="/images/location/6.jpeg" style="zoom:50%;">
+
+<p>用户可以随时在系统设置中更改每个 App 获得的定位权限。</p>
+<p>另外，不管你申请的是哪种权限，都以用户在系统设置中给你的权限为准。比如你 App 启动时通过 <code>requestWhenInUseAuthorization</code> 申请了 <code>WhenInUse</code> 权限，但用户后来到系统设置里给你改成了 <code>Always</code> 权限；哪怕你代码里下次启动时仍然调用的是 <code>requestWhenInUseAuthorization</code>  ，但你启动后可以使用的仍然是 <code>Always</code> 权限。</p>
+<h2 id="四、其它重要属性"><a href="#四、其它重要属性" class="headerlink" title="四、其它重要属性"></a>四、其它重要属性</h2><h2 id="1、pausesLocationUpdatesAutomatically"><a href="#1、pausesLocationUpdatesAutomatically" class="headerlink" title="1、pausesLocationUpdatesAutomatically"></a>1、pausesLocationUpdatesAutomatically</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@property(assign, nonatomic) BOOL pausesLocationUpdatesAutomatically API_AVAILABLE(ios(6.0)) API_UNAVAILABLE(macos) API_UNAVAILABLE(watchos, tvos);</span><br></pre></td></tr></table></figure>
+
+<p>默认值是 YES。当值为 YES 时，如果用户位置长时间不变化，系统就会将定位停掉。系统将定位停掉以后，会通过下述回调告诉我们：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager;</span><br></pre></td></tr></table></figure>
+
+<p>在这个回调里，我们可以开启用户区域变化的监听，当用户离开当前区域后，重新开启定位；或者也可以立即以低定位精度重启定位，当发现用户位置变化后，再以高精度启动定位。以上是两种在尽量省电的前提下使用定位的方式，一些对定位数据依赖不高的场景可以使用，但像驾车导航类的应用，还是乖乖将 <code>pausesLocationUpdatesAutomatically</code> 设置成 NO 吧。</p>
+<p>另外，当系统自动停止定位后，我们又手动重新开启定位时，系统会调用下面的回调，以告诉我们定位被恢复了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2、allowsBackgroundLocationUpdates"><a href="#2、allowsBackgroundLocationUpdates" class="headerlink" title="2、allowsBackgroundLocationUpdates"></a>2、allowsBackgroundLocationUpdates</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@property(assign, nonatomic) BOOL allowsBackgroundLocationUpdates API_AVAILABLE(ios(9.0), watchos(4.0)) API_UNAVAILABLE(macos) API_UNAVAILABLE(tvos);</span><br></pre></td></tr></table></figure>
+
+<p>这是个 iOS 9 才支持的 API，默认值是 NO。</p>
+<ul>
+<li><p>在 iOS 7 及之前系统中，只有 <code>Always</code> 权限，前后台都能正常定位；</p>
+</li>
+<li><p>到了 iOS 8 系统，如果申请的是 <code>WhenInUse</code> 权限，App 切后台后也能正常定位，只是会在屏幕顶部出现定位的提示蓝条；</p>
+</li>
+<li><p>到了 iOS 9 及更新的系统，如果申请的是  <code>WhenInUse</code> 权限，App 切后台后默认就不能定位。当将 <code>allowsBackgroundLocationUpdates</code> 设置成 YES 后，才能在后台定位，同时在后台定位时会像 iOS 8 一样在屏幕顶部出现定位的提示蓝条；</p>
+</li>
+</ul>
+<p>定位提示蓝条如下图所示：</p>
+<img src="/images/location/4.jpeg" style="zoom:50%;">
+
+<h2 id="3、showsBackgroundLocationIndicator"><a href="#3、showsBackgroundLocationIndicator" class="headerlink" title="3、showsBackgroundLocationIndicator"></a>3、showsBackgroundLocationIndicator</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@property(assign, nonatomic) BOOL showsBackgroundLocationIndicator API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(macos) API_UNAVAILABLE(watchos, tvos);</span><br></pre></td></tr></table></figure>
+
+<p>这是个 iOS 11 才支持，默认值为 NO，是个专门给 <code>Always</code> 权限使用的属性。</p>
+<p>前面说过， <code>WhenInUse</code> 权限当 <code>allowsBackgroundLocationUpdates</code>  为 YES，且 App 在后台使用定位时，系统会在设备顶部显示正在使用定位的蓝条。当权限为  <code>Always</code> 时，如果 <code>showsBackgroundLocationIndicator</code> 为 YES 时，那么系统就会为我们展示一个同款蓝条。</p>
+<h2 id="五、关于-iOS-13"><a href="#五、关于-iOS-13" class="headerlink" title="五、关于 iOS 13"></a>五、关于 iOS 13</h2><p>iOS 13 的 <code>CoreLocation</code> 做了比较大的改变，所以单独拿出来说下。</p>
+<h4 id="1、定位权限变动"><a href="#1、定位权限变动" class="headerlink" title="1、定位权限变动"></a>1、定位权限变动</h4><p>在 iOS 13 系统，申请 <code>WhenInUse</code> 或 <code>Always</code> 权限时，系统都会先弹出来下面的弹框让用户选择：</p>
+<img src="/images/location/7.jpeg" style="zoom:50%;">
+
+<ul>
+<li>用户选择 <code>Allow While In Use</code></li>
+</ul>
+<p>如果用户选择 <code>Allow While In Use</code> ，我们的 App 会获得 <code>WhenInUse</code> 权限。</p>
+<p>如果之前申请的是  <code>WhenInUse</code>  权限，那么就跟 iOS 13 之前版本的系统表现没什么区别；</p>
+<p>如果之前申请的是 <code>Always</code> 权限，当我们的 App 在后台使用位置信息时，系统就会在未来的某个时间（目前我重现过的时机是切后台锁屏后，再解锁屏幕时）再弹出一个弹框询问用户是继续给我们的 App  <code>WhenInUse</code> 权限，还是切换成 <code>Always</code> 权限，如下图所示：</p>
+<img src="/images/location/8.jpeg" style="zoom:50%;">
+
+<p>也就是说，iOS 13 中，我们没法直接向用户要 <code>Always</code> 权限了，必须要经过一个二次确认。</p>
+<p>别急，更蛋疼的还在后面。</p>
+<ul>
+<li>用户选择 <code>Allow Once</code></li>
+</ul>
+<p>iOS 13 提出了 <code>Temporary authorization</code> 的概念。当用户选择 <code>Allow Once</code> 后，我们的 App 就获得了 <code>Temporary authorization</code> ，也就是临时权限。该权限有以下特点：</p>
+<p>实际的权限类型是：<code>WhenInUse</code>；</p>
+<p>App 重启后，定位权限会重新变成 <code>NotDetermined</code>，下次开启定位时再申请定位权限会重新弹框让用户确认；</p>
+<h4 id="2、系统设置中的定位权限列表"><a href="#2、系统设置中的定位权限列表" class="headerlink" title="2、系统设置中的定位权限列表"></a>2、系统设置中的定位权限列表</h4><p>如果是用 Xcode 11 编译出来的应用，在 iOS 13 的系统定位权限设置列表里会多出一个下次询问的选项：</p>
+<img src="/images/location/10.png" style="zoom:50%;">
+
+<h4 id="3、定位蓝条"><a href="#3、定位蓝条" class="headerlink" title="3、定位蓝条"></a>3、定位蓝条</h4><p>iOS 13 系统如果当前是 <code>WhenInUse</code> 权限、 <code>allowsBackgroundLocationUpdates</code> 为 YES，且应用在后台时，屏幕顶部的定位蓝条视觉调整成了下图的样式：</p>
+<img src="/images/location/9.png" style="zoom:50%;">
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2019/09/18/2019-09-18-ios-ding-wei-quan-xian-na-xie-shi/" title="iOS 定位权限那些事">http://foogry.wang/2019/09/18/2019-09-18-ios-ding-wei-quan-xian-na-xie-shi/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+            
+              <a href="/tags/CoreLocation/" rel="tag"># CoreLocation</a>
+            
+              <a href="/tags/定位/" rel="tag"># 定位</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2018/11/18/2018-11-18-bian-chang-can-shu-xue-xi-bi-ji/" rel="next" title="变长参数学习笔记">
+                  <i class="fa fa-chevron-left"></i> 变长参数学习笔记
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/09/24/博客从-Octopress-迁移到-Hexo-经验总结/" rel="prev" title="Octopress 迁移 Hexo 经验总结">
+                  Octopress 迁移 Hexo 经验总结 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、定位权限分类"><span class="nav-number">1.</span> <span class="nav-text">一、定位权限分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、Always"><span class="nav-number">1.0.1.</span> <span class="nav-text">1、Always</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、WhenInUse-iOS-8-才有"><span class="nav-number">1.0.2.</span> <span class="nav-text">2、WhenInUse (iOS 8+ 才有)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、系统定位权限弹框"><span class="nav-number">2.</span> <span class="nav-text">二、系统定位权限弹框</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、以下情况系统会弹出定位权限弹框"><span class="nav-number">2.0.1.</span> <span class="nav-text">1、以下情况系统会弹出定位权限弹框</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、系统定位服务设置项中的定位权限列表"><span class="nav-number">3.</span> <span class="nav-text">三、系统定位服务设置项中的定位权限列表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、WhenInUse-（iOS-8-）"><span class="nav-number">3.0.1.</span> <span class="nav-text">1、WhenInUse （iOS 8+）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、Always"><span class="nav-number">3.0.2.</span> <span class="nav-text">2、Always</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、其它重要属性"><span class="nav-number">4.</span> <span class="nav-text">四、其它重要属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1、pausesLocationUpdatesAutomatically"><span class="nav-number">5.</span> <span class="nav-text">1、pausesLocationUpdatesAutomatically</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、allowsBackgroundLocationUpdates"><span class="nav-number">6.</span> <span class="nav-text">2、allowsBackgroundLocationUpdates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、showsBackgroundLocationIndicator"><span class="nav-number">7.</span> <span class="nav-text">3、showsBackgroundLocationIndicator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、关于-iOS-13"><span class="nav-number">8.</span> <span class="nav-text">五、关于 iOS 13</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、定位权限变动"><span class="nav-number">8.0.1.</span> <span class="nav-text">1、定位权限变动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、系统设置中的定位权限列表"><span class="nav-number">8.0.2.</span> <span class="nav-text">2、系统设置中的定位权限列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、定位蓝条"><span class="nav-number">8.0.3.</span> <span class="nav-text">3、定位蓝条</span></a></li></ol></li></ol></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

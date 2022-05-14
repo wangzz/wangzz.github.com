@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="一、Network 面板介绍 其中：  Controls 控制 Network 的外观和功能。 Filters 控制 Requests Table 具体显示哪些内容。 Overview 显示获取到资源的时间轴信息。 Requests Table 按资源获取的前后顺序显示所有获取到的资源信息，点击资源名可以查看该资源的详细信息。 Summary 显示总的请求数、数据传输量、加载时间信息。">
+<meta name="keywords" content="Chrome">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chrome 调试面板之--Network">
+<meta property="og:url" content="http://foogry.wang/2021/03/21/Chrome-调试面板之-Network/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="一、Network 面板介绍 其中：  Controls 控制 Network 的外观和功能。 Filters 控制 Requests Table 具体显示哪些内容。 Overview 显示获取到资源的时间轴信息。 Requests Table 按资源获取的前后顺序显示所有获取到的资源信息，点击资源名可以查看该资源的详细信息。 Summary 显示总的请求数、数据传输量、加载时间信息。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://gitee.com/wangzz/pic/raw/master/network_panel.png">
+<meta property="og:image" content="https://gitee.com/wangzz/pic/raw/master/large_request_rows.png">
+<meta property="og:image" content="https://gitee.com/wangzz/pic/raw/master/apture_screenshots.png">
+<meta property="og:updated_time" content="2021-03-21T15:44:37.007Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chrome 调试面板之--Network">
+<meta name="twitter:description" content="一、Network 面板介绍 其中：  Controls 控制 Network 的外观和功能。 Filters 控制 Requests Table 具体显示哪些内容。 Overview 显示获取到资源的时间轴信息。 Requests Table 按资源获取的前后顺序显示所有获取到的资源信息，点击资源名可以查看该资源的详细信息。 Summary 显示总的请求数、数据传输量、加载时间信息。">
+<meta name="twitter:image" content="https://gitee.com/wangzz/pic/raw/master/network_panel.png">
+  <link rel="canonical" href="http://foogry.wang/2021/03/21/Chrome-调试面板之-Network/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Chrome 调试面板之--Network | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2021/03/21/Chrome-调试面板之-Network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">Chrome 调试面板之--Network
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2021-03-21 23:44:00 / 修改时间：23:44:37" itemprop="dateCreated datePublished" datetime="2021-03-21T23:44:00+08:00">2021-03-21</time>
+            </span>
+          
+            
+
+            
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/03/21/Chrome-调试面板之-Network/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/03/21/Chrome-调试面板之-Network/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一、Network-面板介绍"><a href="#一、Network-面板介绍" class="headerlink" title="一、Network 面板介绍"></a>一、Network 面板介绍</h2><p><img src="https://gitee.com/wangzz/pic/raw/master/network_panel.png" alt></p>
+<p>其中：</p>
+<ul>
+<li>Controls 控制 Network 的外观和功能。</li>
+<li>Filters 控制 Requests Table 具体显示哪些内容。</li>
+<li>Overview 显示获取到资源的时间轴信息。</li>
+<li>Requests Table 按资源获取的前后顺序显示所有获取到的资源信息，点击资源名可以查看该资源的详细信息。</li>
+<li>Summary 显示总的请求数、数据传输量、加载时间信息。</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="二、Controls"><a href="#二、Controls" class="headerlink" title="二、Controls"></a>二、Controls</h2><ul>
+<li>Record Network Log / Stop recording network log</li>
+</ul>
+<p>开始/停止记录网络请求</p>
+<ul>
+<li>Clear</li>
+</ul>
+<p>清空当前记录内容</p>
+<ul>
+<li>Filter</li>
+</ul>
+<p>展开/收起 Filters 菜单</p>
+<ul>
+<li>Search</li>
+</ul>
+<p>展开/收起 Search 菜单</p>
+<ul>
+<li>Preserve log</li>
+</ul>
+<p>刷新界面时，保留/不保留上次网络请求记录</p>
+<ul>
+<li>Disable cache</li>
+</ul>
+<p>禁用/不禁用网络缓存功能。当禁用时，每次界面刷新都跟首次打开界面的效果一样，可以方便优化首次进入界面的性能</p>
+<ul>
+<li>Trottling</li>
+</ul>
+<p>模拟不同的网络条件</p>
+<ul>
+<li>Import HAR file</li>
+</ul>
+<p>导入 HAR 格式的网络调试记录</p>
+<ul>
+<li>Export HAR file</li>
+</ul>
+<p>将当前已记录的网络请求记录导出成 HAR 文件</p>
+<h2 id="三、Filters"><a href="#三、Filters" class="headerlink" title="三、Filters"></a>三、Filters</h2><ul>
+<li>筛选输入框</li>
+</ul>
+<p>输入筛选词来筛选特定的请求，支持按以下内容筛选：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">1、domain </span><br><span class="line">可以模糊、正则匹配</span><br><span class="line"></span><br><span class="line">2、has-response-header </span><br><span class="line">response 中包含特定 header</span><br><span class="line"></span><br><span class="line">3、is</span><br><span class="line">可以使用 `is:running` 找到 `WebSocket` 资源</span><br><span class="line"></span><br><span class="line">4、larger-than</span><br><span class="line">筛选出大于特定尺寸的请求，单位是字节</span><br><span class="line"></span><br><span class="line">5、method</span><br><span class="line">通过 HTTP 方法筛选</span><br><span class="line"></span><br><span class="line">6、mime-type</span><br><span class="line">通过文件的 MIME 类型筛选。MIME 媒体类型（通常称为 Multipurpose Internet Mail Extensions 或 MIME 类型 ）是一种标准，用来表示文档、文件或字节流的性质和格式。</span><br><span class="line"></span><br><span class="line">7、mixed-content</span><br><span class="line">可以通过 mixed-content:all 筛选出全部的请求，也可以通过 mixed-content:displayed 筛选出当前展示的请求</span><br><span class="line"></span><br><span class="line">8、scheme</span><br><span class="line">通过 scheme:http 筛选出 http 请求，通过 scheme:https 筛选出 https 请求</span><br><span class="line"></span><br><span class="line">9、set-cookie-domain</span><br><span class="line">筛选通过 Set-Cookie 设置了 Domain 的请求</span><br><span class="line"></span><br><span class="line">10、set-cookie-name</span><br><span class="line">筛选通过 Set-Cookie 设置了 name 的请求</span><br><span class="line"></span><br><span class="line">11、set-cookie-value</span><br><span class="line">筛选通过 Set-Cookie 设置了 value 的请求</span><br><span class="line"></span><br><span class="line">12、status-code</span><br><span class="line">筛选特定 HTTP code 的请求</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Hide Data URLs</li>
+</ul>
+<p>隐藏/不隐藏 Data URLs 类型的文件</p>
+<ul>
+<li>Filter requests by type</li>
+</ul>
+<p>通过类型筛选请求，包含 XHR、JS、CSS、Img、Media、Font、Doc、WS(WebSocket)、Mainfest 以及其他 Other </p>
+<ul>
+<li>Has blocked cookies</li>
+</ul>
+<p>有/没有 blocked cookies</p>
+<ul>
+<li>Blocked Requests</li>
+</ul>
+<p>有/没有 blocked 请求</p>
+<h2 id="四、Overview"><a href="#四、Overview" class="headerlink" title="四、Overview"></a>四、Overview</h2><p>以时间轴方式展示所有的请求</p>
+<h2 id="五、Requests-Table"><a href="#五、Requests-Table" class="headerlink" title="五、Requests Table"></a>五、Requests Table</h2><p>在 Requests Table 的 Header 上可以右键显示更多的列，默认显示以下列：</p>
+<ul>
+<li>Name </li>
+</ul>
+<p>请求或资源的文件名或唯一标识</p>
+<ul>
+<li>Status</li>
+</ul>
+<p>HTTP 状态码</p>
+<ul>
+<li>Type</li>
+</ul>
+<p>资源的 MIME 类型</p>
+<ul>
+<li>Initiator</li>
+</ul>
+<p>请求发起者，共分以下几种：</p>
+<blockquote>
+<p>Parser：Chrome 的 HTML parser<br>Redirect：HTTP 重定向<br>Script：JavaScript 脚本<br>Other：其它</p>
+</blockquote>
+<ul>
+<li>Size</li>
+</ul>
+<p>请求 response 的 Header 和 body 大小之和</p>
+<ul>
+<li>Time</li>
+</ul>
+<p>请求的全部耗时，包括请求发出到收到数据的总时间</p>
+<ul>
+<li>Waterfall</li>
+</ul>
+<p>每个请求的可视化分解</p>
+<h2 id="六、Summary"><a href="#六、Summary" class="headerlink" title="六、Summary"></a>六、Summary</h2><ul>
+<li><p>total number of requests</p>
+</li>
+<li><p>total download size over network</p>
+</li>
+<li><p>total resources loaded by the page</p>
+</li>
+<li><p>DOMContentLoaded</p>
+</li>
+<li><p>Load</p>
+</li>
+</ul>
+<h2 id="七、timing-breakdown"><a href="#七、timing-breakdown" class="headerlink" title="七、timing breakdown"></a>七、timing breakdown</h2><p>请求耗时分解，共有以下阶段：</p>
+<h4 id="Resource-Scheduling"><a href="#Resource-Scheduling" class="headerlink" title="Resource Scheduling"></a>Resource Scheduling</h4><ul>
+<li>Queueing</li>
+</ul>
+<p>排队中；有以下情况会导致请求排队：</p>
+<blockquote>
+<p>1、有更高优先级的请求<br>2、每个域名已经建立了超过 6 个 TCP 连接（HTTP/1.0 或 HTTP/1.1 才有这个限制）<br>3、浏览器正在分配磁盘空间</p>
+</blockquote>
+<h4 id="Connection-Start"><a href="#Connection-Start" class="headerlink" title="Connection Start"></a>Connection Start</h4><ul>
+<li>Stalled</li>
+</ul>
+<p>停止；一个请求可能会因为导致 Queueing 的原因而导致 Stalled</p>
+<p>解决 Queueing/Stalled 问题的方法：</p>
+<blockquote>
+<p>1、如果必须使用 HTTP/1.0 或 HTTP/1.1 ，进行域名分片（domain sharding）来解决 6 个 TCP 连接的限制<br>2、使用 HTTP/2 以规避 6 个 TCP 连接的限制<br>3、删除或推迟发送不必要的请求</p>
+</blockquote>
+<ul>
+<li>DNS Lookup</li>
+</ul>
+<p>DNS 寻找 IP 地址</p>
+<ul>
+<li>Initial connection</li>
+</ul>
+<p>浏览器建立请求链接耗时，包括 TCP 握手/重试和 SSL 协商</p>
+<ul>
+<li>Proxy negotiation</li>
+</ul>
+<p>与代理服务器协商请求</p>
+<h4 id="Request-Response"><a href="#Request-Response" class="headerlink" title="Request/Response"></a>Request/Response</h4><ul>
+<li>Request sent</li>
+</ul>
+<p>请求发送</p>
+<ul>
+<li>ServiceWorker Preparation</li>
+</ul>
+<p>浏览器启动 ServiceWorker</p>
+<ul>
+<li>Request to ServiceWorker</li>
+</ul>
+<p>请求正在发送给 ServiceWorker</p>
+<ul>
+<li>Waiting (TTFB)</li>
+</ul>
+<p>浏览器正在等待 response 的第一个字节，TTFB 是 Time To First Byte 的缩写。这个耗时包括请求 1 个往返的延迟，以及服务器准备响应所用的时间。</p>
+<p>可能导致 TTFB 的原因：</p>
+<blockquote>
+<p>1、客户端和服务器的网络连接慢<br>2、服务器响应速度慢</p>
+</blockquote>
+<p>对应的解决方案：</p>
+<blockquote>
+<p>1、通过 CDN 优化客户端服务端网络连接慢问题<br>2、服务器优化响应速度</p>
+</blockquote>
+<ul>
+<li>Content Download</li>
+</ul>
+<p>浏览器接收 response</p>
+<ul>
+<li>Receiving Push</li>
+</ul>
+<p>浏览器正在接收 HTTP/2 的服务器 Push</p>
+<ul>
+<li>Reading Push</li>
+</ul>
+<p>浏览器正在读取之前收到的 Push 数据</p>
+<h2 id="八、其它"><a href="#八、其它" class="headerlink" title="八、其它"></a>八、其它</h2><ul>
+<li>Use large request rows</li>
+</ul>
+<p>选项开启后，会以双行的形式展示 size 列，其中上面深颜色的表示通过网络传输的大小，下面浅颜色的表示未经压缩的尺寸</p>
+<p><img src="https://gitee.com/wangzz/pic/raw/master/large_request_rows.png" alt></p>
+<ul>
+<li>Capture screenshots</li>
+</ul>
+<p>选项开启后，会新增一个显示截图的面板。重新刷新网页就能看到界面截图：</p>
+<p><img src="https://gitee.com/wangzz/pic/raw/master/apture_screenshots.png" alt></p>
+<h2 id="九、参考文档"><a href="#九、参考文档" class="headerlink" title="九、参考文档"></a>九、参考文档</h2><ul>
+<li><p><a href="https://developers.google.com/web/tools/chrome-devtools/network/reference" target="_blank" rel="noopener">Chrome DevTools - Network Analysis Reference</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xiaohuochai/p/9182165.html" target="_blank" rel="noopener">使用chrome开发者工具中的network面板测量网站网络性能</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2021/03/21/Chrome-调试面板之-Network/" title="Chrome 调试面板之--Network">http://foogry.wang/2021/03/21/Chrome-调试面板之-Network/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Chrome/" rel="tag"># Chrome</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2021/03/15/关于-console-你需要知道的/" rel="next" title="关于 console 你需要知道的">
+                  <i class="fa fa-chevron-left"></i> 关于 console 你需要知道的
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、Network-面板介绍"><span class="nav-number">1.</span> <span class="nav-text">一、Network 面板介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、Controls"><span class="nav-number">2.</span> <span class="nav-text">二、Controls</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、Filters"><span class="nav-number">3.</span> <span class="nav-text">三、Filters</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、Overview"><span class="nav-number">4.</span> <span class="nav-text">四、Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、Requests-Table"><span class="nav-number">5.</span> <span class="nav-text">五、Requests Table</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、Summary"><span class="nav-number">6.</span> <span class="nav-text">六、Summary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、timing-breakdown"><span class="nav-number">7.</span> <span class="nav-text">七、timing breakdown</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Resource-Scheduling"><span class="nav-number">7.0.1.</span> <span class="nav-text">Resource Scheduling</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Connection-Start"><span class="nav-number">7.0.2.</span> <span class="nav-text">Connection Start</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Request-Response"><span class="nav-number">7.0.3.</span> <span class="nav-text">Request/Response</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八、其它"><span class="nav-number">8.</span> <span class="nav-text">八、其它</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#九、参考文档"><span class="nav-number">9.</span> <span class="nav-text">九、参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

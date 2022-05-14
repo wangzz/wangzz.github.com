@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="简介React 的核心思想是组件化的思想，而 React 组件的定义可以通过下面的公式描述： 1UI = Component(props, state)  组件根据 props 和 state 两个参数，计算得到对应界面的UI。可见，props 和 state 是组件的两个重要数据源。 props 和 state 本质一句话概括，props 是组件对外的接口，state 是组件对内的接口。">
+<meta name="keywords" content="React">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React props 和 state">
+<meta property="og:url" content="http://foogry.wang/2021/01/16/React-props-和-state/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="简介React 的核心思想是组件化的思想，而 React 组件的定义可以通过下面的公式描述： 1UI = Component(props, state)  组件根据 props 和 state 两个参数，计算得到对应界面的UI。可见，props 和 state 是组件的两个重要数据源。 props 和 state 本质一句话概括，props 是组件对外的接口，state 是组件对内的接口。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-03-21T16:07:44.452Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React props 和 state">
+<meta name="twitter:description" content="简介React 的核心思想是组件化的思想，而 React 组件的定义可以通过下面的公式描述： 1UI = Component(props, state)  组件根据 props 和 state 两个参数，计算得到对应界面的UI。可见，props 和 state 是组件的两个重要数据源。 props 和 state 本质一句话概括，props 是组件对外的接口，state 是组件对内的接口。">
+  <link rel="canonical" href="http://foogry.wang/2021/01/16/React-props-和-state/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>React props 和 state | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2021/01/16/React-props-和-state/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">React props 和 state
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2021-01-16 20:51:36" itemprop="dateCreated datePublished" datetime="2021-01-16T20:51:36+08:00">2021-01-16</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-22 00:07:44" itemprop="dateModified" datetime="2021-03-22T00:07:44+08:00">2021-03-22</time>
+              </span>
+            
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/01/16/React-props-和-state/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/01/16/React-props-和-state/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>React 的核心思想是组件化的思想，而 React 组件的定义可以通过下面的公式描述：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UI = Component(props, state)</span><br></pre></td></tr></table></figure>
+
+<p>组件根据 props 和 state 两个参数，计算得到对应界面的UI。可见，props 和 state 是组件的两个重要数据源。</p>
+<h2 id="props-和-state-本质"><a href="#props-和-state-本质" class="headerlink" title="props 和 state 本质"></a>props 和 state 本质</h2><p>一句话概括，<code>props 是组件对外的接口，state 是组件对内的接口</code>。</p>
+<a id="more"></a>
+
+<p>组件内可以引用其他组件，组件之间的引用形成了一个树状结构（组件树），如果下层组件需要使用上层组件的数据或方法，上层组件就可以通过下层组件的 props 属性进行传递，因此 props 是组件对外的接口。</p>
+<p>组件除了使用上层组件传递的数据外，自身也可能需要维护管理数据，这就是组件对内的接口 state。根据对外接口 props 和对内接口 state，组件计算出对应界面的UI。</p>
+<p>组件的 props 和 state 都和组件最终渲染出的UI直接相关。两者的主要区别是：<code>state 是可变的</code>，是组件内部维护的一组用于反映组件UI变化的状态集合；而 <code>props 是组件的只读属性</code>，组件内部不能直接修改 props，要想修改 props，只能在该组件的上层组件中修改。在组件状态上移的场景中，父组件正是通过子组件的props，传递给子组件其所需要的状态。</p>
+<h2 id="如何定义-state"><a href="#如何定义-state" class="headerlink" title="如何定义 state"></a>如何定义 state</h2><p>state 必须能代表一个组件 UI 呈现的 <code>完整状态集</code>，即组件对应 UI 的任何改变，都可以从 state 的变化中反映出来；</p>
+<p>同时，state 还必须是代表一个组件 UI 呈现的 <code>最小状态集</code>，即 state 中的所有状态都是用于反映组件 UI 的变化，没有任何多余的状态，也不需要通过其他状态计算而来的中间状态。</p>
+<p>组件中用到的一个变量是不是应该作为组件 state，可以通过下面的 4 条依据进行判断：</p>
+<ul>
+<li><p>这个变量是否是通过 props 从父组件中获取？如果是，那么它不是一个状态。</p>
+</li>
+<li><p>这个变量是否在组件的整个生命周期中都保持不变？如果是，那么它不是一个状态。</p>
+</li>
+<li><p>这个变量是否可以通过 state 或 props  中的已有数据计算得到？如果是，那么它不是一个状态。</p>
+</li>
+<li><p>这个变量是否在组件的 render 方法中使用？如果不是，那么它不是一个状态。这种情况下，这个变量更适合定义为组件的一个普通属性（除了 props 和 state 以外的组件属性 ），例如组件中用到的定时器，就应该直接定义为 this.timer，而不是 this.state.timer。</p>
+</li>
+</ul>
+<p>请务必牢记，<code>并不是组件中用到的所有变量都是组件的状态</code>！当存在多个组件共同依赖同一个状态时，一般的做法是<code>状态上移</code>，将这个状态放到这几个组件的公共父组件中。</p>
+<h2 id="如何正确修改-state"><a href="#如何正确修改-state" class="headerlink" title="如何正确修改 state"></a>如何正确修改 state</h2><ul>
+<li>不能直接修改 state。</li>
+</ul>
+<p>直接修改 state，组件并不会重新重发 render。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 错误</span><br><span class="line">this.state.title = &apos;React&apos;;</span><br><span class="line">正确的修改方式是使用setState():</span><br><span class="line"></span><br><span class="line">// 正确</span><br><span class="line">this.setState(&#123;title: &apos;React&apos;&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>state 的更新是<code>异步</code>的。</li>
+</ul>
+<p>调用 setState，组件的 state 并不会立即改变，setState 只是把要修改的状态放入一个队列中，React会优化真正的执行时机，并且 React 会出于性能原因，可能会将多次 setState 的状态修改合并成一次状态修改。所以不能依赖当前的 state，计算下个 state。当真正执行状态修改时，依赖的 this.state 并不能保证是最新的 state，因为 React 会把多次 state 的修改合并成一次，这时，this.state 还是等于这几次修改发生前的 state。另外需要注意的是，同样不能依赖当前的 props 计算下个 state，因为 <code>props 的更新也是异步的</code>。</p>
+<p>举个例子，对于一个电商类应用，在我们的购物车中，当点击一次购买按钮，购买的数量就会加 1，如果我们连续点击了两次按钮，就会连续调用两次 this.setState({quantity: this.state.quantity + 1})，在 React 合并多次修改为一次的情况下，相当于等价执行了如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Object.assign(</span><br><span class="line">  previousState,</span><br><span class="line">  &#123;quantity: this.state.quantity + 1&#125;,</span><br><span class="line">  &#123;quantity: this.state.quantity + 1&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>于是乎，后面的操作覆盖掉了前面的操作，最终购买的数量只增加了 1 个。</p>
+<p>如果你真的有这样的需求，可以使用另一个接收一个函数作为参数的 setState，这个函数有两个参数，第一个参数是组件的前一个 state（本次组件状态修改成功前的 state ），第二个参数是组件当前最新的 props。如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 正确</span><br><span class="line">this.setState((preState, props) =&gt; (&#123;</span><br><span class="line">  counter: preState.quantity + 1; </span><br><span class="line">&#125;))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>state 的更新是一个浅合并（Shallow Merge）的过程。</li>
+</ul>
+<p>当调用 <code>setState</code> 修改组件状态时，只需要传入发生改变的状态变量，而不是组件完整的 state，因为组件 state 的更新是一个浅合并（Shallow Merge）的过程。例如，一个组件的 state 为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">this.state = &#123;</span><br><span class="line">  title : &apos;React&apos;,</span><br><span class="line">  content : &apos;React is an wonderful JS library!&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当只需要修改状态 title 时，只需要将修改后的 title 传给 setState：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">this.setState(&#123;title: &apos;Reactjs&apos;&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>React 会合并新的 title 到原来的组件 state 中，同时保留原有的状态 content，合并后的 state为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  title : &apos;Reactjs&apos;,</span><br><span class="line">  content : &apos;React is an wonderful JS library!&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="state-与-immutable"><a href="#state-与-immutable" class="headerlink" title="state 与 immutable"></a>state 与 immutable</h2><p>React 官方建议把 state 当作不可变对象，一方面是如果直接修改 this.state，组件并不会重新 render；另一方面 state 中包含的所有状态都应该是不可变对象。当 state 中的某个状态发生变化，我们应该重新创建一个新状态，而不是直接修改原来的状态。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="https://www.jianshu.com/p/841a8b6eab46" target="_blank" rel="noopener">React 深入系列3：Props 和 State</a></p>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2021/01/16/React-props-和-state/" title="React props 和 state">http://foogry.wang/2021/01/16/React-props-和-state/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/React/" rel="tag"># React</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2021/01/15/React-组件和元素/" rel="next" title="React 组件和元素">
+                  <i class="fa fa-chevron-left"></i> React 组件和元素
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2021/01/17/Vue-router-基础/" rel="prev" title="Vue router 基础">
+                  Vue router 基础 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#props-和-state-本质"><span class="nav-number">2.</span> <span class="nav-text">props 和 state 本质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何定义-state"><span class="nav-number">3.</span> <span class="nav-text">如何定义 state</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何正确修改-state"><span class="nav-number">4.</span> <span class="nav-text">如何正确修改 state</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#state-与-immutable"><span class="nav-number">5.</span> <span class="nav-text">state 与 immutable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

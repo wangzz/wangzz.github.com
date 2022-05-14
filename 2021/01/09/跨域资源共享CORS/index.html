@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="简介CORSCORS （Cross-Origin Resource Sharing，跨域资源共享）是 HTTP 的一部分。它由一系列传输的HTTP头组成，这些HTTP头决定浏览器是否阻止前端 JavaScript 代码获取跨域请求的响应。 所谓的跨域，就是看网站的域名和网站中请求的资源对应服务器域名是否同源，同源的定义见后文。">
+<meta name="keywords" content="CORS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="跨域资源共享CORS">
+<meta property="og:url" content="http://foogry.wang/2021/01/09/跨域资源共享CORS/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="简介CORSCORS （Cross-Origin Resource Sharing，跨域资源共享）是 HTTP 的一部分。它由一系列传输的HTTP头组成，这些HTTP头决定浏览器是否阻止前端 JavaScript 代码获取跨域请求的响应。 所谓的跨域，就是看网站的域名和网站中请求的资源对应服务器域名是否同源，同源的定义见后文。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-03-21T15:42:21.738Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="跨域资源共享CORS">
+<meta name="twitter:description" content="简介CORSCORS （Cross-Origin Resource Sharing，跨域资源共享）是 HTTP 的一部分。它由一系列传输的HTTP头组成，这些HTTP头决定浏览器是否阻止前端 JavaScript 代码获取跨域请求的响应。 所谓的跨域，就是看网站的域名和网站中请求的资源对应服务器域名是否同源，同源的定义见后文。">
+  <link rel="canonical" href="http://foogry.wang/2021/01/09/跨域资源共享CORS/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>跨域资源共享CORS | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2021/01/09/跨域资源共享CORS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">跨域资源共享CORS
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2021-01-09 13:31:26" itemprop="dateCreated datePublished" datetime="2021-01-09T13:31:26+08:00">2021-01-09</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-21 23:42:21" itemprop="dateModified" datetime="2021-03-21T23:42:21+08:00">2021-03-21</time>
+              </span>
+            
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/01/09/跨域资源共享CORS/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/01/09/跨域资源共享CORS/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><h4 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a>CORS</h4><p>CORS （Cross-Origin Resource Sharing，跨域资源共享）是 <code>HTTP 的一部分</code>。它由一系列传输的HTTP头组成，这些HTTP头决定浏览器是否阻止前端 JavaScript 代码获取跨域请求的响应。</p>
+<p>所谓的跨域，就是看网站的域名和网站中请求的资源对应服务器域名是否同源，同源的定义见后文。</p>
+<a id="more"></a>
+
+<h4 id="浏览器为什么要限制跨域"><a href="#浏览器为什么要限制跨域" class="headerlink" title="浏览器为什么要限制跨域"></a>浏览器为什么要限制跨域</h4><p>1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策。最初，它的含义是指，A 网页设置的 Cookie，B 网页不能打开，除非这两个网页“同源”。</p>
+<p>同源政策的目的，是为了保证用户信息的安全，防止恶意的网站窃取数据。设想这样一种情况：A 网站是一家银行，用户登录以后，又去浏览其他网站。如果其他网站可以读取 A 网站的 Cookie，会发生什么？</p>
+<p>随着互联网的发展，“同源政策”越来越严格。目前，如果非同源，共有三种行为受到限制</p>
+<ul>
+<li><p>Cookie、LocalStorage 和 IndexedDB 无法读取</p>
+</li>
+<li><p>无法获取 DOM</p>
+</li>
+<li><p>AJAX 请求无效（可以发送，但浏览器会拒绝接受响应）</p>
+</li>
+</ul>
+<p>跨域安全吗？参考：<a href="https://stackoverflow.com/a/9726921" target="_blank" rel="noopener">When is it safe to enable CORS?</a></p>
+<h2 id="同源的定义"><a href="#同源的定义" class="headerlink" title="同源的定义"></a>同源的定义</h2><p>如果两个 URL 的 protocol、port (如果有指定的话)和 host 都相同的话，则这两个 URL 是同源。</p>
+<p>示例：</p>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>结果</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="http://store.company.com/dir2/other.html" target="_blank" rel="noopener">http://store.company.com/dir2/other.html</a></td>
+<td>同源</td>
+<td>只有路径不同</td>
+</tr>
+<tr>
+<td><a href="http://store.company.com/dir/inner/another.html" target="_blank" rel="noopener">http://store.company.com/dir/inner/another.html</a></td>
+<td>同源</td>
+<td>只有路径不同</td>
+</tr>
+<tr>
+<td><a href="https://store.company.com/secure.html" target="_blank" rel="noopener">https://store.company.com/secure.html</a></td>
+<td>失败</td>
+<td>协议不同</td>
+</tr>
+<tr>
+<td><a href="http://store.company.com:81/dir/etc.html" target="_blank" rel="noopener">http://store.company.com:81/dir/etc.html</a></td>
+<td>失败</td>
+<td>端口不同 ( http:// 默认端口是80)</td>
+</tr>
+<tr>
+<td><a href="http://news.company.com/dir/other.html" target="_blank" rel="noopener">http://news.company.com/dir/other.html</a></td>
+<td>失败</td>
+<td>主机不同</td>
+</tr>
+</tbody></table>
+<h2 id="什么情况会遇到-CORS"><a href="#什么情况会遇到-CORS" class="headerlink" title="什么情况会遇到 CORS"></a>什么情况会遇到 CORS</h2><p>以下场景发起 HTTP 请求时会受跨域策略影响：</p>
+<ul>
+<li><p>XMLHttpRequest 或 Fetch 发起的跨源 HTTP 请求。</p>
+</li>
+<li><p>Web 字体 (CSS 中通过 @font-face 使用跨源字体资源)，因此，网站就可以发布 TrueType 字体资源，并只允许已授权网站进行跨站调用。</p>
+</li>
+<li><p>WebGL 贴图</p>
+</li>
+<li><p>使用 drawImage 将 Images/video 画面绘制到 canvas</p>
+</li>
+</ul>
+<h2 id="跨域相关-Header"><a href="#跨域相关-Header" class="headerlink" title="跨域相关 Header"></a>跨域相关 Header</h2><h4 id="Request-Header"><a href="#Request-Header" class="headerlink" title="Request Header"></a>Request Header</h4><ul>
+<li>Origin</li>
+</ul>
+<p>表明预检请求或实际请求的源站</p>
+<ul>
+<li>Access-Control-Request-Method</li>
+</ul>
+<p>用于预检请求，作用是告诉服务器实际请求的 HTTP 方法。</p>
+<ul>
+<li>Access-Control-Request-Headers</li>
+</ul>
+<p>用于预检请求，作用是将实际请求所携带的 Header 字段告诉服务器</p>
+<h4 id="Response-Header"><a href="#Response-Header" class="headerlink" title="Response Header"></a>Response Header</h4><ul>
+<li>Access-Control-Allow-Origin</li>
+</ul>
+<p>表示服务器允许请求的域，可以指定特定域，也可以用 * 通配符允许所有的域。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Origin: &lt;origin&gt; | *</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Access-Control-Expose-Headers</li>
+</ul>
+<p>在跨源访问时，XMLHttpRequest对象的 getResponseHeader() 方法只能拿到一些最基本的响应头，Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma，如果要访问其他头，则需要服务器设置本响应头。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Expose-Headers: X-My-Custom-Header, X-Another-Custom-Header</span><br></pre></td></tr></table></figure>
+
+<p>这样浏览器就能够通过 getResponseHeader 访问X-My-Custom-Header和 X-Another-Custom-Header 响应头了。</p>
+<ul>
+<li>Access-Control-Max-Age</li>
+</ul>
+<p>指定预请求的结果能被缓存多久</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Max-Age: &lt;delta-seconds&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Access-Control-Allow-Credentials</li>
+</ul>
+<p>指定了当浏览器的 credentials 设置为 true 时是否允许浏览器读取 response 的内容。当用在对 preflight 预检测请求的响应中时，它指定了实际的请求是否可以使用 credentials</p>
+<ul>
+<li>Access-Control-Allow-Methods</li>
+</ul>
+<p>用于预检请求的响应，表明实际请求中允许使用的 HTTP 方法</p>
+<ul>
+<li>Access-Control-Allow-Headers</li>
+</ul>
+<p>用于预检请求的响应，表明实际请求中允许携带的 Header</p>
+<h2 id="跨域预检请求"><a href="#跨域预检请求" class="headerlink" title="跨域预检请求"></a>跨域预检请求</h2><h4 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h4><p>满足以下条件的请求不会触发 CORS 预检，被称为 <code>简单请求</code>：</p>
+<ul>
+<li><p>使用下列方法之一：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET</span><br><span class="line">HEAD</span><br><span class="line">POST</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>除了被用户代理自动设置的首部字段（例如 Connection ，User-Agent）和在 Fetch 规范中定义为 <code>禁用首部名称</code> 的其他首部，允许人为设置的字段为 Fetch 规范定义的 <code>对 CORS 安全的首部字段集合</code>。该集合为：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Accept</span><br><span class="line">Accept-Language</span><br><span class="line">Content-Language</span><br><span class="line">Content-Type （需要注意额外的限制）</span><br><span class="line">DPR</span><br><span class="line">Downlink</span><br><span class="line">Save-Data</span><br><span class="line">Viewport-Width</span><br><span class="line">Width</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Content-Type 的值仅限于下列三者之一：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">text/plain</span><br><span class="line">multipart/form-data</span><br><span class="line">application/x-www-form-urlencoded</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>请求中的任意XMLHttpRequestUpload </li>
+</ul>
+<p>对象均没有注册任何事件监听器；XMLHttpRequestUpload 对象可以使用 XMLHttpRequest.upload 属性访问。</p>
+<ul>
+<li>请求中没有使用 ReadableStream 对象。</li>
+</ul>
+<h4 id="预检请求（preflight-request）"><a href="#预检请求（preflight-request）" class="headerlink" title="预检请求（preflight request）"></a>预检请求（preflight request）</h4><p>除了简单请求以外的都属于 <code>需要预检的请求</code>。在真正发起请求之前，浏览器会先发一个 <code>OPTIONS</code> 预检请求给服务器，以获知服务器是否允许实际请求。</p>
+<p><code>预检请求</code> 的使用，可以避免跨域请求对服务器的用户数据产生未预期的影响。</p>
+<p>一个 <code>预检请求</code> 示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Request URL: https://abc.com</span><br><span class="line">Request Method: OPTIONS</span><br><span class="line">Status Code: 200 OK</span><br><span class="line">Remote Address: 123.11.11.11:22</span><br><span class="line">Referrer Policy: no-referrer-when-downgrade</span><br><span class="line"></span><br><span class="line">Access-Control-Request-Headers: content-type</span><br><span class="line">Access-Control-Request-Method: POST</span><br><span class="line">Origin: https://abc.com</span><br><span class="line">Referer: https://def.html</span><br><span class="line">Sec-Fetch-Mode: cors</span><br><span class="line">User-Agent: Mozilla/5.0 (Linux; Android 10; PDHM00 Build/QKQ1.191222.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045410 Mobile Safari/537.36</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy" target="_blank" rel="noopener">浏览器的同源策略</a></p>
+</li>
+<li><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="noopener">跨源资源共享（CORS）</a></p>
+</li>
+<li><p><a href="https://stackoverflow.com/a/9726921" target="_blank" rel="noopener">When is it safe to enable CORS?</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2021/01/09/跨域资源共享CORS/" title="跨域资源共享CORS">http://foogry.wang/2021/01/09/跨域资源共享CORS/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/CORS/" rel="tag"># CORS</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2021/01/08/CSS-实现水平和竖直居中对齐/" rel="next" title="CSS 实现水平和竖直居中对齐">
+                  <i class="fa fa-chevron-left"></i> CSS 实现水平和竖直居中对齐
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2021/01/10/DOM-节点操作/" rel="prev" title="DOM 节点操作">
+                  DOM 节点操作 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CORS"><span class="nav-number">1.0.1.</span> <span class="nav-text">CORS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器为什么要限制跨域"><span class="nav-number">1.0.2.</span> <span class="nav-text">浏览器为什么要限制跨域</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同源的定义"><span class="nav-number">2.</span> <span class="nav-text">同源的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么情况会遇到-CORS"><span class="nav-number">3.</span> <span class="nav-text">什么情况会遇到 CORS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跨域相关-Header"><span class="nav-number">4.</span> <span class="nav-text">跨域相关 Header</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Request-Header"><span class="nav-number">4.0.1.</span> <span class="nav-text">Request Header</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Response-Header"><span class="nav-number">4.0.2.</span> <span class="nav-text">Response Header</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跨域预检请求"><span class="nav-number">5.</span> <span class="nav-text">跨域预检请求</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单请求"><span class="nav-number">5.0.1.</span> <span class="nav-text">简单请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#预检请求（preflight-request）"><span class="nav-number">5.0.2.</span> <span class="nav-text">预检请求（preflight request）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

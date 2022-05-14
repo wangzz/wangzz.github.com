@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="iPhone指令集本文所讲的内容都是围绕iPhone的CPU指令集(想了解ARM指令集的同学请点击这里)，现在先说说不同型号的iPhone都使用的是什么指令集： 123456789模拟器：iPhone 4s-5: i386iPhone 5s+ Plus: x86_64真机：armv6: iPhone、iPhone 2、iPhone 3G、iPod Touch(第一代)、iPod Touch(第二代">
+<meta name="keywords" content="Architectures, Valid Architectures, Xcode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Xcode设置项之Architectures和Valid Architectures">
+<meta property="og:url" content="http://foogry.wang/2014/05/09/2014-05-08-xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="iPhone指令集本文所讲的内容都是围绕iPhone的CPU指令集(想了解ARM指令集的同学请点击这里)，现在先说说不同型号的iPhone都使用的是什么指令集： 123456789模拟器：iPhone 4s-5: i386iPhone 5s+ Plus: x86_64真机：armv6: iPhone、iPhone 2、iPhone 3G、iPod Touch(第一代)、iPod Touch(第二代">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-02-28T11:19:11.421Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Xcode设置项之Architectures和Valid Architectures">
+<meta name="twitter:description" content="iPhone指令集本文所讲的内容都是围绕iPhone的CPU指令集(想了解ARM指令集的同学请点击这里)，现在先说说不同型号的iPhone都使用的是什么指令集： 123456789模拟器：iPhone 4s-5: i386iPhone 5s+ Plus: x86_64真机：armv6: iPhone、iPhone 2、iPhone 3G、iPod Touch(第一代)、iPod Touch(第二代">
+  <link rel="canonical" href="http://foogry.wang/2014/05/09/2014-05-08-xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Xcode设置项之Architectures和Valid Architectures | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2014/05/09/2014-05-08-xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">Xcode设置项之Architectures和Valid Architectures
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2014-05-09 17:45:33" itemprop="dateCreated datePublished" datetime="2014-05-09T17:45:33+08:00">2014-05-09</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-28 19:19:11" itemprop="dateModified" datetime="2021-02-28T19:19:11+08:00">2021-02-28</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Xcode/" itemprop="url" rel="index"><span itemprop="name">Xcode</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2014/05/09/2014-05-08-xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2014/05/09/2014-05-08-xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="iPhone指令集"><a href="#iPhone指令集" class="headerlink" title="iPhone指令集"></a>iPhone指令集</h2><p>本文所讲的内容都是围绕iPhone的CPU指令集(想了解ARM指令集的同学请点击<a href="http://en.wikipedia.org/wiki/ARM_architecture" target="_blank" rel="noopener">这里</a>)，现在先说说不同型号的iPhone都使用的是什么指令集：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">模拟器：</span><br><span class="line">iPhone 4s-5: i386</span><br><span class="line">iPhone 5s+ Plus: x86_64</span><br><span class="line"></span><br><span class="line">真机：</span><br><span class="line">armv6: iPhone、iPhone 2、iPhone 3G、iPod Touch(第一代)、iPod Touch(第二代)</span><br><span class="line">armv7: iPhone 3Gs、iPhone 4、iPhone 4s、iPad、iPad 2</span><br><span class="line">armv7s: iPhone 5、iPhone 5c</span><br><span class="line">arm64: iPhone 5s、iPhone 6、iPhone 6 Plus、iPhone 6s、iPhone 6s Plus、iPad Air、iPad Air2、iPad mini2、iPad mini3</span><br></pre></td></tr></table></figure>
+
+<h2 id="设置你想支持的指令集"><a href="#设置你想支持的指令集" class="headerlink" title="设置你想支持的指令集"></a>设置你想支持的指令集</h2><p>Xcode中关于生成二进制包指令集相关的设置项有以下三个：</p>
+<a id="more"></a>
+
+<h4 id="Architectures"><a href="#Architectures" class="headerlink" title="Architectures"></a>Architectures</h4><p>官方文档说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Space-separated list of identifiers. Specifies the architectures (ABIs, processor models) to which the binary is targeted. When this build setting specifies more than one architecture, the generated binary may contain object code for each of the specified architectures.</span><br></pre></td></tr></table></figure>
+
+<p>该编译选项指定了工程将被编译成支持哪些指令集，支持指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，造成最终编译的包很大。</p>
+<h4 id="Valid-Architectures"><a href="#Valid-Architectures" class="headerlink" title="Valid Architectures"></a>Valid Architectures</h4><p>官方文档说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Space-separated list of identifiers. Specifies the architectures for which the binary may be built. During the build, this list is intersected with the value of ARCHS build setting; the resulting list specifies the architectures the binary can run on. If the resulting architecture list is empty, the target generates no binary.</span><br></pre></td></tr></table></figure>
+
+<p>该编译项指定可能支持的指令集，<strong>该列表和Architectures列表的交集，将是Xcode最终生成二进制包所支持的指令集</strong>。</p>
+<p>比如，你的<code>Valid Architectures</code>设置的支持arm指令集版本有：<code>armv7/armv7s/arm64</code>，对应的<code>Architectures</code>设置的支持arm指令集版本有：<code>armv7s</code>，这时Xcode只会生成一个<code>armv7s</code>指令集的二进制包。</p>
+<h4 id="Build-Active-Architecture-Only"><a href="#Build-Active-Architecture-Only" class="headerlink" title="Build Active Architecture Only"></a>Build Active Architecture Only</h4><p>官方文档说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Boolean value. Specifies whether the product includes only object code for the native architecture.</span><br></pre></td></tr></table></figure>
+
+<p>该编译项用于设置是否只编译当前使用的设备对应的arm指令集。</p>
+<p>当该选项设置成YES时，你连上一个<code>armv7</code>指令集的设备，就算你的<code>Valid Architectures</code>和<code>Architectures</code>都设置成<code>armv7/armv7s/arm64</code>，还是依然只会生成一个<code>armv7</code>指令集的二进制包。</p>
+<p>当然该选项起作用的前提是<strong>你的Xcode必须成功连接了调试设备</strong>。如果你没有任何活跃设备，即Xcode没有成功连接调试设备，就算该设置项设置成YES依然还会编译<code>Valid Architectures</code>和<code>Architectures</code>指定的二进制包。</p>
+<p>通常情况下，该编译选项在Debug模式都设成YES，Release模式都设成NO。</p>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
+<li>指令集都是可以向下兼容的</li>
+</ul>
+<p>比如，你的设备是armv7s指令集，那么它也可以兼容运行比armv7s版本低的指令集：armv7、armv6</p>
+<ul>
+<li>xcode对armv6指令集的支持</li>
+</ul>
+<p>Xcode4.5起不再支持armv6，Xcode4.5的release notes中明确指出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Changes</span><br><span class="line">General: iOS</span><br><span class="line"></span><br><span class="line">This version of Xcode does not generate armv6 binaries. 12282156</span><br><span class="line">The minimum deployment target is iOS 4.3. 12282166</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何选择支持的指令集"><a href="#如何选择支持的指令集" class="headerlink" title="如何选择支持的指令集"></a>如何选择支持的指令集</h2><p>如果你的软件对安装包大小非常敏感，你可以减少安装包中的指令集数据包，而且这能达到立竿见影的效果。</p>
+<p>我们的项目之前支持的指令集是armv7/armv7s，后来改成只支持armv7后，比原来小了10MB左右。目前AppStore上的一些知名应用，比如<code>百度地图</code>、<code>腾讯地图</code>通过反汇编工具查看后，也都只支持armv7指令集。</p>
+<p>根据向下兼容原则，armv7指令集的应用是可以正常在支持armv7s/arm64指令集的机器上运行的。</p>
+<p>不过对于armv7s/arm64指令集设备来说，使用运行armv7应用是会有一定的性能损失，不过这种损失有多大缺乏权威统计数据，个人认为是不会影响用户体验的。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><p><a href="http://en.wikipedia.org/wiki/ARM_architecture" target="_blank" rel="noopener">ARM architecture</a></p>
+</li>
+<li><p><a href="https://developer.apple.com/library/ios/documentation/DeveloperTools/Reference/XcodeBuildSettingRef/0-Introduction/introduction.html#//apple_ref/doc/uid/TP40003931-CH1-SW1" target="_blank" rel="noopener">Xcode Build Setting Reference</a></p>
+</li>
+<li><p><a href="http://justsee.iteye.com/blog/2009954" target="_blank" rel="noopener">xcode5 arm64</a></p>
+</li>
+<li><p><a href="https://developer.apple.com/library/mac/releasenotes/DeveloperTools/RN-Xcode/xc4_release_notes/xc4_release_notes.html#//apple_ref/doc/uid/TP40001051-CH3-SW174" target="_blank" rel="noopener">Xcode 4.5 Release Notes</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2014/05/09/2014-05-08-xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/" title="Xcode设置项之Architectures和Valid Architectures">http://foogry.wang/2014/05/09/2014-05-08-xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Architectures/" rel="tag"># Architectures</a>
+            
+              <a href="/tags/Valid-Architectures/" rel="tag"># Valid Architectures</a>
+            
+              <a href="/tags/Xcode/" rel="tag"># Xcode</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2014/04/25/2014-04-25-githubyou-xiu-xiang-mu-ios/" rel="next" title="github优秀开源项目大全-iOS">
+                  <i class="fa fa-chevron-left"></i> github优秀开源项目大全-iOS
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2014/05/19/2014-05-19-jia-mi-ni-de-sqlite/" rel="prev" title="加密你的SQLite">
+                  加密你的SQLite <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#iPhone指令集"><span class="nav-number">1.</span> <span class="nav-text">iPhone指令集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置你想支持的指令集"><span class="nav-number">2.</span> <span class="nav-text">设置你想支持的指令集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Architectures"><span class="nav-number">2.0.1.</span> <span class="nav-text">Architectures</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Valid-Architectures"><span class="nav-number">2.0.2.</span> <span class="nav-text">Valid Architectures</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Build-Active-Architecture-Only"><span class="nav-number">2.0.3.</span> <span class="nav-text">Build Active Architecture Only</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说明"><span class="nav-number">3.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何选择支持的指令集"><span class="nav-number">4.</span> <span class="nav-text">如何选择支持的指令集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

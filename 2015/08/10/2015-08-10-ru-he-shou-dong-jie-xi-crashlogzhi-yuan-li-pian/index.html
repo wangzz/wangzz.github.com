@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="在上篇文章《手动解析CrashLog之—-方法篇》里介绍了手动解析CrashLog的方法，接下来再说说dwarfdump、atos等解析工具是如何从符号表文件中获取到崩溃位置信息的。一切还得从.dSYM符号表文件开始说起。 一、.dSYM文件的生成符号表文件.dSYM实际上是从Mach-O文件中抽取调试信息而得到的文件目录，实际用于保存调试信息的问价是DWARF，其出身可以从苹果员工的文章《App">
+<meta name="keywords" content="CrashLog, iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手动解析CrashLog之----原理篇">
+<meta property="og:url" content="http://foogry.wang/2015/08/10/2015-08-10-ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="在上篇文章《手动解析CrashLog之—-方法篇》里介绍了手动解析CrashLog的方法，接下来再说说dwarfdump、atos等解析工具是如何从符号表文件中获取到崩溃位置信息的。一切还得从.dSYM符号表文件开始说起。 一、.dSYM文件的生成符号表文件.dSYM实际上是从Mach-O文件中抽取调试信息而得到的文件目录，实际用于保存调试信息的问价是DWARF，其出身可以从苹果员工的文章《App">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-25T13:04:33.651Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手动解析CrashLog之----原理篇">
+<meta name="twitter:description" content="在上篇文章《手动解析CrashLog之—-方法篇》里介绍了手动解析CrashLog的方法，接下来再说说dwarfdump、atos等解析工具是如何从符号表文件中获取到崩溃位置信息的。一切还得从.dSYM符号表文件开始说起。 一、.dSYM文件的生成符号表文件.dSYM实际上是从Mach-O文件中抽取调试信息而得到的文件目录，实际用于保存调试信息的问价是DWARF，其出身可以从苹果员工的文章《App">
+  <link rel="canonical" href="http://foogry.wang/2015/08/10/2015-08-10-ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>手动解析CrashLog之----原理篇 | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2015/08/10/2015-08-10-ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">手动解析CrashLog之----原理篇
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2015-08-10 15:12:49" itemprop="dateCreated datePublished" datetime="2015-08-10T15:12:49+08:00">2015-08-10</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-25 21:04:33" itemprop="dateModified" datetime="2019-09-25T21:04:33+08:00">2019-09-25</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2015/08/10/2015-08-10-ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2015/08/10/2015-08-10-ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在上篇文章<a href="http://foggry.com/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/" target="_blank" rel="noopener">《手动解析CrashLog之—-方法篇》</a>里介绍了手动解析CrashLog的方法，接下来再说说<code>dwarfdump</code>、<code>atos</code>等解析工具是如何从符号表文件中获取到崩溃位置信息的。一切还得从<code>.dSYM</code>符号表文件开始说起。</p>
+<h2 id="一、-dSYM文件的生成"><a href="#一、-dSYM文件的生成" class="headerlink" title="一、.dSYM文件的生成"></a>一、<code>.dSYM</code>文件的生成</h2><p>符号表文件<code>.dSYM</code>实际上是从Mach-O文件中抽取调试信息而得到的文件目录，实际用于保存调试信息的问价是<code>DWARF</code>，其出身可以从苹果员工的文章<a href="http://wiki.dwarfstd.org/index.php?title=Apple%27s_%22Lazy%22_DWARF_Scheme" target="_blank" rel="noopener">《Apple’s “Lazy” DWARF Scheme》</a>了解一二。</p>
+<h3 id="1、Xcode自动生成"><a href="#1、Xcode自动生成" class="headerlink" title="1、Xcode自动生成"></a>1、Xcode自动生成</h3><p>Xcode会在编译工程或者归档时自动为我们生成<code>.dSYM</code>文件，当然我们也可以通过更改Xcode的若干项<code>Build Settings</code>来阻止它那么干。</p>
+<h3 id="2、手动生成"><a href="#2、手动生成" class="headerlink" title="2、手动生成"></a>2、手动生成</h3><p>另一种方式是通过命令行从Mach-O文件中手工提取，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil /Users/wangzz/Library/Developer/Xcode/DerivedData/YourApp-cqvijavqbptjyhbwewgpdmzbmwzk/Build/Products/Debug-iphonesimulator/YourApp.app/YourApp -o YourApp.dSYM</span><br></pre></td></tr></table></figure>
+
+<p>该方式通过Xcode提供的工具<code>dsymutil</code>，从项目编译结果<code>.app</code>目录下的Mach-O文件中提取出调试符号表文件。实际上Xcode也是通过这种方式来生成符号表文件。</p>
+<a id="more"></a>
+
+<h2 id="二、DWARF简介"><a href="#二、DWARF简介" class="headerlink" title="二、DWARF简介"></a>二、<code>DWARF</code>简介</h2><p><code>DWARF</code>（DebuggingWith Arbitrary Record Formats），是ELF和Mach-O等文件格式中用来存储和处理调试信息的标准格式，<code>.dSYM</code>中真正保存符号表数据的是<code>DWARF</code>文件。<code>DWARF</code>中不同的数据都保存在相应的<code>section</code>（节）中，ELF文件里所有的section名称都以<code>&quot;.debug_&quot;</code>开头，如下表所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">| Section Name         | Contents                                          |</span><br><span class="line">| -------------------- | ------------------------------------------------  |</span><br><span class="line">| .debug_abbrev        | Abbreviations used in the .debug_info section     |</span><br><span class="line">| .debug_aranges       | A mapping between memory address and compilation  |</span><br><span class="line">| .debug_frame         | Call Frame Information                            |</span><br><span class="line">| .debug_info          | The core DWARF data containing DIEs               |</span><br><span class="line">| .debug_line          | Line Number Program                               |</span><br><span class="line">| .debug_loc           | Macro descriptions                                |</span><br><span class="line">| .debug_macinfo       | A lookup table for global objects and functions   |</span><br><span class="line">| .debug_pubnames      | A lookup table for global objects and functions   | </span><br><span class="line">| .debug_pubtypes      | A lookup table for global types                   |</span><br><span class="line">| .debug_ranges        | Address ranges referenced by DIEs                 |</span><br><span class="line">| .debug_str           | String table used by .debug_info                  |</span><br></pre></td></tr></table></figure>
+
+<p>Mach-O中关于section的命名和ELF稍有区别，把名称前的<code>.</code>换成了<code>_</code>，例如<code>.debug_info</code>变成了<code>_debug_info</code>。</p>
+<h2 id="三、section信息提取"><a href="#三、section信息提取" class="headerlink" title="三、section信息提取"></a>三、section信息提取</h2><p>保存在<code>DAWARF</code>中的信息是高度压缩的，可以通过<code>dwarfdump</code>命令从中提取出可读信息。前文所述的那些section中，定位CrashLog只需要用到<code>.debug_info</code>和<code>.debug_line</code>。由于解析出来的数据量较大，为了方便查看，就将其保存在文本中。两个section的数据提取方式如下：</p>
+<ul>
+<li><code>.debug_info</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dwarfdump -e --debug-info YourPath/YourApp.dSYM/Contents/Resources/DWARF &gt; info-e.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>.debug_line</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dwarfdump -e --debug-line YourPath/YourApp.dSYM/Contents/Resources/DWARF &gt; line-e.txt</span><br></pre></td></tr></table></figure>
+
+<p>命令中的<code>-e</code>可以增加解析结果的可读性；其它section的提取方式类似，详情请参考<code>dwarfdump</code>命令帮助信息。</p>
+<h2 id="四、解析崩溃地址"><a href="#四、解析崩溃地址" class="headerlink" title="四、解析崩溃地址"></a>四、解析崩溃地址</h2><h3 id="1、计算崩溃地址对应符号表中的地址"><a href="#1、计算崩溃地址对应符号表中的地址" class="headerlink" title="1、计算崩溃地址对应符号表中的地址"></a>1、计算崩溃地址对应符号表中的地址</h3><p>在<a href="http://foggry.com/blog/2015/07/27/ru-he-shou-dong-jie-xi-crashlog/" target="_blank" rel="noopener">上篇文章</a>中，介绍了如何根据崩溃地址计算得到对应符号表中的地址，并得到了最终数值：<code>0x52846</code>，接下来我们就通过这个值来介绍<code>dwarfdump</code>、<code>atos</code>等工具是如何解析崩溃日志的。</p>
+<h3 id="2、解析过程"><a href="#2、解析过程" class="headerlink" title="2、解析过程"></a>2、解析过程</h3><ul>
+<li><code>.debug_info</code></li>
+</ul>
+<p><code>.debug_info</code>中最基本的描述单元为DIE（Debug Information Entry），详情请参考<a href="http://www.dwarfstd.org/" target="_blank" rel="noopener">DWARF官方网站</a>，首先我们要根据符号表崩溃地址<code>0x52846</code>从<code>.debug_info</code>中取出包含这个地址的DIE单元。为了简单起见，直接贴出了从<code>info-e.txt</code>中取出的对应DIE，其部分内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">0x00062112:     function [99] *</span><br><span class="line">                low pc( 0x000502e0 )</span><br><span class="line">                high pc( 0x00053730 )</span><br><span class="line">                frame base( r7 )</span><br><span class="line">                object pointer( &#123;0x0006212a&#125; )</span><br><span class="line">                name( &quot;-[OBDFirstConnectViewController showOilPricePickerView]&quot; )</span><br><span class="line">                decl file( &quot;/YourSourcePath/OBDFirstConnectViewController.m&quot; )</span><br><span class="line">                decl line( 870 )</span><br><span class="line">                prototyped( 0x01 )</span><br><span class="line">                APPLE instruction set architecture( 0x01 )</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，该DIE包含是方法<code>-[OBDFirstConnectViewController showOilPricePickerView]</code>的内容，其地址范围是<code>0x000502e0</code>-<code>0x00053730</code>，我们的目标地址<code>0x52846</code>正是在这个范围内，所以可以判定崩溃发生在该方法的某一行中。</p>
+<p>需要指出的是，上面这段DIE是我为了介绍方便直接贴出来的，实际应用的时候需要通过搜索算法找出包含目标符号表崩溃地址（这里是<code>0x52846</code>）的DIE。</p>
+<p>从上述DIE中我们可以获取到这些信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">崩溃所在源码文件：/YourSourcePath/OBDFirstConnectViewController.m</span><br><span class="line">发生崩溃的方法：-[OBDFirstConnectViewController showOilPricePickerView]</span><br><span class="line">发生崩溃的方法在源文件中的行号：870</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>. debug_line</code></li>
+</ul>
+<p>截止目前，我们可以获取到发生了崩溃的方法的相关信息，但要想确定崩溃发生的具体行号，还需要<code>.debug_line</code>的帮助。</p>
+<p><code>.debug_line</code>以一个方法为基本块，急了该方法中每一行对应的符号表地址。通过<code>.debug_info</code>得知崩溃发生的方法地址范围是<code>0x000502e0</code>-<code>0x00053730</code>，通过起始地址<code>0x000502e0</code>在解析<code>. debug_line</code>得到的line-e.txt中直接搜索即可得到崩溃所在方法的<code>. debug_line</code>数据，其中<code>部分内容</code>如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">0x00000000000502e0    870 /YourSourcePath/OBDFirstConnectViewController.m</span><br><span class="line">0x00000000000502e0      0</span><br><span class="line">0x00000000000502f0    872</span><br><span class="line">0x000000000005033c    873</span><br><span class="line">0x0000000000050374    874</span><br><span class="line">0x000000000005039e    875</span><br><span class="line">0x00000000000503c8    876</span><br><span class="line">...</span><br><span class="line">0x0000000000052812    880</span><br><span class="line">0x000000000005283e    881</span><br><span class="line">0x0000000000052846    882</span><br><span class="line">0x00000000000528c8    883</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p><code>. debug_line</code>段的第一行内容标识了该方法的起始符号表地址，行号及方法所在文件路径，通过之前得到的崩溃地址<code>0x52846</code>即可得知崩溃发生在882行。</p>
+<p>至此我们已经根据崩溃地址解析出了崩溃发生位置的详细信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">崩溃所在源码文件：/YourSourcePath/OBDFirstConnectViewController.m</span><br><span class="line">发生崩溃的方法：-[OBDFirstConnectViewController showOilPricePickerView]</span><br><span class="line">发生崩溃的方法在源文件中的行号：870</span><br><span class="line">崩溃发生在源文件中得行号：882</span><br></pre></td></tr></table></figure>
+
+<p>以上内容为本人工作学习中所得，如有理解错误之处，还请指出！</p>
+<h2 id="五、参考文档"><a href="#五、参考文档" class="headerlink" title="五、参考文档"></a>五、参考文档</h2><ul>
+<li><a href="http://wiki.dwarfstd.org/index.php?title=Apple%27s_%22Lazy%22_DWARF_Scheme" target="_blank" rel="noopener">Apple’s “Lazy” DWARF Scheme</a></li>
+<li><a href="http://www.dwarfstd.org/doc/Debugging%20using%20DWARF.pdf" target="_blank" rel="noopener">《Introduction to the DWARF Debugging Format》</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2015/08/10/2015-08-10-ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/" title="手动解析CrashLog之----原理篇">http://foogry.wang/2015/08/10/2015-08-10-ru-he-shou-dong-jie-xi-crashlogzhi-yuan-li-pian/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+            
+              <a href="/tags/CrashLog/" rel="tag"># CrashLog</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2015/07/27/2015-07-27-ru-he-shou-dong-jie-xi-crashlog/" rel="next" title="手动解析CrashLog之----方法篇">
+                  <i class="fa fa-chevron-left"></i> 手动解析CrashLog之----方法篇
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2016/03/23/2016-03-23-cocoapods-xiang-jie-zhi-geng-xin-pian/" rel="prev" title="CocoaPods 详解之----更新篇">
+                  CocoaPods 详解之----更新篇 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、-dSYM文件的生成"><span class="nav-number">1.</span> <span class="nav-text">一、.dSYM文件的生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、Xcode自动生成"><span class="nav-number">1.1.</span> <span class="nav-text">1、Xcode自动生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、手动生成"><span class="nav-number">1.2.</span> <span class="nav-text">2、手动生成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、DWARF简介"><span class="nav-number">2.</span> <span class="nav-text">二、DWARF简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、section信息提取"><span class="nav-number">3.</span> <span class="nav-text">三、section信息提取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、解析崩溃地址"><span class="nav-number">4.</span> <span class="nav-text">四、解析崩溃地址</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、计算崩溃地址对应符号表中的地址"><span class="nav-number">4.1.</span> <span class="nav-text">1、计算崩溃地址对应符号表中的地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、解析过程"><span class="nav-number">4.2.</span> <span class="nav-text">2、解析过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、参考文档"><span class="nav-number">5.</span> <span class="nav-text">五、参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

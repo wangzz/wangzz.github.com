@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script data-ad-client="ca-pub-6064212272457327" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<meta name="baidu_union_verify" content="e7fdb5391ac0009822ac53d9be181282">
+  <meta name="description" content="一、关于App Extensionsextension是iOS8新开放的一种对几个固定系统区域的扩展机制，它可以在一定程度上弥补iOS的沙盒机制对应用间通信的限制。 extension的出现，为用户提供了在其它应用中使用我们应用提供的服务的便捷方式，比如用户可以在Today的widgets中查看应用展示的简略信息，而不用再进到我们的应用中，这将是一种全新的用户体验；但是，extension的出现">
+<meta name="keywords" content="WWDC2014, iOS, framework, App Extensions">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WWDC2014之App Extensions学习笔记">
+<meta property="og:url" content="http://foogry.wang/2014/06/23/2014-06-23-wwdc2014zhi-app-extensionsxue-xi-bi-ji/index.html">
+<meta property="og:site_name" content="大前端技术空间">
+<meta property="og:description" content="一、关于App Extensionsextension是iOS8新开放的一种对几个固定系统区域的扩展机制，它可以在一定程度上弥补iOS的沙盒机制对应用间通信的限制。 extension的出现，为用户提供了在其它应用中使用我们应用提供的服务的便捷方式，比如用户可以在Today的widgets中查看应用展示的简略信息，而不用再进到我们的应用中，这将是一种全新的用户体验；但是，extension的出现">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://foogry.wang/images/article5/wwdc_banner_promo.jpg">
+<meta property="og:image" content="http://foogry.wang/images/article5/detailed_communication.png">
+<meta property="og:image" content="http://foogry.wang/images/article5/app_extensions_container_restrictions.png">
+<meta property="og:image" content="http://foogry.wang/images/article5/app_group.png">
+<meta property="og:image" content="http://foogry.wang/images/article5/app_extensions_lifecycle.png">
+<meta property="og:image" content="http://foogry.wang/images/article5/extension_debug.png">
+<meta property="og:updated_time" content="2019-09-25T13:04:33.649Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="WWDC2014之App Extensions学习笔记">
+<meta name="twitter:description" content="一、关于App Extensionsextension是iOS8新开放的一种对几个固定系统区域的扩展机制，它可以在一定程度上弥补iOS的沙盒机制对应用间通信的限制。 extension的出现，为用户提供了在其它应用中使用我们应用提供的服务的便捷方式，比如用户可以在Today的widgets中查看应用展示的简略信息，而不用再进到我们的应用中，这将是一种全新的用户体验；但是，extension的出现">
+<meta name="twitter:image" content="http://foogry.wang/images/article5/wwdc_banner_promo.jpg">
+  <link rel="canonical" href="http://foogry.wang/2014/06/23/2014-06-23-wwdc2014zhi-app-extensionsxue-xi-bi-ji/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>WWDC2014之App Extensions学习笔记 | 大前端技术空间</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2944231de73b405a5da5c6b4097cfa0e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大前端技术空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay hungry,stay foolish.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://foogry.wang/2014/06/23/2014-06-23-wwdc2014zhi-app-extensionsxue-xi-bi-ji/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="foogry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大前端技术空间">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">WWDC2014之App Extensions学习笔记
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2014-06-23 19:55:29" itemprop="dateCreated datePublished" datetime="2014-06-23T19:55:29+08:00">2014-06-23</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-25 21:04:33" itemprop="dateModified" datetime="2019-09-25T21:04:33+08:00">2019-09-25</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/WWDC2014/" itemprop="url" rel="index"><span itemprop="name">WWDC2014</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2014/06/23/2014-06-23-wwdc2014zhi-app-extensionsxue-xi-bi-ji/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2014/06/23/2014-06-23-wwdc2014zhi-app-extensionsxue-xi-bi-ji/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+
+        
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6064212272457327"
+     data-ad-slot="4064252024"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>    
+        
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/images/article5/wwdc_banner_promo.jpg" alt="wwdc_banner_promo"></p>
+<h2 id="一、关于App-Extensions"><a href="#一、关于App-Extensions" class="headerlink" title="一、关于App Extensions"></a>一、关于App Extensions</h2><p>extension是iOS8新开放的一种对几个固定系统区域的扩展机制，它可以在一定程度上弥补iOS的沙盒机制对应用间通信的限制。</p>
+<p>extension的出现，为用户提供了在其它应用中使用我们应用提供的服务的便捷方式，比如用户可以在<code>Today</code>的<code>widgets</code>中查看应用展示的简略信息，而不用再进到我们的应用中，这将是一种全新的用户体验；但是，extension的出现可能会减少用户启动应用的次数，同时还会增大开发者的工作量。</p>
+<a id="more"></a>
+
+<h4 id="几个关键词"><a href="#几个关键词" class="headerlink" title="几个关键词"></a>几个关键词</h4><ul>
+<li>extension point</li>
+</ul>
+<p>系统中支持extension的区域，extension的类别也是据此区分的，iOS上共有<code>Today</code>、<code>Share</code>、<code>Action</code>、<code>Photo Editing</code>、<code>Storage Provider</code>、<code>Custom keyboard</code>几种，其中<code>Today</code>中的extension又被称为<code>widget</code>。</p>
+<p>每种extension point的使用方式和适合干的活都不一样，因此不存在通用的extension。</p>
+<ul>
+<li>app extension</li>
+</ul>
+<p>即为本文所说的extension。extension并不是一个独立的app，它有一个包含在app bundle中的独立bundle，extension的bundle后缀名是<code>.appex</code>。其生命周期也和普通app不同，这些后文将会详述。</p>
+<p>extension不能单独存在，必须有一个包含它的containing app。</p>
+<p>另外，extension需要用户手动激活，不同的extension激活方式也不同，比如：<br>比如Today中的widget需要在Today中激活和关闭；<code>Custom keyboard</code>需要在设置中进行相关设置；<code>Photo Editing</code>需要在使用照片时在照片管理器中激活或关闭；<code>Storage Provider</code>可以在选择文件时出现；<code>Share</code>和<code>Action</code>可以在任何应用里被激活，但前提是开发者需要设置<code>Activation Rules</code>，以确定extension需要在合适出现。</p>
+<ul>
+<li>containing app</li>
+</ul>
+<p>尽管苹果开放了extension，但是在iOS中extension并不能单独存在，要想提交到AppStore，必须将extension包含在一个app中提交，并且app的实现部分不能为空,这个包含extension的app就叫containing app。</p>
+<p>extension会随着containing app的安装而安装，同时随着containing app的卸载而卸载。</p>
+<ul>
+<li>host app</li>
+</ul>
+<p>能够调起extension的app被称为host app，比如<code>widget</code>的host app就是<code>Today</code>。</p>
+<h2 id="二、extension和containing-app、host-app"><a href="#二、extension和containing-app、host-app" class="headerlink" title="二、extension和containing app、host app"></a>二、extension和containing app、host app</h2><h4 id="2-1-extension和host-app"><a href="#2-1-extension和host-app" class="headerlink" title="2.1 extension和host app"></a>2.1 extension和host app</h4><p>extension和host app之间可以通过extensionContext属性直接通信，该属性是新增加的UIViewController类别：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@interface UIViewController(NSExtensionAdditions) &lt;NSExtensionRequestHandling&gt;</span><br><span class="line"></span><br><span class="line">// Returns the extension context. Also acts as a convenience method for a view controller to check if it participating in an extension request.</span><br><span class="line">@property (nonatomic,readonly,retain) NSExtensionContext *extensionContext NS_AVAILABLE_IOS(8_0);</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<p>实际上extension和host app之间是通过IPC（interprocess communication）实现的，只是苹果把调用接口高度抽象了，我们并不需要关注那么底层的东西。</p>
+<h4 id="2-2-containing-app和host-app"><a href="#2-2-containing-app和host-app" class="headerlink" title="2.2 containing app和host app"></a>2.2 containing app和host app</h4><p>他们之间没有任何直接关系，也从来不需要通信。</p>
+<h4 id="2-3-extension和containing-app"><a href="#2-3-extension和containing-app" class="headerlink" title="2.3 extension和containing app"></a>2.3 extension和containing app</h4><p>这二者之间的关系最复杂，纠纠缠缠扯不清关系。</p>
+<ul>
+<li>不能直接通信</li>
+</ul>
+<p>首先，尽管extension的bundle是放在containing app的bundle中，但是他们是两个完全独立的进程，之间不能直接通信。不过extension可以通过openURL的方式启动containing app（当然也能启动其它app），不过必须通过extensionContext借助host app来实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//通过openURL的方式启动Containing APP</span><br><span class="line">- (void)openURLContainingAPP</span><br><span class="line">&#123;</span><br><span class="line">    [self.extensionContext openURL:[NSURL URLWithString:@&quot;appextension://123&quot;]</span><br><span class="line">                 completionHandler:^(BOOL success) &#123;</span><br><span class="line">                     NSLog(@&quot;open url result:%d&quot;,success);</span><br><span class="line">                 &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>extension中是无法直接使用openURL的。</p>
+<ul>
+<li>可以共享<code>Shared resources</code></li>
+</ul>
+<p>extension和containing app可以共同读写一个被称为<code>Shared resources</code>的存储区域，这是通过App Groups实现的，后文将会详述。</p>
+<p>三者间的关系可以通过官网给的两张图片形象地说明：</p>
+<p><img src="/images/article5/detailed_communication.png" alt="detailed_communication"></p>
+<p><img src="/images/article5/app_extensions_container_restrictions.png" alt="app_extensions_container_restrictions"></p>
+<ul>
+<li>containing app能够控制extension的出现和隐藏</li>
+</ul>
+<p>通过以下代码，containing app可以让extension出现或隐藏（当然extension也可以让自己隐藏）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//让隐藏的插件重新显示</span><br><span class="line">- (void)showTodayExtension</span><br><span class="line">&#123;</span><br><span class="line">    [[NCWidgetController widgetController] setHasContent:YES forWidgetWithBundleIdentifier:@&quot;com.wangzz.app.extension&quot;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//隐藏插件</span><br><span class="line">- (void)hiddeTodayExtension</span><br><span class="line">&#123;</span><br><span class="line">    [[NCWidgetController widgetController] setHasContent:NO forWidgetWithBundleIdentifier:@&quot;com.wangzz.app.extension&quot;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、App-Groups"><a href="#三、App-Groups" class="headerlink" title="三、App Groups"></a>三、App Groups</h2><p>这是iOS8新开放的功能，在OS X上早就可用了。它主要用于同一group下的app共享同一份读写空间，以实现数据共享。</p>
+<p>extension和containing app共同读写一份数据是很合理的需求，比如系统的股市应用，widget和app中都需要展示几个公司的股票数据，这就可以通过App Groups实现。</p>
+<h4 id="3-1-功能开启"><a href="#3-1-功能开启" class="headerlink" title="3.1 功能开启"></a>3.1 功能开启</h4><p>为了便于后续操作，请先确保你的开发者账号在Xcode上处于登录状态。</p>
+<ul>
+<li>在app中开启</li>
+</ul>
+<p>App Groups位于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TARGETS--&gt;AppExtensionDemo--&gt;Capabilities--&gt;App Groups</span><br></pre></td></tr></table></figure>
+
+<p>找到以后，将App Groups右上角的开关打开，然后选择添加groups，比如我的是group.wangzz，当然这是为了测试随便起得名字，正规点得命名规则应该是：group.com.company.app。</p>
+<p>添加成功以后如下图所示：</p>
+<p><img src="/images/article5/app_group.png" alt="app_group"></p>
+<ul>
+<li>在extension中开启</li>
+</ul>
+<p>我创建的是widget，target名称为TodayExtension，对应的App Groups位于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TARGETS--&gt;TodayExtension--&gt;Capabilities--&gt;App Groups</span><br></pre></td></tr></table></figure>
+
+<p>开启方式和app中一样，需要注意的是必须保证这里地App Groups名称和app中的相同，即为group.wangzz。</p>
+<h2 id="四、extension和containing-app数据共享"><a href="#四、extension和containing-app数据共享" class="headerlink" title="四、extension和containing app数据共享"></a>四、extension和containing app数据共享</h2><p>App Groups给我们提供了同一group内app可以共同读写的区域，可以通过以下方式实现数据共享：</p>
+<h4 id="4-1-通过NSUserDefaults共享数据"><a href="#4-1-通过NSUserDefaults共享数据" class="headerlink" title="4.1 通过NSUserDefaults共享数据"></a>4.1 通过NSUserDefaults共享数据</h4><ul>
+<li>存数据</li>
+</ul>
+<p>通过以下方式向NSUserDefaults中保存数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (void)saveTextByNSUserDefaults</span><br><span class="line">&#123;</span><br><span class="line">    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@&quot;group.wangzz&quot;];</span><br><span class="line">    [shared setObject:_textField.text forKey:@&quot;wangzz&quot;];</span><br><span class="line">    [shared synchronize];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是：</p>
+<p>1.保存数据的时候必须指明group id；</p>
+<p>2.而且要注意NSUserDefaults能够处理的数据只能是可plist化的对象，详情见<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/PropertyLists/AboutPropertyLists/AboutPropertyLists.html" target="_blank" rel="noopener">Property List Programming Guide</a>。</p>
+<p>3.为了防止出现数据同步问题，不要忘记调用<code>[shared synchronize];</code></p>
+<ul>
+<li>读数据</li>
+</ul>
+<p>对应的读取数据方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)readDataFromNSUserDefaults</span><br><span class="line">&#123;</span><br><span class="line">    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@&quot;group.wangzz&quot;];</span><br><span class="line">    NSString *value = [shared valueForKey:@&quot;wangzz&quot;];</span><br><span class="line">    </span><br><span class="line">    return value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-2-通过NSFileManager共享数据"><a href="#4-2-通过NSFileManager共享数据" class="headerlink" title="4.2 通过NSFileManager共享数据"></a>4.2 通过NSFileManager共享数据</h4><p>NSFileManager在iOS7提供了containerURLForSecurityApplicationGroupIdentifier方法，可以用来实现app group共享数据。</p>
+<ul>
+<li>保存数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)saveTextByNSFileManager</span><br><span class="line">&#123;</span><br><span class="line">    NSError *err = nil;</span><br><span class="line">    NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@&quot;group.wangzz&quot;];</span><br><span class="line">    containerURL = [containerURL URLByAppendingPathComponent:@&quot;Library/Caches/good&quot;];</span><br><span class="line"></span><br><span class="line">    NSString *value = _textField.text;</span><br><span class="line">    BOOL result = [value writeToURL:containerURL atomically:YES encoding:NSUTF8StringEncoding error:&amp;err];</span><br><span class="line">    if (!result) &#123;</span><br><span class="line">        NSLog(@&quot;%@&quot;,err);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        NSLog(@&quot;save value:%@ success.&quot;,value);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>读数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- (NSString *)readTextByNSFileManager</span><br><span class="line">&#123;</span><br><span class="line">    NSError *err = nil;</span><br><span class="line">    NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@&quot;group.wangzz&quot;];</span><br><span class="line">    containerURL = [containerURL URLByAppendingPathComponent:@&quot;Library/Caches/good&quot;];</span><br><span class="line">    NSString *value = [NSString stringWithContentsOfURL:containerURL encoding:NSUTF8StringEncoding error:&amp;err];</span><br><span class="line">    </span><br><span class="line">    return value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里我试着保存和读取的是字符串数据，但读写SQlite我相信也是没问题的。</p>
+<ul>
+<li>数据同步</li>
+</ul>
+<p>两个应用共同读取同一份数据，就会引发数据同步问题。WWDC2014的视频中建议使用NSFileCoordination实现普通文件的读写同步，而数据库可以使用CoreData,Sqlite也支持同步。</p>
+<h2 id="五、extension和containing-app代码共享"><a href="#五、extension和containing-app代码共享" class="headerlink" title="五、extension和containing app代码共享"></a>五、extension和containing app代码共享</h2><p>和数据共享类似，extension和containing app很自然地会有一些业务逻辑上可以共用的代码，这时可以通过iOS8中刚开放使用的framework实现。苹果在<a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW1" target="_blank" rel="noopener">App Extension Programming Guide</a>中是这样描述的：</p>
+<blockquote>
+</blockquote>
+<p>In iOS 8.0 and later, you can use an embedded framework to share code between your extension and its containing app. For example, if you develop image-processing code that you want both your Photo Editing extension and its containing app to share, you can put the code into a framework and embed it in both targets.</p>
+<blockquote>
+</blockquote>
+<p>即将framework分别嵌入到extension和containing app的target中实现代码共享。但这样岂不是需要分别要将framework分别copy到extension和containing app的main bundle中？</p>
+<p>参考extension和containing app数据共享，我试想能不能将framework只保存一份放在App Groups区域？</p>
+<h4 id="5-1-copy-framework到App-Groups"><a href="#5-1-copy-framework到App-Groups" class="headerlink" title="5.1 copy framework到App Groups"></a>5.1 copy framework到App Groups</h4><p>在app首次启动的时候将framework放到App Groups区域：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- (BOOL)copyFrameworkFromMainBundleToAppGroup</span><br><span class="line">&#123;</span><br><span class="line">    NSFileManager *manager = [NSFileManager defaultManager];</span><br><span class="line">    NSError *err = nil;</span><br><span class="line">    NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@&quot;group.wangzz&quot;];</span><br><span class="line">    NSString *sorPath = [NSString stringWithFormat:@&quot;%@/Dylib.framework&quot;,[[NSBundle mainBundle] bundlePath]];</span><br><span class="line">    NSString *desPath = [NSString stringWithFormat:@&quot;%@/Library/Caches/Dylib.framework&quot;,containerURL.path];</span><br><span class="line">    </span><br><span class="line">    BOOL removeResult = [manager removeItemAtPath:desPath error:&amp;err];</span><br><span class="line">    if (!removeResult) &#123;</span><br><span class="line">        NSLog(@&quot;%@&quot;,err);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        NSLog(@&quot;remove success.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    BOOL copyResult = [[NSFileManager defaultManager] copyItemAtPath:sorPath toPath:desPath error:&amp;err];</span><br><span class="line">    if (!copyResult) &#123;</span><br><span class="line">        NSLog(@&quot;%@&quot;,err);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        NSLog(@&quot;copy success.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return copyResult;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-2-使用framework："><a href="#5-2-使用framework：" class="headerlink" title="5.2 使用framework："></a>5.2 使用framework：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)loadFrameworkInAppGroup</span><br><span class="line">&#123;</span><br><span class="line">    NSError *err = nil;</span><br><span class="line">    NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@&quot;group.wangzz&quot;];</span><br><span class="line">    NSString *desPath = [NSString stringWithFormat:@&quot;%@/Library/Caches/Dylib.framework&quot;,containerURL.path];</span><br><span class="line">    NSBundle *bundle = [NSBundle bundleWithPath:desPath];</span><br><span class="line">    BOOL result = [bundle loadAndReturnError:&amp;err];</span><br><span class="line">    if (result) &#123;</span><br><span class="line">        Class root = NSClassFromString(@&quot;Person&quot;);</span><br><span class="line">        if (root) &#123;</span><br><span class="line">            Person *person = [[root alloc] init];</span><br><span class="line">            if (person) &#123;</span><br><span class="line">                [person run];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        NSLog(@&quot;%@&quot;,err);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>经过测试，竟然能够加载成功。</p>
+<p>需要说明的是，这里只是说那么用是可以成功加载framework，但还面临不少问题，比如如果用户在启动app之前去使用extension，这时framework还没有copy过去，怎么处理；另外iOS的机制或者苹果的审核是否允许这样使用等。</p>
+<p>在一切确定下来之前还是乖乖按文档中的方式使用吧。</p>
+<h2 id="六、生命周期"><a href="#六、生命周期" class="headerlink" title="六、生命周期"></a>六、生命周期</h2><p>extension和普通app的最大区别之一是生命周期。</p>
+<ul>
+<li>开始</li>
+</ul>
+<p>在用户通过host app点击extension时，系统就会实例化extension应用，这是生命周期的开始。</p>
+<ul>
+<li>执行任务</li>
+</ul>
+<p>在extension启动以后，开始执行它的使命。</p>
+<ul>
+<li>终止</li>
+</ul>
+<p>在用户取消任务，或者任务执行结束，或者开启了一个长时后台任务时，系统会将其杀掉。</p>
+<p>由此可见，extension就是为了任务而生！</p>
+<p>下图来自官方文档，它将生命周期划分的更详细：</p>
+<p><img src="/images/article5/app_extensions_lifecycle.png" alt="app_extensions_lifecycle"></p>
+<p>通过打印日志发现，<code>Today</code>中的<code>widget</code>在将<code>Today</code>切换到<code>全部</code>或者<code>未读通知时</code>都会被杀掉。</p>
+<h2 id="七、-调试"><a href="#七、-调试" class="headerlink" title="七、 调试"></a>七、 调试</h2><p>extension和普通app的调试方式差不多，开始调试前先选中extension对应的target，点击run，就会弹出下图所示选择框：</p>
+<p><img src="/images/article5/extension_debug.png" alt="extension_debug"></p>
+<p>需要选择一个host app，这里选择<code>Today</code>。</p>
+<p>然后即可和普通app一样调试了，不过我在实际使用过程中，发现有各种奇怪的事情，比如NSLog无法在控制台输出，应该是bug吧。</p>
+<h2 id="八、-iOS8应用文件系统"><a href="#八、-iOS8应用文件系统" class="headerlink" title="八、 iOS8应用文件系统"></a>八、 iOS8应用文件系统</h2><p>发现iOS8的文件系统发生了变化，新的文件系统将可执行文件（即原来的.app文件）从沙盒中移到了另外一个地方，这样感觉更合理。</p>
+<ul>
+<li>测试代码</li>
+</ul>
+<p>下述代码用于打印App Groups路径、应用的可执行文件路径、对应的Documents路径：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- (void)logAppPath</span><br><span class="line">&#123;</span><br><span class="line">    //app group路径</span><br><span class="line">    NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@&quot;group.wangzz&quot;];</span><br><span class="line">    NSLog(@&quot;app group:\n%@&quot;,containerURL.path);</span><br><span class="line">    </span><br><span class="line">    //打印可执行文件路径</span><br><span class="line">    NSLog(@&quot;bundle:\n%@&quot;,[[NSBundle mainBundle] bundlePath]);</span><br><span class="line">    </span><br><span class="line">    //打印documents</span><br><span class="line">    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);</span><br><span class="line">    NSString *path = [paths objectAtIndex:0];</span><br><span class="line">    NSLog(@&quot;documents:\n%@&quot;,path);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>containing app执行结果</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2014-06-23 19:35:03.944 AppExtensionDemo[7471:365131] app group:</span><br><span class="line">/private/var/mobile/Containers/Shared/AppGroup/89CCBFB1-CA5E-4C7F-80CB-A3EB9E841816</span><br><span class="line">2014-06-23 19:35:03.946 AppExtensionDemo[7471:365131] bundle:</span><br><span class="line">/private/var/mobile/Containers/Bundle/Application/1AC73797-A3BB-4BDE-A647-3D083DA6871A/AppExtensionDemo.app</span><br><span class="line">2014-06-23 19:35:03.948 AppExtensionDemo[7471:365131] documents:</span><br><span class="line">/var/mobile/Containers/Data/Application/E5E6E516-0163-4754-9D10-A5F6C33A6261/Documents</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>extension执行结果</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Jun 23 19:37:49 autonavis-iPad com.foogry.AppExtensionDemo.TodayExtension[7638] &lt;Warning&gt;: app group:</span><br><span class="line">	/private/var/mobile/Containers/Shared/AppGroup/89CCBFB1-CA5E-4C7F-80CB-A3EB9E841816</span><br><span class="line">Jun 23 19:37:49 autonavis-iPad com.foogry.AppExtensionDemo.TodayExtension[7638] &lt;Warning&gt;: bundle:</span><br><span class="line">	/private/var/mobile/Containers/Bundle/Application/596717B7-7CB8-4F53-BCD4-380F34ABD30F/AppExtensionDemo.app/PlugIns/com.foogry.AppExtensionDemo.TodayExtension.appex</span><br><span class="line">Jun 23 19:37:49 autonavis-iPad com.foogry.AppExtensionDemo.TodayExtension[7638] &lt;Warning&gt;: documents:</span><br><span class="line">	/var/mobile/Containers/Data/PluginKitPlugin/57581433-3DBD-4930-971F-78D30C150E8A/Documents</span><br></pre></td></tr></table></figure>
+
+<p>由此可见，不管是extension还是containing app，他们的可执行文件和保存数据的目录都是分开存放的，即所有app的可执行文件都放在一个大目录下，保存数据的目录保存在另一个大目录下，同样，AppGroup放在另一个大目录下。</p>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
+<li><p>本文用到的demo已经上传到<a href="https://github.com/wangzz/Demo/tree/master/AppExtensionsDemo" target="_blank" rel="noopener">github</a>上。</p>
+</li>
+<li><p>文中可能有理解有误的地方，还请指出。</p>
+</li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/index.html#//apple_ref/doc/uid/TP40014214-CH20-SW1" target="_blank" rel="noopener">App Extension Programming Guide</a></p>
+</li>
+<li><p><a href="http://blog.waynehartman.com/" target="_blank" rel="noopener">Crash Course In iOS 8 Widgets</a></p>
+</li>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/documentation/NotificationCenter/Reference/NotificationCenter_Framework/index.html#//apple_ref/doc/uid/TP40014443" target="_blank" rel="noopener">Notification Center Framework Reference</a></p>
+</li>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/releasenotes/General/RN-iOSSDK-8.0/" target="_blank" rel="noopener">iOS 8 Release Notes</a></p>
+</li>
+<li><p><a href="https://developer.apple.com/library/prerelease/ios/documentation/Miscellaneous/Reference/EntitlementKeyReference/Chapters/EnablingAppSandbox.html#//apple_ref/doc/uid/TP40011195-CH4-SW19" target="_blank" rel="noopener">Entitlement Key Reference</a></p>
+</li>
+<li><p><a href="http://www.pingwest.com/apples-new-extension-eco-system/" target="_blank" rel="noopener">苹果的插件生态系统，开发者的新世界</a></p>
+</li>
+<li><p><a href="http://www.macstories.net/stories/ios-8-extensions-apples-plan-for-a-powerful-app-ecosystem/" target="_blank" rel="noopener">iOS 8 Extensions: Apple’s Plan for a Powerful App Ecosystem</a></p>
+</li>
+<li><p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/PropertyLists/AboutPropertyLists/AboutPropertyLists.html" target="_blank" rel="noopener">Property List Programming Guide</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/weixinpay.jpg" alt="foogry 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>foogry</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://foogry.wang/2014/06/23/2014-06-23-wwdc2014zhi-app-extensionsxue-xi-bi-ji/" title="WWDC2014之App Extensions学习笔记">http://foogry.wang/2014/06/23/2014-06-23-wwdc2014zhi-app-extensionsxue-xi-bi-ji/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+            
+              <a href="/tags/WWDC2014/" rel="tag"># WWDC2014</a>
+            
+              <a href="/tags/framework/" rel="tag"># framework</a>
+            
+              <a href="/tags/App-Extensions/" rel="tag"># App Extensions</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2014/06/12/2014-06-12-wwdc2014zhi-iosshi-yong-dong-tai-ku/" rel="next" title="WWDC2014之iOS使用动态库">
+                  <i class="fa fa-chevron-left"></i> WWDC2014之iOS使用动态库
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2014/08/08/2014-08-08-ping-mu-xuan-zhuan-xue-xi-bi-ji/" rel="prev" title="iOS屏幕旋转学习笔记">
+                  iOS屏幕旋转学习笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-affix-container">      
+      <div class="sidebar-inner">
+          
+          
+          
+          
+        
+
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview">
+            站点概览
+          </li>
+        </ul>
+
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、关于App-Extensions"><span class="nav-number">1.</span> <span class="nav-text">一、关于App Extensions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#几个关键词"><span class="nav-number">1.0.1.</span> <span class="nav-text">几个关键词</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、extension和containing-app、host-app"><span class="nav-number">2.</span> <span class="nav-text">二、extension和containing app、host app</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-extension和host-app"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 extension和host app</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-containing-app和host-app"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 containing app和host app</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-extension和containing-app"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3 extension和containing app</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、App-Groups"><span class="nav-number">3.</span> <span class="nav-text">三、App Groups</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-功能开启"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 功能开启</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、extension和containing-app数据共享"><span class="nav-number">4.</span> <span class="nav-text">四、extension和containing app数据共享</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-通过NSUserDefaults共享数据"><span class="nav-number">4.0.1.</span> <span class="nav-text">4.1 通过NSUserDefaults共享数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-通过NSFileManager共享数据"><span class="nav-number">4.0.2.</span> <span class="nav-text">4.2 通过NSFileManager共享数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、extension和containing-app代码共享"><span class="nav-number">5.</span> <span class="nav-text">五、extension和containing app代码共享</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-copy-framework到App-Groups"><span class="nav-number">5.0.1.</span> <span class="nav-text">5.1 copy framework到App Groups</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-使用framework："><span class="nav-number">5.0.2.</span> <span class="nav-text">5.2 使用framework：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、生命周期"><span class="nav-number">6.</span> <span class="nav-text">六、生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、-调试"><span class="nav-number">7.</span> <span class="nav-text">七、 调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八、-iOS8应用文件系统"><span class="nav-number">8.</span> <span class="nav-text">八、 iOS8应用文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说明"><span class="nav-number">9.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">10.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+          
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">foogry</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/wangzz" title="GitHub &rarr; https://github.com/wangzz" rel="noopener" target="_blank"><i class="fa fa-fw fa-GitHub"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/1734555471" title="Weibo &rarr; https://weibo.com/u/1734555471" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-ad-inner">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6064212272457327"
+     crossorigin="anonymous"></script>
+  <!-- 侧边栏广告 -->
+  <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-6064212272457327"
+      data-ad-slot="7700244708"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foogry</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    <span>备案号：</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021006847号-1</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'vqsvFaA8FXndr4867HJvtJ7P-gzGzoHsz',
+    appKey: '6L6ddsrLCJVMetc2W7CL9kkf',
+    placeholder: 'Comment Here',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
