@@ -1,5 +1,11 @@
 #! /bin/zsh
 
+# 切换到兼容的 Node 版本（Hexo 3.9.0 不兼容 Node 14+）
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+nvm use 10
+echo "Node version: $(node -v)"
+
 # git pull source
 echo "**************BEGIN GIT PULL SOURCE**************"
 git pull origin source
@@ -43,7 +49,7 @@ fi
 
 # 创建发布用 git 仓库
 cd public
-git init
+git init -b master
 git add .
 
 if [ -n "$1" ];
