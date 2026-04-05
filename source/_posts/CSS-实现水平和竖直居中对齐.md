@@ -44,7 +44,7 @@ http://editor.ruosen.io/?id=62b19aa7fed123ba66c6be3af7cae1ce
 
 * 效果图
 
-![](https://gitee.com/wangzz/pic/raw/master/align1.png)
+![](/images/blog/align1.png)
 
 #### 方案二
 
@@ -77,7 +77,7 @@ http://editor.ruosen.io/?id=ffbf1e3befaa3bd7a0d5ed05f9794d44
 
 * 效果图
 
-![](https://gitee.com/wangzz/pic/raw/master/image-center.png)
+![](/images/blog/image-center.png)
 
 ## 水平垂直同时居中对齐
 
@@ -128,7 +128,7 @@ http://editor.ruosen.io/?id=26c3aa622708de627eb694108b733939
 ```
 * 效果图
 
-![](https://gitee.com/wangzz/pic/raw/master/block_line_v_h_center2.png)
+![](/images/blog/block_line_v_h_center2.png)
 
 
 #### 方案二
@@ -185,7 +185,7 @@ http://editor.ruosen.io/?id=3c2f0840c7fdab40b48438d441228b2d
 
 * 效果图
 
-![](https://gitee.com/wangzz/pic/raw/master/line_v_h_center.png)
+![](/images/blog/line_v_h_center.png)
 
 #### 方案三
 
@@ -225,7 +225,7 @@ http://editor.ruosen.io/?id=b926056b95cbc83288bbd74f8bb3b5f9
 
 * 效果图
 
-![](https://gitee.com/wangzz/pic/raw/master/block_line_v_h_center.png)
+![](/images/blog/block_line_v_h_center.png)
 
 
 #### 方案四
@@ -272,4 +272,4 @@ http://editor.ruosen.io/?id=35056417c445656f8caad68a1109acab
 
 * 效果图
 
-![](https://gitee.com/wangzz/pic/raw/master/text_v_h_center.png)
+![](/images/blog/text_v_h_center.png)

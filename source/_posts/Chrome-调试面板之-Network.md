@@ -6,7 +6,7 @@ tags: [Chrome]
 
 ## 一、Network 面板介绍
 
-![](https://gitee.com/wangzz/pic/raw/master/network_panel.png)
+![](/images/blog/network_panel.png)
 
 其中：
 
@@ -253,13 +253,13 @@ DNS 寻找 IP 地址
 
 选项开启后，会以双行的形式展示 size 列，其中上面深颜色的表示通过网络传输的大小，下面浅颜色的表示未经压缩的尺寸
 
-![](https://gitee.com/wangzz/pic/raw/master/large_request_rows.png)
+![](/images/blog/large_request_rows.png)
 
 * Capture screenshots
 
 选项开启后，会新增一个显示截图的面板。重新刷新网页就能看到界面截图：
 
-![](https://gitee.com/wangzz/pic/raw/master/apture_screenshots.png)
+![](/images/blog/apture_screenshots.png)
 
 
 
