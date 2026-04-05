@@ -21,8 +21,8 @@ fi
 
 # hexo generate
 echo "**************BEGIN HEXO GENERATE**************"
-hexo clean
-hexo generate
+npx hexo clean
+npx hexo generate
 
 if [ $? != 0 ]
 then
