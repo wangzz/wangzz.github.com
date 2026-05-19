@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # Legal
 
 此目录存放法律协议暂存稿（`staging/`）和 md-doc 仓库的本地缓存（`.cache/`）。

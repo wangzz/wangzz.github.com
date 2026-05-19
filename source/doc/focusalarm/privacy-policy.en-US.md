@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # FocusAlarm Privacy Policy
 
 Effective Date: May 5, 2026

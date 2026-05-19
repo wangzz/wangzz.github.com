@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # FocusAlarm Terms of Use
 
 Effective Date: May 5, 2026

@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # Technical Support
 
 ## About zz markdown

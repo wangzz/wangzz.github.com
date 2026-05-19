@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # GPSElevation Legal Documents
 
 ## 协议清单

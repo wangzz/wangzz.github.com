@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # KnowAnimal 使用条款 · Terms of Use (EULA)
 
 **最近更新：2026 年 4 月 29 日**

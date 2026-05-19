@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # Technical Support
 
 **BirthNotice - Birthday Reminder with Lunar Calendar**

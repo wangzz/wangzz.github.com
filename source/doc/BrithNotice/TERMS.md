@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # Terms of Use (EULA) — BirthNotice
 
 **App Name:** BirthNotice - Birthday Reminder with Lunar Calendar

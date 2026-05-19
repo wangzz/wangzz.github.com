@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # FocusAlarm Subscription Terms
 
 Effective Date: May 5, 2026

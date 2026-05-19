@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # Privacy Policy
 
 **Last updated: April 4, 2026**

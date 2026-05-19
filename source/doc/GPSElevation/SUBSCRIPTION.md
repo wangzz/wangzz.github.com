@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # GPS高度表 订阅条款 / Subscription Terms
 
 生效日期 / Effective Date: 2026-05-10

@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # KnowAnimal 订阅说明 · Subscription Terms
 
 **最近更新：2026 年 4 月 29 日**

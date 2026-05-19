@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # Privacy Policy
 
 **BirthNotice - Birthday Reminder with Lunar Calendar**

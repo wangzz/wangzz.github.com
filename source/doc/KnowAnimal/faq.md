@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # KnowAnimal 常见问题 · FAQ
 
 **最近更新：2026 年 4 月 29 日**
