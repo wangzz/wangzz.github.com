@@ -22,7 +22,34 @@ fi
 # hexo generate
 echo "**************BEGIN HEXO GENERATE**************"
 npx hexo clean
-npx hexo generate
+
+# 使用 Node.js 脚本生成，修复 hexo generate 在 Node 20 下输出 0 字节的问题
+node -e "
+const Hexo = require('hexo');
+const fs = require('fs');
+const path = require('path');
+const hexo = new Hexo(process.cwd(), {});
+hexo.init().then(() => hexo.load()).then(() => {
+  const routes = hexo.route.list();
+  return Promise.all(routes.map(route => new Promise((resolve, reject) => {
+    const stream = hexo.route.get(route);
+    let data = '';
+    stream.on('data', chunk => data += chunk);
+    stream.on('end', () => {
+      const filePath = path.join('public', route);
+      fs.mkdirSync(path.dirname(filePath), {recursive: true});
+      fs.writeFileSync(filePath, data);
+      resolve();
+    });
+    stream.on('error', reject);
+  })));
+}).then(() => {
+  console.log('Hexo generate done');
+}).catch(err => {
+  console.error('Hexo generate error:', err);
+  process.exit(1);
+});
+"
 
 if [ $? != 0 ]
 then
