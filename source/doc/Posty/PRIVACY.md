@@ -1,6 +1,7 @@
 # 图记 隐私政策 / Privacy Policy
 
 生效日期 / Effective Date: 2025-07-16
+最后更新 / Last Updated: 2026-05-24
 
 ---
 
@@ -46,7 +47,8 @@ wangzz（以下简称"我们"）高度重视用户隐私保护。本政策说明
 - **Apple StoreKit**：用于处理应用内购买和订阅。Apple 可能收集您的购买凭证和交易信息。隐私政策：https://www.apple.com/legal/privacy/
 - **Apple iCloud**：当您启用 iCloud 同步时，数据通过 Apple iCloud 进行传输与存储。隐私政策：https://www.apple.com/legal/privacy/
 - **Apple Vision Framework**：用于设备端 AI 图像识别（文字识别、主体提取），所有处理均在本地完成，数据不会离开您的设备
-- **友盟SDK（Umeng SDK）**：用于应用数据统计与分析。友盟SDK 会收集设备信息（设备型号、操作系统版本、唯一设备标识符等）、网络信息、应用列表信息，用于提供统计分析服务。隐私政策：https://www.umeng.com/policy
+- **友盟SDK（Umeng SDK）**：用于应用数据统计与分析。友盟SDK 会收集设备信息（设备型号、操作系统版本、唯一设备标识符等）、网络信息、应用列表信息，用于提供统计分析服务。**注意：友盟 SDK 仅在您同意隐私政策后才初始化并开始收集数据。**隐私政策：https://www.umeng.com/policy
+- **Google Mobile Ads (AdMob)**：用于展示应用开屏广告。Google 可能收集设备标识符（IDFV）、应用使用数据、广告交互数据（展示/点击）、粗略地理位置（基于 IP 地址），用于提供个性化广告服务、广告效果统计和防欺诈目的。**注意：订阅 Pro 会员可移除广告。**隐私政策：https://policies.google.com/privacy
 
 我们已与上述第三方签署数据处理协议，要求其按照不低于本政策的标准处理您的信息。
 
@@ -65,16 +67,25 @@ wangzz（以下简称"我们"）高度重视用户隐私保护。本政策说明
 - 删除您的个人信息（通过卸载本应用或清除应用数据）
 - 撤回您先前授予的权限（在系统「设置 → 隐私与安全性 → 图记」中调整）
 - 导出您的数据副本
+- 选择是否接受个性化广告（通过订阅 Pro 会员移除广告）
 
-### 6. 未成年人保护
+### 6. 广告说明
+
+本应用免费版包含开屏广告（App Open Ad），由 Google AdMob 提供：
+- 广告类型：全屏显示的开屏广告
+- 展示时机：应用启动或从后台恢复时
+- 数据使用：Google 可能使用收集的数据向您展示个性化广告
+- 如何关闭：升级至 Pro 会员即可完全移除所有广告
+
+### 7. 未成年人保护
 
 本应用的目标用户不包含未满 14 周岁的未成年人。如果您是未满 14 周岁的未成年人，请在监护人同意并陪同下使用本应用。我们不会在未获得监护人同意的情况下主动收集未成年人的个人信息。
 
-### 7. 政策更新
+### 8. 政策更新
 
 我们可能会不定期更新本政策。更新后的政策将在本页面发布，并修改生效日期。重大变更我们会通过应用内通知或其他方式提示您。
 
-### 8. 联系我们
+### 9. 联系我们
 
 如您对本政策有任何疑问、意见或投诉，请通过以下方式联系我们：
 
@@ -127,7 +138,8 @@ The App integrates the following third-party services. These services may collec
 - **Apple StoreKit**: Used for in-app purchases and subscriptions. Apple may collect your purchase receipts and transaction information. Privacy Policy: https://www.apple.com/legal/privacy/
 - **Apple iCloud**: When you enable iCloud sync, data is transmitted and stored via Apple iCloud. Privacy Policy: https://www.apple.com/legal/privacy/
 - **Apple Vision Framework**: Used for on-device AI image recognition (text recognition, subject extraction). All processing occurs locally; data never leaves your device
-- **Umeng SDK**: Used for app analytics and statistics. The Umeng SDK collects device information (device model, OS version, unique device identifier, etc.), network information, and app list information to provide statistical analysis services. Privacy Policy: https://www.umeng.com/policy
+- **Umeng SDK**: Used for app analytics and statistics. The Umeng SDK collects device information (device model, OS version, unique device identifier, etc.), network information, and app list information to provide statistical analysis services. **Note: Umeng SDK only initializes and begins collecting data after you consent to this privacy policy.** Privacy Policy: https://www.umeng.com/policy
+- **Google Mobile Ads (AdMob)**: Used to display app open ads. Google may collect device identifiers (IDFV), usage data, ad interaction data (impressions/clicks), and coarse location (based on IP address) to serve personalized ads, measure ad performance, and prevent fraud. **Note: Upgrade to Pro membership to remove all ads.** Privacy Policy: https://policies.google.com/privacy
 
 We have signed data processing agreements with these parties requiring them to handle your information at a standard no less strict than this policy.
 
@@ -146,6 +158,14 @@ You have the right to:
 - Delete your personal information (by uninstalling the App or clearing App data)
 - Withdraw previously granted permissions (via iOS Settings → Privacy & Security → 图记 / Posty)
 - Export a copy of your data
+- Choose whether to receive personalized ads (by upgrading to Pro membership to remove ads)
+
+### 6. Advertising Disclosure
+
+The free version of this App contains open-screen advertisements (App Open Ad) provided by Google AdMob:
+- Ad type: Full-screen display ad shown at app launch or when returning from background
+- Data usage: Google may use collected data to show you personalized ads
+- How to remove: Upgrade to Pro membership to remove all advertisements
 
 ### 6. Children's Privacy
 
