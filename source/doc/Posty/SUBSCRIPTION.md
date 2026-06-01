@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # 图记 订阅条款 / Subscription Terms
 
 生效日期 / Effective Date: 2025-07-16

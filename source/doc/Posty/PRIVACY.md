@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # 图记 隐私政策 / Privacy Policy
 
 生效日期 / Effective Date: 2025-07-16

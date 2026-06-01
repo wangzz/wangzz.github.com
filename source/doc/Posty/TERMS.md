@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # 图记 用户协议 / Terms of Use
 
 生效日期 / Effective Date: 2025-07-16

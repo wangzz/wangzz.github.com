@@ -52,9 +52,19 @@
     th {
       background: #f5f5f5;
     }
+    blockquote {
+      border-left: 4px solid #ddd;
+      padding-left: 16px;
+      margin: 1em 0;
+      color: #666;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 <body>
-  {{ page.content | safe }}
+  {{ page.content }}
 </body>
 </html>
