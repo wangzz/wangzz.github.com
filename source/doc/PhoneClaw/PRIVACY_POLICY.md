@@ -60,6 +60,67 @@ PhoneClaw（以下简称"本 App"）由 wangzz（以下简称"我们"）开发�
 ## 联系我们
 
 如果您对本隐私政策有任何疑问，请通过以下方式联系我们：
-- GitHub Issues: https://github.com/wangzz/PhoneClaw/issues
 - 邮箱: wzzvictory_tjsd@163.com
 
+---
+
+# Privacy Policy
+
+**Effective Date: 2026-06-19**
+
+## Introduction
+
+PhoneClaw (the "App") is developed by wangzz ("we", "us", or "our"). We value your privacy. This Privacy Policy explains how we collect, use, and protect your personal information.
+
+## Information We Collect
+
+The App **does not collect any personal user data**.
+
+### Device Identifier
+
+The App collects only a device identifier (Device ID) for device pairing and communication purposes. This data:
+- Is not linked to any personal identity
+- Is not used to track user behavior
+- Is used solely for the App's core functionality (inter-device relay communication)
+
+### Information You Provide
+
+- **Server Configuration**: AI server addresses and API keys you configure within the App are stored locally on your device only. We do not upload or access this information.
+- **Chat Content**: Chat messages you send through the App communicate directly with the AI server you configured yourself. We do not store, view, or access any chat content.
+- **Images**: Images you choose to send are transmitted only to your configured AI server for analysis. We do not store or forward these images.
+
+## How We Use Information
+
+We use the collected information solely for:
+- Enabling device pairing and relay communication
+- Maintaining the normal operation of the App
+
+## Information Sharing
+
+We **do not** sell, trade, or rent your information to third parties.
+
+## Data Security
+
+We employ reasonable technical measures to protect your information:
+- API keys and server configurations are encrypted and stored locally on your device
+- Communications are encrypted through relay services
+- Face ID authentication is supported to protect local data
+
+## Third-Party Services
+
+The App may connect to third-party AI services (such as OpenAI, Anthropic, etc.) that you configure yourself. These services have their own privacy policies, and we recommend reviewing their privacy terms.
+
+The App does not embed any third-party analytics SDKs or advertising SDKs.
+
+## Children's Privacy
+
+The App is not directed to children under 13 and does not knowingly collect personal information from children.
+
+## Changes to This Privacy Policy
+
+We may update this Privacy Policy from time to time. Any material changes will be communicated through in-app notifications or update logs.
+
+## Contact Us
+
+If you have any questions about this Privacy Policy, please contact us at:
+- Email: wzzvictory_tjsd@163.com

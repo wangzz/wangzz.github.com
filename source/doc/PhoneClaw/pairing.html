@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoneClaw - 配对你的 OpenClaw 主机</title>
+<style>
+  :root {
+    --primary: #6C5CE7;
+    --primary-dark: #5A4BD1;
+    --surface: #FFFFFF;
+    --surface-secondary: #F8F9FA;
+    --on-surface: #1A1A2E;
+    --on-surface-secondary: #6B7280;
+    --border: #E5E7EB;
+    --danger: #EF4444;
+    --success: #10B981;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    background: var(--surface-secondary);
+    color: var(--on-surface);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 32px 0 24px;
+  }
+
+  .header-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    background: var(--primary);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-icon svg {
+    width: 36px;
+    height: 36px;
+    fill: white;
+  }
+
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .header p {
+    font-size: 15px;
+    color: var(--on-surface-secondary);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    background: var(--border);
+    border-radius: var(--radius);
+    padding: 4px;
+    margin-bottom: 24px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px 16px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--on-surface-secondary);
+    border: none;
+    background: none;
+  }
+
+  .tab.active {
+    background: var(--surface);
+    color: var(--on-surface);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title .badge {
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--danger);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--on-surface-secondary);
+    margin-bottom: 16px;
+  }
+
+  /* Steps */
+  .steps {
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .steps li {
+    counter-increment: step;
+    padding: 8px 0 8px 32px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 22px;
+    height: 22px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .steps code {
+    background: var(--surface-secondary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+  }
+
+  /* Copy block */
+  .copy-block {
+    background: var(--on-surface);
+    color: #E5E7EB;
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    position: relative;
+    margin-top: 12px;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.2s;
+  }
+
+  .copy-btn:hover {
+    background: rgba(255,255,255,0.25);
+  }
+
+  .copy-btn.copied {
+    background: var(--success);
+  }
+
+  .copy-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Link button */
+  .link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .link-btn:hover {
+    background: var(--primary-dark);
+  }
+
+  .link-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .secondary-btns {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .secondary-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px;
+    background: var(--surface-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--on-surface);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .secondary-btn:hover {
+    background: var(--border);
+  }
+
+  .secondary-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Tab content */
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--on-surface);
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 1000;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .container { padding: 16px 12px 32px; }
+    .header { padding: 24px 0 16px; }
+    .header h1 { font-size: 20px; }
+    .card { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </div>
+    <h1>配对你的 OpenClaw 主机</h1>
+    <p>在运行 OpenClaw 的电脑上安装 PhoneClaw Skill，然后生成配对码并连接到 PhoneClaw App</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="webpage">在电脑上打开配对网页</button>
+    <button class="tab" data-tab="agent">让 Agent 帮忙安装</button>
+  </div>
+
+  <!-- Tab 1: Webpage -->
+  <div class="tab-content active" id="tab-webpage">
+    <div class="card">
+      <div class="card-title">在电脑上打开配对网页</div>
+      <div class="card-desc">在运行 Agent 的电脑上打开这个网页，复制安装/配对 prompt，再生成配对码。</div>
+
+      <div class="steps">
+        <li>在电脑浏览器中打开配对网页</li>
+        <li>复制下方的安装指令，发送给 Agent</li>
+        <li>等待 Agent 安装完成后，让它生成配对码</li>
+        <li>在 PhoneClaw App 中输入配对码完成连接</li>
+      </div>
+
+      <a href="https://foogry.wang/doc/PhoneClaw/pairing.html" class="link-btn" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        打开配对网站
+      </a>
+
+      <div class="secondary-btns">
+        <button class="secondary-btn" onclick="copyUrl()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          复制网址
+        </button>
+        <button class="secondary-btn" onclick="shareUrl()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          分享网址
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 2: Agent -->
+  <div class="tab-content" id="tab-agent">
+    <div class="card">
+      <div class="card-title">
+        让 Agent 帮忙安装 PhoneClaw Skill
+        <span class="badge">推荐</span>
+      </div>
+      <div class="card-desc">复制下面这段话，直接发给 Agent，让它先安装 PhoneClaw Skill，再把这台 OpenClaw 主机配对到 PhoneClaw App。</div>
+
+      <div class="copy-block" id="agent-prompt">请先从这个仓库安装 phone-claw-skill，并严格按下面要求执行：https://github.com/wangzz/PhoneClaw/tree/main/phone-claw-skill
+
+1. 先直接运行 `npm install -g pm2`，确保本机有 pm2（用于后台运行）。
+2. 将 phone-claw-skill 文件夹复制到本机任意位置，例如 `~/phone-claw-skill`。
+3. 进入目录后执行 `npm install && npm run build` 安装依赖并编译。
+4. 使用 `pm2 start dist/index.js --name phoneclaw-skill` 启动 Skill，让它连接到中继服务器。
+5. 启动成功后，执行 `pm2 logs phoneclaw-skill --lines 20` 查看日志，确认看到 "Relay connected" 和 "Initialization complete"。
+6. 然后执行配对命令生成配对码（Skill 会在终端显示 6 位配对码）。
+7. 严格按 skill 的步骤执行，不要跳过检查。
+8. 如果成功，请直接告诉我配对码是多少，以及下一步应该执行的命令。
+9. 如果失败，请直接告诉我卡在哪一步，以及下一步应该执行的命令。
+
+这台主机应按 OpenClaw 配对。生成配对码时请使用 skill 提供的配对功能。</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">已复制到剪贴板</div>
+
+<script>
+// Tab switching
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// Copy functions
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg || '已复制到剪贴板';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast());
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast();
+  }
+}
+
+function copyUrl() {
+  copyText('https://foogry.wang/doc/PhoneClaw/pairing.html');
+}
+
+function shareUrl() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'PhoneClaw 配对网页',
+      url: 'https://foogry.wang/doc/PhoneClaw/pairing.html'
+    });
+  } else {
+    copyUrl();
+  }
+}
+
+// Copy button for agent prompt
+document.querySelectorAll('.copy-block').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> 复制';
+  btn.addEventListener('click', () => {
+    const text = block.textContent.replace('复制', '').trim();
+    copyText(text);
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 已复制';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> 复制';
+    }, 2000);
+  });
+  block.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

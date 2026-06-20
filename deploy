@@ -60,6 +60,13 @@ echo "**************HEXO GENERATE SUCCESS**************"
 fi
 
 
+# Copy static pairing page (skip_render creates empty files, so copy manually)
+echo "**************COPY STATIC PAGES BEGIN**************"
+mkdir -p public/doc/PhoneClaw
+cp source/doc/PhoneClaw/pairing.html public/doc/PhoneClaw/pairing.html
+echo "**************COPY STATIC PAGES SUCCESS**************"
+
+
 # git push source
 echo "**************GIT PUSH SOURCE BEGIN**************"
 git add --all .

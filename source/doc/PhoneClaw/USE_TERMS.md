@@ -71,6 +71,78 @@ layout: doc
 ## 11. 联系我们
 
 如果您对本条款有任何疑问，请通过以下方式联系我们：
-- GitHub Issues: https://github.com/wangzz/PhoneClaw/issues
 - 邮箱: wzzvictory_tjsd@163.com
 
+---
+
+# Terms of Use
+
+**Effective Date: 2026-06-19**
+
+## 1. Acceptance of Terms
+
+By downloading, installing, or using PhoneClaw (the "App"), you agree to be bound by these Terms of Use (the "Terms"). If you do not agree to these Terms, do not use the App.
+
+## 2. License
+
+We grant you a limited, non-exclusive, non-transferable, non-sublicensable license to install and use the App on Apple-branded devices, subject to these Terms.
+
+## 3. Subscriptions and Purchases
+
+### 3.1 Free Features
+The App provides basic features for free use.
+
+### 3.2 Pro Subscription
+You can subscribe to PhoneClaw Pro through in-app purchases to unlock all premium features. Options include:
+- Monthly subscription
+- Annual subscription
+- Lifetime purchase
+
+### 3.3 Payment and Refunds
+- All payments are processed through Apple's in-app purchase system
+- Subscription fees will be charged to your Apple ID account upon confirmation of purchase
+- Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period
+- For refunds, please follow Apple's refund policy
+
+### 3.4 Subscription Management
+You can manage or cancel subscriptions in your iPhone's Settings > Apple ID > Subscriptions.
+
+## 4. User Conduct
+
+### 4.1 Permitted Use
+- Use the App for personal, non-commercial purposes
+- Configure your own AI server connections
+
+### 4.2 Prohibited Use
+- Use the App for any illegal purposes
+- Attempt to reverse engineer, decompile, or modify the App
+- Use the App to transmit unlawful, harmful, or rights-infringing content
+
+## 5. Third-Party Services
+
+The App can connect to third-party AI services that you configure yourself. These services are operated by their respective providers, and we are not responsible for their content, privacy practices, or availability. Your use of these third-party services is subject to their respective terms of service.
+
+## 6. Intellectual Property
+
+The App and its original code, design, icons, and trademarks are the intellectual property of wangzz, protected by Chinese and international copyright laws and other intellectual property laws.
+
+## 7. Disclaimer of Warranties
+
+The App is provided "as is" without warranties of any kind, either express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, and non-infringement. We do not warrant that the App will be uninterrupted or error-free.
+
+## 8. Limitation of Liability
+
+To the maximum extent permitted by applicable law, we shall not be liable for any indirect, incidental, special, or consequential damages arising from the use or inability to use the App.
+
+## 9. Changes to Terms
+
+We reserve the right to modify these Terms at any time. Modified Terms will be effective upon an App update or posting on this page. Continued use of the App constitutes acceptance of the modified Terms.
+
+## 10. Governing Law
+
+These Terms are governed by the laws of the People's Republic of China, without regard to its conflict of law principles.
+
+## 11. Contact Us
+
+If you have any questions about these Terms, please contact us at:
+- Email: wzzvictory_tjsd@163.com
