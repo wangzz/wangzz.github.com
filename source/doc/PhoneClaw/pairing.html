@@ -50,12 +50,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
   }
 
-  .header-icon svg {
+  .header-icon img {
     width: 36px;
     height: 36px;
-    fill: white;
+    border-radius: 16px;
   }
 
   .header h1 {
@@ -218,66 +219,6 @@
     height: 14px;
   }
 
-  /* Link button */
-  .link-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 14px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
-
-  .link-btn:hover {
-    background: var(--primary-dark);
-  }
-
-  .link-btn svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .secondary-btns {
-    display: flex;
-    gap: 8px;
-    margin-top: 8px;
-  }
-
-  .secondary-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 10px;
-    background: var(--surface-secondary);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--on-surface);
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .secondary-btn:hover {
-    background: var(--border);
-  }
-
-  .secondary-btn svg {
-    width: 16px;
-    height: 16px;
-  }
-
   /* Tab content */
   .tab-content {
     display: none;
@@ -323,44 +264,29 @@
 <div class="container">
   <div class="header">
     <div class="header-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      <img src="/doc/PhoneClaw/logo.png" alt="PhoneClaw">
     </div>
     <h1>配对你的 OpenClaw 主机</h1>
     <p>在运行 OpenClaw 的电脑上安装 PhoneClaw Skill，然后生成配对码并连接到 PhoneClaw App</p>
   </div>
 
   <div class="tabs">
-    <button class="tab active" data-tab="webpage">在电脑上打开配对网页</button>
+    <button class="tab active" data-tab="manual">手动安装</button>
     <button class="tab" data-tab="agent">让 Agent 帮忙安装</button>
   </div>
 
-  <!-- Tab 1: Webpage -->
-  <div class="tab-content active" id="tab-webpage">
+  <!-- Tab 1: Manual Installation -->
+  <div class="tab-content active" id="tab-manual">
     <div class="card">
-      <div class="card-title">在电脑上打开配对网页</div>
-      <div class="card-desc">在运行 Agent 的电脑上打开这个网页，复制安装/配对 prompt，再生成配对码。</div>
+      <div class="card-title">手动安装 PhoneClaw Skill</div>
+      <div class="card-desc">在你的电脑上打开终端，按以下步骤安装并配对。</div>
 
       <div class="steps">
-        <li>在电脑浏览器中打开配对网页</li>
-        <li>复制下方的安装指令，发送给 Agent</li>
-        <li>等待 Agent 安装完成后，让它生成配对码</li>
-        <li>在 PhoneClaw App 中输入配对码完成连接</li>
-      </div>
-
-      <a href="https://foogry.wang/doc/PhoneClaw/pairing.html" class="link-btn" target="_blank">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        打开配对网站
-      </a>
-
-      <div class="secondary-btns">
-        <button class="secondary-btn" onclick="copyUrl()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-          复制网址
-        </button>
-        <button class="secondary-btn" onclick="shareUrl()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          分享网址
-        </button>
+        <li>打开终端，运行 <code>npm install -g phoneclaw-connector@latest</code> 全局安装 PhoneClaw Skill</li>
+        <li>确认电脑已安装 OpenClaw（Skill 会自动从 <code>~/.openclaw/openclaw.json</code> 读取网关配置，无需手动填写任何文件）</li>
+        <li>运行 <code>phoneclaw pair</code> 启动配对，终端会显示 6 位配对码</li>
+        <li>在 PhoneClaw App 中输入配对码完成配对</li>
+        <li>配对成功后，运行 <code>phoneclaw start</code> 让 Skill 保持后台运行，之后即可在手机端与电脑端交互</li>
       </div>
     </div>
   </div>
@@ -374,19 +300,17 @@
       </div>
       <div class="card-desc">复制下面这段话，直接发给 Agent，让它先安装 PhoneClaw Skill，再把这台 OpenClaw 主机配对到 PhoneClaw App。</div>
 
-      <div class="copy-block" id="agent-prompt">请先从这个仓库安装 phone-claw-skill，并严格按下面要求执行：https://github.com/wangzz/PhoneClaw/tree/main/phone-claw-skill
+      <div class="copy-block" id="agent-prompt">请严格按以下步骤帮我安装并配置 PhoneClaw Skill：
 
-1. 先直接运行 `npm install -g pm2`，确保本机有 pm2（用于后台运行）。
-2. 将 phone-claw-skill 文件夹复制到本机任意位置，例如 `~/phone-claw-skill`。
-3. 进入目录后执行 `npm install && npm run build` 安装依赖并编译。
-4. 使用 `pm2 start dist/index.js --name phoneclaw-skill` 启动 Skill，让它连接到中继服务器。
-5. 启动成功后，执行 `pm2 logs phoneclaw-skill --lines 20` 查看日志，确认看到 "Relay connected" 和 "Initialization complete"。
-6. 然后执行配对命令生成配对码（Skill 会在终端显示 6 位配对码）。
-7. 严格按 skill 的步骤执行，不要跳过检查。
-8. 如果成功，请直接告诉我配对码是多少，以及下一步应该执行的命令。
-9. 如果失败，请直接告诉我卡在哪一步，以及下一步应该执行的命令。
+1. 先直接运行 `npm install -g phoneclaw-connector@latest`，确保本机的 `phoneclaw` 命令是最新版。
+2. 确认本机已安装 OpenClaw（skill 会自动从 ~/.openclaw/openclaw.json 读取网关配置，无需手动填写任何配置文件）。
+3. 运行 `phoneclaw pair` 启动配对，skill 会在终端显示 6 位配对码。
+4. 严格按 skill 的步骤执行，不要跳过检查。
+5. 如果成功，请把最终 6 位配对码单独放一行，方便我复制。
+6. 配对成功后，请继续运行 `phoneclaw start` 让 Skill 保持后台运行，这样才能和手机端交互。
+7. 如果失败，请直接告诉我卡在哪一步，以及下一条应该执行的命令。
 
-这台主机应按 OpenClaw 配对。生成配对码时请使用 skill 提供的配对功能。</div>
+这台主机应按 OpenClaw 配对。生成配对码时请使用 `phoneclaw pair`。</div>
     </div>
   </div>
 </div>
@@ -425,21 +349,6 @@ function copyText(text) {
     document.execCommand('copy');
     document.body.removeChild(ta);
     showToast();
-  }
-}
-
-function copyUrl() {
-  copyText('https://foogry.wang/doc/PhoneClaw/pairing.html');
-}
-
-function shareUrl() {
-  if (navigator.share) {
-    navigator.share({
-      title: 'PhoneClaw 配对网页',
-      url: 'https://foogry.wang/doc/PhoneClaw/pairing.html'
-    });
-  } else {
-    copyUrl();
   }
 }
 
