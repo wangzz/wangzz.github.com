@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PhoneClaw - 配对你的 OpenClaw 主机</title>
+<title>PhoneClaw - Pair Your OpenClaw Host</title>
 <style>
   :root {
     --primary: #00A86B;
@@ -33,6 +33,36 @@
     max-width: 680px;
     margin: 0 auto;
     padding: 24px 16px 48px;
+  }
+
+  /* Language switcher */
+  .lang-switcher {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2px;
+    z-index: 100;
+  }
+
+  .lang-btn {
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    background: none;
+    border-radius: 18px;
+    cursor: pointer;
+    color: var(--on-surface-secondary);
+    transition: all 0.2s;
+  }
+
+  .lang-btn.active {
+    background: var(--primary);
+    color: white;
   }
 
   /* Header */
@@ -253,37 +283,66 @@
     .header { padding: 24px 0 16px; }
     .header h1 { font-size: 20px; }
     .card { padding: 16px; }
+    .lang-switcher { top: 12px; right: 12px; }
   }
 </style>
 </head>
 <body>
+
+<!-- Language Switcher -->
+<div class="lang-switcher">
+  <button class="lang-btn active" data-lang="zh">中文</button>
+  <button class="lang-btn" data-lang="en">EN</button>
+</div>
 
 <div class="container">
   <div class="header">
     <div class="header-icon">
       <img src="/doc/PhoneClaw/logo.png" alt="PhoneClaw">
     </div>
-    <h1>配对你的 OpenClaw 主机</h1>
-    <p>在运行 OpenClaw 的电脑上安装 PhoneClaw Skill，然后生成配对码并连接到 PhoneClaw App</p>
+    <h1>
+      <span data-i18n="title">配对你的 OpenClaw 主机</span>
+    </h1>
+    <p>
+      <span data-i18n="subtitle">在运行 OpenClaw 的电脑上安装 PhoneClaw Skill，然后生成配对码并连接到 PhoneClaw App</span>
+    </p>
   </div>
 
   <div class="tabs">
-    <button class="tab active" data-tab="manual">手动安装</button>
-    <button class="tab" data-tab="agent">让 Agent 帮忙安装</button>
+    <button class="tab active" data-tab="manual">
+      <span data-i18n="tab-manual">手动安装</span>
+    </button>
+    <button class="tab" data-tab="agent">
+      <span data-i18n="tab-agent">让 Agent 帮忙安装</span>
+    </button>
   </div>
 
   <!-- Tab 1: Manual Installation -->
   <div class="tab-content active" id="tab-manual">
     <div class="card">
-      <div class="card-title">手动安装 PhoneClaw Skill</div>
-      <div class="card-desc">在你的电脑上打开终端，按以下步骤安装并配对。</div>
+      <div class="card-title">
+        <span data-i18n="manual-title">手动安装 PhoneClaw Skill</span>
+      </div>
+      <div class="card-desc">
+        <span data-i18n="manual-desc">在你的电脑上打开终端，按以下步骤安装并配对。</span>
+      </div>
 
       <div class="steps">
-        <li>打开终端，运行 <code>npm install -g phoneclaw-connector@latest</code> 全局安装 PhoneClaw Skill</li>
-        <li>确认电脑已安装 OpenClaw（Skill 会自动从 <code>~/.openclaw/openclaw.json</code> 读取网关配置，无需手动填写任何文件）</li>
-        <li>运行 <code>phoneclaw pair</code> 启动配对，终端会显示 6 位配对码</li>
-        <li>在 PhoneClaw App 中输入配对码完成配对</li>
-        <li>配对成功后，运行 <code>phoneclaw start</code> 让 Skill 保持后台运行，之后即可在手机端与电脑端交互</li>
+        <li>
+          <span data-i18n="step1">打开终端，运行 <code>npm install -g phoneclaw-connector@latest</code> 全局安装 PhoneClaw Skill</span>
+        </li>
+        <li>
+          <span data-i18n="step2">确认电脑已安装 OpenClaw（Skill 会自动从 <code>~/.openclaw/openclaw.json</code> 读取网关配置，无需手动填写任何文件）</span>
+        </li>
+        <li>
+          <span data-i18n="step3">运行 <code>phoneclaw pair</code> 启动配对，终端会显示 6 位配对码</span>
+        </li>
+        <li>
+          <span data-i18n="step4">在 PhoneClaw App 中输入配对码完成配对</span>
+        </li>
+        <li>
+          <span data-i18n="step5">配对成功后，运行 <code>phoneclaw start</code> 让 Skill 保持后台运行，之后即可在手机端与电脑端交互</span>
+        </li>
       </div>
     </div>
   </div>
@@ -292,12 +351,14 @@
   <div class="tab-content" id="tab-agent">
     <div class="card">
       <div class="card-title">
-        让 Agent 帮忙安装 PhoneClaw Skill
-        <span class="badge">推荐</span>
+        <span data-i18n="agent-title">让 Agent 帮忙安装 PhoneClaw Skill</span>
+        <span class="badge" data-i18n="badge-recommended">推荐</span>
       </div>
-      <div class="card-desc">复制下面这段话，直接发给 Agent，让它先安装 PhoneClaw Skill，再把这台 OpenClaw 主机配对到 PhoneClaw App。</div>
+      <div class="card-desc">
+        <span data-i18n="agent-desc">复制下面这段话，直接发给 Agent，让它先安装 PhoneClaw Skill，再把这台 OpenClaw 主机配对到 PhoneClaw App。</span>
+      </div>
 
-      <div class="copy-block" id="agent-prompt">请严格按以下步骤帮我安装并配置 PhoneClaw Skill：
+      <div class="copy-block" id="agent-prompt-zh" data-lang-content="zh">请严格按以下步骤帮我安装并配置 PhoneClaw Skill：
 
 1. 先直接运行 `npm install -g phoneclaw-connector@latest`，确保本机的 `phoneclaw` 命令是最新版。
 2. 确认本机已安装 OpenClaw（skill 会自动从 ~/.openclaw/openclaw.json 读取网关配置，无需手动填写任何配置文件）。
@@ -308,6 +369,18 @@
 7. 如果失败，请直接告诉我卡在哪一步，以及下一条应该执行的命令。
 
 这台主机应按 OpenClaw 配对。生成配对码时请使用 `phoneclaw pair`。</div>
+
+      <div class="copy-block" id="agent-prompt-en" data-lang-content="en" style="display:none;">Please follow these steps to install and configure PhoneClaw Skill for me:
+
+1. First, run `npm install -g phoneclaw-connector@latest` to make sure the `phoneclaw` command is up to date.
+2. Confirm that OpenClaw is installed on this machine (the skill will automatically read gateway config from ~/.openclaw/openclaw.json — no manual config files needed).
+3. Run `phoneclaw pair` to start pairing. The skill will display a 6-digit pairing code in the terminal.
+4. Follow the skill's steps carefully, do not skip any checks.
+5. If successful, please put the final 6-digit pairing code on a separate line so I can copy it easily.
+6. After pairing, please also run `phoneclaw start` to keep the Skill running in the background, so it can interact with the phone.
+7. If it fails, tell me exactly which step it got stuck on and what command I should run next.
+
+This host should be paired via OpenClaw. Use `phoneclaw pair` to generate the pairing code.</div>
     </div>
   </div>
 </div>
@@ -315,6 +388,103 @@
 <div class="toast" id="toast">已复制到剪贴板</div>
 
 <script>
+// i18n strings
+const i18n = {
+  zh: {
+    title: '配对你的 OpenClaw 主机',
+    subtitle: '在运行 OpenClaw 的电脑上安装 PhoneClaw Skill，然后生成配对码并连接到 PhoneClaw App',
+    'tab-manual': '手动安装',
+    'tab-agent': '让 Agent 帮忙安装',
+    'manual-title': '手动安装 PhoneClaw Skill',
+    'manual-desc': '在你的电脑上打开终端，按以下步骤安装并配对。',
+    step1: '打开终端，运行 <code>npm install -g phoneclaw-connector@latest</code> 全局安装 PhoneClaw Skill',
+    step2: '确认电脑已安装 OpenClaw（Skill 会自动从 <code>~/.openclaw/openclaw.json</code> 读取网关配置，无需手动填写任何文件）',
+    step3: '运行 <code>phoneclaw pair</code> 启动配对，终端会显示 6 位配对码',
+    step4: '在 PhoneClaw App 中输入配对码完成配对',
+    step5: '配对成功后，运行 <code>phoneclaw start</code> 让 Skill 保持后台运行，之后即可在手机端与电脑端交互',
+    'agent-title': '让 Agent 帮忙安装 PhoneClaw Skill',
+    'badge-recommended': '推荐',
+    'agent-desc': '复制下面这段话，直接发给 Agent，让它先安装 PhoneClaw Skill，再把这台 OpenClaw 主机配对到 PhoneClaw App。',
+    toast: '已复制到剪贴板',
+    copy: '复制',
+    copied: '已复制',
+  },
+  en: {
+    title: 'Pair Your OpenClaw Host',
+    subtitle: 'Install the PhoneClaw Skill on your OpenClaw machine, generate a pairing code, and connect to the PhoneClaw App.',
+    'tab-manual': 'Manual Install',
+    'tab-agent': 'Let Agent Install',
+    'manual-title': 'Manually Install PhoneClaw Skill',
+    'manual-desc': 'Open a terminal on your computer and follow these steps to install and pair.',
+    step1: 'Open a terminal and run <code>npm install -g phoneclaw-connector@latest</code> to globally install PhoneClaw Skill.',
+    step2: 'Make sure OpenClaw is installed on your computer. The skill will automatically read gateway config from <code>~/.openclaw/openclaw.json</code> — no manual config needed.',
+    step3: 'Run <code>phoneclaw pair</code> to start pairing. A 6-digit pairing code will be displayed in the terminal.',
+    step4: 'Enter the pairing code in the PhoneClaw App to complete pairing.',
+    step5: 'After pairing, run <code>phoneclaw start</code> to keep the Skill running in the background, enabling interaction between your phone and computer.',
+    'agent-title': 'Let Agent Install PhoneClaw Skill',
+    'badge-recommended': 'Recommended',
+    'agent-desc': 'Copy the text below and send it to your Agent. It will install PhoneClaw Skill and pair this OpenClaw host to the PhoneClaw App.',
+    toast: 'Copied to clipboard',
+    copy: 'Copy',
+    copied: 'Copied',
+  }
+};
+
+let currentLang = localStorage.getItem('phoneclaw-lang') || 'zh';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('phoneclaw-lang', lang);
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+  // Update lang buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+
+  // Update i18n text
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18n[lang][key]) {
+      el.innerHTML = i18n[lang][key];
+    }
+  });
+
+  // Update agent prompt blocks
+  document.querySelectorAll('[data-lang-content]').forEach(el => {
+    el.style.display = el.dataset.langContent === lang ? '' : 'none';
+  });
+
+  // Update toast default text
+  document.getElementById('toast').textContent = i18n[lang].toast;
+
+  // Rebuild copy buttons with correct labels
+  rebuildCopyButtons();
+}
+
+function rebuildCopyButtons() {
+  document.querySelectorAll('.copy-block').forEach(block => {
+    // Remove existing copy button
+    const existing = block.querySelector('.copy-btn');
+    if (existing) existing.remove();
+
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> ' + i18n[currentLang].copy;
+    btn.addEventListener('click', () => {
+      const text = block.textContent.replace(i18n[currentLang].copy, '').trim();
+      copyText(text);
+      btn.classList.add('copied');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ' + i18n[currentLang].copied;
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> ' + i18n[currentLang].copy;
+      }, 2000);
+    });
+    block.appendChild(btn);
+  });
+}
+
 // Tab switching
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -325,10 +495,17 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
+// Language switching
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    setLang(btn.dataset.lang);
+  });
+});
+
 // Copy functions
 function showToast(msg) {
   const toast = document.getElementById('toast');
-  toast.textContent = msg || '已复制到剪贴板';
+  toast.textContent = msg || i18n[currentLang].toast;
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2000);
 }
@@ -349,23 +526,8 @@ function copyText(text) {
   }
 }
 
-// Copy button for agent prompt
-document.querySelectorAll('.copy-block').forEach(block => {
-  const btn = document.createElement('button');
-  btn.className = 'copy-btn';
-  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> 复制';
-  btn.addEventListener('click', () => {
-    const text = block.textContent.replace('复制', '').trim();
-    copyText(text);
-    btn.classList.add('copied');
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 已复制';
-    setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> 复制';
-    }, 2000);
-  });
-  block.appendChild(btn);
-});
+// Init
+setLang(currentLang);
 </script>
 
 </body>
