@@ -16,7 +16,7 @@ wangzz（以下简称"我们"）高度重视用户隐私保护。本政策说明
 
 - 上传的人脸图像：仅在您主动选择照片时由系统获取
 - 反馈内容：您通过应用内反馈功能提交的问题、意见、截图
-- 设置偏好：图片质量、AI 水印、24h 自动删除等选项
+- 设置偏好：图片质量、AI 水印等选项
 
 #### 1.2 自动收集的信息
 
@@ -55,7 +55,7 @@ wangzz（以下简称"我们"）高度重视用户隐私保护。本政策说明
 
 - **本地优先**：人脸图像在内存中处理完毕后立即丢弃；AI 生成结果默认保存到您的设备相册
 - **存储地点**：您的数据主要存储在您的设备本地
-- **存储期限**：默认 24 小时后自动删除生成结果（可在设置中调整或关闭）
+- **存储期限**：生成结果默认仅保存到您的设备相册，由您自主管理
 - **安全措施**：我们采用 HTTPS 加密传输，不上传敏感图像到持久存储
 
 ### 5. 您的权利
@@ -105,7 +105,7 @@ wangzz ("we", "us", "our") values your privacy. This Privacy Policy describes ho
 
 - Uploaded face images: only retrieved when you actively select a photo
 - Feedback content: questions, comments, and screenshots you submit through in-app feedback
-- Settings preferences: image quality, AI watermark, 24h auto-delete options
+- Settings preferences: image quality, AI watermark, etc.
 
 #### 1.2 Information Collected Automatically
 
@@ -144,7 +144,7 @@ We have signed data processing agreements with these parties requiring them to h
 
 - **Local-first**: face images are discarded from memory immediately after processing; AI-generated results are saved to your device's photo album by default
 - **Storage location**: your data is primarily stored on your device
-- **Retention period**: generated results are auto-deleted after 24 hours by default (adjustable or disable-able in Settings)
+- **Retention period**: generated results are saved to your device's photo album by default and managed by you
 - **Safeguards**: we use HTTPS encryption in transit and do not upload sensitive images to persistent storage
 
 ### 5. Your Rights

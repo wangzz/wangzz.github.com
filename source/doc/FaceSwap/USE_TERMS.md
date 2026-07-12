@@ -14,7 +14,7 @@ layout: doc
 
 1.1 本应用基于腾讯云 AI 能力提供人像变换服务，包括但不限于：**变老、变年轻、变性、动漫化、智能美颜、任意模板换脸**。所有生成结果均明确标注为 **"AI 合成 · AI换脸"**。
 
-1.2 本应用为本地优先设计：您上传的人脸图像仅在内存中处理，不上传到持久存储；生成结果默认保存到您设备的相册，**24 小时后自动删除**（可在设置中调整）。
+1.2 本应用为本地优先设计：您上传的人脸图像仅在内存中处理，不上传到持久存储；生成结果默认保存到您设备的相册，由您自主管理。
 
 ### 2. 行为规范
 
@@ -92,7 +92,7 @@ These Terms of Use ("Terms") are a legal agreement between you and wangzz ("we",
 
 1.1 The App provides face transformation services based on Tencent Cloud AI capabilities, including but not limited to: **age change (older / younger), gender change, anime-style, intelligent beautification, and template-based face swap**. All generated results are clearly marked as **"AI 合成 · AI换脸"**.
 
-1.2 The App is designed with a local-first principle: uploaded face images are processed in memory only and not uploaded to persistent storage; generated results are saved to your device's photo album by default and are **automatically deleted after 24 hours** (adjustable in Settings).
+1.2 The App is designed with a local-first principle: uploaded face images are processed in memory only and not uploaded to persistent storage; generated results are saved to your device's photo album by default and managed by you.
 
 ### 2. Acceptable Use
 

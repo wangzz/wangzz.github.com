@@ -16,7 +16,7 @@ layout: doc
 
 - **月度订阅**：¥18 / 月
 - **年度订阅**：¥48 / 年（较月度节省 78%）
-- **永久买断**：¥68（一次性付费，永久使用，不含订阅会员价）
+- **永久买断**：¥38（一次性付费，永久使用，不含订阅会员价）
 
 订阅的具体价格以您购买时 App Store 展示的价格为准，可能因地区、汇率、苹果定价策略而调整。
 
@@ -76,7 +76,7 @@ layout: doc
 
 ### 8. 一次性买断
 
-8.1 ¥68 永久买断不享受订阅会员价（如年度订阅节省的金额），但享有与订阅用户相同的模板与导出能力。
+8.1 ¥38 永久买断不享受订阅会员价（如年度订阅节省的金额），但享有与订阅用户相同的模板与导出能力。
 
 8.2 一次性买断**不包含**未来新增的云端能力（如视频版变老、U 模板库等），如需使用需另行订阅或购买。
 
@@ -103,7 +103,7 @@ These Subscription Terms apply to subscription services you purchase within AI�
 The App offers the following subscription products:
 - **Monthly Subscription**: ¥18 / month
 - **Yearly Subscription**: ¥48 / year (saves 78% vs monthly)
-- **Lifetime Purchase**: ¥68 (one-time payment, lifetime use, does not include subscription discounts)
+- **Lifetime Purchase**: ¥38 (one-time payment, lifetime use, does not include subscription discounts)
 
 Actual prices are shown in the App Store at the time of purchase and may vary by region, exchange rate, or Apple's pricing policies.
 
@@ -162,7 +162,7 @@ An in-app shortcut is also available at "Settings → Subscription Status → Ma
 
 ### 8. Lifetime Purchase
 
-8.1 The ¥68 lifetime purchase does not include subscription discounts (such as the savings from the yearly subscription), but includes the same templates and export capabilities as subscribed users.
+8.1 The ¥38 lifetime purchase does not include subscription discounts (such as the savings from the yearly subscription), but includes the same templates and export capabilities as subscribed users.
 
 8.2 The lifetime purchase **does not include** future cloud-based capabilities (e.g., video-based age change, user-generated template library); separate subscription or purchase will be required.
 
