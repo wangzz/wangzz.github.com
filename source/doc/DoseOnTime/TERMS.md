@@ -1,3 +1,6 @@
+---
+layout: doc
+---
 # 到点吃药 使用条款 / Terms of Use
 
 生效日期 / Effective Date: 2026-09-01
