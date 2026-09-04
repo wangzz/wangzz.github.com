@@ -3,7 +3,7 @@ layout: doc
 ---
 # AI证件照 隐私政策 / Privacy Policy
 
-生效日期 / Effective Date: 2026-07-12
+生效日期 / Effective Date: 2026-09-04
 
 ---
 
@@ -52,6 +52,44 @@ wangzz（以下简称"我们"）高度重视用户隐私保护。本政策说明
 
 我们已与上述第三方建立数据处理协议（DPA），要求其按照不低于本政策的标准处理您的信息。
 
+### 3.1 人脸数据与第三方 AI 服务（重要）
+
+#### 3.1.1 人脸数据速览
+
+| 项目 | 说明 |
+|---|---|
+| 收集哪些人脸数据 | 仅您主动拍摄或选择的那**一张人像照片**。我们**不生成、不提取、不存储**任何人脸特征模板（faceprint）、面部几何数据或生物识别标识 |
+| 何时收集 | 仅在您点击「生成证件照」时，由您主动触发 |
+| 用途 | 仅用于生成证件照：背景替换、智能裁剪、规格适配 |
+| 是否与第三方共享 | 是。仅腾讯云市场「怜花数科」AI 证件照接口（vendor ID 42071），无其他接收方 |
+| 存储地点 | 发送过程仅经过厂商服务端（中国境内）。**不经过我们的服务器**，不写入任何对象存储；生成结果保存在您本机的相册 |
+| 保留期限 | 厂商侧 ≤ 24 小时自动删除；设备侧由您自主管理 |
+| 删除方式 | 厂商 24 小时内自动删除；您可随时在相册或「设置 → 数据导出」删除本地结果；也可发邮件至 wzzvictory_tjsd@163.com 要求删除并获取确认 |
+| 是否用于身份识别 / 广告 / 模型训练 | **否**。人脸数据不作身份识别、用户画像、广告投放或模型训练用途 |
+
+#### 3.1.2 详细处理流程
+
+当您主动选择或拍摄一张人像并点击「生成证件照」时，该人像照片会：
+
+- 以 base64 编码方式，通过 HTTPS POST 直接发送至腾讯云市场「怜花数科」AI 证件照接口（vendor ID 42071）；
+- 不经过我们的服务器中转，不写入任何对象存储；
+- 仅用于证件照生成（背景替换、智能裁剪、规格适配）。
+
+厂商在生成完成后 24 小时内自动删除您的原始照片与生成结果，不作持久化存储，不用于模型训练。
+我们不会向除该厂商外的任何第三方分享您的人像照片，也不会出售您的人脸数据。
+
+#### 3.1.3 我们不会创建人脸特征模板
+
+相机页的实时人脸检测（脸位、角度、光线引导）在您的设备上使用 Apple Vision 框架本地完成，检测结果仅存在于内存中，不存储、不上传。本应用不具备人脸识别、身份比对能力，不建立人脸数据库，也不使用 Face ID 或其他生物识别认证。
+
+#### 3.1.4 您的同意与控制
+
+在发送前，App 会通过明确的弹窗向您告知上述数据流向（发送内容、接收方、用途、留存期限）并取得您的同意；**未取得同意时，App 不会向厂商发送任何照片，生成功能不可用**。您可在「设置 → 人像数据告知」中随时查看或撤回该授权，撤回后再次生成时会重新征求您的同意。
+
+#### 3.1.5 第三方保护水平
+
+腾讯云市场「怜花数科」通过腾讯云市场平台提供服务，其数据处理受平台服务协议与本应用与该厂商的数据处理约定约束，要求其按照不低于本政策的标准保护您的信息，且不得将您的人脸数据用于生成证件照以外的任何用途。
+
 ### 4. 信息存储与安全
 
 - **本地优先**：应用内浏览与编辑在本地完成，AI 生成结果默认保存到您的设备相册
@@ -66,6 +104,7 @@ wangzz（以下简称"我们"）高度重视用户隐私保护。本政策说明
 
 - 访问和查看您的个人信息（在本地设备上）
 - 删除您的生成结果与本地缓存（设置 → 数据导出）
+- 要求删除厂商侧留存的原始照片（邮件至 wzzvictory_tjsd@163.com，我们会在 7 个工作日内反馈处理结果）
 - 撤回您先前授予的相册权限（iOS 设置 → 隐私与安全性 → AI证件照）
 - 通过 wzzvictory_tjsd@163.com 联系开发者行使您的数据主体权利
 
@@ -143,6 +182,43 @@ The App integrates the following third-party services. These services may collec
 
 We have signed data processing agreements (DPAs) with these parties requiring them to handle your information at a standard no less strict than this policy.
 
+### 3.1 Face Data & Third-Party AI Services (Important)
+
+#### 3.1.1 Face Data at a Glance
+
+| Item | Detail |
+|---|---|
+| What face data we collect | Only the **single portrait photo** you actively take or select. We do **not** create, extract, or store any faceprint, facial geometry data, or biometric identifier |
+| When we collect it | Only when you actively tap "Generate" |
+| Purpose | Solely to generate the ID photo: background replacement, smart cropping, spec fitting |
+| Shared with third parties | Yes — only the Tencent Cloud Marketplace "Lianhua Tech" ID Photo API (vendor ID 42071). No other recipient |
+| Where it is stored | In transit it only passes through the vendor's server (located in mainland China). It is **not routed through our servers** and is not written to any object storage. The generated result is saved to your device's photo album |
+| Retention period | Vendor-side: automatically deleted within 24 hours. Device-side: managed by you |
+| How it is deleted | Automatically deleted by the vendor within 24 hours; you may delete local results at any time from your photo album or via Settings → Data Export; you may also email wzzvictory_tjsd@163.com to request deletion and receive confirmation |
+| Used for identification / advertising / model training | **No.** Face data is never used for identity recognition, profiling, advertising, or model training |
+
+#### 3.1.2 Detailed Processing Flow
+
+When you actively select or take a portrait and tap "Generate", that portrait photo will be:
+
+- Sent directly as a base64-encoded HTTPS POST to the Tencent Cloud Marketplace "Lianhua Tech" ID Photo API (vendor ID 42071);
+- Not routed through our servers and not written to any object storage;
+- Used solely for ID photo generation (background replacement, smart cropping, spec fitting).
+
+The vendor automatically deletes your original photo and the generated result within 24 hours after generation completes, does not persistently store them, and does not use them for model training. We do not share your portrait photo with any third party other than that vendor, and we never sell your face data.
+
+#### 3.1.3 We Do Not Create Faceprints
+
+The live face detection on the camera page (face position, angle, lighting guidance) runs locally on your device using Apple's Vision framework; the detection results exist only in memory and are never stored or uploaded. The App has no facial recognition or identity-matching capability, maintains no face database, and does not use Face ID or any other biometric authentication.
+
+#### 3.1.4 Your Consent and Control
+
+Before sending, the App discloses the above data flow through a clear in-app dialog — what is sent, to whom, for what purpose, and for how long it is retained — and obtains your consent. **If consent is not granted, the App does not send any photo to the vendor and the generation feature is unavailable.** You can review or revoke this authorization at any time in Settings → Portrait Data Disclosure; after revoking, consent is requested again before the next generation.
+
+#### 3.1.5 Third-Party Protection Level
+
+Tencent Cloud Marketplace "Lianhua Tech" provides its service through the Tencent Cloud Marketplace platform. Its data processing is governed by the platform's service agreement and by the data processing arrangement between us and the vendor, which requires the vendor to protect your information at a standard no less protective than this policy and prohibits any use of your face data other than generating the ID photo you requested.
+
 ### 4. Storage and Security
 
 - **Local-first**: in-app browsing and editing happen on device; AI-generated results are saved to your device's photo album by default
@@ -156,6 +232,7 @@ We have signed data processing agreements (DPAs) with these parties requiring th
 You have the right to:
 - Access and review your personal information (on your local device)
 - Delete your generated results and local cache (Settings → Data Export)
+- Request deletion of the original photo retained by the vendor (email wzzvictory_tjsd@163.com; we will report back within 7 business days)
 - Withdraw previously granted photo library permissions (iOS Settings → Privacy & Security → AI证件照)
 - Contact the developer at wzzvictory_tjsd@163.com to exercise your data subject rights
 
