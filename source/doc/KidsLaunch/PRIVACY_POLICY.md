@@ -1,11 +1,9 @@
 ---
 layout: doc
-title: 儿童启蒙乐园 隐私政策 · KidsLaunch Privacy Policy
 ---
-
 # 儿童启蒙乐园 隐私政策
 
-**生效日期：** 2026-08-27
+**生效日期：** 2026-09-05
 
 **开发者：** wangzz
 
@@ -28,75 +26,36 @@ title: 儿童启蒙乐园 隐私政策 · KidsLaunch Privacy Policy
 - 不收集位置信息、通讯录、相册或相机内容；
 - 不收集使用行为、崩溃日志或分析数据。
 
-## 3. 第三方服务
+## 3. 本地存储的数据
 
-本应用仅集成 Apple 的 StoreKit 框架，用于提供应用内购买（订阅与买断）功能。StoreKit 由 Apple 运营，相关交易与支付信息由 Apple 按其隐私政策处理，我们不会获取您的支付凭证。除 StoreKit 外，本应用不集成任何其他第三方 SDK（无广告 SDK、无统计 SDK）。
+以下内容仅保存在您的设备本地，不会上传：
 
-## 4. 儿童隐私
+- 学习进度与关卡完成记录；
+- 成就解锁状态；
+- 家长中心设置的每日使用时长、音效开关等偏好项。
 
-本应用属于 4+ 岁儿童教育分类。我们**明确不收集未成年人的个人信息**。如未来因功能需要收集任何信息，我们将事先取得监护人同意，并严格按照 COPPA（美国儿童在线隐私保护规则）及中国相关规定执行。
+您可以通过卸载应用清除全部本地数据。
 
-## 5. 数据安全
+## 4. 第三方服务
+
+本应用仅集成 Apple 的 StoreKit 框架，用于提供应用内购买（订阅与买断）功能。StoreKit 由 Apple 运营，相关交易与支付信息由 Apple 按其隐私政策处理，我们不会获取您的支付凭证。除 StoreKit 外，本应用不集成任何其他第三方 SDK（无广告 SDK、无统计 SDK、无推送 SDK）。
+
+## 5. 儿童隐私
+
+本应用属于 4+ 岁儿童教育分类。我们**明确不收集未成年人的个人信息**。本应用不含第三方广告与行为追踪，不含社交分享与用户生成内容，不含外部链接跳转。如未来因功能需要收集任何信息，我们将事先取得监护人同意，并严格按照 COPPA（美国儿童在线隐私保护规则）及中国相关规定执行。
+
+## 6. 数据安全
 
 由于本应用不在服务器上存储任何用户数据，您在本应用内的全部学习进度等数据仅保存在您的设备本地。您可通过卸载应用清除全部本地数据。
 
-## 6. 您的权利
+## 7. 您的权利
 
 您可随时通过以下方式联系我们，就本隐私政策提出疑问或行使相关权利：
 
 - 邮箱：wzzvictory_tjsd@163.com
 - 地址：省略地址
 
-## 7. 政策变更
+## 8. 政策变更
 
-本政策如有变更，我们将更新本页并变更生效日期。本政策生效日期为 2026-08-27。
+本政策如有变更，我们将更新本页并变更生效日期。本政策生效日期为 2026-09-05。
 
----
-
-# KidsLaunch Privacy Policy
-
-**Effective Date:** 2026-08-27
-
-**Developer:** wangzz
-
-**Contact Email:** wzzvictory_tjsd@163.com
-
-**Address:** 省略地址
-
-**Jurisdiction:** China
-
-## 1. Overview
-
-Welcome to "KidsLaunch" (the "App"). This Privacy Policy explains how we collect, use, and protect information about you and your child when using the App. We take children's privacy seriously and comply with applicable children's privacy protection requirements.
-
-## 2. Information We Collect
-
-The App **does not operate any backend server and does not upload any user data to any server**. The App runs entirely on your device locally. Therefore, we **do not collect, store, or upload** any personal information, including:
-
-- No identity information such as name, age, or gender;
-- No device identifiers or Advertising Identifier (IDFA);
-- No location, contacts, photos, or camera content;
-- No usage behavior, crash logs, or analytics data.
-
-## 3. Third-Party Services
-
-The App integrates only Apple's StoreKit framework to provide in-app purchases (subscriptions and one-time purchases). StoreKit is operated by Apple; related transaction and payment information is processed by Apple under its own privacy policy, and we never receive your payment credentials. Apart from StoreKit, the App integrates no other third-party SDKs (no advertising SDK, no analytics SDK).
-
-## 4. Children's Privacy
-
-The App is categorized as a 4+ children's education app. We **explicitly do not collect personal information from minors**. Should future functionality require collecting any information, we will obtain parental consent in advance and strictly follow COPPA (Children's Online Privacy Protection Rule) and applicable regulations.
-
-## 5. Data Security
-
-Because the App stores no user data on any server, all learning progress data remains on your device locally. You may delete all local data by uninstalling the App.
-
-## 6. Your Rights
-
-You may contact us at any time regarding this Privacy Policy or to exercise your rights:
-
-- Email: wzzvictory_tjsd@163.com
-- Address: 省略地址
-
-## 7. Changes
-
-If this policy changes, we will update this page and revise the effective date. The effective date of this policy is 2026-08-27.
