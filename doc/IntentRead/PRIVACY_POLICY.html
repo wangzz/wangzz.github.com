@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大前端技术空间</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      line-height: 1.8;
+      color: #333;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+    a {
+      color: #0594cb;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+    pre {
+      background: #f5f5f5;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    pre code {
+      padding: 0;
+      background: none;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1em 0;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+    }
+    th {
+      background: #f5f5f5;
+    }
+    blockquote {
+      border-left: 4px solid #ddd;
+      padding-left: 16px;
+      margin: 1em 0;
+      color: #666;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="意读-IntentRead-隐私政策-Privacy-Policy"><a href="#意读-IntentRead-隐私政策-Privacy-Policy" class="headerlink" title="意读 IntentRead 隐私政策 / Privacy Policy"></a>意读 IntentRead 隐私政策 / Privacy Policy</h1><p>生效日期 / Effective Date: 2026-10-03</p>
+<hr>
+<h2 id="中文版"><a href="#中文版" class="headerlink" title="中文版"></a>中文版</h2><p>wangzz（以下简称”我们”）高度重视用户隐私。本政策说明您在我们使用「意读 IntentRead」（以下简称”本应用”）时，我们如何处理与您的聊天内容、判读结果及购买相关的信息。</p>
+<p>在阅读本政策前，请特别了解以下三件事：</p>
+<ol>
+<li><strong>我们不做服务器中转。本应用没有自己的服务端，判读请求由您的设备直接发送给判读服务提供方。</strong></li>
+<li><strong>您截图导入的聊天图片不会上传。</strong> 图片文字识别（OCR）全部在本机完成，识别完成后图片即被丢弃。</li>
+<li><strong>对话文本会被发送给判读服务用于生成判断结果</strong>，这一点我们在下面第 2 节详细说明。</li>
+</ol>
+<h3 id="1-我们处理的信息"><a href="#1-我们处理的信息" class="headerlink" title="1. 我们处理的信息"></a>1. 我们处理的信息</h3><h4 id="1-1-判读输入（聊天文本）"><a href="#1-1-判读输入（聊天文本）" class="headerlink" title="1.1 判读输入（聊天文本）"></a>1.1 判读输入（聊天文本）</h4><ul>
+<li>您主动粘贴到输入框的对话文本；</li>
+<li>或您从相册导入聊天截图、经本机 OCR 识别得到的文字（<strong>图片文件本身不发送、不上传、不留存</strong>）。</li>
+</ul>
+<p>用途：调用判读服务，换取对方意图、情绪倾向、敷衍倾向与置信度等结构化结果。</p>
+<p>数据流向：您的设备 → HTTPS 直连 → 判读服务（腾讯云 EdgeOne Makers 托管的 Jev 网关 <code>ai-gateway.edgeone.link</code>，模型 <code>@makers/jev</code>）。若您在「设置」中填入了自己的 Jev API Key（BYOK），则改为直连 Jev 官方 <code>api.typesafe.ai</code>，由您自己的账号与配额承担。</p>
+<p>我们不以任何形式留存您提交的对话文本，也不将其用于模型训练或任何二次用途。</p>
+<h4 id="1-2-判读结果与历史记录"><a href="#1-2-判读结果与历史记录" class="headerlink" title="1.2 判读结果与历史记录"></a>1.2 判读结果与历史记录</h4><ul>
+<li>判读结果默认<strong>不保存</strong>。</li>
+<li>您可在设置中开启「历史记录」，开启后判读结果仅写入<strong>本机数据库</strong>，用于回看与态度趋势。历史记录可在设置中随时单条或全部删除，删除后不可恢复。</li>
+<li>卸载本应用即可清除本机全部历史数据。</li>
+</ul>
+<h4 id="1-3-账号与凭证"><a href="#1-3-账号与凭证" class="headerlink" title="1.3 账号与凭证"></a>1.3 账号与凭证</h4><p>本应用<strong>没有用户账号体系，无需注册登录</strong>。</p>
+<ul>
+<li>判读服务所需的密钥（内置平台 Key 或您自行填写的 BYOK Key）仅保存在您的设备本地；</li>
+<li>订阅凭证与恢复购买所需信息由 Apple StoreKit 管理，凭证缓存在本机 Keychain；</li>
+<li>应用偏好、历史开关、所选方案等设置保存在本机 UserDefaults。</li>
+</ul>
+<h4 id="1-4-您不向我们提供的信息"><a href="#1-4-您不向我们提供的信息" class="headerlink" title="1.4 您不向我们提供的信息"></a>1.4 您不向我们提供的信息</h4><p>由于本应用没有账号与服务端，我们无法也从未收集：</p>
+<ul>
+<li>精确地理位置（本应用不申请定位权限）</li>
+<li>通讯录、短信、通话记录、照片库索引</li>
+<li>健康数据、生物识别数据</li>
+<li>设备标识符（IDFA）与任何可用于跨应用追踪的标识</li>
+<li>浏览器浏览历史</li>
+</ul>
+<p>本应用<strong>不集成任何广告 SDK</strong>，不使用 App Tracking Transparency，不申请 IDFA。</p>
+<h3 id="2-第三方服务"><a href="#2-第三方服务" class="headerlink" title="2. 第三方服务"></a>2. 第三方服务</h3><table>
+<thead>
+<tr>
+<th>第三方</th>
+<th>处理的信息</th>
+<th>用途</th>
+<th>隐私政策</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>腾讯云 EdgeOne Makers（Jev 判读服务网关）</td>
+<td>您提交的对话文本、判读请求参数</td>
+<td>返回结构化判读结果</td>
+<td><a href="https://www.tencent.com/legal/privacy-policy.html" target="_blank" rel="noopener">https://www.tencent.com/legal/privacy-policy.html</a></td>
+</tr>
+<tr>
+<td>TypeSafe AI（Jev 官方，仅当用户自填 BYOK Key 时）</td>
+<td>您提交的对话文本</td>
+<td>返回结构化判读结果</td>
+<td>由用户在设置中自行确认其服务条款</td>
+</tr>
+<tr>
+<td>Apple（StoreKit / App Store）</td>
+<td>订阅与购买凭证、付款信息</td>
+<td>处理内购、恢复购买、订阅管理</td>
+<td><a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">https://www.apple.com/legal/privacy/</a></td>
+</tr>
+</tbody></table>
+<p>除上述判读服务外，我们不与任何第三方共享您的个人信息，也从不出售个人信息。</p>
+<h3 id="3-权限说明"><a href="#3-权限说明" class="headerlink" title="3. 权限说明"></a>3. 权限说明</h3><p>本应用仅申请<strong>照片图库读取</strong>一项系统权限，用于您主动选择聊天截图。该权限仅在本次识别中使用，图片上传行为不存在。本应用不申请定位、相机、麦克风、通讯录、通知权限。</p>
+<h3 id="4-信息安全"><a href="#4-信息安全" class="headerlink" title="4. 信息安全"></a>4. 信息安全</h3><p>判读请求全程使用 HTTPS 加密传输。判读结果仅存于本机，不上传。您可随时在设置中清除全部本地数据。</p>
+<h3 id="5-未成年人"><a href="#5-未成年人" class="headerlink" title="5. 未成年人"></a>5. 未成年人</h3><p>本应用面向成年人使用，不面向 13 岁以下儿童，不收集儿童个人信息。若您认为未满 13 周岁的未成年人向我們提供了个人信息，请发邮件至 <a href="mailto:wzzvictory_tjsd@163.com" target="_blank" rel="noopener">wzzvictory_tjsd@163.com</a>，我们将在核实后删除。</p>
+<h3 id="6-政策更新"><a href="#6-政策更新" class="headerlink" title="6. 政策更新"></a>6. 政策更新</h3><p>本政策可能随功能调整而更新。更新后的内容将在本页面公布并更新「生效日期」。继续使用本应用即视为接受更新后的政策。</p>
+<h3 id="7-联系我们"><a href="#7-联系我们" class="headerlink" title="7. 联系我们"></a>7. 联系我们</h3><p>如有任何隐私相关问题，请联系：<a href="mailto:wzzvictory_tjsd@163.com" target="_blank" rel="noopener">wzzvictory_tjsd@163.com</a></p>
+<p>本政策适用中华人民共和国法律。</p>
+<hr>
+<h2 id="English-Version"><a href="#English-Version" class="headerlink" title="English Version"></a>English Version</h2><p>wangzz (“we”, “us”, “our”) values your privacy. This Privacy Policy explains how we handle your conversation content, judgment results, and purchase information when you use “IntentRead” (the “App”).</p>
+<p>Before reading further, please note three things:</p>
+<ol>
+<li><strong>We run no server of our own.</strong> Judgment requests go directly from your device to the judgment service provider.</li>
+<li><strong>Screenshots you import are never uploaded.</strong> Image recognition (OCR) happens entirely on your device; the image is discarded once recognition finishes.</li>
+<li><strong>Conversation text is sent to the judgment service</strong> in order to produce a result. This is described in detail in section 2 below.</li>
+</ol>
+<h3 id="1-Information-We-Process"><a href="#1-Information-We-Process" class="headerlink" title="1. Information We Process"></a>1. Information We Process</h3><h4 id="1-1-Judgment-input-conversation-text"><a href="#1-1-Judgment-input-conversation-text" class="headerlink" title="1.1 Judgment input (conversation text)"></a>1.1 Judgment input (conversation text)</h4><ul>
+<li>Conversation text you paste into the input box;</li>
+<li>Or text obtained by on-device OCR from a chat screenshot you select from your photo library. <strong>The image file itself is never transmitted, uploaded, or stored.</strong></li>
+</ul>
+<p>Purpose: call the judgment service to obtain a structured result covering the other party’s intent, emotional leaning, perfunctory tendency, and confidence level.</p>
+<p>Data flow: your device → HTTPS direct connection → judgment service (Jev hosted on Tencent Cloud EdgeOne Makers at <code>ai-gateway.edgeone.link</code>, model <code>@makers/jev</code>). If you enter your own Jev API Key in Settings (BYOK), requests go directly to Jev’s official endpoint <code>api.typesafe.ai</code> under your own account and quota.</p>
+<p>We do not retain the conversation text you submit and never use it for model training or any secondary purpose.</p>
+<h4 id="1-2-Judgment-results-and-history"><a href="#1-2-Judgment-results-and-history" class="headerlink" title="1.2 Judgment results and history"></a>1.2 Judgment results and history</h4><ul>
+<li>Judgment results are <strong>not saved</strong> by default.</li>
+<li>You may enable “History” in Settings. Once enabled, results are written to a <strong>local database on your device</strong> for review and attitude trends. History entries can be deleted individually or in bulk from Settings; deletion is permanent.</li>
+<li>Uninstalling the App removes all local history data.</li>
+</ul>
+<h4 id="1-3-Accounts-and-credentials"><a href="#1-3-Accounts-and-credentials" class="headerlink" title="1.3 Accounts and credentials"></a>1.3 Accounts and credentials</h4><p>The App has <strong>no user account system and no sign-up or sign-in</strong>.</p>
+<ul>
+<li>Judgment service credentials (the built-in platform key or a BYOK key you enter) are stored only on your device;</li>
+<li>Subscription and restore-purchase data is handled by Apple StoreKit, with receipts cached in the local Keychain;</li>
+<li>Preferences, history toggle, and selected plan are stored in local UserDefaults.</li>
+</ul>
+<h4 id="1-4-Information-You-Never-Provide-to-Us"><a href="#1-4-Information-You-Never-Provide-to-Us" class="headerlink" title="1.4 Information You Never Provide to Us"></a>1.4 Information You Never Provide to Us</h4><p>Because the App has no account system or server, we neither collect nor are able to collect:</p>
+<ul>
+<li>Precise location (the App requests no location permission)</li>
+<li>Contacts, SMS, call logs, photo library index</li>
+<li>Health or biometric data</li>
+<li>Device identifiers (IDFA) or any cross-app tracking identifier</li>
+<li>Browser browsing history</li>
+</ul>
+<p>The App <strong>integrates no advertising SDK</strong>, does not use App Tracking Transparency, and never requests the IDFA.</p>
+<h3 id="2-Third-Party-Services"><a href="#2-Third-Party-Services" class="headerlink" title="2. Third-Party Services"></a>2. Third-Party Services</h3><table>
+<thead>
+<tr>
+<th>Third party</th>
+<th>Information processed</th>
+<th>Purpose</th>
+<th>Privacy policy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tencent Cloud EdgeOne Makers (Jev judgment gateway)</td>
+<td>Conversation text you submit, judgment request parameters</td>
+<td>Return the structured judgment result</td>
+<td><a href="https://www.tencent.com/legal/privacy-policy.html" target="_blank" rel="noopener">https://www.tencent.com/legal/privacy-policy.html</a></td>
+</tr>
+<tr>
+<td>TypeSafe AI (official Jev; only when you supply a BYOK key)</td>
+<td>Conversation text you submit</td>
+<td>Return the structured judgment result</td>
+<td>Covered by the service terms the user accepts in Settings</td>
+</tr>
+<tr>
+<td>Apple (StoreKit / App Store)</td>
+<td>Subscription and purchase receipts, payment details</td>
+<td>Process in-app purchases, restore purchases, manage subscriptions</td>
+<td><a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">https://www.apple.com/legal/privacy/</a></td>
+</tr>
+</tbody></table>
+<p>Apart from the judgment service above, we share no personal information with any third party and never sell personal information.</p>
+<h3 id="3-Permissions"><a href="#3-Permissions" class="headerlink" title="3. Permissions"></a>3. Permissions</h3><p>The App requests exactly one system permission: <strong>Photo Library (read-only)</strong>, used only when you deliberately select a chat screenshot. No image transfer exists. The App requests no location, camera, microphone, contacts, or notification permissions.</p>
+<h3 id="4-Data-Security"><a href="#4-Data-Security" class="headerlink" title="4. Data Security"></a>4. Data Security</h3><p>All judgment requests use encrypted HTTPS transport. Judgment results stay on your device and are never uploaded. You may clear all local data at any time from Settings.</p>
+<h3 id="5-Minors"><a href="#5-Minors" class="headerlink" title="5. Minors"></a>5. Minors</h3><p>The App is intended for adult users, is not directed at children under 13, and collects no information from children. If you believe a child under 13 has provided us with personal information, contact <a href="mailto:wzzvictory_tjsd@163.com" target="_blank" rel="noopener">wzzvictory_tjsd@163.com</a> and we will delete it after verification.</p>
+<h3 id="6-Policy-Updates"><a href="#6-Policy-Updates" class="headerlink" title="6. Policy Updates"></a>6. Policy Updates</h3><p>This policy may be updated as the product evolves. Updated content will be published on this page with a revised “Effective Date”. Continuing to use the App means you accept the updated policy.</p>
+<h3 id="7-Contact"><a href="#7-Contact" class="headerlink" title="7. Contact"></a>7. Contact</h3><p>For any privacy-related question, contact: <a href="mailto:wzzvictory_tjsd@163.com" target="_blank" rel="noopener">wzzvictory_tjsd@163.com</a></p>
+<p>This policy is governed by the laws of the People’s Republic of China.</p>
+
+</body>
+</html>
