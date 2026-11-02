@@ -65,6 +65,9 @@ echo "**************COPY STATIC PAGES BEGIN**************"
 mkdir -p public/doc/PhoneClaw
 cp source/doc/PhoneClaw/pairing.html public/doc/PhoneClaw/pairing.html
 cp source/doc/PhoneClaw/logo.png public/doc/PhoneClaw/logo.png
+mkdir -p public/doc/Foreman
+cp source/doc/Foreman/guide.html public/doc/Foreman/guide.html
+cp source/doc/Foreman/icon.png public/doc/Foreman/icon.png
 echo "**************COPY STATIC PAGES SUCCESS**************"
 
 

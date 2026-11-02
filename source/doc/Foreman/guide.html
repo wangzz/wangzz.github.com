@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foreman - Mac 安装与使用指南</title>
+<style>
+  :root {
+    --primary: #714CB6;
+    --primary-dark: #5B3A9B;
+    --primary-soft: rgba(113, 76, 182, 0.10);
+    --bg: #FAF9F6;
+    --surface: #FFFFFF;
+    --surface-secondary: #F3F1EC;
+    --text: #292827;
+    --text-secondary: #6E6A63;
+    --text-tertiary: #756F67;
+    --border: #DCD7D3;
+    --success: #3F8F5F;
+    --warning: #B06A12;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 28px 18px 56px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 12px 0 26px;
+  }
+
+  .header-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 22px rgba(113, 76, 182, 0.22);
+  }
+
+  .header-icon img { width: 100%; height: 100%; display: block; }
+
+  .header h1 {
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+    margin-bottom: 8px;
+  }
+
+  .header p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* Download */
+  .download {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 26px;
+  }
+
+  .download-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 14px;
+  }
+
+  .download-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+
+  .download-icon svg { width: 21px; height: 21px; stroke: #fff; }
+
+  .download-name { font-size: 15px; font-weight: 700; }
+
+  .download-meta {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 1px;
+  }
+
+  .btn-download {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 13px 18px;
+    background: var(--primary);
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+  }
+
+  .btn-download:hover { background: var(--primary-dark); }
+
+  .btn-download svg { width: 16px; height: 16px; stroke: currentColor; }
+
+  .download-note {
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  /* Requirements */
+  .requirements {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .requirement {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .requirement svg { width: 14px; height: 14px; stroke: var(--success); flex: 0 0 auto; }
+
+  /* Section */
+  section { margin-bottom: 26px; }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 10px;
+    padding-left: 2px;
+  }
+
+  .section-index {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+
+  .steps { list-style: none; counter-reset: step; }
+
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding: 7px 0 7px 32px;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  .steps li + li { border-top: 1px dashed transparent; }
+
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 21px;
+    height: 21px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .steps b { font-weight: 600; }
+
+  .path {
+    display: inline-block;
+    background: var(--surface-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1px 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  .steps code, code.inline {
+    background: var(--surface-secondary);
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+  }
+
+  /* Permission rows */
+  .perm-list { display: flex; flex-direction: column; }
+
+  .perm {
+    display: flex;
+    gap: 11px;
+    padding: 13px 0;
+  }
+
+  .perm + .perm { border-top: 1px solid var(--border); }
+  .perm:first-child { padding-top: 0; }
+  .perm:last-child { padding-bottom: 0; }
+
+  .perm-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--primary-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    margin-top: 1px;
+  }
+
+  .perm-icon svg { width: 14px; height: 14px; stroke: var(--primary); }
+
+  .perm-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 5px;
+    letter-spacing: 0.2px;
+  }
+
+  .tag.required { color: var(--primary); background: var(--primary-soft); }
+  .tag.optional { color: var(--text-secondary); background: var(--surface-secondary); }
+
+  .perm-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .perm-code {
+    display: block;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  /* Callouts */
+  .callout {
+    display: flex;
+    gap: 9px;
+    background: var(--primary-soft);
+    border: 1px solid rgba(113, 76, 182, 0.22);
+    border-radius: var(--radius-sm);
+    padding: 11px 13px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-top: 12px;
+  }
+
+  .callout.warn {
+    background: #FBF3E4;
+    border-color: #E4C9A0;
+  }
+
+  .callout svg {
+    width: 15px;
+    height: 15px;
+    flex: 0 0 auto;
+    margin-top: 2px;
+    stroke: var(--primary);
+  }
+
+  .callout.warn svg { stroke: var(--warning); }
+
+  .callout b { color: var(--text); font-weight: 600; }
+
+  /* Feature list */
+  .feature {
+    display: flex;
+    gap: 11px;
+    padding: 13px 0;
+  }
+
+  .feature:first-child { padding-top: 0; }
+  .feature:last-child { padding-bottom: 0; }
+  .feature + .feature { border-top: 1px solid var(--border); }
+
+  .feature-num {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--primary);
+    padding-top: 3px;
+    flex: 0 0 auto;
+  }
+
+  .feature-title { font-size: 13.5px; font-weight: 600; }
+  .feature-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  /* FAQ */
+  .faq-item { padding: 13px 0; }
+  .faq-item:first-child { padding-top: 0; }
+  .faq-item:last-child { padding-bottom: 0; }
+  .faq-item + .faq-item { border-top: 1px solid var(--border); }
+
+  .faq-q {
+    font-size: 13.5px;
+    font-weight: 600;
+    display: flex;
+    gap: 8px;
+  }
+
+  .faq-q svg {
+    width: 15px;
+    height: 15px;
+    stroke: var(--primary);
+    flex: 0 0 auto;
+    margin-top: 3px;
+  }
+
+  .faq-a {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    padding-left: 23px;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    padding-top: 8px;
+  }
+
+  @media (max-width: 480px) {
+    .container { padding: 18px 14px 40px; }
+    .header h1 { font-size: 21px; }
+    .card { padding: 16px; }
+    .requirements { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-icon"><img src="/doc/Foreman/icon.png" alt="Foreman"></div>
+    <h1>在 Mac 上装好 Foreman</h1>
+    <p>Foreman 是手机遥控桌面 coding agent 的指挥台：Mac 端跑 Bridge，手机端发指令、看流式输出、批权限、直接操作模拟器。</p>
+  </div>
+
+  <div class="download">
+    <div class="download-row">
+      <div class="download-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/>
+        </svg>
+      </div>
+      <div>
+        <div class="download-name">Foreman for macOS</div>
+        <div class="download-meta">版本 0.1.0 · 41 MB · Apple 芯片（M 系列）</div>
+      </div>
+    </div>
+
+    <a class="btn-download" href="/doc/Foreman/Foreman-0.1.0.dmg" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/>
+      </svg>
+      下载 Foreman-0.1.0.dmg
+    </a>
+
+    <div class="download-note">下载后双击打开，把 Foreman 拖进「应用程序」。当前版本未经过 Apple 公证，首次打开需要按第 1 节第 3 步手动放行。</div>
+
+    <div class="requirements">
+      <div class="requirement">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
+        macOS 14 或更新
+      </div>
+      <div class="requirement">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
+        Xcode 16 或更新（预览模拟器需要）
+      </div>
+      <div class="requirement">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
+        允许出站 443 端口
+      </div>
+      <div class="requirement">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
+        无需安装 Node（已内置）
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <span class="section-index">01</span>
+      <span class="section-title">下载与安装</span>
+    </div>
+    <div class="card">
+      <ol class="steps">
+        <li>点上方 <b>下载 Foreman-0.1.0.dmg</b>。</li>
+        <li>双击打开镜像，把 <b>Foreman</b> 拖进「应用程序」文件夹。</li>
+        <li>首次打开若提示「Apple 无法验证」：打开 <span class="path">系统设置 → 隐私与安全性</span>，在底部点 <b>仍要打开</b>；也可以右键 App 图标选「打开」再确认。</li>
+        <li>打开后菜单栏会出现一个锤子图标。Foreman 是菜单栏 App，不占 Dock，关掉窗口也不会退出。</li>
+      </ol>
+      <div class="callout warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 16H3z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg>
+        <span>如果双击后提示「已损坏」或直接被拦下，在终端运行 <code class="inline">xattr -dr com.apple.quarantine /Applications/Foreman.app</code> 即可解除隔离标记。</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="section-index">02</span>
+      <span class="section-title">需要授权的权限</span>
+    </div>
+    <div class="card">
+      <div class="perm-list">
+        <div class="perm">
+          <div class="perm-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <div>
+            <div class="perm-title">辅助功能 <span class="tag required">必需</span></div>
+            <div class="perm-desc">把手机上的轻点、滑动回灌到模拟器窗口。</div>
+            <span class="perm-code">系统设置 → 隐私与安全性 → 辅助功能 → 勾选 Foreman</span>
+          </div>
+        </div>
+        <div class="perm">
+          <div class="perm-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg>
+          </div>
+          <div>
+            <div class="perm-title">本地网络 <span class="tag required">必需</span></div>
+            <div class="perm-desc">手机与 Mac 在同一局域网时直连，画面和指令不经云端。</div>
+            <span class="perm-code">首次启动时允许，或到 系统设置 → 隐私与安全性 → 本地网络 打开</span>
+          </div>
+        </div>
+        <div class="perm">
+          <div class="perm-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+          </div>
+          <div>
+            <div class="perm-title">屏幕录制 <span class="tag optional">建议</span></div>
+            <div class="perm-desc">实时回传模拟器画面（15fps）。不开也能用，会自动降级为逐帧截图，画面更卡。</div>
+            <span class="perm-code">系统设置 → 隐私与安全性 → 屏幕录制 → 勾选 Foreman</span>
+          </div>
+        </div>
+      </div>
+      <div class="callout">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
+        <span>改完权限后 <b>退出并重新打开 Foreman</b>（菜单栏锤子图标 → 电源键）才会生效。</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="section-index">03</span>
+      <span class="section-title">用手机配对</span>
+    </div>
+    <div class="card">
+      <ol class="steps">
+        <li>点菜单栏锤子图标，选 <b>主窗口</b>。</li>
+        <li>窗口左侧会显示二维码和 <b>6 位配对码</b>，配对码 10 分钟内有效，可点「生成新配对码」刷新。</li>
+        <li>手机打开 Foreman，选 <b>扫码连接我的 Mac</b> 扫二维码；或在「或输入 6 位配对码」里输入这 6 位数字。</li>
+        <li>手机与 Mac 交换密钥，配对成功后指令与输出全程端到端加密，不经过账号。</li>
+      </ol>
+      <div class="callout">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        <span>配对码只在本机的 Bridge 里生成和校验。换手机或重装 App 后，在 Mac 主窗口重新生成配对码即可。</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="section-index">04</span>
+      <span class="section-title">开始使用</span>
+    </div>
+    <div class="card">
+      <div class="feature">
+        <span class="feature-num">01</span>
+        <div>
+          <div class="feature-title">添加工作区</div>
+          <div class="feature-desc">主窗口「工作区 → 添加目录」加入项目文件夹；手机新建会话时直接选，未选则落到置顶或最近使用的工作区。</div>
+        </div>
+      </div>
+      <div class="feature">
+        <span class="feature-num">02</span>
+        <div>
+          <div class="feature-title">发指令、看结果</div>
+          <div class="feature-desc">选 Agent（WorkBuddy / Codex），输入需求即可。流式输出、思考过程和工具调用都会实时回到手机。</div>
+        </div>
+      </div>
+      <div class="feature">
+        <span class="feature-num">03</span>
+        <div>
+          <div class="feature-title">在手机上批权限</div>
+          <div class="feature-desc">Agent 需要写文件或执行命令时，手机会进入「等你确认」；批准后操作在 Mac 上真实执行，全程可追溯。</div>
+        </div>
+      </div>
+      <div class="feature">
+        <span class="feature-num">04</span>
+        <div>
+          <div class="feature-title">预览并操作模拟器</div>
+          <div class="feature-desc">会话页或聊天页工具栏进入预览：远程启动模拟器、看实时画面、轻点与滑动直接回灌到 Mac 上的模拟器。</div>
+        </div>
+      </div>
+      <div class="feature">
+        <span class="feature-num">05</span>
+        <div>
+          <div class="feature-title">合上 Mac 也不丢会话</div>
+          <div class="feature-desc">Bridge 在 Mac 后台运行，会话和事件落盘；重连后继续，等确认和任务完成会推送到手机。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="section-index">05</span>
+      <span class="section-title">常见问题</span>
+    </div>
+    <div class="card">
+      <div class="faq-item">
+        <div class="faq-q">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
+          菜单栏找不到 Foreman？
+        </div>
+        <div class="faq-a">Foreman 是纯菜单栏 App，图标是锤子；如果图标被折叠，用 Spotlight 搜「Foreman」重新打开即可。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
+          Bridge 显示异常 / 一直是「等待 Bridge 启动」？
+        </div>
+        <div class="faq-a">在主窗口点「重试」或「启动 Bridge」。仍失败时打开「设置」检查 Relay 地址，并确认网络允许出站 443；日志在 <code class="inline">~/Library/Logs/Foreman/bridge.log</code>。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
+          手机上提示配对失败？
+        </div>
+        <div class="faq-a">配对码 10 分钟就会过期，回 Mac 主窗口生成新的再试；同时确认手机和 Mac 都能正常联网，系统时间没有偏差。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
+          模拟器画面黑屏或很卡？
+        </div>
+        <div class="faq-a">授予「屏幕录制」权限并重启 Foreman。没有该权限时会自动回退到截帧模式，帧率明显更低，但轻点回灌仍可用。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
+          手机上轻点模拟器没反应？
+        </div>
+        <div class="faq-a">检查「辅助功能」是否勾选了 Foreman，并重启 App；操作时确保模拟器窗口没有被其他窗口完全遮住。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
+          怎么卸载或解绑？
+        </div>
+        <div class="faq-a">菜单栏锤子图标退出 Foreman，然后把「应用程序」里的 Foreman 拖进废纸篓。设备身份和会话在 <code class="inline">~/.foreman/</code>，一并删除即彻底重置，手机端需要重新配对。</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">Foreman · 手机遥控桌面 coding agent</div>
+</div>
+</body>
+</html>
