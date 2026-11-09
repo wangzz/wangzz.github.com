@@ -411,18 +411,18 @@
       </div>
       <div>
         <div class="download-name">Foreman for macOS</div>
-        <div class="download-meta">版本 0.1.0 · 41 MB · Apple 芯片（M 系列）</div>
+        <div class="download-meta"><span id="download-version">版本 1.0.0</span> · <span id="download-size">86 MB</span> · Apple 芯片与 Intel 通用</div>
       </div>
     </div>
 
-    <a class="btn-download" href="/doc/Foreman/Foreman-0.1.0.dmg" download>
+    <a class="btn-download" id="download-link" href="/doc/Foreman/Foreman-1.0.0.dmg" download>
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/>
       </svg>
-      下载 Foreman-0.1.0.dmg
+      <span id="download-label">下载 Foreman-1.0.0.dmg</span>
     </a>
 
-    <div class="download-note">下载后双击打开，把 Foreman 拖进「应用程序」。当前版本未经过 Apple 公证，首次打开需要按第 1 节第 3 步手动放行。</div>
+    <div class="download-note">下载后双击打开，把 Foreman 拖进「应用程序」。安装包已签名并公证，正常双击即可打开。</div>
 
     <div class="requirements">
       <div class="requirement">
@@ -431,11 +431,19 @@
       </div>
       <div class="requirement">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
-        Xcode 16 或更新（预览模拟器需要）
+        至少一个 Agent CLI 并已登录
       </div>
       <div class="requirement">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
-        允许出站 443 端口
+        可选：Xcode 16 或更新（模拟器预览 / 真机构建）
+      </div>
+      <div class="requirement">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
+        允许出站 443 端口（云端 Relay）
+      </div>
+      <div class="requirement">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
+        同网直连使用 8787 端口
       </div>
       <div class="requirement">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
@@ -451,14 +459,14 @@
     </div>
     <div class="card">
       <ol class="steps">
-        <li>点上方 <b>下载 Foreman-0.1.0.dmg</b>。</li>
+        <li>点上方 <b id="download-step-label">下载 Foreman-1.0.0.dmg</b>（或更新版本）。</li>
         <li>双击打开镜像，把 <b>Foreman</b> 拖进「应用程序」文件夹。</li>
-        <li>首次打开若提示「Apple 无法验证」：打开 <span class="path">系统设置 → 隐私与安全性</span>，在底部点 <b>仍要打开</b>；也可以右键 App 图标选「打开」再确认。</li>
-        <li>打开后菜单栏会出现一个锤子图标。Foreman 是菜单栏 App，不占 Dock，关掉窗口也不会退出。</li>
+        <li>从「应用程序」启动 Foreman。1.0.0 起安装包已签名并公证，正常双击即可打开。</li>
+        <li>菜单栏会出现 Foreman 图标（带 <code class="inline">&gt;_</code> 的显示器）。Foreman 是菜单栏 App，不占 Dock，关掉窗口也不会退出。</li>
       </ol>
-      <div class="callout warn">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 16H3z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg>
-        <span>如果双击后提示「已损坏」或直接被拦下，在终端运行 <code class="inline">xattr -dr com.apple.quarantine /Applications/Foreman.app</code> 即可解除隔离标记。</span>
+      <div class="callout">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
+        <span>首次启动后按第 2 节授权。若系统仍提示「Apple 无法验证」，请确认下载的是 <b>1.0.0 或更新版本</b>；旧的 0.1.0 包未公证，不要继续使用。</span>
       </div>
     </div>
   </section>
@@ -475,8 +483,8 @@
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
           </div>
           <div>
-            <div class="perm-title">辅助功能 <span class="tag required">必需</span></div>
-            <div class="perm-desc">把手机上的轻点、滑动回灌到模拟器窗口。</div>
+            <div class="perm-title">辅助功能 <span class="tag optional">按需</span></div>
+            <div class="perm-desc">把手机上的轻点、滑动回灌到模拟器窗口，远程桌面操作也依赖它。只看不控制时可以不授权。</div>
             <span class="perm-code">系统设置 → 隐私与安全性 → 辅助功能 → 勾选 Foreman</span>
           </div>
         </div>
@@ -485,8 +493,8 @@
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg>
           </div>
           <div>
-            <div class="perm-title">本地网络 <span class="tag required">必需</span></div>
-            <div class="perm-desc">手机与 Mac 在同一局域网时直连，画面和指令不经云端。</div>
+            <div class="perm-title">本地网络 <span class="tag optional">可选</span></div>
+            <div class="perm-desc">手机与 Mac 在同一局域网时直连，画面和指令不经云端；只走云端 Relay 时不需要。</div>
             <span class="perm-code">首次启动时允许，或到 系统设置 → 隐私与安全性 → 本地网络 打开</span>
           </div>
         </div>
@@ -496,14 +504,14 @@
           </div>
           <div>
             <div class="perm-title">屏幕录制 <span class="tag optional">建议</span></div>
-            <div class="perm-desc">实时回传模拟器画面（15fps）。不开也能用，会自动降级为逐帧截图，画面更卡。</div>
+            <div class="perm-desc">远程桌面与模拟器实时画面需要。不开时模拟器会自动降级为逐帧截图，画面更卡，远程桌面不可用。</div>
             <span class="perm-code">系统设置 → 隐私与安全性 → 屏幕录制 → 勾选 Foreman</span>
           </div>
         </div>
       </div>
       <div class="callout">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
-        <span>改完权限后 <b>退出并重新打开 Foreman</b>（菜单栏锤子图标 → 电源键）才会生效。</span>
+        <span>只聊天、不操作模拟器或桌面时，这些权限都不是必需的。辅助功能通常几秒内生效；屏幕录制授权只在启动时读取，改完需要 <b>退出并重新打开 Foreman</b>（菜单栏 Foreman 图标 → 电源键）。</span>
       </div>
     </div>
   </section>
@@ -515,14 +523,15 @@
     </div>
     <div class="card">
       <ol class="steps">
-        <li>点菜单栏锤子图标，选 <b>主窗口</b>。</li>
-        <li>窗口左侧会显示二维码和 <b>6 位配对码</b>，配对码 10 分钟内有效，可点「生成新配对码」刷新。</li>
-        <li>手机打开 Foreman，选 <b>扫码连接我的 Mac</b> 扫二维码；或在「或输入 6 位配对码」里输入这 6 位数字。</li>
+        <li>点菜单栏 Foreman 图标，选 <b>主窗口</b>。</li>
+        <li>窗口左侧会显示二维码和 <b>8 位配对码</b>，配对码 5 分钟内有效，可点「生成新配对码」刷新。</li>
+        <li>手机打开 Foreman，选 <b>连接我的 Mac</b>（已配对过则选 <b>配对新 Mac</b>），扫二维码或输入这 8 位数字。</li>
+        <li>手机与 Mac 在同一 Wi-Fi 时，也可以直接在手机上点这台 Mac，回到 Mac 主窗口点 <b>允许</b>，不用输码。</li>
         <li>手机与 Mac 交换密钥，配对成功后指令与输出全程端到端加密，不经过账号。</li>
       </ol>
       <div class="callout">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
-        <span>配对码只在本机的 Bridge 里生成和校验。换手机或重装 App 后，在 Mac 主窗口重新生成配对码即可。</span>
+        <span>配对码只在本机的 Bridge 里生成和校验。换手机或重装 App 后，在 Mac 主窗口重新生成配对码即可；已配对的 Mac 不会被移除，可随时切换。</span>
       </div>
     </div>
   </section>
@@ -544,7 +553,7 @@
         <span class="feature-num">02</span>
         <div>
           <div class="feature-title">发指令、看结果</div>
-          <div class="feature-desc">选 Agent（WorkBuddy / Codex），输入需求即可。流式输出、思考过程和工具调用都会实时回到手机。</div>
+          <div class="feature-desc">选 Agent（WorkBuddy / Codex / Claude Code / Cursor / Trae CN / Qoder CN），输入需求即可。流式输出、思考过程和工具调用都会实时回到手机。</div>
         </div>
       </div>
       <div class="feature">
@@ -564,9 +573,13 @@
       <div class="feature">
         <span class="feature-num">05</span>
         <div>
-          <div class="feature-title">合上 Mac 也不丢会话</div>
-          <div class="feature-desc">Bridge 在 Mac 后台运行，会话和事件落盘；重连后继续，等确认和任务完成会推送到手机。</div>
+          <div class="feature-title">关掉窗口也不丢会话</div>
+          <div class="feature-desc">Bridge 在 Mac 后台运行，会话和事件落盘；关掉窗口或断开后重连可以继续。合盖休眠会暂停，唤醒后继续。</div>
         </div>
+      </div>
+      <div class="callout">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
+        <span>至少安装并登录一个 Agent CLI 才能开始；未安装的会在手机「设置 → 支持 Agent」里给出安装命令。模拟器实时预览、远程桌面、多台 Mac 配对、远程构建和按任务切换模型为 Pro 功能，免费版每月 20 条聊天消息。</span>
       </div>
     </div>
   </section>
@@ -582,7 +595,14 @@
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
           菜单栏找不到 Foreman？
         </div>
-        <div class="faq-a">Foreman 是纯菜单栏 App，图标是锤子；如果图标被折叠，用 Spotlight 搜「Foreman」重新打开即可。</div>
+        <div class="faq-a">Foreman 是纯菜单栏 App，图标是带 <code class="inline">&gt;_</code> 的显示器；如果图标被折叠，用 Spotlight 搜「Foreman」重新打开即可。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
+          提示「Apple 无法验证」或「已损坏」？
+        </div>
+        <div class="faq-a">请确认下载的是 1.0.0 或更新版本。1.0.0 起安装包已签名并公证，正常双击即可打开；旧的 0.1.0 包未公证，请删掉后重新下载。</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">
@@ -596,7 +616,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
           手机上提示配对失败？
         </div>
-        <div class="faq-a">配对码 10 分钟就会过期，回 Mac 主窗口生成新的再试；同时确认手机和 Mac 都能正常联网，系统时间没有偏差。</div>
+        <div class="faq-a">配对码 5 分钟就会过期，回 Mac 主窗口生成新的再试；同时确认手机和 Mac 都能正常联网，系统时间没有偏差。</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">
@@ -610,19 +630,45 @@
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
           手机上轻点模拟器没反应？
         </div>
-        <div class="faq-a">检查「辅助功能」是否勾选了 Foreman，并重启 App；操作时确保模拟器窗口没有被其他窗口完全遮住。</div>
+        <div class="faq-a">检查「辅助功能」是否勾选了 Foreman。辅助功能通常几秒内生效；如果仍未生效，再退出并重新打开 Foreman。操作时确保模拟器窗口没有被其他窗口完全遮住。</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
           怎么卸载或解绑？
         </div>
-        <div class="faq-a">菜单栏锤子图标退出 Foreman，然后把「应用程序」里的 Foreman 拖进废纸篓。设备身份和会话在 <code class="inline">~/.foreman/</code>，一并删除即彻底重置，手机端需要重新配对。</div>
+        <div class="faq-a">点菜单栏 Foreman 图标退出，然后把「应用程序」里的 Foreman 拖进废纸篓。设备身份和会话在 <code class="inline">~/.foreman/</code>，一并删除即彻底重置，手机端需要重新配对。</div>
       </div>
     </div>
   </section>
 
   <div class="footer">Foreman · 手机遥控桌面 coding agent</div>
 </div>
+<script>
+  (() => {
+    const link = document.getElementById('download-link');
+    const label = document.getElementById('download-label');
+    const version = document.getElementById('download-version');
+    const size = document.getElementById('download-size');
+    const stepLabel = document.getElementById('download-step-label');
+    if (!link || !label || !version || !size) return;
+
+    fetch('/doc/Foreman/update.json', { cache: 'no-store' })
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then(async (feed) => {
+        if (!feed.version || !feed.url) return;
+        link.href = feed.url;
+        label.textContent = `下载 Foreman-${feed.version}.dmg`;
+        version.textContent = `版本 ${feed.version}`;
+        if (stepLabel) stepLabel.textContent = `下载 Foreman-${feed.version}.dmg`;
+        try {
+          const head = await fetch(feed.url, { method: 'HEAD' });
+          const bytes = Number(head.headers.get('content-length'));
+          if (bytes > 0) size.textContent = `${Math.round(bytes / 1000000)} MB`;
+        } catch {}
+      })
+      .catch(() => {});
+  })();
+</script>
 </body>
 </html>
