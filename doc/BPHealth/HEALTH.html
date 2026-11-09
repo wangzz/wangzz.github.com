@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大前端技术空间</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      line-height: 1.8;
+      color: #333;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+    a {
+      color: #0594cb;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+    pre {
+      background: #f5f5f5;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    pre code {
+      padding: 0;
+      background: none;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1em 0;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+    }
+    th {
+      background: #f5f5f5;
+    }
+    blockquote {
+      border-left: 4px solid #ddd;
+      padding-left: 16px;
+      margin: 1em 0;
+      color: #666;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="健康数据说明（HealthKit-Usage-Disclosure）"><a href="#健康数据说明（HealthKit-Usage-Disclosure）" class="headerlink" title="健康数据说明（HealthKit Usage Disclosure）"></a>健康数据说明（HealthKit Usage Disclosure）</h1><p><strong>生效日期：</strong> 2026-08-21<br><strong>适用产品：</strong> 血压记录（BPHealth），iOS 应用<br><strong>Bundle ID：</strong> com.wangzz.bphealth<br><strong>联系邮箱：</strong> wzzvictory_tjsd@163.com</p>
+<blockquote>
+<p>本说明依据 Apple HealthKit 与隐私规范（App Store Review Guidelines §5.1.1、HealthKit Human Interface Guidelines）以及《中华人民共和国个人信息保护法》要求编写，说明本应用如何访问与使用 Apple「健康」中的数据。请结合《隐私政策》一并阅读。</p>
+</blockquote>
+<hr>
+<h2 id="1-我们访问的健康数据类型"><a href="#1-我们访问的健康数据类型" class="headerlink" title="1. 我们访问的健康数据类型"></a>1. 我们访问的健康数据类型</h2><p>在您<strong>主动授权</strong>后，本应用可访问您 Apple「健康」中的以下数据类型：</p>
+<table>
+<thead>
+<tr>
+<th>数据类别</th>
+<th>HealthKit 类型</th>
+<th>读取</th>
+<th>写入</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>血压（收缩压）</td>
+<td><code>HKQuantityTypeIdentifierBloodPressureSystolic</code></td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>血压（舒张压）</td>
+<td><code>HKQuantityTypeIdentifierBloodPressureDiastolic</code></td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>心率</td>
+<td><code>HKQuantityTypeIdentifierHeartRate</code></td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+</tbody></table>
+<p>本应用<strong>不</strong>请求访问上述类型以外的任何其他健康数据（如步数、睡眠、血氧、心电图、医疗记录等）。</p>
+<h2 id="2-使用目的"><a href="#2-使用目的" class="headerlink" title="2. 使用目的"></a>2. 使用目的</h2><h3 id="2-1-读取（NSHealthShareUsageDescription）"><a href="#2-1-读取（NSHealthShareUsageDescription）" class="headerlink" title="2.1 读取（NSHealthShareUsageDescription）"></a>2.1 读取（NSHealthShareUsageDescription）</h3><ul>
+<li>在「趋势」页中合并展示您”健康”中已有的血压/心率记录与本应用本地记录，便于统一查看长期走势；</li>
+<li>在记录详情页对照历史数据。</li>
+</ul>
+<h3 id="2-2-写入（NSHealthUpdateUsageDescription）"><a href="#2-2-写入（NSHealthUpdateUsageDescription）" class="headerlink" title="2.2 写入（NSHealthUpdateUsageDescription）"></a>2.2 写入（NSHealthUpdateUsageDescription）</h3><ul>
+<li>将您在本应用中确认的血压与心率读数（含测量时间）写入”健康”，便于您在”健康”App 中统一查看，或在其他第三方健康应用之间共享；</li>
+<li>写入时间使用您指定的<strong>测量时间</strong>（非当前时间），避免趋势错位。</li>
+</ul>
+<blockquote>
+<p>我们承诺：HealthKit 数据的读取与写入<strong>完全在本机由 iOS 系统调度</strong>，不经过任何外部服务器，不与任何第三方共享。</p>
+</blockquote>
+<h2 id="3-数据不离开本机"><a href="#3-数据不离开本机" class="headerlink" title="3. 数据不离开本机"></a>3. 数据不离开本机</h2><p>3.1 本应用<strong>不会</strong>将任何 HealthKit 数据上传到服务器、发送给第三方，也不会用于广告或跨应用广告追踪。</p>
+<p>3.2 本应用<strong>不集成</strong>任何广告 SDK、统计分析 SDK 或用户追踪 SDK，对应的 <code>NSPrivacyTracking</code> 在 Privacy Manifest (<code>PrivacyInfo.xcprivacy</code>) 中已设为 <code>false</code>。</p>
+<p>3.3 HealthKit 数据的存储与处理完全由 iOS 系统级加密机制保护；本应用仅在您授权范围内访问与写入，无权跨越 iOS 沙盒获取其他应用数据。</p>
+<h2 id="4-权限管理"><a href="#4-权限管理" class="headerlink" title="4. 权限管理"></a>4. 权限管理</h2><p>4.1 您可在 iOS”设置 → 隐私与安全性 → 健康”中查看本应用对健康数据的访问权限，并可随时<strong>全部撤销</strong>或仅关闭其中某一项（读 / 写）。</p>
+<p>4.2 撤销读取权限后：本应用趋势页将不再合并展示”健康”中的历史数据，仅展示本应用本地记录。</p>
+<p>4.3 撤销写入权限后：本应用识别/补录的读数将<strong>仅保存于本机</strong>，不会写入”健康”。</p>
+<p>4.4 您随时可在本应用”设置 → 反馈”中就 HealthKit 数据访问向我们咨询。</p>
+<h2 id="5-合规承诺"><a href="#5-合规承诺" class="headerlink" title="5. 合规承诺"></a>5. 合规承诺</h2><p>依据 Apple HealthKit 使用规范，我们承诺：</p>
+<ul>
+<li><strong>不</strong>将 HealthKit 数据用于广告或营销目的；</li>
+<li><strong>不</strong>将 HealthKit 数据用于任何第三方分析、画像或追踪；</li>
+<li><strong>不</strong>将 HealthKit 数据出售或共享给任何第三方；</li>
+<li><strong>不</strong>在未取得您明确授权前访问任何 HealthKit 数据；</li>
+<li><strong>不</strong>将 HealthKit 数据用于医疗诊断或治疗建议（本应用仅为个人记录辅助工具，详见《用户协议》第 4 节医疗免责声明）。</li>
+</ul>
+<h2 id="6-与-Privacy-Manifest-的一致性"><a href="#6-与-Privacy-Manifest-的一致性" class="headerlink" title="6. 与 Privacy Manifest 的一致性"></a>6. 与 Privacy Manifest 的一致性</h2><p>本应用的 Privacy Manifest 文件 <code>PrivacyInfo.xcprivacy</code> 已声明：</p>
+<ul>
+<li><code>NSPrivacyTracking</code>：<code>false</code>（不进行跨应用追踪）；</li>
+<li><code>NSPrivacyTrackingDomains</code>：空（无追踪域名）；</li>
+<li><code>NSPrivacyAccessedAPITypes</code>：空（未使用需要声明的 Required Reason API）。</li>
+</ul>
+<blockquote>
+<p>您可在本应用包内找到完整的 <code>PrivacyInfo.xcprivacy</code>，亦可参考《隐私政策》第 7 节”第三方 SDK”了解本应用对框架依赖的隐私边界。</p>
+</blockquote>
+<h2 id="7-联系我们"><a href="#7-联系我们" class="headerlink" title="7. 联系我们"></a>7. 联系我们</h2><p>如对本应用如何使用 HealthKit 数据有任何疑问，可通过以下方式联系我们：</p>
+<ul>
+<li><strong>邮箱：</strong> wzzvictory_tjsd@163.com</li>
+<li><strong>应用内入口：</strong> 设置 → 反馈建议</li>
+</ul>
+<hr>
+<blockquote>
+<p>本说明英文版本（如有）仅供参考，若有歧义，以本中文版本为准。</p>
+</blockquote>
+
+</body>
+</html>
