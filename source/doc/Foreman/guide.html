@@ -378,6 +378,24 @@
     padding-left: 23px;
   }
 
+  /* Advanced troubleshooting, collapsed by default */
+  details.advanced { margin-top: 8px; }
+  details.advanced summary {
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    list-style: none;
+  }
+  details.advanced summary::-webkit-details-marker { display: none; }
+  details.advanced summary::before {
+    content: '›';
+    display: inline-block;
+    margin-right: 5px;
+    transition: transform 0.15s;
+  }
+  details.advanced[open] summary::before { transform: rotate(90deg); }
+  details.advanced .inline { display: inline-block; margin-top: 5px; }
+
   .footer {
     text-align: center;
     font-size: 11px;
@@ -399,7 +417,7 @@
   <div class="header">
     <div class="header-icon"><img src="/doc/Foreman/icon.png" alt="Foreman"></div>
     <h1>在 Mac 上装好 Foreman</h1>
-    <p>Foreman 是手机遥控桌面 coding agent 的指挥台：Mac 端跑 Bridge，手机端发指令、看流式输出、批权限、直接操作模拟器。</p>
+    <p>在 Mac 上运行你常用的 AI 编程工具，用手机发指令、看进度、确认操作，还能直接预览和操作 iOS 模拟器。</p>
   </div>
 
   <div class="download">
@@ -422,7 +440,7 @@
       <span id="download-label">下载 Foreman-1.0.0.dmg</span>
     </a>
 
-    <div class="download-note">下载后双击打开，把 Foreman 拖进「应用程序」。安装包已签名并公证，正常双击即可打开。</div>
+    <div class="download-note">下载后双击打开，把 Foreman 拖进「应用程序」。安装包已签名并公证，正常双击就能打开。</div>
 
     <div class="requirements">
       <div class="requirement">
@@ -431,23 +449,7 @@
       </div>
       <div class="requirement">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
-        至少一个 Agent CLI 并已登录
-      </div>
-      <div class="requirement">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
-        可选：Xcode 16 或更新（模拟器预览 / 真机构建）
-      </div>
-      <div class="requirement">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
-        允许出站 443 端口（云端 Relay）
-      </div>
-      <div class="requirement">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
-        同网直连使用 8787 端口
-      </div>
-      <div class="requirement">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>
-        无需安装 Node（已内置）
+        已装好并登录一个 AI 编程工具
       </div>
     </div>
   </div>
@@ -474,7 +476,7 @@
   <section>
     <div class="section-head">
       <span class="section-index">02</span>
-      <span class="section-title">需要授权的权限</span>
+      <span class="section-title">可能需要你允许的权限</span>
     </div>
     <div class="card">
       <div class="perm-list">
@@ -484,7 +486,7 @@
           </div>
           <div>
             <div class="perm-title">辅助功能 <span class="tag optional">按需</span></div>
-            <div class="perm-desc">把手机上的轻点、滑动回灌到模拟器窗口，远程桌面操作也依赖它。只看不控制时可以不授权。</div>
+            <div class="perm-desc">让你在手机上点按、滑动时，Mac 上的模拟器跟着响应。只聊天、不操作模拟器时可以先不开。</div>
             <span class="perm-code">系统设置 → 隐私与安全性 → 辅助功能 → 勾选 Foreman</span>
           </div>
         </div>
@@ -493,8 +495,8 @@
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg>
           </div>
           <div>
-            <div class="perm-title">本地网络 <span class="tag optional">可选</span></div>
-            <div class="perm-desc">手机与 Mac 在同一局域网时直连，画面和指令不经云端；只走云端 Relay 时不需要。</div>
+            <div class="perm-title">本地网络 <span class="tag optional">建议</span></div>
+            <div class="perm-desc">手机和 Mac 在同一个 Wi-Fi 时直接连接，速度更快；不开也能用，只是会走云端。</div>
             <span class="perm-code">首次启动时允许，或到 系统设置 → 隐私与安全性 → 本地网络 打开</span>
           </div>
         </div>
@@ -504,14 +506,14 @@
           </div>
           <div>
             <div class="perm-title">屏幕录制 <span class="tag optional">建议</span></div>
-            <div class="perm-desc">远程桌面与模拟器实时画面需要。不开时模拟器会自动降级为逐帧截图，画面更卡，远程桌面不可用。</div>
+            <div class="perm-desc">让手机看到 Mac 上的实时画面。不开也能用，但模拟器会变成较慢的截图模式，远程桌面不可用。</div>
             <span class="perm-code">系统设置 → 隐私与安全性 → 屏幕录制 → 勾选 Foreman</span>
           </div>
         </div>
       </div>
       <div class="callout">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
-        <span>只聊天、不操作模拟器或桌面时，这些权限都不是必需的。辅助功能通常几秒内生效；屏幕录制授权只在启动时读取，改完需要 <b>退出并重新打开 Foreman</b>（菜单栏 Foreman 图标 → 电源键）。</span>
+        <span>只聊天、不操作模拟器或桌面时，这些权限都可以先跳过。修改「屏幕录制」后，需要 <b>退出并重新打开 Foreman</b> 才会生效。</span>
       </div>
     </div>
   </section>
@@ -527,11 +529,11 @@
         <li>窗口左侧会显示二维码和 <b>8 位配对码</b>，配对码 5 分钟内有效，可点「生成新配对码」刷新。</li>
         <li>手机打开 Foreman，选 <b>连接我的 Mac</b>（已配对过则选 <b>配对新 Mac</b>），扫二维码或输入这 8 位数字。</li>
         <li>手机与 Mac 在同一 Wi-Fi 时，也可以直接在手机上点这台 Mac，回到 Mac 主窗口点 <b>允许</b>，不用输码。</li>
-        <li>手机与 Mac 交换密钥，配对成功后指令与输出全程端到端加密，不经过账号。</li>
+        <li>配对成功后，只有你的手机能控制这台 Mac，指令和画面全程加密，不需要注册账号。</li>
       </ol>
       <div class="callout">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
-        <span>配对码只在本机的 Bridge 里生成和校验。换手机或重装 App 后，在 Mac 主窗口重新生成配对码即可；已配对的 Mac 不会被移除，可随时切换。</span>
+        <span>配对码只在这台 Mac 上生成，换手机或重装 App 后重新生成一个即可。已经配对的 Mac 不会被移除，可以随时切换。</span>
       </div>
     </div>
   </section>
@@ -553,33 +555,33 @@
         <span class="feature-num">02</span>
         <div>
           <div class="feature-title">发指令、看结果</div>
-          <div class="feature-desc">选 Agent（WorkBuddy / Codex / Claude Code / Cursor / Trae CN / Qoder CN），输入需求即可。流式输出、思考过程和工具调用都会实时回到手机。</div>
+          <div class="feature-desc">选一个 AI 编程工具（WorkBuddy / Codex / Claude Code / Cursor / Trae CN / Qoder CN），输入需求即可。回答、思考和执行过程都会实时显示在手机上。</div>
         </div>
       </div>
       <div class="feature">
         <span class="feature-num">03</span>
         <div>
           <div class="feature-title">在手机上批权限</div>
-          <div class="feature-desc">Agent 需要写文件或执行命令时，手机会进入「等你确认」；批准后操作在 Mac 上真实执行，全程可追溯。</div>
+          <div class="feature-desc">AI 要写文件或执行命令时，手机会进入「等你确认」；批准后操作才会在 Mac 上执行，全程有记录。</div>
         </div>
       </div>
       <div class="feature">
         <span class="feature-num">04</span>
         <div>
           <div class="feature-title">预览并操作模拟器</div>
-          <div class="feature-desc">会话页或聊天页工具栏进入预览：远程启动模拟器、看实时画面、轻点与滑动直接回灌到 Mac 上的模拟器。</div>
+          <div class="feature-desc">会话页或聊天页工具栏进入预览：远程启动模拟器、看实时画面，在手机上轻点或滑动就能操作 Mac 上的模拟器。需要 Mac 装有 Xcode 16 或更新。</div>
         </div>
       </div>
       <div class="feature">
         <span class="feature-num">05</span>
         <div>
           <div class="feature-title">关掉窗口也不丢会话</div>
-          <div class="feature-desc">Bridge 在 Mac 后台运行，会话和事件落盘；关掉窗口或断开后重连可以继续。合盖休眠会暂停，唤醒后继续。</div>
+          <div class="feature-desc">Foreman 在 Mac 后台运行，会话会自动保存；关掉窗口或断开后重连可以继续。合盖休眠会暂停，唤醒后继续。</div>
         </div>
       </div>
       <div class="callout">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
-        <span>至少安装并登录一个 Agent CLI 才能开始；未安装的会在手机「设置 → 支持 Agent」里给出安装命令。模拟器实时预览、远程桌面、多台 Mac 配对、远程构建和按任务切换模型为 Pro 功能，免费版每月 20 条聊天消息。</span>
+        <span>开始前需要先装好并登录一个 AI 编程工具；手机「设置 → 支持 Agent」里有安装指引。模拟器实时预览、远程桌面、多台 Mac 配对、远程构建和按任务切换模型为 Pro 功能，免费版每月 20 条聊天消息。</span>
       </div>
     </div>
   </section>
@@ -609,21 +611,26 @@
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
           Bridge 显示异常 / 一直是「等待 Bridge 启动」？
         </div>
-        <div class="faq-a">在主窗口点「重试」或「启动 Bridge」。仍失败时打开「设置」检查 Relay 地址，并确认网络允许出站 443；日志在 <code class="inline">~/Library/Logs/Foreman/bridge.log</code>。</div>
+        <div class="faq-a">先点「重试」或「启动 Bridge」。还不行就重启 Foreman，并确认 Mac 能正常上网；如果公司网络限制了外网访问，请允许 Foreman 联网后再试。
+          <details class="advanced">
+            <summary>仍然失败？查看日志位置</summary>
+            日志在 <code class="inline">~/Library/Logs/Foreman/bridge.log</code>，联系支持时附上即可。
+          </details>
+        </div>
       </div>
       <div class="faq-item">
         <div class="faq-q">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
           手机上提示配对失败？
         </div>
-        <div class="faq-a">配对码 5 分钟就会过期，回 Mac 主窗口生成新的再试；同时确认手机和 Mac 都能正常联网，系统时间没有偏差。</div>
+        <div class="faq-a">配对码 5 分钟就会过期，回 Mac 主窗口重新生成一个再试，并确认手机和 Mac 都能正常上网。</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
           模拟器画面黑屏或很卡？
         </div>
-        <div class="faq-a">授予「屏幕录制」权限并重启 Foreman。没有该权限时会自动回退到截帧模式，帧率明显更低，但轻点回灌仍可用。</div>
+        <div class="faq-a">在系统设置里允许「屏幕录制」，然后退出并重新打开 Foreman。没有该权限时画面会变成较慢的截图刷新，但点按和滑动仍可用。</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">
@@ -637,7 +644,12 @@
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.8-2.5 3.5"/><path d="M12 17h.01"/></svg>
           怎么卸载或解绑？
         </div>
-        <div class="faq-a">点菜单栏 Foreman 图标退出，然后把「应用程序」里的 Foreman 拖进废纸篓。设备身份和会话在 <code class="inline">~/.foreman/</code>，一并删除即彻底重置，手机端需要重新配对。</div>
+        <div class="faq-a">点菜单栏 Foreman 图标退出，再把「应用程序」里的 Foreman 拖进废纸篓。手机上需要重新配对才能再次连接。
+          <details class="advanced">
+            <summary>高级：彻底清除本机数据</summary>
+            本机的身份和会话保存在 <code class="inline">~/.foreman/</code>，删除后即彻底重置。
+          </details>
+        </div>
       </div>
     </div>
   </section>
