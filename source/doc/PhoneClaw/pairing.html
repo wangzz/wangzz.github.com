@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PhoneClaw - Pair Your OpenClaw Host</title>
+<title>PhoneClaw - Pair Your OpenClaw / Hermes Host</title>
 <style>
   :root {
     --primary: #00A86B;
@@ -301,10 +301,10 @@
       <img src="/doc/PhoneClaw/logo.png" alt="PhoneClaw">
     </div>
     <h1>
-      <span data-i18n="title">配对你的 OpenClaw 主机</span>
+      <span data-i18n="title">配对你的 OpenClaw / Hermes 主机</span>
     </h1>
     <p>
-      <span data-i18n="subtitle">在运行 OpenClaw 的电脑上安装 PhoneClaw Skill，然后生成配对码并连接到 PhoneClaw App</span>
+      <span data-i18n="subtitle">在运行 OpenClaw 或 Hermes 的电脑上安装 PhoneClaw Skill，然后生成配对码并连接到 PhoneClaw App</span>
     </p>
   </div>
 
@@ -332,7 +332,7 @@
           <span data-i18n="step1">打开终端，运行 <code>npm install -g phoneclaw-connector@latest</code> 全局安装 PhoneClaw Skill</span>
         </li>
         <li>
-          <span data-i18n="step2">确认电脑已安装 OpenClaw（Skill 会自动从 <code>~/.openclaw/openclaw.json</code> 读取网关配置，无需手动填写任何文件）</span>
+          <span data-i18n="step2">确认电脑已安装并运行 OpenClaw 或 Hermes：OpenClaw 会自动读取 <code>~/.openclaw/openclaw.json</code>；Hermes 需用 <code>API_SERVER_ENABLED=true API_SERVER_KEY=&lt;你的密钥&gt; hermes gateway</code> 启动，或把密钥写入 <code>~/.hermes/.env</code></span>
         </li>
         <li>
           <span data-i18n="step3">运行 <code>phoneclaw pair</code> 启动配对，终端会显示 6 位配对码</span>
@@ -355,32 +355,36 @@
         <span class="badge" data-i18n="badge-recommended">推荐</span>
       </div>
       <div class="card-desc">
-        <span data-i18n="agent-desc">复制下面这段话，直接发给 Agent，让它先安装 PhoneClaw Skill，再把这台 OpenClaw 主机配对到 PhoneClaw App。</span>
+        <span data-i18n="agent-desc">复制下面这段话，直接发给 Agent，让它先安装 PhoneClaw Skill，再把这台 OpenClaw 或 Hermes 主机配对到 PhoneClaw App。</span>
       </div>
 
       <div class="copy-block" id="agent-prompt-zh" data-lang-content="zh">请严格按以下步骤帮我安装并配置 PhoneClaw Skill：
 
 1. 先直接运行 `npm install -g phoneclaw-connector@latest`，确保本机的 `phoneclaw` 命令是最新版。
-2. 确认本机已安装 OpenClaw（skill 会自动从 ~/.openclaw/openclaw.json 读取网关配置，无需手动填写任何配置文件）。
-3. 运行 `phoneclaw pair` 启动配对，skill 会在终端显示 6 位配对码。
+2. 确认本机已安装并运行 OpenClaw 或 Hermes：
+   - OpenClaw：skill 会自动从 ~/.openclaw/openclaw.json 读取网关配置。
+   - Hermes：用 `API_SERVER_ENABLED=true API_SERVER_KEY=<你的密钥> hermes gateway` 启动（默认 http://127.0.0.1:8642），或把 API_SERVER_KEY 写入 ~/.hermes/.env。更多选项可写入 ~/.phoneclaw/config.json。
+3. 运行 `phoneclaw pair` 启动配对，skill 会打印识别到的后端和 6 位配对码。
 4. 严格按 skill 的步骤执行，不要跳过检查。
 5. 如果成功，请把最终 6 位配对码单独放一行，方便我复制。
 6. 配对成功后，请继续运行 `phoneclaw start` 让 Skill 保持后台运行，这样才能和手机端交互。
 7. 如果失败，请直接告诉我卡在哪一步，以及下一条应该执行的命令。
 
-这台主机应按 OpenClaw 配对。生成配对码时请使用 `phoneclaw pair`。</div>
+这台主机可以通过 OpenClaw 或 Hermes 配对。如果两者都已安装、想用 Hermes，请先设置 PHONECLAW_PROVIDER=hermes 再运行 `phoneclaw pair`。</div>
 
       <div class="copy-block" id="agent-prompt-en" data-lang-content="en" style="display:none;">Please follow these steps to install and configure PhoneClaw Skill for me:
 
 1. First, run `npm install -g phoneclaw-connector@latest` to make sure the `phoneclaw` command is up to date.
-2. Confirm that OpenClaw is installed on this machine (the skill will automatically read gateway config from ~/.openclaw/openclaw.json — no manual config files needed).
-3. Run `phoneclaw pair` to start pairing. The skill will display a 6-digit pairing code in the terminal.
+2. Make sure OpenClaw or Hermes is installed and running on this machine:
+   - OpenClaw: the skill reads gateway config from ~/.openclaw/openclaw.json automatically.
+   - Hermes: start it with `API_SERVER_ENABLED=true API_SERVER_KEY=<your-key> hermes gateway` (default http://127.0.0.1:8642), or put API_SERVER_KEY in ~/.hermes/.env. Other options can go in ~/.phoneclaw/config.json.
+3. Run `phoneclaw pair` to start pairing. The skill will display the detected backend and a 6-digit pairing code.
 4. Follow the skill's steps carefully, do not skip any checks.
 5. If successful, please put the final 6-digit pairing code on a separate line so I can copy it easily.
 6. After pairing, please also run `phoneclaw start` to keep the Skill running in the background, so it can interact with the phone.
 7. If it fails, tell me exactly which step it got stuck on and what command I should run next.
 
-This host should be paired via OpenClaw. Use `phoneclaw pair` to generate the pairing code.</div>
+This host can be paired via OpenClaw or Hermes. If both are installed and you want Hermes, set PHONECLAW_PROVIDER=hermes before running `phoneclaw pair`.</div>
     </div>
   </div>
 </div>
@@ -391,39 +395,39 @@ This host should be paired via OpenClaw. Use `phoneclaw pair` to generate the pa
 // i18n strings
 const i18n = {
   zh: {
-    title: '配对你的 OpenClaw 主机',
-    subtitle: '在运行 OpenClaw 的电脑上安装 PhoneClaw Skill，然后生成配对码并连接到 PhoneClaw App',
+    title: '配对你的 OpenClaw / Hermes 主机',
+    subtitle: '在运行 OpenClaw 或 Hermes 的电脑上安装 PhoneClaw Skill，然后生成配对码并连接到 PhoneClaw App',
     'tab-manual': '手动安装',
     'tab-agent': '让 Agent 帮忙安装',
     'manual-title': '手动安装 PhoneClaw Skill',
     'manual-desc': '在你的电脑上打开终端，按以下步骤安装并配对。',
     step1: '打开终端，运行 <code>npm install -g phoneclaw-connector@latest</code> 全局安装 PhoneClaw Skill',
-    step2: '确认电脑已安装 OpenClaw（Skill 会自动从 <code>~/.openclaw/openclaw.json</code> 读取网关配置，无需手动填写任何文件）',
+    step2: '确认电脑已安装并运行 OpenClaw 或 Hermes：OpenClaw 会自动读取 <code>~/.openclaw/openclaw.json</code>；Hermes 需用 <code>API_SERVER_ENABLED=true API_SERVER_KEY=&lt;你的密钥&gt; hermes gateway</code> 启动，或把密钥写入 <code>~/.hermes/.env</code>',
     step3: '运行 <code>phoneclaw pair</code> 启动配对，终端会显示 6 位配对码',
     step4: '在 PhoneClaw App 中输入配对码完成配对',
     step5: '配对成功后，运行 <code>phoneclaw start</code> 让 Skill 保持后台运行，之后即可在手机端与电脑端交互',
     'agent-title': '让 Agent 帮忙安装 PhoneClaw Skill',
     'badge-recommended': '推荐',
-    'agent-desc': '复制下面这段话，直接发给 Agent，让它先安装 PhoneClaw Skill，再把这台 OpenClaw 主机配对到 PhoneClaw App。',
+    'agent-desc': '复制下面这段话，直接发给 Agent，让它先安装 PhoneClaw Skill，再把这台 OpenClaw 或 Hermes 主机配对到 PhoneClaw App。',
     toast: '已复制到剪贴板',
     copy: '复制',
     copied: '已复制',
   },
   en: {
-    title: 'Pair Your OpenClaw Host',
-    subtitle: 'Install the PhoneClaw Skill on your OpenClaw machine, generate a pairing code, and connect to the PhoneClaw App.',
+    title: 'Pair Your OpenClaw / Hermes Host',
+    subtitle: 'Install the PhoneClaw Skill on your OpenClaw or Hermes machine, generate a pairing code, and connect to the PhoneClaw App.',
     'tab-manual': 'Manual Install',
     'tab-agent': 'Let Agent Install',
     'manual-title': 'Manually Install PhoneClaw Skill',
     'manual-desc': 'Open a terminal on your computer and follow these steps to install and pair.',
     step1: 'Open a terminal and run <code>npm install -g phoneclaw-connector@latest</code> to globally install PhoneClaw Skill.',
-    step2: 'Make sure OpenClaw is installed on your computer. The skill will automatically read gateway config from <code>~/.openclaw/openclaw.json</code> — no manual config needed.',
+    step2: 'Make sure OpenClaw or Hermes is installed and running: OpenClaw is read from <code>~/.openclaw/openclaw.json</code> automatically; for Hermes start with <code>API_SERVER_ENABLED=true API_SERVER_KEY=&lt;your-key&gt; hermes gateway</code>, or put the key in <code>~/.hermes/.env</code>.',
     step3: 'Run <code>phoneclaw pair</code> to start pairing. A 6-digit pairing code will be displayed in the terminal.',
     step4: 'Enter the pairing code in the PhoneClaw App to complete pairing.',
     step5: 'After pairing, run <code>phoneclaw start</code> to keep the Skill running in the background, enabling interaction between your phone and computer.',
     'agent-title': 'Let Agent Install PhoneClaw Skill',
     'badge-recommended': 'Recommended',
-    'agent-desc': 'Copy the text below and send it to your Agent. It will install PhoneClaw Skill and pair this OpenClaw host to the PhoneClaw App.',
+    'agent-desc': 'Copy the text below and send it to your Agent. It will install PhoneClaw Skill and pair this OpenClaw or Hermes host to the PhoneClaw App.',
     toast: 'Copied to clipboard',
     copy: 'Copy',
     copied: 'Copied',
