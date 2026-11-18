@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大前端技术空间</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      line-height: 1.8;
+      color: #333;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+    a {
+      color: #0594cb;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+    pre {
+      background: #f5f5f5;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    pre code {
+      padding: 0;
+      background: none;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1em 0;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+    }
+    th {
+      background: #f5f5f5;
+    }
+    blockquote {
+      border-left: 4px solid #ddd;
+      padding-left: 16px;
+      margin: 1em 0;
+      color: #666;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="隐私政策"><a href="#隐私政策" class="headerlink" title="隐私政策"></a>隐私政策</h1><p><strong>生效日期：</strong> 2026-08-21<br><strong>适用产品：</strong> 血压记录（BPHealth），iOS 应用<br><strong>Bundle ID：</strong> com.wangzz.bphealth<br><strong>联系邮箱：</strong> wzzvictory_tjsd@163.com</p>
+<blockquote>
+<p>血压记录（以下简称”本应用”）是一款帮助用户在本机记录、查看血压与心率趋势的本地化工具。我们高度重视您的隐私，本政策说明我们如何处理（或不处理）您的信息。本政策依据《中华人民共和国个人信息保护法》（PIPL）、《App违法违规收集使用个人信息行为认定方法》及 Apple App Store《隐私政策》要求编写。</p>
+</blockquote>
+<hr>
+<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>本应用<strong>以”本地优先、不上传、不共享”为最高隐私原则</strong>：</p>
+<ul>
+<li>您的血压/心率读数、家庭成员信息、可选保存的拍照缩略图，<strong>全部仅存储于您本机的 iOS SwiftData 数据库</strong>；</li>
+<li>我们<strong>不会</strong>将上述任何健康数据上传到任何服务器；</li>
+<li>我们<strong>不会</strong>与任何第三方共享您的健康数据；</li>
+<li>我们<strong>不集成任何广告 SDK 与统计分析 SDK</strong>；</li>
+<li>我们<strong>不进行任何跨应用追踪</strong>（NSPrivacyTracking = false）；</li>
+<li>本应用<strong>不要求注册账号</strong>。</li>
+</ul>
+<h2 id="2-我们”收集”与”不收集”的信息"><a href="#2-我们”收集”与”不收集”的信息" class="headerlink" title="2. 我们”收集”与”不收集”的信息"></a>2. 我们”收集”与”不收集”的信息</h2><h3 id="2-1-不收集的信息"><a href="#2-1-不收集的信息" class="headerlink" title="2.1 不收集的信息"></a>2.1 不收集的信息</h3><p>下列信息<strong>全部仅存储于您本机，开发者从不访问、不上传、不收集</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>内容</th>
+<th>存储位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>健康数据</td>
+<td>收缩压、舒张压、心率、测量时间、备注、来源（OCR/手动）</td>
+<td>本机 SwiftData</td>
+</tr>
+<tr>
+<td>家庭成员信息</td>
+<td>您自填的成员姓名、关系、色标</td>
+<td>本机 SwiftData</td>
+</tr>
+<tr>
+<td>拍照留存缩略图</td>
+<td>可选保存的血压计屏幕缩略图</td>
+<td>本机 SwiftData</td>
+</tr>
+<tr>
+<td>应用偏好</td>
+<td>测量提醒、单位与显示设置等</td>
+<td>本机 UserDefaults</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-仅在您主动使用反馈功能时通过系统邮件发送的信息"><a href="#2-2-仅在您主动使用反馈功能时通过系统邮件发送的信息" class="headerlink" title="2.2 仅在您主动使用反馈功能时通过系统邮件发送的信息"></a>2.2 仅在您主动使用反馈功能时通过系统邮件发送的信息</h3><p>当您在”设置 → 反馈建议”主动点击发邮件时，系统邮件 App 会按以下内容生成邮件草稿，<strong>收件人为开发者邮箱 <a href="mailto:wzzvictory_tjsd@163.com" target="_blank" rel="noopener">wzzvictory_tjsd@163.com</a></strong>，由您审阅后手动发送：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>来源</th>
+<th>是否含个人信息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>邮件主题</td>
+<td><code>[Feedback][BPHealth][v1.0.0][iOS17.0][&lt;DeviceModel&gt;]</code></td>
+<td>否（系统公开信息）</td>
+</tr>
+<tr>
+<td>邮件正文</td>
+<td>App 版本、系统版本、设备型号、设备语言、Apple ID 所在地区、反馈时间</td>
+<td>否（均为系统公开信息，<strong>不含 Apple ID、姓名、健康数据</strong>）</td>
+</tr>
+</tbody></table>
+<p>上述反馈邮件的所有内容由您本人审阅与决定是否发送，<strong>本应用不附加任何您不可见的隐藏内容</strong>。</p>
+<h3 id="2-3-由-Apple-处理、开发者不接触的信息"><a href="#2-3-由-Apple-处理、开发者不接触的信息" class="headerlink" title="2.3 由 Apple 处理、开发者不接触的信息"></a>2.3 由 Apple 处理、开发者不接触的信息</h3><ul>
+<li><strong>订阅与支付信息</strong>：所有内购交易（包括订阅状态、续费、退款）均由 Apple 通过 StoreKit 全程处理。我们仅能获取”是否已订阅 Pro 状态”的布尔结果，<strong>不接触您的信用卡号、Apple ID 密码、具体支付金额以外的支付明细</strong>。</li>
+<li><strong>HealthKit 数据</strong>：详见《健康数据说明》。</li>
+</ul>
+<h2 id="3-信息使用目的"><a href="#3-信息使用目的" class="headerlink" title="3. 信息使用目的"></a>3. 信息使用目的</h2><h3 id="3-1-本机健康数据"><a href="#3-1-本机健康数据" class="headerlink" title="3.1 本机健康数据"></a>3.1 本机健康数据</h3><p>仅用于在本应用内提供以下功能：</p>
+<ul>
+<li>历史记录列表与详情展示；</li>
+<li>趋势图与达标率统计展示；</li>
+<li>家庭成员分组与切换；</li>
+<li>用户主动选择写入 Apple「健康」（详见第 4 节）。</li>
+</ul>
+<h3 id="3-2-反馈邮件"><a href="#3-2-反馈邮件" class="headerlink" title="3.2 反馈邮件"></a>3.2 反馈邮件</h3><p>如您主动发起反馈，邮件内容仅用于回复您的问题、修复 Bug 或改进产品。</p>
+<h3 id="3-3-订阅状态"><a href="#3-3-订阅状态" class="headerlink" title="3.3 订阅状态"></a>3.3 订阅状态</h3><p>仅用于在应用内判断是否解锁高级功能与展示订阅状态，不用于其他用途。</p>
+<h2 id="4-与-Apple「健康」（HealthKit）的交互"><a href="#4-与-Apple「健康」（HealthKit）的交互" class="headerlink" title="4. 与 Apple「健康」（HealthKit）的交互"></a>4. 与 Apple「健康」（HealthKit）的交互</h2><p>若您主动授权，本应用可：</p>
+<ul>
+<li><strong>读取</strong>您”健康”中已有的血压、心率数据，用于在趋势页统一展示；</li>
+<li><strong>写入</strong>您在本应用中确认的血压与心率读数到”健康”。</li>
+</ul>
+<p>相关数据<strong>仅在本机处理，不会发送到外部任何服务器</strong>。您可随时在 iOS”设置 → 隐私与安全性 → 健康 → 血压记录”中查看或撤销授权。详见《健康数据说明》。</p>
+<h2 id="5-数据存储与留存"><a href="#5-数据存储与留存" class="headerlink" title="5. 数据存储与留存"></a>5. 数据存储与留存</h2><h3 id="5-1-存储方式"><a href="#5-1-存储方式" class="headerlink" title="5.1 存储方式"></a>5.1 存储方式</h3><ul>
+<li>健康数据、家庭成员信息、拍照缩略图均存储于<strong>本机 iOS SwiftData 本地数据库</strong>；</li>
+<li>应用偏好设置存储于<strong>本机 iOS UserDefaults</strong>；</li>
+<li>本应用<strong>不使用任何云端服务器</strong>存储您的数据，<strong>不使用 iCloud 同步</strong>（V1.0 不提供跨设备同步）。</li>
+</ul>
+<h3 id="5-2-数据留存"><a href="#5-2-数据留存" class="headerlink" title="5.2 数据留存"></a>5.2 数据留存</h3><ul>
+<li>您本机的数据将一直保留，直至您主动删除单条记录、删除整个家庭成员档案或卸载本应用；</li>
+<li><strong>卸载本应用后，本机所有数据将被永久删除且不可恢复</strong>，开发者亦无法协助恢复，请您谨慎操作。</li>
+</ul>
+<h3 id="5-3-数据安全"><a href="#5-3-数据安全" class="headerlink" title="5.3 数据安全"></a>5.3 数据安全</h3><ul>
+<li>本机数据受 iOS 系统级加密保护（设备锁屏密码 / 生物识别）；</li>
+<li>您可在 iOS 系统设置中开启”擦除数据”（10 次错误密码尝试后自动擦除）等安全选项进一步保护本机数据；</li>
+<li>由于数据不上传，<strong>不存在因开发者服务器被攻破而导致数据泄露的风险</strong>。</li>
+</ul>
+<h2 id="6-第三方共享与披露"><a href="#6-第三方共享与披露" class="headerlink" title="6. 第三方共享与披露"></a>6. 第三方共享与披露</h2><p>我们承诺：</p>
+<ul>
+<li><strong>不与任何第三方共享您的健康数据</strong>；</li>
+<li><strong>不向任何第三方出售您的个人信息</strong>；</li>
+<li><strong>不与任何第三方建立数据合作或联合画像关系</strong>；</li>
+<li>在法律法规要求或政府机关依法强制要求时，可能依其要求提供必要信息（仅限法律法规明确许可的范围）。</li>
+</ul>
+<h2 id="7-第三方-SDK"><a href="#7-第三方-SDK" class="headerlink" title="7. 第三方 SDK"></a>7. 第三方 SDK</h2><p>本应用<strong>不集成任何广告 SDK、统计分析 SDK、推送 SDK 或跨应用追踪 SDK</strong>。本应用使用的所有框架均为 Apple 官方提供（HealthKit、StoreKit、Vision、SwiftData、UIKit/SwiftUI 等），均在本机运行，不向任何第三方服务器发送您的数据。</p>
+<h2 id="8-跨境数据传输"><a href="#8-跨境数据传输" class="headerlink" title="8. 跨境数据传输"></a>8. 跨境数据传输</h2><p>本应用<strong>不向境外（含港澳台地区）传输您的任何个人信息</strong>。所有数据处理均在您的本机完成，开发者不持有您的数据。</p>
+<h2 id="9-未成年人保护"><a href="#9-未成年人保护" class="headerlink" title="9. 未成年人保护"></a>9. 未成年人保护</h2><p>9.1 本应用面向<strong>12 周岁及以上</strong>用户。我们不会明知地收集未满 14 周岁儿童的个人信息。</p>
+<p>9.2 如您是未满 14 周岁的儿童，请在监护人陪同下阅读本政策并使用本应用；如发现本应用涉及未成年人不当使用情形，请通过联系邮箱告知我们。</p>
+<h2 id="10-您的权利"><a href="#10-您的权利" class="headerlink" title="10. 您的权利"></a>10. 您的权利</h2><p>依据《个人信息保护法》及相关法律法规，您就本应用中您的信息享有以下权利：</p>
+<table>
+<thead>
+<tr>
+<th>权利</th>
+<th>实现方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>知情权与决定权</td>
+<td>阅读本政策；不下载、卸载本应用</td>
+</tr>
+<tr>
+<td>查询、复制权</td>
+<td>在本应用”记录””家庭档案”页面查看全部数据；如需导出请通过反馈邮箱联系</td>
+</tr>
+<tr>
+<td>更正、补充权</td>
+<td>在记录详情页编辑数值、在家庭档案页修改成员信息</td>
+</tr>
+<tr>
+<td>删除权</td>
+<td>在记录详情删除单条；在家庭档案删除成员；卸载应用清除全部本机数据</td>
+</tr>
+<tr>
+<td>撤回同意权</td>
+<td>在 iOS”设置 → 隐私 → 健康 / 相机 / 相册”中撤回对应权限</td>
+</tr>
+<tr>
+<td>投诉举报权</td>
+<td>通过联系邮箱向我们反馈，或向网信部门投诉举报</td>
+</tr>
+</tbody></table>
+<p>由于本应用数据全部本机存储，上述权利均可由您直接在本应用或 iOS 系统设置中完成，无需向我们提出申请。</p>
+<h2 id="11-政策变更"><a href="#11-政策变更" class="headerlink" title="11. 政策变更"></a>11. 政策变更</h2><p>11.1 本政策可能不时修订。修订后的政策将在本政策托管页面与应用内”设置 → 隐私政策”同步公布，并更新文首”生效日期”。</p>
+<p>11.2 对于涉及数据使用方式、跨境传输、第三方共享等重大变更，我们将在应用内以显著方式告知。继续使用即视为接受修订后的政策；若不同意，请停止使用并卸载本应用。</p>
+<h2 id="12-联系我们"><a href="#12-联系我们" class="headerlink" title="12. 联系我们"></a>12. 联系我们</h2><p>如对本隐私政策有任何疑问、意见、投诉或建议，可通过以下方式联系我们：</p>
+<ul>
+<li><strong>邮箱：</strong> wzzvictory_tjsd@163.com</li>
+<li><strong>应用内入口：</strong> 设置 → 反馈建议</li>
+</ul>
+<p>我们将在收到您的反馈后合理时间内回复。如对回复结果不满意，您亦有权向网信部门投诉举报。</p>
+<hr>
+<blockquote>
+<p>本政策英文版本（如有）仅供参考，若有歧义，以本中文版本为准。</p>
+</blockquote>
+
+</body>
+</html>
